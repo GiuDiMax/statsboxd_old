@@ -5,6 +5,7 @@ import time
 
 app = Flask(__name__)
 
+
 @app.route('/<username>/')
 def main(username):
     user = getFromusername(username)
