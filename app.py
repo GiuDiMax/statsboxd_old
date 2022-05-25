@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from username import getFromusername
-from fullProcedure import fullUpdate
+from username import getFromusername, fullUpdate
 import gunicorn
 import time
 
