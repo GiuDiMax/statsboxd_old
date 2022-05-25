@@ -107,10 +107,17 @@ def fullCreation(username):
     watched_list = get_watched(username, False)
     diary_list = get_watched(username, True)
     db.Users.insert_one({'username': username, 'watched': watched_list, 'diary': diary_list})
-    fullUpdate(username)
+    fullOperation(username)
 
 
 def fullUpdate(username):
+    watched_list = get_watched(username, False)
+    diary_list = get_watched(username, True)
+    db.Users.update_one({'username': username}, {'$set': {'watched': watched_list, 'diary': diary_list}})
+    fullOperation(username)
+
+
+def fullOperation(username):
     username_object = getFromusername(username)
     watched = username_object['watched']
     ids = []
@@ -162,5 +169,4 @@ def fullUpdate(username):
         x.append(i)
     y = y | {'lists': x}
     db.Users.update_one({'username': username}, {'$set': {'stats': y}})
-
 
