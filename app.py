@@ -7,6 +7,7 @@ app = Flask(__name__)
 
 app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='static/favicon.ico'))
 
+
 @app.route('/<username>/')
 def main(username):
     user = getFromusername(username)
@@ -23,8 +24,7 @@ def main_update(username):
 
 @app.route('/')
 def main_std():
-    user = getFromusername('mery94')
-    return render_template('index.html', user=user, lbdurl='https://letterboxd.com/')
+    return render_template('username.html')
 
 
 @app.context_processor
