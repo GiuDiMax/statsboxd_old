@@ -7,7 +7,7 @@ import time
 app = Flask(__name__)
 
 
-@app.route('/<username>')
+@app.route('/<username>/')
 def main(username):
     user = getFromusername(username)
     if user is not None:
@@ -15,7 +15,7 @@ def main(username):
     return redirect('https://letterboxd.com/pro/')
 
 
-@app.route('/<username>/update')
+@app.route('/<username>/update/')
 def main_update(username):
     fullUpdate(username)
     return redirect('/' + username)
@@ -24,7 +24,8 @@ def main_update(username):
 @app.route('/')
 def main_std():
     user = getFromusername('GiuDiMax')
-    return render_template('index.html', user=user, lbdurl='https://letterboxd.com/')
+    return redirect('https://letterboxd.com/pro/')
+    #return render_template('index.html', user=user, lbdurl='https://letterboxd.com/')
 
 
 @app.context_processor

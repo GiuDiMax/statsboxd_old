@@ -6,6 +6,7 @@ from username import getFromusername
 from operations import fillMongodb
 from setPeople import mainSetNames2
 
+
 def fullUpdate(username):
     start_time = time.time()
     username_object = getFromusername(username)
