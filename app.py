@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/<username>/')
 def main(username):
-    user = getFromusername(username.tolower())
+    user = getFromusername(username.lower())
     if user is not None:
         return render_template('index.html', user=user, lbdurl='https://letterboxd.com/')
     return redirect('https://letterboxd.com/pro/')
@@ -16,7 +16,7 @@ def main(username):
 
 @app.route('/<username>/update/')
 def main_update(username):
-    fullUpdate(username.tolower())
+    fullUpdate(username.lower())
     return redirect('/' + username)
 
 
