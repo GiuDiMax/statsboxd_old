@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://s.ltrbxd.com/static/css/main.min.2eeb0c9b.css" rel="stylesheet" media="screen, projection">
+    <link href="https://s.ltrbxd.com/static/css/desktop.min.506e7cd4.css" rel="stylesheet" media="screen, projection">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="https://s.ltrbxd.com/static/js/yir-member-statistics.min.f783730d.js"></script>
+    <script>
+		window.dataLayer = window.dataLayer || [];
+	function gtag() { dataLayer.push(arguments); }
+	function ga() {}
+
+	// Default consent to 'denied'.
+	gtag('consent', 'default', {
+		'analytics_storage': 'denied',
+		'ad_storage': 'denied',
+	});
+	</script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-D3ECBB4D7L"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		var analytic_params = {};
+
+analytic_params['user_type'] = 'Visitor';
+		analytic_params['template'] = '/object/person/member-statistics';
+
+		if (analytic_params.member_type) {
+			gtag('set', 'user_properties', {
+				member_type: analytic_params.member_type,
+			});
+			delete analytic_params.member_type;
+		}
+		var config = {
+			...analytic_params,
+			'cookie_domain': 'letterboxd.com',
+			'optimize_id': 'GTM-TB8HSDN',
+		};
+		gtag('config', 'G-D3ECBB4D7L', config);
+	</script>
+	<script>
+		var isMobile = false,
+			isMobileOptimised = true,
+			renderMobile = false,
+			useStaticFonts = false,
+			disableFrameProtection = false;
+	</script>
+	<title>&lrm;{{ user.username }}’s all-time stats &bull; Letterboxd</title>
+	<link rel="manifest" href="/manifest.json" />
+	<link rel="author" type="text/plain" href="/humans.txt" />
+	<link rel="mask-icon" href="https://s.ltrbxd.com/static/img/icons/letterboxd-decal-l-16px.5fe24c7d.svg"
+		color="#445566" />
+	<link rel="shortcut icon" sizes="196x196"
+		href="https://s.ltrbxd.com/static/img/icons/touch-icon-192x192.257b84e7.png" />
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<link rel="search" type="application/opensearchdescription+xml" title="Letterboxd" href="/static/opensearch.xml" />
+	<!--[if lte IE 9 ]>
+		<link href="https://s.ltrbxd.com/static/css/ie9-1.min.e4b44815.css" rel="stylesheet" media="screen, projection"/>
+		<link href="https://s.ltrbxd.com/static/css/ie9-2.min.d3e2d308.css" rel="stylesheet" media="screen, projection"/>
+	<![endif]-->
+	<!--[if (gt IE 9)|!(IE)]><!-->
+	<link href="https://s.ltrbxd.com/static/css/main.min.3fd28322.css" rel="stylesheet" media="screen, projection" />
+	<!--<![endif]-->
+	<!--[if lte IE 6]><script>location.replace("/errors/ie6");</script><![endif]-->
+	<!--[if IE 7]><script>location.replace("/errors/ie7");</script><![endif]-->
+	<!--[if IE 8]><script>location.replace("/errors/ie8");</script><![endif]-->
+	<!--[if IE 9]><script>location.replace("/errors/ie9");</script><![endif]-->
+	<link href="https://s.ltrbxd.com/static/css/desktop.min.506e7cd4.css" rel="stylesheet" media="screen, projection" />
+	<script>
+		var baseURL = "";
+		var successMessages = [];
+		var errorMessages = [];
+		var stickyMessages = [];
+		var globals = {
+			autoAddFilm: false
+			, spinners: {
+				ajax_242d35: 'https://s.ltrbxd.com/static/img/spinner-dark-2x.fda24f88.gif',
+				spinner_12_2C3641: 'https://s.ltrbxd.com/static/img/spinner-dark-2x.fda24f88.gif',
+				spinner_14_20272f: 'https://s.ltrbxd.com/static/img/spinner-dark-2x.fda24f88.gif',
+				spinner_16_161B21: 'https://s.ltrbxd.com/static/img/spinner-dark-2x.fda24f88.gif'
+			}
+		};
+		var supermodelCSRF = "";
+		var gRecaptchaKey = '6Le3mMIUAAAAAEXbwZ7M1R5jEv0V5xbvj7bgXq2g';
+		var person = {
+			username: ""
+			, loggedIn: false
+			, showAds: true
+			, role: "guest"
+			, hasExtendedServiceFilters: false
+			, canBulkAddToLists: false
+			, canFilterOwned: false
+			, hasHqRole: false
+			, canHaveHqDashboard: false
+			, hasMemberStatistics: false
+			, blockedMembers: []
+			, showAdultContent: false
+			, validated: null
+			, trusted: false
+			, hasBlocked : function(member) { for (var i = 0; i !== person.blockedMembers.length; i++) {if (person.blockedMembers[i] === member) return true;} return false; }
+			, viewingTags: []
+			, hasMoreTags: true
+		};
+		var disableAds = false;
+            supermodelCSRF = "bc4bdfa26a377adbaf21";
+			if ( screen.width < 768 ) {
+				var date = new Date();
+				var maxAge = 365 * 24 * 60 * 60;
+				date.setTime(date.getTime() + maxAge * 1000);
+				var expires = '; expires=' + date.toUTCString();
+				document.cookie = "useMobileSite=yes" + expires + "; path=/; maxAge=" + maxAge;
+				if ( document.cookie && document.cookie.indexOf("useMobileSite=yes") >= 0 ) {
+					window.location.reload(true);
+				} else {
+					// No cookies.  No Mobile version.
+				}
+			}
+
+
+		var isWindows = navigator.platform.toUpperCase().indexOf('WIN') >= 0; // Detect windows platform
+		if (isWindows) { document.documentElement.classList.add('is-windows'); }
+
+	</script>
+	<script src="https://s.ltrbxd.com/static/js/main.min.8f96980a.js"></script>
+	<script>
+		if ( $.cookie("letterboxd.admin.signed.in") === person.username ) {
+			successMessages.push("You are signed in as " + person.username);
+			$(function(){$("#header, #content, body").css("background","#543");});
+		}
+	</script>
+	<script>
+		var tyche = {
+			mode: "tyche",
+			config: "//config.playwire.com/1024338/v2/websites/72804/banner.json",
+			passiveMode: false,
+
+			custom_tags: [
+
+				'',
+				'',
+				'intl_true',
+				'',
+				''
+			],
+			onReady: () => {
+				if (window.onTycheReady) window.onTycheReady(window.tyche)
+			},
+		}
+	</script>
+	<script id="tyche" src="//cdn.intergient.com/pageos/pageos.js"></script>
+	<script src="https://btloader.com/tag?o=5150306120761344&upapi=true" async></script>
+</head>
+
+<body>
+    <div id="content" class="site-body">
+        <div class="content-wrap">
+            <script src="https://s.ltrbxd.com/static/js/yir-member-statistics.min.f783730d.js"></script>
+            <article id="js-member-statistic" class="yir">
+                <header class="yir-member-header -all-time">
+                    <div class="constraint">
+                        <h1 class="yir-member-title">
+                            A Life in&nbsp;Film
+                            <a href="#" class="popmenu-link" data-popmenu-id="yir-menu" data-popmenu-direction="s"></a>
+                        </h1>
+                        <h3 class="yir-member-subtitle">
+                            <a class="avatar -a35" href="{{ lbdurl }}/{{ user.username }}/" data-original-title="">
+                                <img src="https://a.ltrbxd.com/resized/avatar/twitter/3/2/1/9/2/shard/http___pbs.twimg.com_profile_images_1015061849321164801_S527QFnk-0-70-0-70-crop.jpg?k=ec532be972" alt="{{ user.username }}" width="35" height="35">
+                            </a>
+                            <a href="/{{ user.username }}/">{{ user.username }}</a>
+                        </h3>
+                        <div class="yir-member-sharing js-hide-in-app">
+                            <h5 class="heading">Share</h5>
+                            <ul class="link-group -social">
+                                <li class="tw">
+                                    <a href="#" title="Tweet a link" data-sharer-type="twitter">Tweet a link</a>
+                                </li>
+                                <li class="fb">
+                                    <a href="#" title="Share to Facebook" data-sharer-type="facebook">Share to Facebook</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <svg class="pattern -right" role="presentation" width="320" height="390" viewBox="0 0 320 390" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g transform="translate(318 63)"><rect fill="#00E054" y="67" width="4" height="80" rx="2"></rect><rect fill="#40BCF4" width="4" height="58" rx="2"></rect><rect fill="#FF8000" y="172" width="4" height="62" rx="2"></rect></g><g transform="translate(298 88)"><rect fill="#00E054" y="59" width="4" height="70" rx="2"></rect><rect fill="#40BCF4" width="4" height="28" rx="2"></rect><rect fill="#FF8000" y="162" width="4" height="42" rx="2"></rect></g><g transform="translate(278 78)"><rect fill="#00E054" y="86" width="4" height="50" rx="2"></rect><rect fill="#40BCF4" width="4" height="70" rx="2"></rect><rect fill="#FF8000" y="174" width="4" height="60" rx="2"></rect></g><g transform="translate(258 94)"><rect fill="#00E054" y="70" width="4" height="99" rx="2"></rect><rect fill="#40BCF4" width="4" height="48" rx="2"></rect><rect fill="#FF8000" y="196" width="4" height="30" rx="2"></rect></g><g transform="translate(238 83)"><rect fill="#00E054" y="104" width="4" height="80" rx="2"></rect><rect fill="#40BCF4" width="4" height="58" rx="2"></rect><rect fill="#FF8000" y="192" width="4" height="32" rx="2"></rect></g><g transform="translate(218 108)"><rect fill="#00E054" y="79" width="4" height="40" rx="2"></rect><rect fill="#40BCF4" width="4" height="48" rx="2"></rect><rect fill="#FF8000" y="152" width="4" height="62" rx="2"></rect><rect fill="#FF8000" y="222" width="4" height="4" rx="2"></rect></g><g transform="translate(198 78)"><rect fill="#00E054" y="112" width="4" height="60" rx="2"></rect><rect fill="#40BCF4" width="4" height="80" rx="2"></rect><rect fill="#FF8000" y="184" width="4" height="30" rx="2"></rect><rect fill="#FF8000" y="222" width="4" height="10" rx="2"></rect></g><g transform="translate(178 64)"><rect fill="#00E054" y="100" width="4" height="119" rx="2"></rect><rect fill="#40BCF4" width="4" height="68" rx="2"></rect><rect fill="#FF8000" y="226" width="4" height="10" rx="2"></rect></g><g transform="translate(158 91)"><rect fill="#00E054" y="88" width="4" height="80" rx="2"></rect><rect fill="#40BCF4" width="4" height="28" rx="2"></rect><rect fill="#FF8000" y="184" width="4" height="32" rx="2"></rect></g><g opacity=".8" transform="translate(138 100)"><rect fill="#00E054" y="63" width="4" height="50" rx="2"></rect><rect fill="#40BCF4" width="4" height="28" rx="2"></rect><rect fill="#FF8000" y="138" width="4" height="82" rx="2"></rect></g><g transform="translate(118 100)"><rect fill="#00E054" y="66" width="4" height="50" rx="2"></rect><rect fill="#40BCF4" width="4" height="28" rx="2"></rect><rect fill="#FF8000" y="172" width="4" height="32" rx="2"></rect></g><g transform="translate(98 110)"><rect fill="#00E054" y="66" width="4" height="30" rx="2"></rect><rect fill="#40BCF4" width="4" height="38" rx="2"></rect><rect fill="#FF8000" y="131" width="4" height="42" rx="2"></rect><rect fill="#FF8000" y="182" width="4" height="12" rx="2"></rect></g><g transform="translate(78 107)"><rect fill="#00E054" y="46" width="4" height="60" rx="2"></rect><rect fill="#40BCF4" width="4" height="10" rx="2"></rect><rect fill="#FF8000" y="149" width="4" height="32" rx="2"></rect></g><g transform="translate(58 76)"><rect fill="#00E054" y="63" width="4" height="60" rx="2"></rect><rect fill="#40BCF4" y="18" width="4" height="28" rx="2"></rect><rect fill="#40BCF4" width="4" height="10" rx="2"></rect><rect fill="#FF8000" y="185" width="4" height="36" rx="2"></rect></g><g transform="translate(38 39)"><rect fill="#00E054" y="83" width="4" height="74" rx="2"></rect><rect fill="#40BCF4" width="4" height="77" rx="2"></rect><rect fill="#FF8000" y="214" width="4" height="22" rx="2"></rect></g><g transform="translate(18 81)"><rect fill="#00E054" y="56" width="4" height="70" rx="2"></rect><rect fill="#40BCF4" width="4" height="28" rx="2"></rect><rect fill="#FF8000" y="172" width="4" height="42" rx="2"></rect></g><g transform="translate(-2 101)"><rect fill="#00E054" y="36" width="4" height="80" rx="2"></rect><rect fill="#40BCF4" width="4" height="10" rx="2"></rect><rect fill="#FF8000" y="124" width="4" height="72" rx="2"></rect></g></g></svg>
+                        <svg class="pattern -left" role="presentation" width="320" height="390" viewBox="0 0 320 390" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g transform="translate(318 70)"><rect fill="#00E054" y="86" width="4" height="80" rx="2"></rect><rect fill="#40BCF4" width="4" height="77" rx="2"></rect><rect fill="#FF8000" y="202" width="4" height="32" rx="2"></rect><rect fill="#FF8000" y="238" width="4" height="4" rx="2"></rect></g><g transform="translate(298 121)"><rect fill="#00E054" y="55" width="4" height="90" rx="2"></rect><rect fill="#40BCF4" width="4" height="48" rx="2"></rect><rect fill="#FF8000" y="169" width="4" height="22" rx="2"></rect></g><g transform="translate(278 111)"><rect fill="#00E054" y="66" width="4" height="70" rx="2"></rect><rect fill="#40BCF4" width="4" height="28" rx="2"></rect><rect fill="#FF8000" y="152" width="4" height="52" rx="2"></rect></g><g transform="translate(258 84)"><rect fill="#00E054" y="78" width="4" height="90" rx="2"></rect><rect fill="#FF8000" y="201" width="4" height="52" rx="2"></rect><rect fill="#40BCF4" width="4" height="60" rx="2"></rect></g><g transform="translate(238 80)"><rect fill="#00E054" y="96" width="4" height="90" rx="2"></rect><rect fill="#00E054" y="68" width="4" height="20" rx="2"></rect><rect fill="#40BCF4" width="4" height="47" rx="2"></rect><rect fill="#FF8000" y="212" width="4" height="32" rx="2"></rect></g><g transform="translate(218 96)"><rect fill="#00E054" y="48" width="4" height="70" rx="2"></rect><rect fill="#40BCF4" y="12" width="4" height="18" rx="2"></rect><rect fill="#40BCF4" width="4" height="4" rx="2"></rect><rect fill="#FF8000" y="144" width="4" height="22" rx="2"></rect></g><g transform="translate(198 111)"><rect fill="#00E054" y="46" width="4" height="60" rx="2"></rect><rect fill="#00E054" y="114" width="4" height="4" rx="2"></rect><rect fill="#40BCF4" width="4" height="28" rx="2"></rect><rect fill="#FF8000" y="142" width="4" height="42" rx="2"></rect></g><g transform="translate(178 40)"><rect fill="#00E054" y="102" width="4" height="100" rx="2"></rect><rect fill="#FF8000" y="210" width="4" height="12" rx="2"></rect><rect fill="#40BCF4" width="4" height="70" rx="2"></rect></g><g transform="translate(158 86)"><rect fill="#00E054" y="36" width="4" height="80" rx="2"></rect><rect fill="#40BCF4" width="4" height="28" rx="2"></rect><rect fill="#FF8000" y="132" width="4" height="32" rx="2"></rect></g><g transform="translate(138 86)"><rect fill="#00E054" y="36" width="4" height="80" rx="2"></rect><rect fill="#40BCF4" width="4" height="28" rx="2"></rect><rect fill="#FF8000" y="132" width="4" height="32" rx="2"></rect></g><g transform="translate(118 111)"><rect fill="#00E054" y="36" width="4" height="80" rx="2"></rect><rect fill="#40BCF4" width="4" height="28" rx="2"></rect><rect fill="#FF8000" y="132" width="4" height="32" rx="2"></rect></g><g transform="translate(98 82)"><rect fill="#00E054" y="102" width="4" height="100" rx="2"></rect><rect fill="#FF8000" y="210" width="4" height="12" rx="2"></rect><rect fill="#40BCF4" width="4" height="70" rx="2"></rect></g><g transform="translate(78 74)"><rect fill="#00E054" y="51" width="4" height="170" rx="2"></rect><rect fill="#40BCF4" width="4" height="4" rx="2"></rect><rect fill="#40BCF4" y="23" width="4" height="20" rx="2"></rect><rect fill="#FF8000" y="246" width="4" height="34" rx="2"></rect></g><g transform="translate(58 127)"><rect fill="#00E054" y="64" width="4" height="40" rx="2"></rect><rect fill="#FF8000" y="144" width="4" height="74" rx="2"></rect><rect fill="#40BCF4" width="4" height="20" rx="2"></rect></g><g transform="translate(38 77)"><rect fill="#00E054" y="104" width="4" height="90" rx="2"></rect><rect fill="#FF8000" y="204" width="4" height="64" rx="2"></rect><rect fill="#40BCF4" width="4" height="24" rx="2"></rect><rect fill="#40BCF4" y="32" width="4" height="50" rx="2"></rect></g><g transform="translate(18 117)"><rect fill="#00E054" y="84" width="4" height="70" rx="2"></rect><rect fill="#FF8000" y="184" width="4" height="44" rx="2"></rect><rect fill="#FF8000" y="232" width="4" height="4" rx="2"></rect><rect fill="#40BCF4" width="4" height="30" rx="2"></rect></g><g transform="translate(-2 127)"><rect fill="#00E054" y="42" width="4" height="76" rx="2"></rect><rect fill="#FF8000" y="194" width="4" height="44" rx="2"></rect><rect fill="#40BCF4" width="4" height="10" rx="2"></rect></g></g></svg>
+                    </div>
+                    <div class="grid" role="presentation"></div>
+                    <div class="central-fade" role="presentation"></div>
+                    <div class="yir-member-stats">
+                        <h4 class="yir-member-statistic statistic">
+                            <a href="{{ lbdurl }}/{{ user.username }}/films/">
+                                <span class="value">{{ format_comma(user.stats.total[0].movies) }}</span>
+                                <span class="definition">Films</span>
+                            </a>
+                        </h4>
+                        <h4 class="yir-member-statistic statistic">
+                                <span class="value">{{ format_comma(user.stats.total[0].runtime/60) }}</span>
+                                <span class="definition">Hours</span>
+                        </h4>
+                        <h4 class="yir-member-statistic statistic">
+                                <span class="value">000</span>
+                                <span class="definition">Directors</span>
+                        </h4>
+                        <h4 class="yir-member-statistic statistic">
+                            <a href="{{ lbdurl }}/{{ user.username }}/films/">
+                                <span class="value">000</span>
+                                <span class="definition">Countries</span>
+                            </a>
+                        </h4>
+                    </div>
+                </header>
+                <section class="yir-wide yir-top-lists js-yir-tabs">
+                    <header>
+						<a name="top-films"></a>
+						<h3 class="yir-title-3">Top films</h3>
+					</header>
+                    <section id="top-films-1" class="js-yir-tab-section -show">
+                        <section class="yir-wide yir-top-ten yir-feature-list has-feature-bg">
+                            <div class="backdrop-wrapper js-inline-backdrop -loaded"
+                                 data-backdrop="https://a.ltrbxd.com/resized/sm/upload/e4/cj/4p/18/before-midnight-1200-1200-675-675-crop-000000.jpg?k=78601ff47f"
+                                 data-backdropmobile="https://a.ltrbxd.com/resized/sm/upload/e4/cj/4p/18/before-midnight-960-960-540-540-crop-000000.jpg?k=9e8244c39a"
+                                 data-offset="60">
+                                <div class="backdropplaceholder js-backdrop-placeholder"
+                                     style="background-image: url(https://a.ltrbxd.com/resized/sm/upload/e4/cj/4p/18/before-midnight-48-48-27-27-crop.png?k=9f5ada90c7); background-position: center -60px;">
+                                </div>
+                                <div class="backdropimage js-backdrop-image" style="background-position: center -60px; background-image: url(https://a.ltrbxd.com/resized/sm/upload/e4/cj/4p/18/before-midnight-1200-1200-675-675-crop-000000.jpg?k=78601ff47f&quot;);">
+                                </div>
+                                <div class="backdropmask js-backdrop-fade"></div>
+                            </div>
+                            <div class="featured-bg">
+                                <div>
+                                    <section class="yir-block body-text">
+                                        <h1 class="title-0 prettify">
+                                            <a href="{{ lbdurl }}/{{ user.username }}/list/the-best-films-of-2013-1/">THE BEST FILMS OF 2013</a>
+                                        </h1>
+                                        <p class="yir-label -detail">
+                                            <a class="avatar -a24" href="{{ lbdurl }}/{{ user.username }}/" data-original-title="">
+                                                <img src="https://a.ltrbxd.com/resized/avatar/twitter/3/2/1/9/2/shard/http___pbs.twimg.com_profile_images_1015061849321164801_S527QFnk-0-48-0-48-crop.jpg?k=ec532be972" alt="{{ user.username }}" width="24" height="24">
+                                            </a>
+                                        </p>
+                                        <div class="film-list-summary">
+                                            <div class="body-text" data-more="{{ lbdurl }}/{{ user.username }}/list/the-best-films-of-2013-1/">
+                                                <p class="yir-label -detail">my favorite films of 2013</p>
+                                            </div>
+                                        </div>
+                                        <p></p>
+                                        <div class="yir-wide-tray">
+                                            <ul class="posters">
+                                                <li class="poster-hero">
+                                                    <div class="react-component poster film-poster film-poster-102444 linked-film-poster" data-component-class="globals.comps.FilmPosterComponent" data-film-id="102444" data-film-name="Before Midnight" data-poster-url="/film/before-midnight/image-150/" data-film-release-year="2013" data-new-list-with-film-action="/list/new/with/before-midnight/" data-remove-from-watchlist-action="/film/before-midnight/remove-from-watchlist/" data-add-to-watchlist-action="/film/before-midnight/add-to-watchlist/" data-rate-action="/film/before-midnight/rate/" data-mark-as-watched-action="/film/before-midnight/mark-as-watched/" data-mark-as-not-watched-action="/film/before-midnight/mark-as-not-watched/" data-film-link="/film/before-midnight/"><div><img src="https://a.ltrbxd.com/resized/film-poster/1/0/2/4/4/4/102444-before-midnight-0-150-0-225-crop.jpg?k=607dab38fd" width="150" height="225" alt="Before Midnight" srcset="https://a.ltrbxd.com/resized/film-poster/1/0/2/4/4/4/102444-before-midnight-0-300-0-450-crop.jpg?k=864a63cf21 2x" class="image"><a href="{{ lbdurl }}/film/before-midnight/" class="frame" data-original-title="Before Midnight (2013)"><span class="number"><span>1</span></span><span class="frame-title">Before Midnight (2013)</span><span class="overlay"></span></a></div></div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </section>
+		                        </div>
+	                        </div>
+                        </section>
+			        </section>
+                </section>
+                <section class="yir-block yir-films-by-year text js-yir-tabs">
+                    <header>
+						<a name="films"></a>
+						<h3 class="yir-title-3">By release year</h3>
+						<nav class="js-films-by-year-nav">
+							<a class="js-yir-internal-nav-link -active" data-link-for="#release-year-films">Films</a>
+							<a class="js-yir-internal-nav-link" data-link-for="#release-year-ratings">Ratings</a>
+						</nav>
+					</header>
+                    <div class="yir-by-year-wrapper">
+                        <section id="release-year-films" class="js-yir-tab-section yir-by-year yir-films-by-release-year -show">
+                            <script>
+                                window.__BXD_DATA["6f8a9edf-a2ae-41a1-8cb4-bc184ec594ae"] = [{"year":1923,"count":1,"name":1923,"y":1},{"year":1924,"count":0,"name":1924,"y":0},{"year":1925,"count":1,"name":1925,"y":1},{"year":1926,"count":0,"name":1926,"y":0},{"year":1927,"count":0,"name":1927,"y":0},{"year":1928,"count":0,"name":1928,"y":0},{"year":1929,"count":0,"name":1929,"y":0},{"year":1930,"count":1,"name":1930,"y":1},{"year":1931,"count":0,"name":1931,"y":0},{"year":1932,"count":1,"name":1932,"y":1},{"year":1933,"count":0,"name":1933,"y":0},{"year":1934,"count":1,"name":1934,"y":1},{"year":1935,"count":0,"name":1935,"y":0},{"year":1936,"count":0,"name":1936,"y":0},{"year":1937,"count":0,"name":1937,"y":0},{"year":1938,"count":2,"name":1938,"y":2},{"year":1939,"count":1,"name":1939,"y":1},{"year":1940,"count":4,"name":1940,"y":4},{"year":1941,"count":1,"name":1941,"y":1},{"year":1942,"count":2,"name":1942,"y":2},{"year":1943,"count":1,"name":1943,"y":1},{"year":1944,"count":1,"name":1944,"y":1},{"year":1945,"count":1,"name":1945,"y":1},{"year":1946,"count":2,"name":1946,"y":2},{"year":1947,"count":2,"name":1947,"y":2},{"year":1948,"count":2,"name":1948,"y":2},{"year":1949,"count":0,"name":1949,"y":0},{"year":1950,"count":3,"name":1950,"y":3},{"year":1951,"count":3,"name":1951,"y":3},{"year":1952,"count":2,"name":1952,"y":2},{"year":1953,"count":3,"name":1953,"y":3},{"year":1954,"count":2,"name":1954,"y":2},{"year":1955,"count":5,"name":1955,"y":5},{"year":1956,"count":4,"name":1956,"y":4},{"year":1957,"count":6,"name":1957,"y":6},{"year":1958,"count":4,"name":1958,"y":4},{"year":1959,"count":0,"name":1959,"y":0},{"year":1960,"count":4,"name":1960,"y":4},{"year":1961,"count":2,"name":1961,"y":2},{"year":1962,"count":8,"name":1962,"y":8},{"year":1963,"count":3,"name":1963,"y":3},{"year":1964,"count":3,"name":1964,"y":3},{"year":1965,"count":1,"name":1965,"y":1},{"year":1966,"count":3,"name":1966,"y":3},{"year":1967,"count":2,"name":1967,"y":2},{"year":1968,"count":2,"name":1968,"y":2},{"year":1969,"count":6,"name":1969,"y":6},{"year":1970,"count":4,"name":1970,"y":4},{"year":1971,"count":3,"name":1971,"y":3},{"year":1972,"count":5,"name":1972,"y":5},{"year":1973,"count":3,"name":1973,"y":3},{"year":1974,"count":1,"name":1974,"y":1},{"year":1975,"count":3,"name":1975,"y":3},{"year":1976,"count":2,"name":1976,"y":2},{"year":1977,"count":3,"name":1977,"y":3},{"year":1978,"count":1,"name":1978,"y":1},{"year":1979,"count":5,"name":1979,"y":5},{"year":1980,"count":4,"name":1980,"y":4},{"year":1981,"count":6,"name":1981,"y":6},{"year":1982,"count":3,"name":1982,"y":3},{"year":1983,"count":7,"name":1983,"y":7},{"year":1984,"count":2,"name":1984,"y":2},{"year":1985,"count":5,"name":1985,"y":5},{"year":1986,"count":5,"name":1986,"y":5},{"year":1987,"count":4,"name":1987,"y":4},{"year":1988,"count":6,"name":1988,"y":6},{"year":1989,"count":2,"name":1989,"y":2},{"year":1990,"count":6,"name":1990,"y":6},{"year":1991,"count":4,"name":1991,"y":4},{"year":1992,"count":6,"name":1992,"y":6},{"year":1993,"count":5,"name":1993,"y":5},{"year":1994,"count":9,"name":1994,"y":9},{"year":1995,"count":5,"name":1995,"y":5},{"year":1996,"count":7,"name":1996,"y":7},{"year":1997,"count":3,"name":1997,"y":3},{"year":1998,"count":7,"name":1998,"y":7},{"year":1999,"count":6,"name":1999,"y":6},{"year":2000,"count":4,"name":2000,"y":4},{"year":2001,"count":5,"name":2001,"y":5},{"year":2002,"count":5,"name":2002,"y":5},{"year":2003,"count":13,"name":2003,"y":13},{"year":2004,"count":4,"name":2004,"y":4},{"year":2005,"count":3,"name":2005,"y":3},{"year":2006,"count":6,"name":2006,"y":6},{"year":2007,"count":7,"name":2007,"y":7},{"year":2008,"count":11,"name":2008,"y":11},{"year":2009,"count":7,"name":2009,"y":7},{"year":2010,"count":10,"name":2010,"y":10},{"year":2011,"count":41,"name":2011,"y":41},{"year":2012,"count":112,"name":2012,"y":112},{"year":2013,"count":194,"name":2013,"y":194},{"year":2014,"count":219,"name":2014,"y":219},{"year":2015,"count":190,"name":2015,"y":190},{"year":2016,"count":241,"name":2016,"y":241},{"year":2017,"count":221,"name":2017,"y":221},{"year":2018,"count":237,"name":2018,"y":237},{"year":2019,"count":242,"name":2019,"y":242},{"year":2020,"count":185,"name":2020,"y":185},{"year":2021,"count":215,"name":2021,"y":215},{"year":2022,"count":68,"name":2022,"y":68}]
+							</script>
+                            <div class="chart js-films-by-release-year-chart"
+								data-lb-yir-chart-options='{"pointClickEventUrl": "{{ lbdurl }}/{{ user.username }}/films/year/1234567/", "pointClickEventURLReplacementString": "1234567", "bxdDataKey": "6f8a9edf-a2ae-41a1-8cb4-bc184ec594ae", "chromaScaleArray": ["#00E054", "#40BCF4"]}'>
+								<div class="target js-target"></div>
+								<div class="xaxis js-xaxis">
+									<span class="yir-label –left">1923</span>
+									<span class="yir-label -right">2022</span>
+								</div>
+							</div>
+                        </section>
+                    </div>
+                </section>
+            </article>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>&lrm;{{ user.username }}’s all-time stats &bull; Letterboxd</title>
+        <script src="//cdn.jsdelivr.net/npm/chart.js"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.css') }}">
+        <script src="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.min.js') }}"></script>
+        <script src="//jvectormap.com/js/jquery-jvectormap-world-mill.js"></script>
+    </head>
+    <body>
+        <div id="content" class="content">
+            <h2>{{ format_comma(user.stats.total[0].movies) }}</h2>
+            <section class="byyear">
+                <div class="chart-container">
+                    <canvas id="releaseYear"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="ratingYear"></canvas>
+                </div>
+            </section>
+            <section>
+                <div class="worldmap" id="world-map"></div>
+            </section>
+        </div>
+    </body>
+    <footer>
+        <script>
+            $(document).ready(function () {
+
+                //WORLDMAP
+                var worldData = {
+                    {%for element in user.stats.totalcountry%}
+                        '{{ element['info']['_id'] }}': {{ element['sum'] }},
+                    {%endfor%}
+                };
+
+                var worldDataUri = {
+                    {%for element in user.stats.totalcountry%}
+                        '{{ element['info']['_id'] }}': '{{ element['info']['uri'] }}',
+                    {%endfor%}
+                };
+
+                $('#world-map').vectorMap({
+                  map: 'world_mill',
+                  series: {
+                    regions: [{
+                      values: worldData,
+                      scale: ['#007834', '#00e054'],
+                    }]
+                  },
+                  onRegionTipShow: function(e, el, code) {
+                      el.html(el.html() + ' ' + worldData[code]);
+                  },
+                  onRegionClick: function(e, el, code){
+                      location.href = '{{ lbdurl }}{{ user.username }}/films/country/'+ worldDataUri[el] + '/' ;
+                  }
+                });
+
+                //BYYEARCHART
+                var ctx = document.getElementById('releaseYear');
+                var ctx2 = document.getElementById('ratingYear');
+                var context = ctx.getContext('2d');
+                var context2 = ctx2.getContext('2d');
+                var gradient = context.createLinearGradient(0, 0, 950, 150);
+                var gradient2 = context2.createLinearGradient(0, 0, 950, 150);
+                gradient.addColorStop(0, 'rgba(0, 114, 84, 1)');
+                gradient.addColorStop(1, 'rgba(63, 188, 242, 1)');
+                gradient2.addColorStop(0, 'rgba(255, 184, 96, 1)');
+                gradient2.addColorStop(1, 'rgba(255, 232, 112, 1)');
+                var releaseYearChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        datasets: [{
+                            data: [
+                                {%for element in user.stats.totalyear%}
+                                    {x: "{{ element['_id'] }}", y: {{ (element['sum']) }}},
+                                {%endfor%}
+                            ],
+                            backgroundColor: gradient,
+                            borderWidth: 0,
+                            borderRadius: 3,
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest'
+                        },
+                        //responsive: true,
+                        onClick: (e, items) => {
+                            location.href = '{{ lbdurl }}{{ user.username }}/films/year/'+ releaseYearChart.data.datasets[0].data[items[0].index].x + '/' ;
+                        }
+                    }
+                });
+                var ratingYear = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        datasets: [{
+                            data: [
+                                {%for element in user.stats.totalyear%}
+                                    {x: "{{ element['_id'] }}", y: {{ ifNull0_divide2(element['average']) }}},
+                                {%endfor%}
+                            ],
+                            backgroundColor: gradient2,
+                            borderWidth: 0,
+                            borderRadius: 3,
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest'
+                        },
+                        //responsive: true,
+                        onClick: (e, items) => {
+                            location.href = '{{ lbdurl }}{{ user.username }}/films/year/'+ releaseYearChart.data.datasets[0].data[items[0].index].x + '/' ;
+                        }
+                    }
+                });
+            })
+        </script>
+    </footer>
+</html>
