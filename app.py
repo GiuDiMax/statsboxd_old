@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from username import getFromusername
+from fullProcedure import fullUpdate
 import gunicorn
 import time
 
@@ -14,9 +15,14 @@ def main(username):
     return redirect('https://letterboxd.com/pro/')
 
 
+@app.route('/<username>/update')
+def main_update(username):
+    fullUpdate(username)
+    return redirect('/' + username)
+
+
 @app.route('/')
 def main_std():
-    time.sleep(5)
     user = getFromusername('GiuDiMax')
     return render_template('index.html', user=user, lbdurl='https://letterboxd.com/')
 
