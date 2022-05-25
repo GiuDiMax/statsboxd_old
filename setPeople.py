@@ -38,7 +38,9 @@ async def main2(urls):
         return json0
 
 def fillMongodb(urls):
+    asyncio.set_event_loop(asyncio.SelectorEventLoop())
     return asyncio.get_event_loop().run_until_complete(main2(urls))
+    #return asyncio.get_event_loop().run_until_complete(main2(urls))
 
 
 def mainSetNames():

@@ -6,6 +6,7 @@ from mongodb import db
 from datetime import datetime
 from stats import getStats, getLists
 from operations import fillMongodb
+from setPeople import mainSetNames2
 
 global listx
 
@@ -127,7 +128,8 @@ def fullOperation(username):
         uris.append(movie['uri'])
 
     db.tmpUris.delete_many({})
-    db.tmpUris.insert_many(username_object['watched'])
+    if len(uris) > 0:
+        db.tmpUris.insert_many(username_object['watched'])
 
     while True:
         obj1 = db.Film.find({"_id": {"$in": ids}})
@@ -141,15 +143,13 @@ def fullOperation(username):
         else:
             break
 
-    print('names')
-    #mainSetNames2()
+    mainSetNames2()
     json3 = getStats(username)
     for x in json3:
         y = x
 
     min = y['totalyear'][0]['_id']
     max = y['totalyear'][-1]['_id']
-
 
     y2 = []
     for i in range(min, max + 1):

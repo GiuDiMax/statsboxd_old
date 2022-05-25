@@ -32,7 +32,9 @@ async def main2(urls):
         await asyncio.gather(*[get(url, session) for url in urls])
 
 def fillMongodb(urls):
-    return asyncio.get_event_loop().run_until_complete(main2(urls))
+    asyncio.set_event_loop(asyncio.SelectorEventLoop())
+    asyncio.get_event_loop().run_until_complete(main2(urls))
+    #asyncio.get_event_loop().run_until_complete(main2(urls))
 
 def mainSetCollection():
     json_operations = {}
