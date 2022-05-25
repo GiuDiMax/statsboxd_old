@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/<username>/')
 def main(username):
-    user = getFromusername(username)
+    user = getFromusername(username.tolower())
     if user is not None:
         return render_template('index.html', user=user, lbdurl='https://letterboxd.com/')
     return redirect('https://letterboxd.com/pro/')
@@ -16,7 +16,7 @@ def main(username):
 
 @app.route('/<username>/update/')
 def main_update(username):
-    fullUpdate(username)
+    fullUpdate(username.tolower())
     return redirect('/' + username)
 
 
@@ -30,6 +30,7 @@ def utility_processor():
     def format_comma(number):
         return f'{int(number):,}'
     return dict(format_comma=format_comma)
+
 
 
 @app.context_processor
