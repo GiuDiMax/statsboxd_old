@@ -75,15 +75,22 @@ def get_watched(username, diary=False):
         url = 'http://letterboxd.com/' + str(username) + '/films/diary/page/1/'
     else:
         url = 'http://letterboxd.com/' + str(username) + '/films/page/1/'
+
     resp = requests.get(url)
     soup = BeautifulSoup(resp.text, 'lxml', parse_only=SoupStrainer('div', {'class': 'paginate-pages'}))
-    pages = int(soup.find_all('li', class_="paginate-page")[-1].text)
-    urls = []
-    for i in range(pages):
-        if diary:
-            urls.append('http://letterboxd.com/' + str(username) + '/films/diary/page/' + str(i+1) +"/")
-        else:
-            urls.append('http://letterboxd.com/' + str(username) + '/films/page/' + str(i + 1) + "/")
+    try:
+        pages = int(soup.find_all('li', class_="paginate-page")[-1].text)
+        urls = []
+        for i in range(pages):
+            if diary:
+                urls.append('http://letterboxd.com/' + str(username) + '/films/diary/page/' + str(i+1) +"/")
+            else:
+                urls.append('http://letterboxd.com/' + str(username) + '/films/page/' + str(i + 1) + "/")
+    except:
+        urls = [url]
+
+    #asyncio.get_event_loop().run_until_complete(get_watched2(urls, diary))
+    asyncio.set_event_loop(asyncio.SelectorEventLoop())
     asyncio.get_event_loop().run_until_complete(get_watched2(urls, diary))
     return listx
 
@@ -92,11 +99,8 @@ def getFromusername(username):
     obj = db.Users.find_one({"username": username})
     if obj is not None:
         return obj
-    try:
-        fullCreation(username)
-        return db.Users.find_one({"username": username})
-    except:
-        return None
+    fullCreation(username)
+    return db.Users.find_one({"username": username})
 
 
 def fullCreation(username):

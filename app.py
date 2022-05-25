@@ -9,6 +9,7 @@ app = Flask(__name__)
 @app.route('/<username>/')
 def main(username):
     user = getFromusername(username)
+    print(user)
     if user is not None:
         return render_template('index.html', user=user, lbdurl='https://letterboxd.com/')
     return redirect('https://letterboxd.com/pro/')
@@ -22,9 +23,8 @@ def main_update(username):
 
 @app.route('/')
 def main_std():
-    user = getFromusername('GiuDiMax')
-    return redirect('https://letterboxd.com/pro/')
-    #return render_template('index.html', user=user, lbdurl='https://letterboxd.com/')
+    user = getFromusername('mery94')
+    return render_template('index.html', user=user, lbdurl='https://letterboxd.com/')
 
 
 @app.context_processor
