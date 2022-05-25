@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup, SoupStrainer
 from mongodb import db
 from datetime import datetime
+from fullProcedure import fullUpdate
 
 global listx
 
@@ -94,7 +95,9 @@ def getFromusername(username):
         watched_list = get_watched(username, False)
         diary_list = get_watched(username, True)
         db.Users.insert_one({'username': username, 'watched': watched_list, 'diary': diary_list})
+        fullUpdate(username)
         return db.Users.find_one({"username": username})
     except:
         return None
+
 
