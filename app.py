@@ -1,15 +1,15 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from username import getFromusername, fullUpdate
 import gunicorn
 import time
 
 app = Flask(__name__)
 
+app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='static/favicon.ico'))
 
 @app.route('/<username>/')
 def main(username):
     user = getFromusername(username)
-    print(user)
     if user is not None:
         return render_template('index.html', user=user, lbdurl='https://letterboxd.com/')
     return redirect('https://letterboxd.com/pro/')
