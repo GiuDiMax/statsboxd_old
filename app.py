@@ -5,9 +5,6 @@ import time
 
 app = Flask(__name__)
 
-app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='static/favicon.ico'))
-
-
 @app.route('/<username>/')
 def main(username):
     user = getFromusername(username)
@@ -56,3 +53,4 @@ def utility_processor3():
 
 if __name__ == '__main__':
     app.run()
+    app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='static/favicon.ico'))
