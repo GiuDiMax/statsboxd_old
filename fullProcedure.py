@@ -6,59 +6,58 @@ from username import getFromusername
 from operations import fillMongodb
 from setPeople import mainSetNames2
 
-start_time = time.time()
-username = 'GiuDiMax'
-username_object = getFromusername(username)
+def fullUpdate(username):
+    start_time = time.time()
+    username_object = getFromusername(username)
 
+    watched = username_object['watched']
+    ids = []
+    uris = []
+    for movie in watched:
+        ids.append(movie['id'])
+        uris.append(movie['uri'])
 
-watched = username_object['watched']
-ids = []
-uris = []
-for movie in watched:
-    ids.append(movie['id'])
-    uris.append(movie['uri'])
+    db.tmpUris.delete_many({})
+    db.tmpUris.insert_many(username_object['watched'])
 
-db.tmpUris.delete_many({})
-db.tmpUris.insert_many(username_object['watched'])
-
-while True:
-    obj1 = db.Film.find({"_id": {"$in": ids}})
-    uris2 = list(set(uris) - set(obj1.distinct('uri')))
-    print(len(uris2))
-    if len(uris2) > 0:
-        try:
-            fillMongodb(uris2)
-        except:
-            pass
-    else:
-        break
-
-mainSetNames2()
-json3 = getStats(username)
-for x in json3:
-    y = x
-    y = x
-
-min = y['totalyear'][0]['_id']
-max = y['totalyear'][-1]['_id']
-
-y2 = []
-for i in range(min, max + 1):
-    check = False
-    for a in y['totalyear']:
-        if a['_id'] == i:
-            y2.append(a)
-            check = True
+    while True:
+        obj1 = db.Film.find({"_id": {"$in": ids}})
+        uris2 = list(set(uris) - set(obj1.distinct('uri')))
+        print(len(uris2))
+        if len(uris2) > 0:
+            try:
+                fillMongodb(uris2)
+            except:
+                pass
+        else:
             break
-    if not check:
-        y2.append({'_id': i, 'average': 0, 'sum': 0})
-y['totalyear'] = y2
 
-x = []
-json4 = getLists()
-for i in json4:
-    x.append(i)
-y = y | {'lists': x}
-db.Users.update_one({'username': username}, {'$set': {'stats': y}})
+    print('names')
+    #mainSetNames2()
+    json3 = getStats(username)
+    for x in json3:
+        y = x
 
-print(time.time() - start_time)
+    min = y['totalyear'][0]['_id']
+    max = y['totalyear'][-1]['_id']
+
+
+    y2 = []
+    for i in range(min, max + 1):
+        check = False
+        for a in y['totalyear']:
+            if a['_id'] == i:
+                y2.append(a)
+                check = True
+                break
+        if not check:
+            y2.append({'_id': i, 'average': 0, 'sum': 0})
+    y['totalyear'] = y2
+
+    x = []
+    json4 = getLists()
+    for i in json4:
+        x.append(i)
+    y = y | {'lists': x}
+    db.Users.update_one({'username': username}, {'$set': {'stats': y}})
+    print(time.time() - start_time)
