@@ -5,12 +5,19 @@ from stats import getStats, getLists
 from username import getFromusername
 from operations import fillMongodb
 from setPeople import mainSetNames2
+from username import get_watched
+
+
+def fullCreation(username):
+    watched_list = get_watched(username, False)
+    diary_list = get_watched(username, True)
+    db.Users.insert_one({'username': username, 'watched': watched_list, 'diary': diary_list})
+    fullUpdate(username)
 
 
 def fullUpdate(username):
     start_time = time.time()
     username_object = getFromusername(username)
-
     watched = username_object['watched']
     ids = []
     uris = []
