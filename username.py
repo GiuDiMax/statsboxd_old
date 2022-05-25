@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup, SoupStrainer
 from mongodb import db
 from datetime import datetime
-from fullProcedure import fullUpdate
+from fullProcedure import fullUpdate, fullCreation
 
 global listx
 
@@ -92,10 +92,7 @@ def getFromusername(username):
     if obj is not None:
         return obj
     try:
-        watched_list = get_watched(username, False)
-        diary_list = get_watched(username, True)
-        db.Users.insert_one({'username': username, 'watched': watched_list, 'diary': diary_list})
-        fullUpdate(username)
+        fullCreation(username)
         return db.Users.find_one({"username": username})
     except:
         return None
