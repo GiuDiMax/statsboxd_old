@@ -25,3 +25,6 @@ listsSelection = [
     ['jack/list/women-directors-the-official-top-100-narrative', 'Top 100 Women-Directed'],
     ['lifeasfiction/list/letterboxd-100-animation', 'Top 100 Animation']
 ]
+
+beta_test = True
+beta_users = ['giudimax']

@@ -5,12 +5,15 @@ import time
 from setCollections import mainSetCollection2
 from setPeople import mainSetNames2
 from setLists import updateLists
+from config import *
 
 app = Flask(__name__)
 
 @app.route('/<username>/')
 def main(username):
     if '.ico' not in username:
+        if beta_test and username.lower() not in beta_users:
+            return render_template('username.html')
         if username.lower() == 'adminupdate':
             mainSetNames2()
             mainSetCollection2()
@@ -22,11 +25,13 @@ def main(username):
                 return render_template('index.html', user=user, lbdurl='https://letterboxd.com/')
             else:
                 return redirect('/'+username+"/update/")
-    return redirect('https://letterboxd.com/pro/')
+    return render_template('username.html')
 
 
 @app.route('/<username>/update/')
 def main_update(username):
+    if beta_test and username.lower() not in beta_users:
+        return render_template('username.html')
     fullUpdate(username.lower())
     return redirect('/' + username)
 
