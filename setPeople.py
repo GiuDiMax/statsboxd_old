@@ -50,7 +50,7 @@ def mainSetNames():
         op_role.append({'$unwind': '$'+field})
         op_role.append({'$group': {'_id': '$'+field,
                                    'sum': {'$sum': 1}}})
-        op_role.append({'$match': {"sum": {'$gt': 2}}})
+        op_role.append({'$match': {"sum": {'$gt': 4}}})
         op_role.append({'$lookup': {
                             'from': 'People',
                             'localField': '_id',
@@ -68,12 +68,14 @@ def mainSetNames():
         for y in x:
             for z in x[y]:
                 uris.append(z['_id'])
-    fillMongodb(uris)
+
+    if len(uris) > 0:
+        print('da aggiungere persone ' + str(len(uris)))
+        fillMongodb(uris)
+
 
 def mainSetNames2():
-    while True:
-        try:
-            mainSetNames()
-            break
-        except:
-            pass
+    try:
+        mainSetNames()
+    except:
+        mainSetNames2()
