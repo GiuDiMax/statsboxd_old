@@ -9,7 +9,40 @@
 }
 
 body{
+    margin:0;
     background: #14181c url(https://s.ltrbxd.com/static/img/content-bg.0d9a0f0f.png) 0 -1px repeat-x;
+    /*background-image: linear-gradient(180deg,#14181c 0,#14181c 250px,#2c3440 251px);*/
+}
+
+h1, h2, h3, h4, h5, label, span, a {
+    color: #fff;
+}
+
+span{
+    font-family: Graphik-Semibold-Web,sans-serif;
+}
+
+.madeby{
+    font-weight: 700;
+    color: #9ab;
+    display: block;
+    float:right;
+    font-size: 13px;
+    letter-spacing: .07692308em;
+    line-height: 17px;
+    text-transform: uppercase;
+}
+
+.headerbar{
+    background-color: #14181c;
+    height:72px;
+    display:flex;
+    align-items:center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding-left:25%;
+    padding-right:25%;
+    justify-content: space-between;
 }
 
 .chart-container{
