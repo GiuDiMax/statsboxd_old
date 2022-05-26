@@ -10,9 +10,17 @@
         <script src="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.min.js') }}"></script>
         <script src="//jvectormap.com/js/jquery-jvectormap-world-mill.js"></script>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <!--<link rel="stylesheet" href="//s.ltrbxd.com/static/css/main.min.bccb3911.css">-->
     </head>
     <body>
+        <div class="headerbar">
+            <a href="https://letterboxd.com/">
+                <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="letterboxdlogo"/>
+            </a>
+            <span class="madeby">Project made by GiuDiMax</span>
+        </div>
         <div id="content" class="content">
+            <h1>A life in Film</h1>
             <h2>{{ format_comma(user.stats.total[0].movies) }}</h2>
             <section class="byyear">
                 <div class="chart-container">
