@@ -22,6 +22,25 @@
                     <canvas id="ratingYear"></canvas>
                 </div>
             </section>
+            <section class="attributes-chart">
+                <div class="chart-container">
+                    <canvas id="genreChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="countriesChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="languageChart"></canvas>
+                </div>
+            </section>
+            <section class="attributes-chart">
+                <div class="chart-container">
+                    <canvas id="genre2Chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="genre3Chart"></canvas>
+                </div>
+            </section>
             <section>
                 <div class="worldmap" id="world-map"></div>
             </section>
@@ -95,7 +114,7 @@
                         interaction: {
                             mode: 'nearest'
                         },
-                        //responsive: true,
+                        responsive: true,
                         onClick: (e, items) => {
                             location.href = '{{ lbdurl }}{{ user.username }}/films/year/'+ releaseYearChart.data.datasets[0].data[items[0].index].x + '/' ;
                         }
@@ -125,10 +144,41 @@
                         interaction: {
                             mode: 'nearest'
                         },
-                        //responsive: true,
+                        responsive: true,
                         onClick: (e, items) => {
                             location.href = '{{ lbdurl }}{{ user.username }}/films/year/'+ releaseYearChart.data.datasets[0].data[items[0].index].x + '/' ;
                         }
+                    }
+                });
+
+                //GENRES CHART
+                new Chart(document.getElementById('genreChart'), {
+                    type: 'bar',
+                    data: {
+                        datasets: [{
+                            data: [
+                                {% for i in range(10) %}
+                                    {y: "{{ firstUpper(user.stats.mostWatchedgenres_main[i]['_id']) }}",
+                                     x: {{ (user.stats.mostWatchedgenres_main[i]['sum']) }}},
+                                {%endfor%}
+                            ],
+                            backgroundColor: 'rgb(0, 224, 84)',
+                            borderWidth: 0,
+                            borderRadius: 3,
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest'
+                        },
+                        responsive: true,
                     }
                 });
             })

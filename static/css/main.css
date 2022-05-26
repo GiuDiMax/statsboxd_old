@@ -12,10 +12,17 @@ body{
 }
 
 .chart-container{
-  position: relative;
   margin: auto;
   height: 300px;
   width: 80%;
+}
+
+.attributes-chart{
+    display:flex;
+    margin: auto;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    width: 80%;
 }
 
 .worldmap{

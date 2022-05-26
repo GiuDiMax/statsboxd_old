@@ -47,6 +47,3 @@ def updateLists():
         except:
             db.Lists.update_one({'_id': list[0]}, {'$set': {'name': list[1], 'num': len(uris), 'uris': uris, 'isStats': True}})
         db.Film.update_many({"uri": {"$in": uris}}, {'$push': {'statsLists': list[0]}})
-
-
-updateLists()

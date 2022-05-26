@@ -8,7 +8,6 @@ from setLists import updateLists
 
 app = Flask(__name__)
 
-
 @app.route('/<username>/')
 def main(username):
     if '.ico' not in username:
@@ -62,6 +61,13 @@ def utility_processor3():
         else:
             return val/2
     return dict(ifNull0_divide2=ifNull0_divide2)
+
+
+@app.context_processor
+def utility_processor4():
+    def firstUpper(string):
+        return string.replace('-', ' ').title()
+    return dict(firstUpper=firstUpper)
 
 
 if __name__ == '__main__':
