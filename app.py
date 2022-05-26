@@ -2,15 +2,27 @@ from flask import Flask, render_template, request, redirect, url_for
 from username import getFromusername, fullUpdate
 import gunicorn
 import time
+from setCollections import mainSetCollection2
+from setPeople import mainSetNames2
+from setLists import updateLists
 
 app = Flask(__name__)
 
 
 @app.route('/<username>/')
 def main(username):
-    user = getFromusername(username.lower())
-    if user is not None:
-        return render_template('index.html', user=user, lbdurl='https://letterboxd.com/')
+    if '.ico' not in username:
+        if username.lower() == 'adminupdate':
+            mainSetNames2()
+            mainSetCollection2()
+            updateLists()
+            return render_template('username.html')
+        user = getFromusername(username.lower())
+        if user is not None:
+            if 'stats' in user:
+                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/')
+            else:
+                return redirect('/'+username+"/update/")
     return redirect('https://letterboxd.com/pro/')
 
 
@@ -30,7 +42,6 @@ def utility_processor():
     def format_comma(number):
         return f'{int(number):,}'
     return dict(format_comma=format_comma)
-
 
 
 @app.context_processor

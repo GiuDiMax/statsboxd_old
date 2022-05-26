@@ -7,6 +7,7 @@ import requests
 
 global uris, list_name
 
+
 async def get_watched3(url, session):
     global uris
     async with session.get(url=url) as response:
@@ -15,9 +16,11 @@ async def get_watched3(url, session):
         for sup in soup:
             uris.append(sup.div['data-film-slug'].split("/")[2])
 
+
 async def get_watched2(urlx):
     async with aiohttp.ClientSession() as session:
         await asyncio.gather(*[get_watched3(url, session) for url in urlx])
+
 
 def get_list_urls(url):
     resp = requests.get(url)
@@ -31,6 +34,7 @@ def get_list_urls(url):
         urlsx.append(url)
     asyncio.get_event_loop().run_until_complete(get_watched2(urlsx))
 
+
 def updateLists():
     global uris
     for list in listsSelection:
@@ -40,6 +44,4 @@ def updateLists():
             db.Lists.insert_one({'_id': list[0], 'name': list[1], 'uris': uris, 'isStats': True})
         except:
             db.Lists.update_one({'_id': list[0]}, {'$set': {'name': list[1], 'num': len(uris), 'uris': uris, 'isStats': True}})
-
-updateLists()
 

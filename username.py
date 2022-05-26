@@ -7,9 +7,9 @@ from datetime import datetime
 from stats import getStats, getLists
 from operations import fillMongodb
 from setPeople import mainSetNames2
+import time
 
 global listx
-
 
 async def get_watched3(url, session, diary):
     async with session.get(url=url) as response:
@@ -101,21 +101,26 @@ def getFromusername(username):
     if obj is not None:
         return obj
     fullCreation(username)
-    return db.Users.find_one({"username": username})
+    obj = db.Users.find_one({"username": username})
+    if obj is not None:
+        return obj
 
 
 def fullCreation(username):
     watched_list = get_watched(username, False)
-    diary_list = get_watched(username, True)
-    db.Users.insert_one({'username': username, 'watched': watched_list, 'diary': diary_list})
-    fullOperation(username)
+    if len(watched_list) > 0:
+        diary_list = get_watched(username, True)
+        db.Users.insert_one({'username': username, 'watched': watched_list, 'diary': diary_list})
+        fullOperation(username)
 
 
 def fullUpdate(username):
+    start = time.time()
     watched_list = get_watched(username, False)
     diary_list = get_watched(username, True)
     db.Users.update_one({'username': username}, {'$set': {'watched': watched_list, 'diary': diary_list}})
     fullOperation(username)
+    print(time.time()-start)
 
 
 def fullOperation(username):
@@ -134,7 +139,7 @@ def fullOperation(username):
     while True:
         obj1 = db.Film.find({"_id": {"$in": ids}})
         uris2 = list(set(uris) - set(obj1.distinct('uri')))
-        print(len(uris2))
+        print('film da aggiungere: ' + str(len(uris2)))
         if len(uris2) > 0:
             try:
                 fillMongodb(uris2)
@@ -143,7 +148,7 @@ def fullOperation(username):
         else:
             break
 
-    mainSetNames2()
+    #mainSetNames2()
     json3 = getStats(username)
     for x in json3:
         y = x
@@ -163,10 +168,12 @@ def fullOperation(username):
             y2.append({'_id': i, 'average': 0, 'sum': 0})
     y['totalyear'] = y2
 
+    '''
     x = []
     json4 = getLists()
     for i in json4:
         x.append(i)
     y = y | {'lists': x}
+    '''
     db.Users.update_one({'username': username}, {'$set': {'stats': y}})
 
