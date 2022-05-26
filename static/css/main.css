@@ -41,6 +41,31 @@ body{
   animation: spin 2s linear infinite;
 }
 
+.pielists{
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: space-between;
+}
+
+.hole {
+  width: 188px; height: 188px;
+  border-radius: 50%;
+  background: #14181c;
+}
+
+.donut {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 209px; height: 209px;
+    border-radius: 50%;
+
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }

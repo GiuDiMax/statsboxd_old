@@ -9,6 +9,7 @@ from config import *
 
 app = Flask(__name__)
 
+
 @app.route('/<username>/')
 def main(username):
     if '.ico' not in username:
@@ -73,6 +74,19 @@ def utility_processor4():
     def firstUpper(string):
         return string.replace('-', ' ').title()
     return dict(firstUpper=firstUpper)
+
+
+@app.context_processor
+def utility_processor5():
+    def perctodeg(val):
+        return 360*val
+    return dict(perctodeg=perctodeg)
+
+@app.context_processor
+def utility_processor5():
+    def valtoperc(val):
+        return int(val*100)
+    return dict(valtoperc=valtoperc)
 
 
 if __name__ == '__main__':
