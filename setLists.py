@@ -5,7 +5,7 @@ import asyncio
 from bs4 import BeautifulSoup, SoupStrainer
 import requests
 
-global uris, list_name
+global uri
 
 
 async def get_watched3(url, session):
@@ -14,7 +14,8 @@ async def get_watched3(url, session):
         ret = await response.read()
         soup = BeautifulSoup(ret, 'lxml').find_all('li', class_="poster-container")
         for sup in soup:
-            uris.append(sup.div['data-film-slug'].split("/")[2])
+            movie = sup.div['data-film-slug'].split("/")[2]
+            uris.append(movie)
 
 
 async def get_watched2(urlx):
@@ -37,6 +38,7 @@ def get_list_urls(url):
 
 def updateLists():
     global uris
+    db.Film.update_many({}, {'$unset': {'statsLists': ""}})
     for list in listsSelection:
         uris = []
         get_list_urls("https://letterboxd.com/" + list[0])
@@ -44,4 +46,7 @@ def updateLists():
             db.Lists.insert_one({'_id': list[0], 'name': list[1], 'uris': uris, 'isStats': True})
         except:
             db.Lists.update_one({'_id': list[0]}, {'$set': {'name': list[1], 'num': len(uris), 'uris': uris, 'isStats': True}})
+        db.Film.update_many({"uri": {"$in": uris}}, {'$push': {'statsLists': list[0]}})
 
+
+updateLists()
