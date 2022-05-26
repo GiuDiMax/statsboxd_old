@@ -63,7 +63,30 @@ body{
     justify-content: center;
     width: 209px; height: 209px;
     border-radius: 50%;
+}
 
+.actors{
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: space-between;
+}
+
+.holeperson{
+    position: relative;
+    top: -30px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.container_people{
+    display:flex;
+    flex-direction: column;
 }
 
 @keyframes spin {

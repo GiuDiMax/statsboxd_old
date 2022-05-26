@@ -56,8 +56,11 @@
                 {%endfor%}
             </section>
             <section class="actors">
-                {%for element in user.stats.mostwatchedactors%}
-
+                {%for element in user.stats.mostWatchedactors%}
+                    <div class="container_people">
+                        <span>{{ element.info[0].name }}</span>
+                        <img class="holeperson" src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"  alt="{{ element.info[0].name }}"/>
+                    </div>
                 {%endfor%}
             </section>
             <section>
