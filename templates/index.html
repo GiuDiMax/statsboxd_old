@@ -41,6 +41,9 @@
                     <canvas id="genre3Chart"></canvas>
                 </div>
             </section>
+            <section class="pielists">
+
+            </section>
             <section>
                 <div class="worldmap" id="world-map"></div>
             </section>
@@ -105,11 +108,11 @@
                         }]
                     },
                     options: {
+                        plugins: {legend: {display: false}},
                         maintainAspectRatio: false,
                         scales: {
-                            y: {
-                                beginAtZero: true
-                            }
+                            y: {beginAtZero: true, display: false},
+                            x: {display:false}
                         },
                         interaction: {
                             mode: 'nearest'
@@ -135,11 +138,11 @@
                         }]
                     },
                     options: {
+                        plugins: {legend: {display: false}},
                         maintainAspectRatio: false,
                         scales: {
-                            y: {
-                                beginAtZero: true
-                            }
+                            y: {beginAtZero: true, display: false},
+                            x: {display:false}
                         },
                         interaction: {
                             mode: 'nearest'
@@ -168,12 +171,12 @@
                         }]
                     },
                     options: {
+                        plugins: {legend: {display: false}},
                         indexAxis: 'y',
                         maintainAspectRatio: false,
                         scales: {
-                            y: {
-                                beginAtZero: true
-                            }
+                            y: {beginAtZero: true,},
+                            x: {beginAtZero: true, display:false}
                         },
                         interaction: {
                             mode: 'nearest'
