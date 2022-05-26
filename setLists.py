@@ -40,6 +40,7 @@ def updateLists():
     global uris
     db.Film.update_many({}, {'$unset': {'statsLists': ""}})
     for list in listsSelection:
+        print(list[1])
         uris = []
         get_list_urls("https://letterboxd.com/" + list[0])
         try:
@@ -47,3 +48,4 @@ def updateLists():
         except:
             db.Lists.update_one({'_id': list[0]}, {'$set': {'name': list[1], 'num': len(uris), 'uris': uris, 'isStats': True}})
         db.Film.update_many({"uri": {"$in": uris}}, {'$push': {'statsLists': list[0]}})
+

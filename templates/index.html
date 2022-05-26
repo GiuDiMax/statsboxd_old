@@ -42,7 +42,23 @@
                 </div>
             </section>
             <section class="pielists">
+                {%for element in user.stats.statsLists%}
+                    <div class="donut"
+                         style="background:
+                                 conic-gradient(#40bcf4 0deg {{ perctodeg(element.perc) }}deg,
+                                                #303c44 {{ perctodeg(element.perc) }}deg 360deg);">
+                        <div class="hole">
+                            <span class="listtitle">{{ element.name }}</span>
+                            <span class="listperc">{{ valtoperc(element.perc) }}%</span>
+                            <span class="listnum">{{ element.watched }} of {{ element.num }}</span>
+                        </div>
+                    </div>
+                {%endfor%}
+            </section>
+            <section class="actors">
+                {%for element in user.stats.mostwatchedactors%}
 
+                {%endfor%}
             </section>
             <section>
                 <div class="worldmap" id="world-map"></div>
