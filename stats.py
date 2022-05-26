@@ -121,6 +121,19 @@ def getStats(username):
                                  'num': {'$concat': [{'$toString': '$num'}, '/', {'$toString': '$info.num'}]}}})
     json_operations['collections'] = op_role
 
+    op_role = []
+    op_role.append({'$unwind': '$info.statsLists'})
+    op_role.append({'$group': {'_id': '$info.statsLists', 'num': {'$sum': 1}}})
+    op_role.append({'$lookup': {
+        'from': 'Lists',
+        'localField': '_id',
+        'foreignField': '_id',
+        'as': 'info'}})
+    op_role.append({'$project': {'_id': '$_id', 'name': {'$first': '$info.name'},
+                                 'watched': '$num', 'num': {'$first': '$info.num'}}})
+    op_role.append({'$addFields': {"perc": {'$divide': ['$watched', '$num']}}}),
+    json_operations['statsLists'] = op_role
+
     ob3 = db.Users.aggregate([
         {'$match': {"username": username}},
         {'$unwind': '$watched'},
@@ -134,7 +147,7 @@ def getStats(username):
     ])
     return ob3
 
-
+#OBSOLETO
 def getLists():
     return(db.Lists.aggregate([
         {'$match': {"isStats": True}},
