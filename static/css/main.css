@@ -6,6 +6,35 @@
     margin-left:auto;
     margin-right:auto;
     padding-bottom:200px;
+    text-align: center;
+}
+
+@font-face {
+	font-family: TiemposTextWeb-Semibold;
+	font-style: normal;
+	font-weight: 400;
+	src: url('/static/fonts/TiemposTextWeb-Semibold.woff') format("woff");
+}
+
+@font-face {
+	font-family: Graphik-Light-Web;
+	font-style: normal;
+	font-weight: 400;
+	src: url('/static/fonts/Graphik-Light-Web.woff') format("woff");
+}
+
+@font-face {
+	font-family: Graphik-Regular-Web;
+	font-style: normal;
+	font-weight: 400;
+	src: url('/static/fonts/Graphik-Regular-Web.woff') format("woff");
+}
+
+@font-face {
+	font-family: Graphik-Semibold-Web;
+	font-style: normal;
+	font-weight: 400;
+	src: url('/static/fonts/Graphik-Semibold-Web.woff') format("woff");
 }
 
 body{
@@ -16,10 +45,11 @@ body{
 
 h1, h2, h3, h4, h5, label, span, a {
     color: #fff;
+    font-family: Graphik-Regular-Web, sans-serif;
 }
 
 span{
-    font-family: Graphik-Semibold-Web,sans-serif;
+    font-family: Graphik-Semibold-Web, sans-serif;
 }
 
 .madeby{
@@ -45,10 +75,125 @@ span{
     justify-content: space-between;
 }
 
+.hide{
+    display:none !important;
+}
+
+.mainTitle{
+    color: #fff;
+    font-size: 96px;
+    font-family: TiemposTextWeb-Semibold, Georgia, serif;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: -.02em;
+    line-height: 1;
+    position: relative;
+    text-align: center;
+    text-shadow: 0 0 0.25em rgb(20 24 28 / 75%);
+}
+
+.mainTitlesec{
+
+}
+
+.numbersStats{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    gap:50px;
+}
+
+.numbersStats div{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.numbersStats .number{
+    color: #d8e0e8;
+    font-family: TiemposTextWeb-Semibold,Georgia,serif;
+    font-size: 2.46153846rem;
+    font-weight: 400;
+}
+
+.numbersStats .text{
+    color: #9ab;
+    font-family: Graphik-Regular-Web,sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: .075em;
+    margin-top: 0.66666667em;
+    text-transform: uppercase;
+}
+
+.sepline{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    padding-top:50px;
+    padding-bottom: 20px;
+    gap: 15px;
+}
+
+.sepline span{
+    color: #fff;
+    font-family: Graphik-Regular-Web,sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: .075em;
+    line-height: 1.2;
+    margin: 0;
+    text-transform: uppercase;
+    flex-grow: 0;
+}
+
+.sepline .line{
+    background-color: #2c3440;
+    height:1px;
+    flex-grow: 1;
+}
+
+.sepline .clickable{
+    color: #89a;
+    font-family: Graphik-Regular-Web,sans-serif;
+    cursor:pointer;
+}
+
+.sepline .clickable:focus{
+    color: #40bcf4;
+}
+
+.sepline .active{
+    color: #40bcf4;
+}
+
+.byyear{
+    margin: auto;
+    width:80%;
+}
+
 .chart-container{
-  margin: auto;
-  height: 120px;
-  width: 80%;
+    margin-left: 25px;
+    margin-right: 25px;
+    height: 120px;
+}
+
+.chart-container .years {
+    display:flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    flex-basis: 100%;
+    padding-top:12px;
+}
+
+.chart-container .years span{
+    color: #fff;
+    font-family: Graphik-Regular-Web,sans-serif;
+    font-size: 15px;
+    line-height: 1.2;
 }
 
 .attributes-chart{

@@ -10,7 +10,6 @@
         <script src="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.min.js') }}"></script>
         <script src="//jvectormap.com/js/jquery-jvectormap-world-mill.js"></script>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-        <!--<link rel="stylesheet" href="//s.ltrbxd.com/static/css/main.min.bccb3911.css">-->
     </head>
     <body>
         <div class="headerbar">
@@ -20,14 +19,41 @@
             <span class="madeby">Project made by GiuDiMax</span>
         </div>
         <div id="content" class="content">
-            <h1>A life in Film</h1>
-            <h2>{{ format_comma(user.stats.total[0].movies) }}</h2>
+            <section class="mainTitlesec">
+                <h1 class="mainTitle">A Life in Film</h1>
+                <div class="numbersStats">
+                    <div>
+                        <span class="number">{{ format_comma(user.stats.total[0].movies) }}</span>
+                        <span class="text">Films</span>
+                    </div>
+                    <div>
+                        <span class="number">{{ format_comma(user.stats.total[0].runtime/60) }}</span>
+                        <span class="text">Hours</span>
+                    </div>
+                    <div>
+                        <span class="number">?</span>
+                        <span class="text">Directors</span>
+                    </div>
+                    <div>
+                        <span class="number">?</span>
+                        <span class="text">Countries</span>
+                    </div>
+                </div>
+            </section>
             <section class="byyear">
-                <div class="chart-container">
-                    <canvas id="releaseYear"></canvas>
+                <div class="sepline">
+                    <span>By release year</span>
+                    <div class="line"></div>
+                    <span class="clickable active" data-show="releaseYear" data-hide="yearChart">Films</span>
+                    <span class="clickable" data-show="ratingYear" data-hide="yearChart">Ratings</span>
                 </div>
                 <div class="chart-container">
-                    <canvas id="ratingYear"></canvas>
+                    <canvas id="releaseYear" class="yearChart"></canvas>
+                    <canvas id="ratingYear" class="yearChart hide"></canvas>
+                    <div class="years">
+                        <span>{{ user.stats.totalyear[0]._id }}</span>
+                        <span>{{ user.stats.totalyear[-1]._id }}</span>
+                    </div>
                 </div>
             </section>
             <section class="attributes-chart">
@@ -79,6 +105,14 @@
     <footer>
         <script>
             $(document).ready(function () {
+
+
+                $('.clickable').click(function() {
+                    $('.'+$(this).attr('data-hide')).addClass('hide');
+                    $('#'+$(this).attr('data-show')).removeClass('hide');
+                    $(this).addClass('active');
+                    $(this).siblings().removeClass('active');
+                })
 
                 //WORLDMAP
                 var worldData = {
