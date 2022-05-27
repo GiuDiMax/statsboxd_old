@@ -169,7 +169,7 @@ span{
     color: #40bcf4;
 }
 
-.byyear{
+.sectionStats{
     margin: auto;
     width:80%;
 }
@@ -180,16 +180,18 @@ span{
     height: 120px;
 }
 
-.chart-container .years {
+.years {
     display:flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-between;
     flex-basis: 100%;
     padding-top:12px;
+    margin-left: 25px;
+    margin-right: 25px;
 }
 
-.chart-container .years span{
+.years span{
     color: #fff;
     font-family: Graphik-Regular-Web,sans-serif;
     font-size: 15px;
@@ -198,11 +200,11 @@ span{
 
 .attributes-chart{
     display:flex;
-    margin: auto;
     flex-direction:row;
     flex-wrap:nowrap;
-    width: 80%;
     height: 295px;
+    gap: 20px;
+    justify-content: space-between;
 }
 
 .worldmap{
