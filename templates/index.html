@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </section>
-            <section class="byyear">
+            <section class="sectionStats">
                 <div class="sepline">
                     <span>By release year</span>
                     <div class="line"></div>
@@ -50,21 +50,27 @@
                 <div class="chart-container">
                     <canvas id="releaseYear" class="yearChart"></canvas>
                     <canvas id="ratingYear" class="yearChart hide"></canvas>
-                    <div class="years">
-                        <span>{{ user.stats.totalyear[0]._id }}</span>
-                        <span>{{ user.stats.totalyear[-1]._id }}</span>
-                    </div>
+                </div>
+                <div class="years">
+                    <span>{{ user.stats.totalyear[0]._id }}</span>
+                    <span>{{ user.stats.totalyear[-1]._id }}</span>
                 </div>
             </section>
-            <section class="attributes-chart">
-                <div>
-                    <canvas id="genreChart"></canvas>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Genres, Countries & Languages</span>
+                    <div class="line"></div>
                 </div>
-                <div>
-                    <canvas id="countriesChart"></canvas>
-                </div>
-                <div>
-                    <canvas id="languageChart"></canvas>
+                <div class="attributes-chart">
+                    <div>
+                        <canvas id="genreChart"></canvas>
+                    </div>
+                    <div>
+                        <canvas id="countriesChart"></canvas>
+                    </div>
+                    <div>
+                        <canvas id="languageChart"></canvas>
+                    </div>
                 </div>
             </section>
             <section class="attributes-chart">
@@ -216,6 +222,12 @@
                 });
 
                 //GENRES CHART
+                var genreUri = {
+                    {%for element in user.stats.mostWatchedgenres_main%}
+                        '{{ firstUpper(element['_id']) }}': '{{ element['_id'] }}',
+                    {%endfor%}
+                };
+
                 new Chart(document.getElementById('genreChart'), {
                     type: 'bar',
                     data: {
@@ -243,6 +255,11 @@
                             mode: 'nearest'
                         },
                         responsive: true,
+                        onClick: (e, el) => {
+                            console.log(e);
+                            console.log(el);
+                            //location.href = '{{ lbdurl }}{{ user.username }}/films/genres/'+ genreUri[el] + '/' ;
+                        }
                     }
                 });
             })
