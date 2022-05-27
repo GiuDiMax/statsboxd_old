@@ -210,7 +210,7 @@ span{
     justify-content: space-between;
 }
 
-.threecolumn div{
+.sixColumn div{
     width: 16%;
 }
 
@@ -242,7 +242,7 @@ span{
     color: #8dbbc3;
     float: left;
     font-family: Graphik-Regular-Web,sans-serif;
-    font-size: 12px;
+    font-size: 15px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
