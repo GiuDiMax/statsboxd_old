@@ -61,24 +61,69 @@
                     <span>Genres, Countries & Languages</span>
                     <div class="line"></div>
                 </div>
-                <div class="attributes-chart">
+                <div class="attributes-chart threecolumn">
+                    <div class="labels">
+                        {% for i in range(10) %}
+                            <span class="clickable" data-url="/films/country/{{ user.stats.mostWatchedgenres_main[i]['_id'] }}">
+                                {{ firstUpper(user.stats.mostWatchedgenres_main[i]['_id']) }}
+                            </span>
+                        {%endfor%}
+                    </div>
                     <div>
                         <canvas id="genreChart"></canvas>
                     </div>
+                    <div class="labels">
+                        {% for i in range(10) %}
+                            <span class="clickable" data-url="/films/genre/{{ user.stats.mostWatchedcountry[i]['_id'] }}">
+                                {{ firstUpper(user.stats.mostWatchedcountry[i]['_id']) }}
+                            </span>
+                        {%endfor%}
+                    </div>
                     <div>
-                        <canvas id="countriesChart"></canvas>
+                        <canvas id="countryChart"></canvas>
+                    </div>
+                    <div class="labels">
+                        {% for i in range(10) %}
+                            <span class="clickable label1" data-url="/films/language/{{ user.stats.mostWatchedlanguage[i]['_id'] }}">
+                                {{ firstUpper(user.stats.mostWatchedlanguage[i]['_id']) }}
+                            </span>
+                        {%endfor%}
                     </div>
                     <div>
                         <canvas id="languageChart"></canvas>
                     </div>
                 </div>
             </section>
-            <section class="attributes-chart">
-                <div>
-                    <canvas id="genre2Chart"></canvas>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>THEMES & NANOGENRES®</span>
+                    <div class="line"></div>
                 </div>
-                <div>
-                    <canvas id="genre3Chart"></canvas>
+                <div class="attributes-chart twocolumn">
+                    <div class="left">
+                        <div class="labels">
+                            {% for i in range(10) %}
+                                <span class="clickable label2" data-url="#">
+                                    {{ firstUpper(user.stats.mostWatchedgenres_main[i]['_id']) }}
+                                </span>
+                            {%endfor%}
+                        </div>
+                        <div>
+                            <canvas id="genre2Chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="labels">
+                            {% for i in range(10) %}
+                                <span class="clickable label2" data-url="#">
+                                    {{ firstUpper(user.stats.mostWatchedgenres_main[i]['_id']) }}
+                                </span>
+                            {%endfor%}
+                        </div>
+                        <div>
+                            <canvas id="genre3Chart"></canvas>
+                        </div>
+                    </div>
                 </div>
             </section>
             <section class="pielists">
@@ -112,6 +157,7 @@
         <script>
             $(document).ready(function () {
 
+                const isMobile = true;
 
                 $('.clickable').click(function() {
                     $('.'+$(this).attr('data-hide')).addClass('hide');
@@ -145,8 +191,9 @@
                       el.html(el.html() + ' ' + worldData[code]);
                   },
                   onRegionClick: function(e, el, code){
+                      if (isMobile) {
                       location.href = '{{ lbdurl }}{{ user.username }}/films/country/'+ worldDataUri[el] + '/' ;
-                  }
+                  }}
                 });
 
                 //BYYEARCHART
@@ -172,25 +219,29 @@
                             backgroundColor: gradient,
                             borderWidth: 0,
                             borderRadius: 3,
+                            borderSkipped: false,
+                            borderSkipped: false,
                         }]
                     },
                     options: {
                         plugins: {legend: {display: false}},
                         maintainAspectRatio: false,
                         scales: {
-                            y: {beginAtZero: true, display: false},
-                            x: {display:false}
+                            y: {beginAtZero: true, display:false},
+                            x: {display:false},
+                            offset: false,
                         },
                         interaction: {
                             mode: 'nearest'
                         },
                         responsive: true,
                         onClick: (e, items) => {
+                            if (isMobile) {
                             location.href = '{{ lbdurl }}{{ user.username }}/films/year/'+ releaseYearChart.data.datasets[0].data[items[0].index].x + '/' ;
-                        }
+                        }}
                     }
                 });
-                var ratingYear = new Chart(ctx2, {
+                new Chart(ctx2, {
                     type: 'bar',
                     data: {
                         datasets: [{
@@ -202,64 +253,191 @@
                             backgroundColor: gradient2,
                             borderWidth: 0,
                             borderRadius: 3,
+                            borderSkipped: false,
                         }]
                     },
                     options: {
                         plugins: {legend: {display: false}},
                         maintainAspectRatio: false,
                         scales: {
-                            y: {beginAtZero: true, display: false},
-                            x: {display:false}
+                            y: {beginAtZero: true, display:false},
+                            x: {display:false},
+                            offset: false,
                         },
                         interaction: {
                             mode: 'nearest'
                         },
                         responsive: true,
                         onClick: (e, items) => {
+                            if (isMobile) {
                             location.href = '{{ lbdurl }}{{ user.username }}/films/year/'+ releaseYearChart.data.datasets[0].data[items[0].index].x + '/' ;
-                        }
+                        }}
                     }
                 });
 
-                //GENRES CHART
-                var genreUri = {
-                    {%for element in user.stats.mostWatchedgenres_main%}
-                        '{{ firstUpper(element['_id']) }}': '{{ element['_id'] }}',
-                    {%endfor%}
-                };
-
-                new Chart(document.getElementById('genreChart'), {
+                //LANGUAGE COUNTY CHART
+                var languageChart = new Chart(document.getElementById('languageChart'), {
                     type: 'bar',
                     data: {
                         datasets: [{
                             data: [
                                 {% for i in range(10) %}
-                                    {y: "{{ firstUpper(user.stats.mostWatchedgenres_main[i]['_id']) }}",
-                                     x: {{ (user.stats.mostWatchedgenres_main[i]['sum']) }}},
+                                    {y: "{{ user.stats.mostWatchedlanguage[i]['_id'] }}",
+                                     x: {{ (user.stats.mostWatchedlanguage[i]['sum']) }}},
                                 {%endfor%}
                             ],
-                            backgroundColor: 'rgb(0, 224, 84)',
+                            backgroundColor: '#ff8000',
                             borderWidth: 0,
                             borderRadius: 3,
+                            borderSkipped: false,
                         }]
                     },
                     options: {
+                        barPercentage: 0.97,
                         plugins: {legend: {display: false}},
                         indexAxis: 'y',
                         maintainAspectRatio: false,
                         scales: {
-                            y: {beginAtZero: true,},
-                            x: {beginAtZero: true, display:false}
+                            y: {beginAtZero: true, display:false},
+                            x: {beginAtZero: true, display:false},
+                            offset: false,
                         },
                         interaction: {
                             mode: 'nearest'
                         },
                         responsive: true,
-                        onClick: (e, el) => {
-                            console.log(e);
-                            console.log(el);
-                            //location.href = '{{ lbdurl }}{{ user.username }}/films/genres/'+ genreUri[el] + '/' ;
-                        }
+                    }
+                });
+
+                var countryChart = new Chart(document.getElementById('countryChart'), {
+                    type: 'bar',
+                    data: {
+                        datasets: [{
+                            data: [
+                                {% for i in range(10) %}
+                                    {y: "{{ user.stats.mostWatchedcountry[i]['_id'] }}",
+                                     x: {{ (user.stats.mostWatchedcountry[i]['sum']) }}},
+                                {%endfor%}
+                            ],
+                            backgroundColor: '#40bcf4',
+                            borderWidth: 0,
+                            borderRadius: 3,
+                            borderSkipped: false,
+                        }]
+                    },
+                    options: {
+                        barPercentage: 0.97,
+                        plugins: {legend: {display: false}},
+                        indexAxis: 'y',
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {beginAtZero: true, display: false},
+                            x: {display:false, display: false},
+                            offset: false,
+                        },
+                        interaction: {
+                            mode: 'nearest'
+                        },
+                        responsive: true,
+                    }
+                });
+
+                //GENRES CHART
+
+                var genreChart = new Chart(document.getElementById('genreChart'), {
+                    type: 'bar',
+                    data: {
+                        datasets: [{
+                            data: [
+                                {% for i in range(10) %}
+                                    {y: "{{ user.stats.mostWatchedgenres_main[i]['_id'] }}",
+                                     x: {{ (user.stats.mostWatchedgenres_main[i]['sum']) }}},
+                                {%endfor%}
+                            ],
+                            backgroundColor: '#08e359',
+                            borderWidth: 0,
+                            borderRadius: 3,
+                            borderSkipped: false,
+                        }]
+                    },
+                    options: {
+                        barPercentage: 0.97,
+                        plugins: {legend: {display: false}},
+                        indexAxis: 'y',
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {beginAtZero: true, display: false},
+                            x: {display:false, display: false},
+                            offset: false,
+                        },
+                        interaction: {
+                            mode: 'nearest'
+                        },
+                        responsive: true,
+                    }
+                });
+
+                new Chart(document.getElementById('genre2Chart'), {
+                    type: 'bar',
+                    data: {
+                        datasets: [{
+                            data: [
+                                {% for i in range(10) %}
+                                    {y: "{{ firstUpper(user.stats.mostWatchedgenres_themes[i]['_id']) }}",
+                                     x: {{ (user.stats.mostWatchedgenres_themes[i]['sum']) }}},
+                                {%endfor%}
+                            ],
+                            backgroundColor: '#283038',
+                            borderWidth: 0,
+                            borderRadius: 3,
+                            borderSkipped: false,
+                        }]
+                    },
+                    options: {
+                        barPercentage: 0.97,
+                        plugins: {legend: {display: false}, tooltip: {enabled: false}},
+                        indexAxis: 'y',
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {beginAtZero: true, ticks: {mirror: true} },
+                            x: {beginAtZero: true, display: false},
+                        },
+                        interaction: {
+                            mode: 'nearest'
+                        },
+                        responsive: true,
+                    }
+                });
+
+                new Chart(document.getElementById('genre3Chart'), {
+                    type: 'bar',
+                    data: {
+                        datasets: [{
+                            data: [
+                                {% for i in range(10) %}
+                                    {y: "{{ firstUpper(user.stats['mostWatchedgenres_mini-themes'][i]['_id']) }}",
+                                     x: {{ (user.stats['mostWatchedgenres_mini-themes'][i]['sum']) }}},
+                                {%endfor%}
+                            ],
+                            backgroundColor: '#283038',
+                            borderWidth: 0,
+                            borderRadius: 3,
+                            borderSkipped: false,
+                        }]
+                    },
+                    options: {
+                        barPercentage: 0.97,
+                        plugins: {legend: {display: false}},
+                        indexAxis: 'y',
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {beginAtZero: true, ticks: {mirror: true} },
+                            x: {beginAtZero: true, display: false}
+                        },
+                        interaction: {
+                            mode: 'nearest'
+                        },
+                        responsive: true,
                     }
                 });
             })

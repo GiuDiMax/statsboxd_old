@@ -72,6 +72,8 @@ def utility_processor3():
 @app.context_processor
 def utility_processor4():
     def firstUpper(string):
+        if len(string) < 4:
+            return string.replace('-', ' ').title().upper()
         return string.replace('-', ' ').title()
     return dict(firstUpper=firstUpper)
 

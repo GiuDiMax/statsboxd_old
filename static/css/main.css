@@ -158,11 +158,14 @@ span{
 .sepline .clickable{
     color: #89a;
     font-family: Graphik-Regular-Web,sans-serif;
+}
+
+.clickable{
     cursor:pointer;
 }
 
-.sepline .clickable:focus{
-    color: #40bcf4;
+.clickable:hover{
+    color: #40bcf4 !important;
 }
 
 .sepline .active{
@@ -203,8 +206,47 @@ span{
     flex-direction:row;
     flex-wrap:nowrap;
     height: 295px;
-    gap: 20px;
+    flex-basis: 100%;
     justify-content: space-between;
+}
+
+.threecolumn div{
+    width: 16%;
+}
+
+.twocolumn div{
+    width: 50%;
+}
+
+.attributes-chart .labels {
+    margin-top: 7px;
+    margin-bottom: 7px;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.label1 {
+    color: #fff;
+    float: left;
+    font-family: Graphik-Regular-Web,sans-serif;
+    font-size: 18px;
+    line-height: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+}
+
+.label2 {
+    color: #8dbbc3;
+    float: left;
+    font-family: Graphik-Regular-Web,sans-serif;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
 }
 
 .worldmap{
