@@ -61,7 +61,7 @@
                     <span>Genres, Countries & Languages</span>
                     <div class="line"></div>
                 </div>
-                <div class="attributes-chart threecolumn">
+                <div class="attributes-chart sixColumn">
                     <div class="labels">
                         {% for i in range(10) %}
                             <span class="clickable" data-url="/films/country/{{ user.stats.mostWatchedgenres_main[i]['_id'] }}">
@@ -104,7 +104,7 @@
                         <div class="labels">
                             {% for i in range(10) %}
                                 <span class="clickable label2" data-url="#">
-                                    {{ firstUpper(user.stats.mostWatchedgenres_main[i]['_id']) }}
+                                    {{ firstUpper(user.stats.mostWatchedgenres_themes[i]['_id']) }}
                                 </span>
                             {%endfor%}
                         </div>
@@ -116,7 +116,7 @@
                         <div class="labels">
                             {% for i in range(10) %}
                                 <span class="clickable label2" data-url="#">
-                                    {{ firstUpper(user.stats.mostWatchedgenres_main[i]['_id']) }}
+                                    {{ firstUpper(user.stats['mostWatchedgenres_mini-themes'][i]['_id']) }}
                                 </span>
                             {%endfor%}
                         </div>
