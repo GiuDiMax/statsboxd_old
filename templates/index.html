@@ -64,7 +64,7 @@
                 <div class="attributes-chart sixColumn">
                     <div class="labels">
                         {% for i in range(10) %}
-                            <span class="clickable" data-url="/films/country/{{ user.stats.mostWatchedgenres_main[i]['_id'] }}">
+                            <span class="clickable label1" data-url="/films/country/{{ user.stats.mostWatchedgenres_main[i]['_id'] }}">
                                 {{ firstUpper(user.stats.mostWatchedgenres_main[i]['_id']) }}
                             </span>
                         {%endfor%}
@@ -74,7 +74,7 @@
                     </div>
                     <div class="labels">
                         {% for i in range(10) %}
-                            <span class="clickable" data-url="/films/genre/{{ user.stats.mostWatchedcountry[i]['_id'] }}">
+                            <span class="clickable label1" data-url="/films/genre/{{ user.stats.mostWatchedcountry[i]['_id'] }}">
                                 {{ firstUpper(user.stats.mostWatchedcountry[i]['_id']) }}
                             </span>
                         {%endfor%}
@@ -100,45 +100,61 @@
                     <div class="line"></div>
                 </div>
                 <div class="attributes-chart twocolumn">
-                    <div class="left">
-                        <div class="labels">
-                            {% for i in range(10) %}
-                                <span class="clickable label2" data-url="#">
-                                    {{ firstUpper(user.stats.mostWatchedgenres_themes[i]['_id']) }}
-                                </span>
-                            {%endfor%}
-                        </div>
-                        <div>
+                    <div class="left overlap1">
+                        <div class="graph">
                             <canvas id="genre2Chart"></canvas>
                         </div>
-                    </div>
-                    <div class="right">
                         <div class="labels">
                             {% for i in range(10) %}
-                                <span class="clickable label2" data-url="#">
-                                    {{ firstUpper(user.stats['mostWatchedgenres_mini-themes'][i]['_id']) }}
-                                </span>
+                                <div class="clickable label2" data-url="#">
+                                    <span class="leftText">
+                                        {{ firstUpper(user.stats['mostWatchedgenres_themes'][i]['_id']) }}
+                                    </span>
+                                    <span class="bold right">
+                                        {{ user.stats['mostWatchedgenres_themes'][i]['sum'] }} films
+                                    </span>
+                                </div>
                             {%endfor%}
                         </div>
-                        <div>
+                    </div>
+                    <div class="right overlap1">
+                        <div class="graph">
                             <canvas id="genre3Chart"></canvas>
+                        </div>
+                        <div class="labels">
+                            {% for i in range(10) %}
+                                <div class="clickable label2" data-url="#">
+                                    <span class="leftText">
+                                        {{ firstUpper(user.stats['mostWatchedgenres_mini-themes'][i]['_id']) }}
+                                    </span>
+                                    <span class="bold right">
+                                        {{ user.stats['mostWatchedgenres_mini-themes'][i]['sum'] }} films
+                                    </span>
+                                </div>
+                            {%endfor%}
                         </div>
                     </div>
                 </div>
             </section>
-            <section class="pielists">
-                {%for element in user.stats.statsLists%}
-                    <div class="donut"
-                         style="background:
-                                 conic-gradient(#40bcf4 0deg {{ perctodeg(element.perc) }}deg,
-                                                #303c44 {{ perctodeg(element.perc) }}deg 360deg);">
-                        <div class="hole">
-                            <span class="listtitle">{{ element.name }}</span>
-                            <span class="listperc">{{ valtoperc(element.perc) }}%</span>
-                            <span class="listnum">{{ element.watched }} of {{ element.num }}</span>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>List progress</span>
+                    <div class="line"></div>
+                </div>
+                <div class="pielists">
+                    {%for element in user.stats.statsLists%}
+                        <div class="donut"
+                             style="background:
+                                     conic-gradient(#40bcf4 0deg {{ perctodeg(element.perc) }}deg,
+                                                    #303c44 {{ perctodeg(element.perc) }}deg 360deg);">
+                            <div class="hole">
+                                <span class="listtitle">{{ element.name }}</span>
+                                <span class="listperc">{{ valtoperc(element.perc) }}%</span>
+                                <span class="listnum">{{ element.watched }} of {{ element.num }}</span>
+                            </div>
                         </div>
-                    </div>
-                {%endfor%}
+                    {%endfor%}
+                </div>
             </section>
             <section class="actors">
                 {%for element in user.stats.mostWatchedactors%}
@@ -399,7 +415,7 @@
                         indexAxis: 'y',
                         maintainAspectRatio: false,
                         scales: {
-                            y: {beginAtZero: true, ticks: {mirror: true} },
+                            y: {beginAtZero: true, display: false },
                             x: {beginAtZero: true, display: false},
                         },
                         interaction: {
@@ -431,7 +447,7 @@
                         indexAxis: 'y',
                         maintainAspectRatio: false,
                         scales: {
-                            y: {beginAtZero: true, ticks: {mirror: true} },
+                            y: {beginAtZero: true, display: false },
                             x: {beginAtZero: true, display: false}
                         },
                         interaction: {

@@ -205,25 +205,49 @@ span{
     display:flex;
     flex-direction:row;
     flex-wrap:nowrap;
-    height: 295px;
+    height: auto;
     flex-basis: 100%;
     justify-content: space-between;
 }
 
 .sixColumn div{
     width: 16%;
+    height: 295px;
 }
 
-.twocolumn div{
-    width: 50%;
+.overlap1{
+    height:374px;
+    overflow:hidden;
+}
+
+.overlap1 .labels{
+    z-index:5;
+    height:374px;
+    position:relative;
+    top:-374px;
+    margin:0;
+}
+
+.overlap1 .graph{
+    height:374px;
+}
+
+.overlap1 canvas{
+}
+
+.twocolumn{
+    justify-content: space-between;
+}
+
+.twocolumn>div{
+    width: 47%;
 }
 
 .attributes-chart .labels {
-    margin-top: 7px;
-    margin-bottom: 7px;
     display:flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
+    margin: 0 !important;
 }
 
 .label1 {
@@ -238,15 +262,34 @@ span{
     text-align: left;
 }
 
-.label2 {
+.label2 span {
     color: #8dbbc3;
     float: left;
     font-family: Graphik-Regular-Web,sans-serif;
-    font-size: 15px;
-    overflow: hidden;
+    font-size: 14px;
     text-overflow: ellipsis;
     white-space: nowrap;
     text-align: left;
+    overflow: hidden;
+    padding:2px;
+    padding-left: 10px;
+}
+
+.label2 .leftText{
+    width: 70%;
+    overflow: hidden;
+}
+
+.label2 .right{
+    float:right;
+}
+
+.label2 .bold{
+    font-weight: 600;
+}
+
+.label2:hover span{
+    color:white !important;
 }
 
 .worldmap{
@@ -264,8 +307,7 @@ span{
 }
 
 .pielists{
-    width: 80%;
-    margin: auto;
+    padding-top:30px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -273,10 +315,29 @@ span{
     justify-content: space-between;
 }
 
+.listtitle{
+    font-family: Graphik-Regular-Web,sans-serif;
+    line-height: 1.2;
+    font-size: 17px;
+    width:70%;
+    margin:5px auto;
+}
+
+.listperc{
+    font-family: Graphik-Light-Web,sans-serif;
+    font-size: 40px;
+    width:70%;
+    margin:0 auto;
+}
+
 .hole {
-  width: 188px; height: 188px;
-  border-radius: 50%;
-  background: #14181c;
+    width: 188px; height: 188px;
+    border-radius: 50%;
+    background: #14181c;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content:center;
 }
 
 .donut {
