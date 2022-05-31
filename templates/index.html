@@ -147,22 +147,94 @@
                              style="background:
                                      conic-gradient(#40bcf4 0deg {{ perctodeg(element.perc) }}deg,
                                                     #303c44 {{ perctodeg(element.perc) }}deg 360deg);">
-                            <div class="hole">
-                                <span class="listtitle">{{ element.name }}</span>
-                                <span class="listperc">{{ valtoperc(element.perc) }}%</span>
-                                <span class="listnum">{{ element.watched }} of {{ element.num }}</span>
-                            </div>
+                            <a class="hole" href="{{  lbdurl }}/{{ element._id }}">
+                                    <span class="listtitle">{{ element.name }}</span>
+                                    <span class="listperc">{{ valtoperc(element.perc) }}%</span>
+                                    <span class="listnum">{{ element.watched }} of {{ element.num }}</span>
+                            </a>
                         </div>
                     {%endfor%}
                 </div>
             </section>
-            <section class="actors">
-                {%for element in user.stats.mostWatchedactors%}
-                    <div class="container_people">
-                        <span>{{ element.info[0].name }}</span>
-                        <img class="holeperson" src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"  alt="{{ element.info[0].name }}"/>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Collections (WIP)</span>
+                    <div class="line"></div>
+                    <!--<<span class="clickable active" data-show="completeCollection" data-hide="collections">Complete</span>
+                    <span class="clickable" data-show="almostCollection" data-hide="collections">Almost Complete</span>-->
+                </div>
+                <div class="collections">
+                    <div id="completeCollection">
+                            {%for element in user.stats.collections%}
+                                <div class="singleCollection" >
+                                    <a class="name" href="{{ lbdurl }}films/in/{{ element['_id'] }}/by/release-earliest/size/large/">
+                                        {{ element['name'] }}
+                                    </a>
+                                    <span class="progress sottotitolo">
+                                        {{ element['num'] }} watched
+                                    </span>
+                                </div>
+                            {%endfor%}
                     </div>
-                {%endfor%}
+                    <div id="almostCollection">
+                    </div>
+                </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Rated higher then average</span>
+                    <div class="line"></div>
+                </div>
+                <div class="filmList">
+                        {%for element in user.stats.topToAverage%}
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                    <img src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo stelline">{{ numToStars(element.rating) }}</span>
+                                    <span class="sottotitolo">vs {{ element.media }}</span>
+                                </div>
+                            </div>
+                        {%endfor%}
+                </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Rated lower then average</span>
+                    <div class="line"></div>
+                </div>
+                <div class="filmList">
+                        {%for element in user.stats.flopToAverage%}
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                    <img src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo stelline">{{ numToStars(element.rating) }}</span>
+                                    <span class="sottotitolo">vs {{ element.media }}</span>
+                                </div>
+                            </div>
+                        {%endfor%}
+                </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Stars</span>
+                    <div class="line"></div>
+                    <span class="clickable active" data-show="actorsWatch" data-hide="actors">Most Watched</span>
+                    <span class="clickable" data-show="actorsRat" data-hide="actors">Highest Rated</span>
+                </div>
+                <div class="actors2">
+                    <section id="actorsWatch" class="actors">
+                        {%for element in user.stats.mostWatchedactors%}
+                            <div class="container_people">
+                                <span>{{ element.info[0].name }}</span>
+                                <img class="holeperson" src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"  alt="{{ element.info[0].name }}"/>
+                            </div>
+                        {%endfor%}
+                    </section>
+                </div>
             </section>
             <section>
                 <div class="worldmap" id="world-map"></div>

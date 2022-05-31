@@ -84,11 +84,31 @@ def utility_processor5():
         return 360*val
     return dict(perctodeg=perctodeg)
 
+
 @app.context_processor
-def utility_processor5():
+def utility_processor6():
     def valtoperc(val):
         return int(val*100)
     return dict(valtoperc=valtoperc)
+
+
+@app.context_processor
+def utility_processor7():
+    def numToStars(num, half=True):
+        if half:
+            num = num/2
+        result = int(num) * "★"
+        if num > int(num):
+            result = result + "½"
+        return result
+    return dict(numToStars=numToStars)
+
+
+@app.context_processor
+def utility_processor8():
+    def replaceSize(src, height, width):
+        return src.split("-0-")[0] + "-0-" + str(height) + "-0-" + str(width) + "-crop.jpg"
+    return dict(replaceSize=replaceSize)
 
 
 if __name__ == '__main__':

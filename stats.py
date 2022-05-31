@@ -71,7 +71,7 @@ def getStats(username):
     op_role.append({'$match': {"media": {'$gt': 0}}})
     op_role.append({'$addFields': {'rispettoMedia': {'$subtract': [{'$divide': ['$rating', 2]}, '$media']}}})
     op_role.append({'$sort': {'rispettoMedia': -1}})
-    op_role.append({'$limit': 10})
+    op_role.append({'$limit': 12})
     json_operations['topToAverage'] = op_role
 
     op_role = []
@@ -84,7 +84,7 @@ def getStats(username):
     op_role.append({'$match': {"media": {'$gt': 0}}})
     op_role.append({'$addFields': {'rispettoMedia': {'$subtract': [{'$divide': ['$rating', 2]}, '$media']}}})
     op_role.append({'$sort': {'rispettoMedia': 1}})
-    op_role.append({'$limit': 10})
+    op_role.append({'$limit': 12})
     json_operations['flopToAverage'] = op_role
 
     op_role = []
