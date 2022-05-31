@@ -186,5 +186,3 @@ def fullOperation(username, watched=None):
         y['totalyear'] = y2
 
         db.Users.update_one({'username': username}, {'$set': {'stats': y}})
-
-fullUpdate('giudimax')
