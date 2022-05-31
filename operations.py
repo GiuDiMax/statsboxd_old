@@ -48,11 +48,11 @@ def fill_db(url, soup):
         json1['genres'] = {'main': [], 'themes': [], 'mini-themes': []}
         for genre in genres:
             if "/theme/" in str(genre['href']):
-                json1['genres']['themes'].append(genre.text.lower())
+                json1['genres']['themes'].append(genre['href'].split("/")[3])
             if "/mini-theme/" in str(genre['href']):
-                json1['genres']['mini-themes'].append(genre.text.lower())
+                json1['genres']['mini-themes'].append(genre['href'].split("/")[3])
             if "/genre/" in str(genre['href']):
-                json1['genres']['main'].append(genre.text)
+                json1['genres']['main'].append(genre['href'].split("/")[3])
     except:
         pass
 
@@ -102,7 +102,7 @@ def fill_db(url, soup):
 
     #COLLECTIONS
     try:
-        json2 = {}
+        #json2 = {}
         collection = soup.find('section', {"id": "related"})
         link = collection.find('h2', {"class": "section-heading"}).find("a")['href']
         json1['collection'] = link.split("/", 4)[3]

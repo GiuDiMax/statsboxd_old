@@ -62,6 +62,18 @@ def getStats(username):
     json_operations['total'] = op_role
 
     op_role = []
+    op_role.append({'$unwind': '$info.crew.director'})
+    op_role.append({'$group': {'_id': '$info.crew.director'}})
+    op_role.append({'$group': {'_id': None, 'count': {"$sum": 1}}})
+    json_operations['totalDirectors'] = op_role
+
+    op_role = []
+    op_role.append({'$unwind': '$info.country'})
+    op_role.append({'$group': {'_id': '$info.country'}})
+    op_role.append({'$group': {'_id': None, 'count': {"$sum": 1}}})
+    json_operations['totalCountry'] = op_role
+
+    op_role = []
     op_role.append({'$group': {'_id': '$watched.id',
                                'uri': {'$first': '$watched.uri'},
                                'poster': {'$first': '$info.images.poster'},
