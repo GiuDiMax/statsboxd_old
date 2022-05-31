@@ -119,25 +119,29 @@ def fullCreation(username):
         fullOperation(username)
 
 
+def threadxwatched(username):
+    global watched_list
+    get_watched(username, False)
+    fullOperation(username, watched_list)
+
+
 def fullUpdate(username):
     global watched_list, diary_list
     start = time.time()
-    t1 = Thread(target=get_watched, args=(username, False))
+    t1 = Thread(target=threadxwatched, args=(username,))
     t2 = Thread(target=get_watched, args=(username, True))
     t1.start()
     t2.start()
     t1.join()
     t2.join()
-    print('watched + diary in: ' + str(time.time() - start))
-    start = time.time()
+    print('All stats in: ' + str(time.time() - start))
     db.Users.update_one({'username': username}, {'$set': {'watched': watched_list, 'diary': diary_list}})
-    fullOperation(username)
-    print('stats in: ' + str(time.time() - start))
 
 
-def fullOperation(username):
-    username_object = getFromusername(username)
-    watched = username_object['watched']
+def fullOperation(username, watched=None):
+    if watched is None:
+        username_object = getFromusername(username)
+        watched = username_object['watched']
     ids = []
     uris = []
     for movie in watched:
@@ -146,7 +150,7 @@ def fullOperation(username):
 
     db.tmpUris.delete_many({})
     if len(uris) > 0:
-        db.tmpUris.insert_many(username_object['watched'])
+        db.tmpUris.insert_many(watched)
 
     while True:
         obj1 = db.Film.find({"_id": {"$in": ids}})
@@ -180,6 +184,7 @@ def fullOperation(username):
     y['totalyear'] = y2
 
     db.Users.update_one({'username': username}, {'$set': {'stats': y}})
+
 
 fullUpdate('giudimax')
 
