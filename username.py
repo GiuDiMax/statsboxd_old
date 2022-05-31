@@ -11,8 +11,6 @@ from threading import Thread
 import time
 
 global watched_list, diary_list
-watched_list = []
-diary_list = []
 
 async def get_watched3(url, session, diary):
     global watched_list, diary_list
@@ -122,7 +120,9 @@ def fullCreation(username):
 def threadxwatched(username):
     global watched_list
     get_watched(username, False)
+    start2 = time.time()
     fullOperation(username, watched_list)
+    print('Stats in: ' + str(time.time() - start2))
 
 
 def fullUpdate(username):
@@ -134,7 +134,7 @@ def fullUpdate(username):
     t2.start()
     t1.join()
     t2.join()
-    print('All stats in: ' + str(time.time() - start))
+    print('All op in: ' + str(time.time() - start))
     db.Users.update_one({'username': username}, {'$set': {'watched': watched_list, 'diary': diary_list}})
 
 
@@ -164,27 +164,27 @@ def fullOperation(username, watched=None):
         else:
             break
 
+    y = None
     json3 = getStats(username)
     for x in json3:
         y = x
 
-    min = y['totalyear'][0]['_id']
-    max = y['totalyear'][-1]['_id']
+    if y != None:
+        min = y['totalyear'][0]['_id']
+        max = y['totalyear'][-1]['_id']
 
-    y2 = []
-    for i in range(min, max + 1):
-        check = False
-        for a in y['totalyear']:
-            if a['_id'] == i:
-                y2.append(a)
-                check = True
-                break
-        if not check:
-            y2.append({'_id': i, 'average': 0, 'sum': 0})
-    y['totalyear'] = y2
+        y2 = []
+        for i in range(min, max + 1):
+            check = False
+            for a in y['totalyear']:
+                if a['_id'] == i:
+                    y2.append(a)
+                    check = True
+                    break
+            if not check:
+                y2.append({'_id': i, 'average': 0, 'sum': 0})
+        y['totalyear'] = y2
 
-    db.Users.update_one({'username': username}, {'$set': {'stats': y}})
-
+        db.Users.update_one({'username': username}, {'$set': {'stats': y}})
 
 fullUpdate('giudimax')
-
