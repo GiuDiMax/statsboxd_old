@@ -7,20 +7,23 @@ from datetime import datetime
 from stats import getStats, getLists
 from operations import fillMongodb
 from setPeople import mainSetNames2
+from threading import Thread
 import time
 
-global listx
+global watched_list, diary_list
+watched_list = []
+diary_list = []
 
 async def get_watched3(url, session, diary):
+    global watched_list, diary_list
     async with session.get(url=url) as response:
         ret = await response.read()
     if diary:
-        soup = BeautifulSoup(ret, 'lxml').find_all('tr')
+        soup = BeautifulSoup(ret, 'lxml', parse_only=SoupStrainer(['tr'])).find_all('tr')
         for sup in soup[1:]:
             diaryx = {}
             diaryx['id'] = int(sup.find("div", class_="film-poster")['data-film-id'])
             diaryx['dRating'] = int(sup.find("td", class_="td-rating rating-green").input['value'])
-
             test = sup.find("td", class_="td-like center diary-like")
             if "icon-liked" in str(test):
                 diaryx['dLike'] = True
@@ -35,19 +38,17 @@ async def get_watched3(url, session, diary):
             else:
                 diaryx['review'] = False
 
-            test = sup.find("td", class_="td-day diary-day center")
-            date = test.a['href'].split("/", 5)[5][:-1]
-            test = sup.find("td", class_="td-film-details")
-            diaryx['uri'] = test.div['data-film-slug'].split("/")[-2]
+            date = sup.find("td", class_="td-day diary-day center").a['href'].split("/", 5)[5][:-1]
+            diaryx['uri'] = sup.find("td", class_="td-film-details").div['data-film-slug'].split("/")[-2]
             diaryx['date'] = datetime.strptime(date, '%Y/%m/%d')
-            listx.append(diaryx)
+            diary_list.append(diaryx)
+
     else:
-        soup = BeautifulSoup(ret, 'lxml').find_all('li', class_="poster-container")
+        soup = BeautifulSoup(ret, 'lxml', parse_only=SoupStrainer(['li'])).find_all('li', class_="poster-container")
         for sup in soup:
             watched = {}
             watched['id'] = int(sup.div['data-film-id'])
             watched['uri'] = sup.div['data-film-slug'].split("/")[-2]
-
             try:
                 rating = sup.p.span['class'][-1]
                 if 'rated' in rating:
@@ -61,7 +62,7 @@ async def get_watched3(url, session, diary):
                 watched['liked'] = True
             else:
                 watched['liked'] = False
-            listx.append(watched)
+            watched_list.append(watched)
 
 
 async def get_watched2(urlx, diary):
@@ -70,8 +71,9 @@ async def get_watched2(urlx, diary):
 
 
 def get_watched(username, diary=False):
-    global listx
-    listx = []
+    global watched_list, diary_list
+    watched_list = []
+    diary_list = []
     if diary:
         url = 'http://letterboxd.com/' + str(username) + '/films/diary/page/1/'
     else:
@@ -82,18 +84,19 @@ def get_watched(username, diary=False):
     try:
         pages = int(soup.find_all('li', class_="paginate-page")[-1].text)
         urls = []
-        for i in range(pages):
-            if diary:
-                urls.append('http://letterboxd.com/' + str(username) + '/films/diary/page/' + str(i+1) +"/")
-            else:
-                urls.append('http://letterboxd.com/' + str(username) + '/films/page/' + str(i + 1) + "/")
+        if diary:
+            for i in range(pages):
+                if diary:
+                    urls.append('http://letterboxd.com/' + str(username) + '/films/diary/page/' + str(i+1) +"/")
+        else:
+            for i in range(pages):
+                    urls.append('http://letterboxd.com/' + str(username) + '/films/page/' + str(i + 1) + "/")
     except:
         urls = [url]
 
     #asyncio.get_event_loop().run_until_complete(get_watched2(urls, diary))
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
     asyncio.get_event_loop().run_until_complete(get_watched2(urls, diary))
-    return listx
 
 
 def getFromusername(username):
@@ -107,20 +110,29 @@ def getFromusername(username):
 
 
 def fullCreation(username):
-    watched_list = get_watched(username, False)
+    global watched_list, diary_list
+    get_watched(username, False)
     if len(watched_list) > 0:
-        diary_list = get_watched(username, True)
+        get_watched(username, True)
         db.Users.insert_one({'username': username, 'watched': watched_list, 'diary': diary_list})
+        #db.Users.insert_one({'username': username, 'watched': watched_list})
         fullOperation(username)
 
 
 def fullUpdate(username):
+    global watched_list, diary_list
     start = time.time()
-    watched_list = get_watched(username, False)
-    diary_list = get_watched(username, True)
+    t1 = Thread(target=get_watched, args=(username, False))
+    t2 = Thread(target=get_watched, args=(username, True))
+    t1.start()
+    t2.start()
+    t1.join()
+    t2.join()
+    print('watched + diary in: ' + str(time.time() - start))
+    start = time.time()
     db.Users.update_one({'username': username}, {'$set': {'watched': watched_list, 'diary': diary_list}})
     fullOperation(username)
-    print(time.time()-start)
+    print('stats in: ' + str(time.time() - start))
 
 
 def fullOperation(username):
@@ -148,7 +160,6 @@ def fullOperation(username):
         else:
             break
 
-    #mainSetNames2()
     json3 = getStats(username)
     for x in json3:
         y = x
@@ -168,12 +179,7 @@ def fullOperation(username):
             y2.append({'_id': i, 'average': 0, 'sum': 0})
     y['totalyear'] = y2
 
-    '''
-    x = []
-    json4 = getLists()
-    for i in json4:
-        x.append(i)
-    y = y | {'lists': x}
-    '''
     db.Users.update_one({'username': username}, {'$set': {'stats': y}})
+
+fullUpdate('giudimax')
 
