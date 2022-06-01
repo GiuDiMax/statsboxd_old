@@ -151,20 +151,18 @@ def getStats(username):
     json_operations['statsLists'] = op_role
 
     #ZONA TEST
-    '''
+
     json_operations2 = {}
 
-    for field in ['genres.themes', 'genres.mini-themes']:
-        op_role = []
-        op_role.append({'$unwind': '$info.'+field})
-        op_role.append({'$group': {'_id': '$info.'+field,
-                                   'average': {'$avg': '$watched.rating'},
-                                   'sum': {'$sum': 1},
-                                   'list': {'$push': '$info.uri'}}})
-        op_role.append({'$sort': {'sum': -1}})
-        op_role.append({'$limit': 2})
-        json_operations2['mostWatched'+field.replace('.', '_')] = op_role
-    '''
+    op_role = []
+    op_role.append({'$unwind': '$info.actors'})
+    op_role.append({'$group': {'_id': '$info.actors',
+                               'average': {'$avg': '$watched.rating'},
+                               'sum': {'$sum': 1},
+                               'list': {'$push': '$info.uri'}}})
+    op_role.append({'$sort': {'sum': -1}})
+    op_role.append({'$limit': 10})
+    json_operations2['test'] = op_role
 
     ob3 = db.Users.aggregate([
         {'$match': {"username": username}},
@@ -178,7 +176,3 @@ def getStats(username):
         {'$facet': json_operations},
     ])
     return ob3
-
-#y = getStats('giudimax')
-#for x in y:
-#    print(x)

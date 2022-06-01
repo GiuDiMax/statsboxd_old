@@ -6,6 +6,7 @@ from mongodb import db
 from datetime import datetime, timedelta
 import requests
 import lxml
+from config import exclude_people
 
 json0 = []
 
@@ -78,7 +79,8 @@ def fill_db(url, soup):
         for actor in actors:
             try:
                 code = actor['href'].split('/actor/')[-1][:-1]
-                if 'uncredited' not in actor['title'] and 'voice' not in actor['title']:
+                #if 'uncredited' not in actor['title'] and 'voice' not in actor['title']:
+                if code not in exclude_people and 'uncredited' not in actor['title']:
                     json1['actors'].append(code)
             except:
                 pass

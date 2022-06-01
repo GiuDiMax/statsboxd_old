@@ -254,7 +254,7 @@
                                     {% if type[2]=='w' %}
                                         <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ element.sum }} films</a>
                                     {% else %}
-                                        <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ "%.1f"|format(element.average/2) }}</a>
+                                        <span class="sottotitolo">★ {{ "%.1f"|format(element.average/2) }}</span>
                                     {% endif %}
                                 </div>
                             {%endfor%}
@@ -271,16 +271,30 @@
                 <div class="sepline">
                     <span>Crew & Studios</span>
                     <div class="line"></div>
-                    <span class="clickable active" data-show="crewWatch" data-hide="crewbis">Most Watched</span>
-                    <span class="clickable" data-show="crewRat" data-hide="crewbis">Highest Rated</span>
+                    <span class="clickable active" data-show="crewmostWatched" data-hide="crewbis">Most Watched</span>
+                    <span class="clickable" data-show="crewtopRated" data-hide="crewbis">Highest Rated</span>
                 </div>
-                {%for role in roles %}
-                    <div class="role">
-                        {%for element in user.stats['topRated'+role[0]][10:]%}
-                            <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[1] }}/{{ element._id }}">{{ element.info[0].name }}</a>
-                            <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[1] }}/{{ element._id }}">{{ '%0.1f'| format(element.average/2) }}</a>
-                        {%endfor%}
-                    </div>
+                {%for type in ['mostWatched', 'topRated'] %}
+                <section id="crew{{ type }}" class="crewbis {% if type == 'topRated' %} hide{% endif %}">
+                    {%for role in roles %}
+                        <div class="role">
+                            <span class="titlerole">{{ role[2] }}</span>
+                            {%for element in user.stats[type+role[0]]%}
+                                <div class="{{ type }}limit {% if loop.index > 5 %}hide{% endif %}">
+                                    <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[1] }}/{{ element._id }}">{{ element._id }}</a>
+                                    <span class="sottotitolo">
+                                        {% if type == 'mostWatched' %}
+                                            {{ element.sum }}
+                                        {% else %}
+                                            {{ '%0.1f'| format(element.average/2) }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            {%endfor%}
+                        </div>
+                    {%endfor%}
+                <a class="clickable {{ type }}btn seeallbutton" data-class-show="{{ type }}limit" data-hide="{{ type }}btn">see more</a>
+                </section>
                 {%endfor%}
             </section>
 
@@ -298,6 +312,7 @@
                 $('.clickable').click(function() {
                     $('.'+$(this).attr('data-hide')).addClass('hide');
                     $('#'+$(this).attr('data-show')).removeClass('hide');
+                    $('.'+$(this).attr('data-class-show')).removeClass('hide');
                     $(this).addClass('active');
                     $(this).siblings().removeClass('active');
                 })
