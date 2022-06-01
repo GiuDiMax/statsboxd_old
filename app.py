@@ -23,7 +23,7 @@ def main(username):
         user = getFromusername(username.lower())
         if user is not None:
             if 'stats' in user:
-                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/')
+                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html)
             else:
                 return redirect('/'+username+"/update/")
     return render_template('username.html')
@@ -74,7 +74,7 @@ def utility_processor4():
     def firstUpper(string):
         if len(string) < 4:
             return string.replace('-', ' ').title().upper()
-        return string.replace('-', ' ').title()
+        return string.replace('-', ' ').title().replace('And', 'and').replace('Or', 'or')
     return dict(firstUpper=firstUpper)
 
 

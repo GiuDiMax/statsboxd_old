@@ -162,6 +162,7 @@ span{
 
 .clickable{
     cursor:pointer;
+    text-decoration: none;
 }
 
 .clickable:hover{
@@ -487,6 +488,35 @@ span{
 
 .holeperson:hover{
     border: 1px solid hsla(0,0%,100%,.50);
+}
+
+.seeallbutton{
+    border: 1px solid rgba(64,188,244,.4);
+    border-radius: 4px;
+    color: #40bcf4;
+    cursor: pointer;
+    font-family: Graphik-Regular-Web,sans-serif;
+    letter-spacing: .075rem;
+    text-transform: uppercase;
+    font-size: 15px;
+    padding: 10px 15px;
+    margin-top:20px;
+    margin-left:auto;
+    margin-right: auto;
+    flex: none;
+}
+
+.seeallbutton:hover{
+    border: 1px solid #646d77;
+    border-radius: 4px;
+    color: #d0eee2 !important;
+}
+
+.actorsbis, .directorsbis{
+    display:flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: center;
 }
 
 @keyframes spin {
