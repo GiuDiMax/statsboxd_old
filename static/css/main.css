@@ -367,29 +367,6 @@ span{
     margin:1.5%;
 }
 
-.actors{
-    width: 80%;
-    margin: auto;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 40px;
-    justify-content: space-between;
-}
-
-.holeperson{
-    position: relative;
-    top: -30px;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.container_people{
-    display:flex;
-    flex-direction: column;
-}
 
 .collections>div{
     display:flex;
@@ -471,6 +448,45 @@ span{
     outline: 3px solid  #00e054;
     outline-offset: -3px;
     transition-duration: 0.15s;
+}
+
+.people{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap:0;
+    justify-content: space-between;
+}
+
+.container_people{
+    display:flex;
+    flex-direction: column;
+    margin: 10px;
+    padding-top:10px;
+    width: 152px;
+}
+
+.container_people .clickable{
+    font-size: 18px;
+    text-decoration: none;
+    padding:5px 0;
+}
+
+.container_people .sottotitolo:hover{
+    color: #79999d;
+}
+
+.holeperson{
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border: 1px solid hsla(0,0%,100%,.25);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.holeperson:hover{
+    border: 1px solid hsla(0,0%,100%,.50);
 }
 
 @keyframes spin {
