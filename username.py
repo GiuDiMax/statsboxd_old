@@ -9,8 +9,35 @@ from operations import fillMongodb
 from setPeople import mainSetNames2
 from threading import Thread
 import time
+from multiprocessing import Pool
+import sys
 
 global watched_list, diary_list
+
+
+def diary_function(sup):
+    diaryx = {}
+    diaryx['id'] = int(sup.find("div", class_="film-poster")['data-film-id'])
+    diaryx['dRating'] = int(sup.find("td", class_="td-rating rating-green").input['value'])
+    test = sup.find("td", class_="td-like center diary-like")
+    if "icon-liked" in str(test):
+        diaryx['dLike'] = True
+    else:
+        diaryx['dLike'] = False
+    if sup.find("td", class_="td-rewatch center"):
+        diaryx['rewatch'] = True
+    else:
+        diaryx['rewatch'] = False
+    if sup.find("td", class_="td-review center"):
+        diaryx['review'] = True
+    else:
+        diaryx['review'] = False
+
+    date = sup.find("td", class_="td-day diary-day center").a['href'].split("/", 5)[5][:-1]
+    diaryx['uri'] = sup.find("td", class_="td-film-details").div['data-film-slug'].split("/")[-2]
+    diaryx['date'] = datetime.strptime(date, '%Y/%m/%d')
+    diary_list.append(diaryx)
+
 
 async def get_watched3(url, session, diary):
     global watched_list, diary_list
@@ -19,27 +46,11 @@ async def get_watched3(url, session, diary):
     if diary:
         soup = BeautifulSoup(ret, 'lxml', parse_only=SoupStrainer(['tr'])).find_all('tr')
         for sup in soup[1:]:
-            diaryx = {}
-            diaryx['id'] = int(sup.find("div", class_="film-poster")['data-film-id'])
-            diaryx['dRating'] = int(sup.find("td", class_="td-rating rating-green").input['value'])
-            test = sup.find("td", class_="td-like center diary-like")
-            if "icon-liked" in str(test):
-                diaryx['dLike'] = True
-            else:
-                diaryx['dLike'] = False
-            if sup.find("td", class_="td-rewatch center"):
-                diaryx['rewatch'] = True
-            else:
-                diaryx['rewatch'] = False
-            if sup.find("td", class_="td-review center"):
-                diaryx['review'] = True
-            else:
-                diaryx['review'] = False
-
-            date = sup.find("td", class_="td-day diary-day center").a['href'].split("/", 5)[5][:-1]
-            diaryx['uri'] = sup.find("td", class_="td-film-details").div['data-film-slug'].split("/")[-2]
-            diaryx['date'] = datetime.strptime(date, '%Y/%m/%d')
-            diary_list.append(diaryx)
+            diary_function(sup)
+        #sys.setrecursionlimit(0x100000)
+        #if __name__ == '__main__':
+        #    with Pool(5) as p:
+        #        p.map(diary_function, [soup[1:]])
 
     else:
         soup = BeautifulSoup(ret, 'lxml', parse_only=SoupStrainer(['li'])).find_all('li', class_="poster-container")
@@ -186,3 +197,6 @@ def fullOperation(username, watched=None):
         y['totalyear'] = y2
 
         db.Users.update_one({'username': username}, {'$set': {'stats': y}})
+
+
+#fullUpdate('giudimax')

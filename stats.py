@@ -27,7 +27,10 @@ def getStats(username):
             op_role.append({'$group': {'_id': '$info.'+field,
                                        'average': {'$avg': '$watched.rating'},
                                        'sum': {'$sum': 1}}})
-            op_role.append({'$match': {"sum": {'$gt': 2}}})
+            if field == 'actors':
+                op_role.append({'$match': {"sum": {'$gt': 3}}})
+            else:
+                op_role.append({'$match': {"sum": {'$gt': 1}}})
             op_role.append({'$sort': {'average': -1}})
             op_role.append({'$limit': 20})
             if field in field2:
@@ -141,9 +144,10 @@ def getStats(username):
         'localField': '_id',
         'foreignField': '_id',
         'as': 'info'}})
-    op_role.append({'$project': {'_id': '$_id', 'name': {'$first': '$info.name'},
+    op_role.append({'$project': {'_id': '$_id', 'name': {'$first': '$info.name'}, 'order': {'$first': '$info.order'},
                                  'watched': '$num', 'num': {'$first': '$info.num'}}})
     op_role.append({'$addFields': {"perc": {'$divide': ['$watched', '$num']}}}),
+    op_role.append({'$sort': {'order': 1}})
     json_operations['statsLists'] = op_role
 
     ob3 = db.Users.aggregate([
