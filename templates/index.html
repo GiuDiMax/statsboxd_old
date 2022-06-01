@@ -64,9 +64,9 @@
                 <div class="attributes-chart sixColumn">
                     <div class="labels">
                         {% for i in range(10) %}
-                            <span class="clickable label1" data-url="/films/country/{{ user.stats.mostWatchedgenres_main[i]['_id'] }}">
+                            <a class="clickable label1" href="{{ lbdurl }}{{ user.username }}/films/genre/{{ user.stats.mostWatchedgenres_main[i]['_id'] }}">
                                 {{ firstUpper(user.stats.mostWatchedgenres_main[i]['_id']) }}
-                            </span>
+                            </a>
                         {%endfor%}
                     </div>
                     <div>
@@ -74,9 +74,9 @@
                     </div>
                     <div class="labels">
                         {% for i in range(10) %}
-                            <span class="clickable label1" data-url="/films/genre/{{ user.stats.mostWatchedcountry[i]['_id'] }}">
+                            <a class="clickable label1" href="{{ lbdurl }}{{ user.username }}/films/country/{{ user.stats.mostWatchedcountry[i]['_id'] }}">
                                 {{ firstUpper(user.stats.mostWatchedcountry[i]['_id']) }}
-                            </span>
+                            </a>
                         {%endfor%}
                     </div>
                     <div>
@@ -84,9 +84,9 @@
                     </div>
                     <div class="labels">
                         {% for i in range(10) %}
-                            <span class="clickable label1" data-url="/films/language/{{ user.stats.mostWatchedlanguage[i]['_id'] }}">
+                            <a class="clickable label1" href="{{ lbdurl }}{{ user.username }}/films/language/{{ user.stats.mostWatchedlanguage[i]['_id'] }}">
                                 {{ firstUpper(user.stats.mostWatchedlanguage[i]['_id']) }}
-                            </span>
+                            </a>
                         {%endfor%}
                     </div>
                     <div>
@@ -106,14 +106,14 @@
                         </div>
                         <div class="labels">
                             {% for i in range(10) %}
-                                <div class="clickable label2" data-url="#">
+                                <a class="clickable label2" href="{{ lbdurl }}{{ user.username }}/films/theme/{{ user.stats['mostWatchedgenres_themes'][i]['_id'] }}">
                                     <span class="leftText">
                                         {{ firstUpper(user.stats['mostWatchedgenres_themes'][i]['_id']) }}
                                     </span>
                                     <span class="bold right">
                                         {{ user.stats['mostWatchedgenres_themes'][i]['sum'] }} films
                                     </span>
-                                </div>
+                                </a>
                             {%endfor%}
                         </div>
                     </div>
@@ -123,14 +123,14 @@
                         </div>
                         <div class="labels">
                             {% for i in range(10) %}
-                                <div class="clickable label2" data-url="#">
+                                <a class="clickable label2" href="{{ lbdurl }}{{ user.username }}/films/mini-theme/{{ user.stats['mostWatchedgenres_mini-themes'][i]['_id'] }}">
                                     <span class="leftText">
                                         {{ firstUpper(user.stats['mostWatchedgenres_mini-themes'][i]['_id']) }}
                                     </span>
                                     <span class="bold right">
                                         {{ user.stats['mostWatchedgenres_mini-themes'][i]['sum'] }} films
                                     </span>
-                                </div>
+                                </a>
                             {%endfor%}
                         </div>
                     </div>
@@ -249,7 +249,7 @@
                                 </div>
                             {%endfor%}
                         </div>
-                        <a class="clickable aw2" data-show="actorsWatch2" data-hide="aw2">see all</a>
+                        <a class="clickable aw2 seeallbutton" data-show="actorsWatch2" data-hide="aw2">see more</a>
                     </section>
                     <section id="actorsRat" class="actorsbis hide">
                         <div id="actorsRat1" class="actors people">
@@ -274,7 +274,7 @@
                                 </div>
                             {%endfor%}
                         </div>
-                        <a class="clickable ar2" data-show="actorsRat2" data-hide="ar2">see all</a>
+                        <a class="clickable ar2 seeallbutton" data-show="actorsRat2" data-hide="ar2">see more</a>
                     </section>
                 </div>
             </section>
@@ -309,7 +309,7 @@
                                 </div>
                             {%endfor%}
                         </div>
-                        <a class="clickable dw2" data-show="directorsWatch2" data-hide="dw2">see all</a>
+                        <a class="clickable dw2 seeallbutton" data-show="directorsWatch2" data-hide="dw2">see more</a>
                     </section>
                     <section id="directorsRat" class="directorsbis hide">
                         <div id="directorsRat1" class="directors people">
@@ -334,9 +334,25 @@
                                 </div>
                             {%endfor%}
                         </div>
-                        <a class="clickable dr2" data-show="directorsRat2" data-hide="dr2">see all</a>
+                        <a class="clickable dr2 seeallbutton" data-show="directorsRat2" data-hide="dr2">see more</a>
                     </section>
                 </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Crew & Studios</span>
+                    <div class="line"></div>
+                    <span class="clickable active" data-show="crewWatch" data-hide="crewbis">Most Watched</span>
+                    <span class="clickable" data-show="crewRat" data-hide="crewbis">Highest Rated</span>
+                </div>
+                {%for role in roles %}
+                    <div class="role">
+                        {%for element in user.stats['topRated'+role[0]][10:]%}
+                            <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ element.info[0].name }}</a>
+                            <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ '%0.1f'| format(element.average/2) }}</a>
+                        {%endfor%}
+                    </div>
+                {%endfor%}
             </section>
             <section>
                 <div class="worldmap" id="world-map"></div>

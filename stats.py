@@ -150,6 +150,22 @@ def getStats(username):
     op_role.append({'$sort': {'order': 1}})
     json_operations['statsLists'] = op_role
 
+    #ZONA TEST
+    '''
+    json_operations2 = {}
+
+    for field in ['genres.themes', 'genres.mini-themes']:
+        op_role = []
+        op_role.append({'$unwind': '$info.'+field})
+        op_role.append({'$group': {'_id': '$info.'+field,
+                                   'average': {'$avg': '$watched.rating'},
+                                   'sum': {'$sum': 1},
+                                   'list': {'$push': '$info.uri'}}})
+        op_role.append({'$sort': {'sum': -1}})
+        op_role.append({'$limit': 2})
+        json_operations2['mostWatched'+field.replace('.', '_')] = op_role
+    '''
+
     ob3 = db.Users.aggregate([
         {'$match': {"username": username}},
         {'$unwind': '$watched'},
@@ -163,17 +179,6 @@ def getStats(username):
     ])
     return ob3
 
-#OBSOLETO
-def getLists():
-    return(db.Lists.aggregate([
-        {'$match': {"isStats": True}},
-        {'$unwind': '$uris'},
-        {'$lookup': {
-            'from': 'tmpUris',
-            'localField': 'uris',
-            'foreignField': 'uri',
-            'as': 'info'}},
-        {'$match': {"info": {'$not': {'$size': 0}}}},
-        {'$group': {'_id': '$_id', 'name': {'$first': '$name'}, 'num': {'$first': '$num'}, 'numWatch': {'$sum': 1}}},
-        {'$addFields': {"perc": {'$multiply': [{'$divide': ['$numWatch', '$num']}, 100]}}}
-    ]))
+#y = getStats('giudimax')
+#for x in y:
+#    print(x)

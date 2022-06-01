@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup, SoupStrainer
 from mongodb import db
 from datetime import datetime
-from stats import getStats, getLists
+from stats import getStats
 from operations import fillMongodb
 from setPeople import mainSetNames2
 from threading import Thread

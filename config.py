@@ -28,5 +28,13 @@ listsSelection = [
     ['lifeasfiction/list/letterboxd-100-animation', 'Top 100 Animation', 12]
 ]
 
+crew_html = [
+     ['crew_producers', 'producer', 'Producers'],  ['crew_writers', 'writer', 'Writers'], ['crew_editors', 'editor', 'Editors'],
+     ['crew_cinematography', 'cinematography', 'Cinematography'],  ['crew_production-design', 'production-design', 'Production Design'],
+     ['crew_art-direction', 'art-direction', 'Art Direction'],  ['crew_set-decoration', 'set-decoration', 'Set Decoration'],
+     ['crew_visual-effects', 'visual-effects', 'Visual Effects'],  ['crew_composer', 'composer', 'Composers'],
+     ['crew_sound', 'sound', 'Sound'],  ['crew_costumes', 'costumes', 'Costumes'], ['crew_make-up', 'make-up', 'Make-Up']
+]
+
 beta_test = True
 beta_users = ['giudimax']
