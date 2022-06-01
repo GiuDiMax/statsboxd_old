@@ -1,6 +1,6 @@
 client_string = 'mongodb+srv://GiuDiMax:iiZBB9JYW07nqQcp@lbdcluster.bqbva.mongodb.net/Letterboxd?retryWrites=true&w=majority'
 
-field2 = ['actors', 'crew.director', 'crew.producers', 'crew.writers', 'crew.editors',
+field2 = ['actors', 'crew.director', 'crew.producer', 'crew.writer', 'crew.editor',
           'crew.cinematography', 'crew.production-design', 'crew.art-direction',
           'crew.set-decoration', 'crew.visual-effects', 'crew.composer', 'crew.sound',
           'crew.costumes', 'crew.make-up']
@@ -29,12 +29,14 @@ listsSelection = [
 ]
 
 crew_html = [
-     ['crew_producers', 'producer', 'Producers'],  ['crew_writers', 'writer', 'Writers'], ['crew_editors', 'editor', 'Editors'],
+     ['crew_producer', 'producer', 'Producers'],  ['crew_writer', 'writer', 'Writers'], ['crew_editor', 'editor', 'Editors'],
      ['crew_cinematography', 'cinematography', 'Cinematography'],  ['crew_production-design', 'production-design', 'Production Design'],
      ['crew_art-direction', 'art-direction', 'Art Direction'],  ['crew_set-decoration', 'set-decoration', 'Set Decoration'],
      ['crew_visual-effects', 'visual-effects', 'Visual Effects'],  ['crew_composer', 'composer', 'Composers'],
      ['crew_sound', 'sound', 'Sound'],  ['crew_costumes', 'costumes', 'Costumes'], ['crew_make-up', 'make-up', 'Make-Up']
 ]
+
+exclude_people = ['mickie-mcgowan', 'stan-lee', 'jack-angel', 'sherry-lynn']
 
 beta_test = True
 beta_users = ['giudimax']
