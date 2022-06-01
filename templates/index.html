@@ -218,126 +218,55 @@
                         {%endfor%}
                 </div>
             </section>
+
+            {%for role in [['actor', 'Stars', 'a', 'actors'], ['director', 'Directors', 'd', 'crew_director']]%}
             <section class="sectionStats">
                 <div class="sepline">
-                    <span>Stars</span>
+                    <span>{{ role[1] }}</span>
                     <div class="line"></div>
-                    <span class="clickable active" data-show="actorsWatch" data-hide="actorsbis">Most Watched</span>
-                    <span class="clickable" data-show="actorsRat" data-hide="actorsbis">Highest Rated</span>
+                    <span class="clickable active" data-show="{{ role[0] }}sWatch" data-hide="{{ role[0] }}sbis">Most Watched</span>
+                    <span class="clickable" data-show="{{ role[0] }}sRat" data-hide="{{ role[0] }}sbis">Highest Rated</span>
                 </div>
-                <div class="actors2">
-                    <section id="actorsWatch" class="actorsbis">
-                        <div id="actorsWatch1" class="actors people">
-                            {%for element in user.stats.mostWatchedactors[:10]%}
+                <div class="{{ role[0] }}s2">
+                    {%for type in [['Watch', 'mostWatched', 'w', ''], ['Rat', 'topRated', 'r', 'hide']] %}
+                    <section id="{{ role[0] }}s{{ type[0] }}" class="{{ role[0] }}sbis {{ type[3] }}">
+                        {%for num in [['1', ''], ['2', 'hide']]%}
+                        <div id="{{ role[0] }}s{{ type[0] }}{{ num[0] }}" class="{{ role[0] }}s people {{ num[1] }}">
+                            {% if num[0] == '1' %}
+                                {% set list = user.stats[type[1]+ role[3]][:10] %}
+                            {% else %}
+                                {% set list = user.stats[type[1]+ role[3]][10:] %}
+                            {% endif %}
+                            {%for element in list%}
                                 <div class="container_people">
-                                    <a href="{{ lbdurl }}{{ user.username }}/films/with/actor/{{ element._id }}">
-                                        <img class="holeperson" src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"  alt="{{ element.info[0].name }}"/>
+                                    <a href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">
+                                        <img class="holeperson" src="{{ url_for('static', filename = 'images/'+role[0]+'.jpg') }}"
+                                            {% if 'tmdbImg' in element.info[0] %}
+                                                 data-src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"
+                                            {% endif %}
+                                        alt="{{ element._id }}"/>
                                     </a>
-                                    <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/actor/{{ element._id }}">{{ element.info[0].name }}</a>
-                                    <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/actor/{{ element._id }}">{{ element.sum }} films</a>
+                                        {% if element.info|length > 0 %}
+                                            <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ element.info[0].name }}</a>
+                                        {% else %}
+                                            <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ firstUpper(element._id) }}</a>
+                                        {% endif %}
+                                    {% if type[2]=='w' %}
+                                        <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ element.sum }} films</a>
+                                    {% else %}
+                                        <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ "%.1f"|format(element.average/2) }}</a>
+                                    {% endif %}
                                 </div>
                             {%endfor%}
                         </div>
-                        <div id="actorsWatch2" class="hide actors people" >
-                            {%for element in user.stats.mostWatchedactors[10:]%}
-                                <div class="container_people">
-                                    <a href="{{ lbdurl }}{{ user.username }}/films/with/actor/{{ element._id }}">
-                                        <img class="holeperson" src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"  alt="{{ element.info[0].name }}"/>
-                                    </a>
-                                    <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/actor/{{ element._id }}">{{ element.info[0].name }}</a>
-                                    <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/actor/{{ element._id }}">{{ element.sum }} films</a>
-                                </div>
-                            {%endfor%}
-                        </div>
-                        <a class="clickable aw2 seeallbutton" data-show="actorsWatch2" data-hide="aw2">see more</a>
+                        {%endfor%}
+                        <a class="clickable {{ role[2] }}{{ type[2] }}2 seeallbutton" data-show="{{ role[0] }}s{{ type[0] }}2" data-hide="{{ role[2] }}{{ type[2] }}2">see more</a>
                     </section>
-                    <section id="actorsRat" class="actorsbis hide">
-                        <div id="actorsRat1" class="actors people">
-                            {%for element in user.stats.topRatedactors[:10]%}
-                                <div class="container_people">
-                                    <a href="{{ lbdurl }}{{ user.username }}/films/with/actor/{{ element._id }}">
-                                        <img class="holeperson" src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"  alt="{{ element.info[0].name }}"/>
-                                    </a>
-                                    <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/actor/{{ element._id }}">{{ element.info[0].name }}</a>
-                                    <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/actor/{{ element._id }}">{{ '%0.1f'| format(element.average/2) }}</a>
-                                </div>
-                            {%endfor%}
-                        </div>
-                        <div id="actorsRat2" class="hide actors people" >
-                            {%for element in user.stats.topRatedactors[10:]%}
-                                <div class="container_people">
-                                    <a href="{{ lbdurl }}{{ user.username }}/films/with/actor/{{ element._id }}">
-                                        <img class="holeperson" src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"  alt="{{ element.info[0].name }}"/>
-                                    </a>
-                                    <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/actor/{{ element._id }}">{{ element.info[0].name }}</a>
-                                    <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/actor/{{ element._id }}">{{ '%0.1f'| format(element.average/2) }}</a>
-                                </div>
-                            {%endfor%}
-                        </div>
-                        <a class="clickable ar2 seeallbutton" data-show="actorsRat2" data-hide="ar2">see more</a>
-                    </section>
+                    {%endfor%}
                 </div>
             </section>
-            <section class="sectionStats">
-                <div class="sepline">
-                    <span>Directors</span>
-                    <div class="line"></div>
-                    <span class="clickable active" data-show="directorsWatch" data-hide="directorsbis">Most Watched</span>
-                    <span class="clickable" data-show="directorsRat" data-hide="directorsbis">Highest Rated</span>
-                </div>
-                <div class="directors2">
-                    <section id="directorsWatch" class="directorsbis">
-                        <div id="directorsWatch1" class="directors people">
-                            {%for element in user.stats.mostWatchedcrew_director[:10]%}
-                                <div class="container_people">
-                                    <a href="{{ lbdurl }}{{ user.username }}/films/with/director/{{ element._id }}">
-                                        <img class="holeperson" src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"  alt="{{ element.info[0].name }}"/>
-                                    </a>
-                                    <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/director/{{ element._id }}">{{ element.info[0].name }}</a>
-                                    <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/director/{{ element._id }}">{{ element.sum }} films</a>
-                                </div>
-                            {%endfor%}
-                        </div>
-                        <div id="directorsWatch2" class="hide directors people" >
-                            {%for element in user.stats.mostWatchedcrew_director[10:]%}
-                                <div class="container_people">
-                                    <a href="{{ lbdurl }}{{ user.username }}/films/with/director/{{ element._id }}">
-                                        <img class="holeperson" src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"  alt="{{ element.info[0].name }}"/>
-                                    </a>
-                                    <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/director/{{ element._id }}">{{ element.info[0].name }}</a>
-                                    <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/director/{{ element._id }}">{{ element.sum }} films</a>
-                                </div>
-                            {%endfor%}
-                        </div>
-                        <a class="clickable dw2 seeallbutton" data-show="directorsWatch2" data-hide="dw2">see more</a>
-                    </section>
-                    <section id="directorsRat" class="directorsbis hide">
-                        <div id="directorsRat1" class="directors people">
-                            {%for element in user.stats.topRatedcrew_director[:10]%}
-                                <div class="container_people">
-                                    <a href="{{ lbdurl }}{{ user.username }}/films/with/director/{{ element._id }}">
-                                        <img class="holeperson" src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"  alt="{{ element.info[0].name }}"/>
-                                    </a>
-                                    <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/director/{{ element._id }}">{{ element.info[0].name }}</a>
-                                    <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/director/{{ element._id }}">{{ '%0.1f'| format(element.average/2) }}</a>
-                                </div>
-                            {%endfor%}
-                        </div>
-                        <div id="directorsRat2" class="hide directors people" >
-                            {%for element in user.stats.topRatedcrew_director[10:]%}
-                                <div class="container_people">
-                                    <a href="{{ lbdurl }}{{ user.username }}/films/with/director/{{ element._id }}">
-                                        <img class="holeperson" src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"  alt="{{ element.info[0].name }}"/>
-                                    </a>
-                                    <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/director/{{ element._id }}">{{ element.info[0].name }}</a>
-                                    <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/director/{{ element._id }}">{{ '%0.1f'| format(element.average/2) }}</a>
-                                </div>
-                            {%endfor%}
-                        </div>
-                        <a class="clickable dr2 seeallbutton" data-show="directorsRat2" data-hide="dr2">see more</a>
-                    </section>
-                </div>
-            </section>
+            {%endfor%}
+
             <section class="sectionStats">
                 <div class="sepline">
                     <span>Crew & Studios</span>
@@ -348,12 +277,13 @@
                 {%for role in roles %}
                     <div class="role">
                         {%for element in user.stats['topRated'+role[0]][10:]%}
-                            <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ element.info[0].name }}</a>
-                            <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ '%0.1f'| format(element.average/2) }}</a>
+                            <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[1] }}/{{ element._id }}">{{ element.info[0].name }}</a>
+                            <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[1] }}/{{ element._id }}">{{ '%0.1f'| format(element.average/2) }}</a>
                         {%endfor%}
                     </div>
                 {%endfor%}
             </section>
+
             <section>
                 <div class="worldmap" id="world-map"></div>
             </section>
