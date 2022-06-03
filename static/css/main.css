@@ -668,122 +668,161 @@ span{
         display:block !important;
     }
 
+    .headerbar{
+        padding:5px;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+    }
+
     .content{
         max-width: initial !important;
-        margin-left:5%;
-        margin-right:5%;
+        margin:0;
+        padding: 0 16px 200px 16px;
     }
 
     .sectionStats{
         width: 100%;
     }
 
-    .headerbar{
-        height:40px;
-    }
-
-    .mainTitle{
-        font-size: 9rem;
-        width: 60%;
-        margin-left:auto;
-        margin-right:auto;
-
-    }
-
-    .numbersStats{
-        justify-content: space-around;
-        width: 70%;
-        margin:auto;
-    }
-
-    .numbersStats div{
-        flex-grow: 0;
-        flex-basis: 35%;
-    }
-
-    .numbersStats .number{
-        font-size: 65px !important;
-    }
-
-    .numbersStats .text{
-        font-size: 30px !important;
-    }
-
     .sepline{
         align-items: flex-start;
         flex-wrap: wrap;
+        padding-top: 30px;
     }
 
     .sepline span{
         text-align: left;
-
     }
 
     .sepline span:first-child{
         flex-basis: 100%;
-        font-size: 50px;
         text-transform: initial !important;
         letter-spacing: 0;
         margin-bottom:5px;
+        font-size: 21px;
     }
 
     .sepline .clickable{
-        font-size: 35px;
-        padding-right: 20px;
+        padding-right: 7px;
+        font-size: 14px;
     }
 
     .sepline .line{
         order: -1;
         flex-basis: 100%;
-        margin-top:25px;
-        margin-bottom: 25px;
-    }
-
-    .years span{
-        margin-top: 10px;
-        font-size: 25px;
-
+        margin-top:10px;
+        margin-bottom: 10px;
     }
 
     .donut{
-        width:397px;
-        height:397px;
+        width:154px;
+        height:154px;
     }
 
     .hole{
-        width:356px;
-        height:356px;
+        width:138px;
+        height:138px;
     }
 
     .listtitle{
-        font-size: 30px;
-        width:70%;
+        font-size: 12px;
     }
 
     .listperc{
-        font-size: 70px;
+        font-size: 28px;
     }
 
     .listnum{
-        font-size: 30px;
+        font-size: 11px;
     }
 
     .singleCollection{
-        width: auto;
+        width: 45%;
+    }
+
+    .poster, .poster img{
+        width:100% !important;
+        height:100% !important;
+    }
+
+    .singleFilm{
+        width: 17%;
+        margin: 0;
+    }
+
+    .singleFilm div{
+        display:flex;
+        flex-direction:column;
+    }
+
+    .filmList{
+        row-gap: 20px;
+    }
+
+    .filmList > .singleFilm:nth-last-of-type(-n+2){
+        display:none;
+    }
+
+    .container_people{
+        width: 50%;
+        margin:0;
+    }
+
+    .holeperson{
+        width: 123.75px;
+        height: 123.75px;
+    }
+
+    .people{
+        justify-content: space-around;
+        row-gap:20px;
+    }
+
+    .container_people .clickable{
+        font-size: 15px;
+        margin-top: 8px;
+    }
+
+    .container_people .sottotitolo{
+        font-size: 15px;
+    }
+
+    .crewbis {
+        flex-wrap: wrap;
+        justify-content: space-around;
+        column-gap: 15px;
+    }
+
+    .role{
         flex-basis: 45%;
+        width: 50%;
+        margin: 0;
     }
 
-    .singleCollection .name{
-        font-size: 35px;
-        line-height: 45px;
+    .titlerole{
+        padding-top:10px;
     }
 
-    .singleCollection .progress{
-        font-size: 25px;
+    .role a{
+        font-size: 14px !important;
+        line-height: 20px !important;
+        text-align: left;
     }
 
-    .collections>div {
-        justify-content: center;
-        align-content: center;
+    .role div{
+        display: block;
+        text-align: left;
+        padding-right: 0;
     }
+
+    .role .sottotitolo{
+        padding-left:0 !important;
+    }
+
+    .worldmap {
+        height: 250px;
+    }
+
 }
