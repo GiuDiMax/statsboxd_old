@@ -12,6 +12,7 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     </head>
     <body>
+        <div id="isMobile"></div>
         <div class="headerbar">
             <a href="https://letterboxd.com/">
                 <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="letterboxdlogo"/>
@@ -249,7 +250,7 @@
                                         {% if element.info|length > 0 %}
                                             <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ element.info[0].name }}</a>
                                         {% else %}
-                                            <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ firstUpper(element._id) }}</a>
+                                            <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ firstUpperBis(element._id) }}</a>
                                         {% endif %}
                                     {% if type[2]=='w' %}
                                         <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ element.sum }} films</a>
@@ -260,7 +261,9 @@
                             {%endfor%}
                         </div>
                         {%endfor%}
-                        <a class="clickable {{ role[2] }}{{ type[2] }}2 seeallbutton" data-show="{{ role[0] }}s{{ type[0] }}2" data-hide="{{ role[2] }}{{ type[2] }}2">see more</a>
+                        <div class="noflex">
+                            <a class="clickable {{ role[2] }}{{ type[2] }}2 seeallbutton" data-show="{{ role[0] }}s{{ type[0] }}2" data-hide="{{ role[2] }}{{ type[2] }}2">see more</a>
+                        </div>
                     </section>
                     {%endfor%}
                 </div>
@@ -281,7 +284,14 @@
                             <span class="titlerole">{{ role[2] }}</span>
                             {%for element in user.stats[type+role[0]]%}
                                 <div class="{{ type }}limit {% if loop.index > 5 %}hide{% endif %}">
-                                    <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[1] }}/{{ element._id }}">{{ element._id }}</a>
+                                    <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[1] }}/{{ element._id }}">
+                                         {% if element.info|length > 0 %}
+                                            {{ element.info[0].name }}
+                                        {% else %}
+                                            {{ firstUpperBis(element._id) }}
+                                        {% endif %}
+
+                                    </a>
                                     <span class="sottotitolo">
                                         {% if type == 'mostWatched' %}
                                             {{ element.sum }}
@@ -293,13 +303,16 @@
                             {%endfor%}
                         </div>
                     {%endfor%}
-                <a class="clickable {{ type }}btn seeallbutton" data-class-show="{{ type }}limit" data-hide="{{ type }}btn">see more</a>
+                <div class="noflex">
+                    <a class="clickable {{ type }}btn seeallbutton" data-class-show="{{ type }}limit" data-hide="{{ type }}btn">see more</a>
+                </div>
                 </section>
                 {%endfor%}
             </section>
 
-            <section>
-                <div class="worldmap" id="world-map"></div>
+            <section class="wMap noselect">
+                <span class="wmTitle">World Map</span>
+                <div class="worldmap noselect" id="world-map"></div>
             </section>
         </div>
     </body>
@@ -307,7 +320,11 @@
         <script>
             $(document).ready(function () {
 
-                const isMobile = true;
+                var isMobile = false;
+                if($('#isMobile').is(':visible')) {
+                    isMobile = true;
+                }
+
 
                 $('.clickable').click(function() {
                     $('.'+$(this).attr('data-hide')).addClass('hide');
@@ -332,20 +349,51 @@
 
                 $('#world-map').vectorMap({
                   map: 'world_mill',
+                  backgroundColor: "",
                   series: {
                     regions: [{
                       values: worldData,
                       scale: ['#007834', '#00e054'],
                     }]
                   },
+                  tooltip: {
+                      enabled: false,
+                  },
+                  regionStyle: {
+                    initial: {
+                        fill: '#303c44'
+                    },
+                    hover:{
+                        fill: '#40bcf4'
+                    }
+                  },
                   onRegionTipShow: function(e, el, code) {
-                      el.html(el.html() + ' ' + worldData[code]);
+                      var text = "0"
+                      if (typeof worldDataUri[code] !== 'undefined') {
+                          text = worldData[code]
+                      }
+                      el.html($("<span/>", {'class': 'ttTitle', 'html': el.html()}));
+                      el.append($("<br/>"));
+                      el.append($("<span/>", {'class': 'ttSubtitle', 'html': "Films watched: " + text}));
+                      el.html($("<div/>", {'class': 'maptt', 'html': el.html()}));
+                      el.append($("<div/>", {'class': 'ttPointer'}));
+                      el.html($("<a/>", {'class': 'maptt2', 'onClick':'alert(0);', 'href': 'www.google.com', 'html': el.html()}));
                   },
                   onRegionClick: function(e, el, code){
-                      if (isMobile) {
-                      location.href = '{{ lbdurl }}{{ user.username }}/films/country/'+ worldDataUri[el] + '/' ;
-                  }}
+                      if (!isMobile) {
+                        clickMap(el);
+                      }
+                  },
+                  onMarkerClick: function(e, code){
+                      alert(code);
+                  },
                 });
+
+                function clickMap(el){
+                      if (typeof worldDataUri[el] !== 'undefined') {
+                          location.href = '{{ lbdurl }}{{ user.username }}/films/country/' + worldDataUri[el] + '/';
+                      }
+                }
 
                 //BYYEARCHART
                 var ctx = document.getElementById('releaseYear');

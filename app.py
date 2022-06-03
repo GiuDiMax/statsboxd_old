@@ -79,6 +79,27 @@ def utility_processor4():
 
 
 @app.context_processor
+def utility_processor8():
+    def firstUpperBis(string):
+        if len(string) < 4:
+            return string.replace('-', ' ').title().upper()
+        string2 = string.title()
+        if "-" in string:
+            string = string.split("-")
+            string2 = ""
+            for stri in string:
+                if not stri.isdecimal():
+                    if len(stri) == 1:
+                        stri = stri + "."
+                    elif len(stri) == 2:
+                        stri = stri[0] + "." + " " + stri[1] + "."
+                    string2 = string2 + stri.title() + " "
+            string2 = string2[:-1]
+        return string2
+    return dict(firstUpperBis=firstUpperBis)
+
+
+@app.context_processor
 def utility_processor5():
     def perctodeg(val):
         return 360*val

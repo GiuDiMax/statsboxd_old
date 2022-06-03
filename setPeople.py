@@ -79,3 +79,5 @@ def mainSetNames2():
         mainSetNames()
     except:
         mainSetNames2()
+
+#mainSetNames2()

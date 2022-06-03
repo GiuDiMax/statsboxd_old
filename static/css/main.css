@@ -137,7 +137,7 @@ span{
     gap: 15px;
 }
 
-.sepline span{
+.sepline span, .wmTitle{
     color: #fff;
     font-family: Graphik-Regular-Web,sans-serif;
     font-size: 15px;
@@ -490,6 +490,15 @@ span{
     border: 1px solid hsla(0,0%,100%,.50);
 }
 
+.noflex{
+    width:100%;
+    margin-left:auto;
+    margin-right: auto;
+    flex: none;
+    margin-top:30px;
+    margin-bottom:10px;
+}
+
 .seeallbutton{
     border: 1px solid rgba(64,188,244,.4);
     border-radius: 4px;
@@ -500,10 +509,10 @@ span{
     text-transform: uppercase;
     font-size: 15px;
     padding: 10px 15px;
-    margin-top:20px;
     margin-left:auto;
     margin-right: auto;
     flex: none;
+    'width:100%;
 }
 
 .seeallbutton:hover{
@@ -565,7 +574,97 @@ span{
 
 }
 
+.worldmap{
+    border: 1px solid #303840;
+    border-radius: 4px;
+    height: 700px;
+}
+
+.wmTitle{
+    background-color: #14181c;
+    position:relative;
+    top:10px;
+    padding:15px;
+}
+
+.wMap{
+    padding-top:50px;
+}
+
+.jvectormap-tip{
+    background-color: transparent !important;
+    border:0 !important;
+}
+
+.jvectormap-tip .ttTitle{
+    font-family: Graphik-Semibold-Web, sans-serif;
+    font-size: 14px;
+    color: #ccddee;
+    line-height: 22px !important;
+}
+
+.jvectormap-tip .ttSubtitle{
+    font-family: Graphik-Regular-Web-Web, sans-serif;
+    font-size: 12px;
+    color: #99aabb;
+    line-height: 22px !important;
+}
+
+.maptt{
+    background-color: #445566 !important;
+    text-align: center;
+    padding: 5px 15px !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 20%) !important;
+    border: 0 !important;
+}
+
+.maptt2{
+    position: relative;
+    left: 70px !important;
+    top: 10px !important;
+    text-decoration: none !important;
+}
+
+.ttPointer{
+  position: relative;
+  left:50px;
+  height: 0;
+  width: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-top: 10px solid #445566;
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.noselect, .jvectormap-container path {
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+@media only screen and (min-width: 1200px) {
+    #isMobile{
+        display:none;
+    }
+}
+
+/* MOBILE PART */
+
+@media only screen and (max-width: 1199px) {
+    #isMobile{
+        height: 0;
+        display:block !important;
+    }
 }
