@@ -128,7 +128,11 @@ def utility_processor7():
 @app.context_processor
 def utility_processor8():
     def replaceSize(src, height, width):
-        return src.split("-0-")[0] + "-0-" + str(height) + "-0-" + str(width) + "-crop.jpg"
+        try:
+            return src.split("-0-")[0] + "-0-" + str(height) + "-0-" + str(width) + "-crop.jpg"
+        except:
+            print(src)
+            return ""
     return dict(replaceSize=replaceSize)
 
 
