@@ -426,7 +426,7 @@ span{
     font-size: 15px;
 }
 
-.singleFilm .poster{
+.poster{
     background-image: linear-gradient(90deg,hsla(0,0%,100%,0) 0,hsla(0,0%,100%,.5) 50%,hsla(0,0%,100%,0));
     background-repeat: no-repeat;
     background-size: 100% 1px;
@@ -440,12 +440,12 @@ span{
     margin-bottom: 10px;
 }
 
-.singleFilm .poster img{
+.poster img{
     margin:1px;
     border-radius: 3px;
 }
 
-.singleFilm .poster img:hover{
+.poster img:hover{
     outline: 3px solid  #00e054;
     outline-offset: -3px;
     transition-duration: 0.15s;
@@ -637,6 +637,38 @@ span{
   border-top: 10px solid #445566;
 }
 
+.decade{
+    display:flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+}
+
+.decadeTitle{
+    font-family: Graphik-Light-Web,sans-serif;
+    font-size: 40px;
+    width: 20%;
+    text-align: left;
+}
+
+.decPosters{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 80%;
+    gap:2px;
+}
+
+.decPosterImg{
+    width: 9%;
+    height:auto;
+}
+
+.decPosterImg img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -742,7 +774,7 @@ span{
         width: 45%;
     }
 
-    .poster, .poster img{
+    .singleFilm .poster, .singleFilm .poster img{
         width:100% !important;
         height:100% !important;
     }
@@ -823,6 +855,25 @@ span{
 
     .worldmap {
         height: 250px;
+    }
+
+    .decade{
+        flex-direction: column;
+    }
+
+    .decadeTitle{
+        font-size: 32px;
+        padding-bottom: 10px;
+    }
+
+    .decPosters {
+        width: 100%;
+        gap: 5px;
+    }
+
+    .decPosterImg {
+        width: 18%;
+        height: 40%;
     }
 
 }

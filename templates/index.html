@@ -63,9 +63,20 @@
             <section class="sectionStats">
                 <div class="sepline">
                     <span>Highest rated decades</span>
+                    <div class="line"></div>
                 </div>
-                <div class="chart-container">
-                </div>
+                {% for element in user.stats.topDecade %}
+                    <div class="decade">
+                        <span class="decadeTitle">{{ element._id }}0s</span>
+                        <div class="decPosters">
+                        {%for element2 in element.posters%}
+                            <a class="poster decPosterImg" href="{{ lbdurl }}film/{{ element2.uri }}">
+                                <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element2.img, 70, 105) }}" alt="{{ element.uri }}" />
+                            </a>
+                        {%endfor%}
+                        </div>
+                    </div>
+                {%endfor%}
             </section>
             <section class="sectionStats">
                 <div class="sepline">
