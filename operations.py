@@ -120,8 +120,11 @@ def fill_db(url, soup):
     #POSTERS
     try:
         poster = soup.find('div', {"class": "film-poster"}).select('img')[0]['src']
-        backdrop = soup.find('div', {"class": "backdrop-wrapper"})['data-backdrop']
-        json1['images'] = {'poster': poster, 'backdrop': backdrop}
+        try:
+            backdrop = soup.find('div', {"class": "backdrop-wrapper"})['data-backdrop']
+            json1['images'] = {'poster': poster, 'backdrop': backdrop}
+        except:
+            json1['images'] = {'poster': poster}
     except:
         pass
 
@@ -129,7 +132,7 @@ def fill_db(url, soup):
     json1['updateDate'] = datetime.today()
     json1['modifiedDate'] = datetime.strptime(json_lb['dateModified'], '%Y-%m-%d')
 
-    db.Film.insert_one(json1)
+    db.Film.update_one({'_id': json1['_id']}, {'$set': json1})
     return json1
 
 async def get(url, session):
@@ -147,3 +150,4 @@ def fillMongodb(urls):
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
     asyncio.get_event_loop().run_until_complete(main2(urls))
     #return asyncio.get_event_loop().run_until_complete(main2(urls))
+
