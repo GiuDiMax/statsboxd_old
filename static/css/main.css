@@ -682,6 +682,7 @@ span{
     flex-wrap: wrap;
     width: 80%;
     gap:2px;
+    justify-content: flex-start;
 }
 
 .decPosterImg{

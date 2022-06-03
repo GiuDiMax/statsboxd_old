@@ -176,9 +176,11 @@ def fullOperation(username, watched=None):
             break
 
     y = None
+    db.Users.update_one({'username': username}, {'$set': {'stats': y}})
     json3 = getStats(username)
     for x in json3:
         y = x
+
 
     if y != None:
         min = y['totalyear'][0]['_id']
