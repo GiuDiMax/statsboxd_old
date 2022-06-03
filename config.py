@@ -37,7 +37,7 @@ crew_html = [
      ['studio', 'studio', 'Studio']
 ]
 
-exclude_people = ['mickie-mcgowan', 'stan-lee', 'jack-angel', 'sherry-lynn']
+exclude_people = ['mickie-mcgowan', 'stan-lee', 'jack-angel', 'sherry-lynn', 'frank-welker']
 
 beta_test = False
 beta_users = ['giudimax']
