@@ -131,8 +131,10 @@ def fill_db(url, soup):
     #DATE
     json1['updateDate'] = datetime.today()
     json1['modifiedDate'] = datetime.strptime(json_lb['dateModified'], '%Y-%m-%d')
-
-    db.Film.update_one({'_id': json1['_id']}, {'$set': json1})
+    try:
+        db.Film.insert_one(json1)
+    except:
+        db.Film.update_one({'_id': json1['_id']}, {'$set': json1})
     return json1
 
 async def get(url, session):
