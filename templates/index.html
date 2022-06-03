@@ -11,6 +11,8 @@
         <script src="//jvectormap.com/js/jquery-jvectormap-world-mill.js"></script>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js"></script>
     </head>
     <body>
         <div id="isMobile"></div>
@@ -191,7 +193,7 @@
                         {%for element in user.stats.topToAverage%}
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
-                                    <img src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
                                 </a>
                                 <div>
                                     <span class="sottotitolo stelline">{{ numToStars(element.rating) }}</span>
@@ -210,7 +212,7 @@
                         {%for element in user.stats.flopToAverage%}
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
-                                    <img src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
                                 </a>
                                 <div>
                                     <span class="sottotitolo stelline">{{ numToStars(element.rating) }}</span>
@@ -242,7 +244,7 @@
                             {%for element in list%}
                                 <div class="container_people">
                                     <a href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">
-                                        <img class="holeperson" src="{{ url_for('static', filename = 'images/'+role[0]+'.jpg') }}"
+                                        <img class="holeperson lazy" src="{{ url_for('static', filename = 'images/'+role[0]+'.jpg') }}"
                                             {% if 'tmdbImg' in element.info[0] %}
                                                  data-src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"
                                             {% endif %}
@@ -325,6 +327,10 @@
                 if($('#isMobile').is(':visible')) {
                     isMobile = true;
                 }
+
+                $(function() {
+                    $('.lazy').Lazy();
+                });
 
                 $('.clickable').click(function() {
                     $('.'+$(this).attr('data-hide')).addClass('hide');
