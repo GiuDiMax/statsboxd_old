@@ -118,44 +118,26 @@
             </section>
             <section class="sectionStats">
                 <div class="sepline">
-                    <span>THEMES & NANOGENRES®</span>
+                    <span>Themes & Nanogenres®</span>
                     <div class="line"></div>
                 </div>
                 <div class="attributes-chart twocolumn">
-                    <div class="left overlap1">
-                        <div class="graph">
-                            <canvas id="genre2Chart"></canvas>
-                        </div>
-                        <div class="labels">
-                            {% for i in range(10) %}
-                                <a class="clickable label2" href="{{ lbdurl }}{{ user.username }}/films/theme/{{ user.stats['mostWatchedgenres_themes'][i]['_id'] }}">
+                    {% for type in ['theme','mini-theme'] %}
+                    <div class="labels">
+                        {% for i in range(10) %}
+                                <a class="clickable label2" href="{{ lbdurl }}{{ user.username }}/films/{{type}}/{{ user.stats['mostWatchedgenres_' + type + 's'][i]['_id'] }}">
+
                                     <span class="leftText">
-                                        {{ firstUpper(user.stats['mostWatchedgenres_themes'][i]['_id']) }}
+                                        {{ firstUpper(user.stats['mostWatchedgenres_' + type + 's'][i]['_id']) }}
                                     </span>
                                     <span class="bold right">
-                                        {{ user.stats['mostWatchedgenres_themes'][i]['sum'] }} films
+                                        {{ user.stats['mostWatchedgenres_' + type + 's'][i]['sum'] }} films
                                     </span>
+                                    <div class="labcontainer" style="width:{{ user.stats['mostWatchedgenres_' + type + 's'][i]['sum'] * 100 /user.stats['mostWatchedgenres_' + type + 's'][0]['sum'] }}%;"></div>
                                 </a>
-                            {%endfor%}
-                        </div>
+                        {%endfor%}
                     </div>
-                    <div class="right overlap1">
-                        <div class="graph">
-                            <canvas id="genre3Chart"></canvas>
-                        </div>
-                        <div class="labels">
-                            {% for i in range(10) %}
-                                <a class="clickable label2" href="{{ lbdurl }}{{ user.username }}/films/mini-theme/{{ user.stats['mostWatchedgenres_mini-themes'][i]['_id'] }}">
-                                    <span class="leftText">
-                                        {{ firstUpper(user.stats['mostWatchedgenres_mini-themes'][i]['_id']) }}
-                                    </span>
-                                    <span class="bold right">
-                                        {{ user.stats['mostWatchedgenres_mini-themes'][i]['sum'] }} films
-                                    </span>
-                                </a>
-                            {%endfor%}
-                        </div>
-                    </div>
+                     {%endfor%}
                 </div>
             </section>
             <section class="sectionStats">
@@ -459,7 +441,7 @@
                         },
                         responsive: true,
                         onClick: (e, items) => {
-                            if (isMobile) {
+                            if (!isMobile) {
                             location.href = '{{ lbdurl }}{{ user.username }}/films/year/'+ releaseYearChart.data.datasets[0].data[items[0].index].x + '/' ;
                         }}
                     }
@@ -492,7 +474,7 @@
                         },
                         responsive: true,
                         onClick: (e, items) => {
-                            if (isMobile) {
+                            if (!isMobile) {
                             location.href = '{{ lbdurl }}{{ user.username }}/films/year/'+ releaseYearChart.data.datasets[0].data[items[0].index].x + '/' ;
                         }}
                     }
@@ -600,69 +582,7 @@
                     }
                 });
 
-                new Chart(document.getElementById('genre2Chart'), {
-                    type: 'bar',
-                    data: {
-                        datasets: [{
-                            data: [
-                                {% for i in range(10) %}
-                                    {y: "{{ firstUpper(user.stats.mostWatchedgenres_themes[i]['_id']) }}",
-                                     x: {{ (user.stats.mostWatchedgenres_themes[i]['sum']) }}},
-                                {%endfor%}
-                            ],
-                            backgroundColor: '#283038',
-                            borderWidth: 0,
-                            borderRadius: 3,
-                            borderSkipped: false,
-                        }]
-                    },
-                    options: {
-                        barPercentage: 0.97,
-                        plugins: {legend: {display: false}, tooltip: {enabled: false}},
-                        indexAxis: 'y',
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {beginAtZero: true, display: false },
-                            x: {beginAtZero: true, display: false},
-                        },
-                        interaction: {
-                            mode: 'nearest'
-                        },
-                        responsive: true,
-                    }
-                });
 
-                new Chart(document.getElementById('genre3Chart'), {
-                    type: 'bar',
-                    data: {
-                        datasets: [{
-                            data: [
-                                {% for i in range(10) %}
-                                    {y: "{{ firstUpper(user.stats['mostWatchedgenres_mini-themes'][i]['_id']) }}",
-                                     x: {{ (user.stats['mostWatchedgenres_mini-themes'][i]['sum']) }}},
-                                {%endfor%}
-                            ],
-                            backgroundColor: '#283038',
-                            borderWidth: 0,
-                            borderRadius: 3,
-                            borderSkipped: false,
-                        }]
-                    },
-                    options: {
-                        barPercentage: 0.97,
-                        plugins: {legend: {display: false}},
-                        indexAxis: 'y',
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {beginAtZero: true, display: false },
-                            x: {beginAtZero: true, display: false}
-                        },
-                        interaction: {
-                            mode: 'nearest'
-                        },
-                        responsive: true,
-                    }
-                });
             })
         </script>
     </footer>
