@@ -39,5 +39,5 @@ crew_html = [
 
 exclude_people = ['mickie-mcgowan', 'stan-lee', 'jack-angel', 'sherry-lynn']
 
-beta_test = True
+beta_test = False
 beta_users = ['giudimax']
