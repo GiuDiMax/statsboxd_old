@@ -8,3 +8,71 @@
 
 </body>
 </html>
+
+<footer>
+    <script>
+                        new Chart(document.getElementById('genre2Chart'), {
+                    type: 'bar',
+                    data: {
+                        datasets: [{
+                            data: [
+                                {% for i in range(10) %}
+                                    {y: "{{ firstUpper(user.stats.mostWatchedgenres_themes[i]['_id']) }}",
+                                     x: {{ (user.stats.mostWatchedgenres_themes[i]['sum']) }}},
+                                {%endfor%}
+                            ],
+                            backgroundColor: '#283038',
+                            borderWidth: 0,
+                            borderRadius: 3,
+                            borderSkipped: false,
+                        }]
+                    },
+                    options: {
+                        barPercentage: 0.97,
+                        plugins: {legend: {display: false}, tooltip: {enabled: false}},
+                        indexAxis: 'y',
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {beginAtZero: true, display: false },
+                            x: {beginAtZero: true, display: false},
+                        },
+                        interaction: {
+                            mode: 'nearest'
+                        },
+                        responsive: true,
+                    }
+                });
+
+                new Chart(document.getElementById('genre3Chart'), {
+                    type: 'bar',
+                    data: {
+                        datasets: [{
+                            data: [
+                                {% for i in range(10) %}
+                                    {y: "{{ firstUpper(user.stats['mostWatchedgenres_mini-themes'][i]['_id']) }}",
+                                     x: {{ (user.stats['mostWatchedgenres_mini-themes'][i]['sum']) }}},
+                                {%endfor%}
+                            ],
+                            backgroundColor: '#283038',
+                            borderWidth: 0,
+                            borderRadius: 3,
+                            borderSkipped: false,
+                        }]
+                    },
+                    options: {
+                        barPercentage: 0.97,
+                        plugins: {legend: {display: false}},
+                        indexAxis: 'y',
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {beginAtZero: true, display: false },
+                            x: {beginAtZero: true, display: false}
+                        },
+                        interaction: {
+                            mode: 'nearest'
+                        },
+                        responsive: true,
+                    }
+                });
+    </script>
+</footer>
