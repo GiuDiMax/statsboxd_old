@@ -105,13 +105,14 @@ def getStats(username):
     op_role = []
     op_role.append({'$group': {'_id': '$watched.id',
                                'year': {'$first': '$info.year'},
+                               'uri': {'$first': '$info.uri'},
                                'poster': {'$first': '$info.images.poster'},
                                'rating': {'$first': '$watched.rating'}}})
     op_role.append({'$sort': {'rating': -1}})
     op_role.append({'$addFields': {'decade': {'$substr': [{'$toString': '$year'}, 0, 3]}}}),
     op_role.append({'$group': {'_id': '$decade',
                                'average': {'$avg': '$rating'},
-                               'posters': {'$push': "$poster"},
+                               'posters': {'$push': {'img': "$poster", 'uri': '$uri'}},
                                'sum': {'$sum': 1}}})
     op_role.append({'$match': {"sum": {'$gt': 10}}})
     op_role.append({'$sort': {'average': -1}})
