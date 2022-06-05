@@ -146,8 +146,8 @@ def fullUpdate(username):
     t2.start()
     t1.join()
     t2.join()
-    print('All op in: ' + str(time.time() - start))
     db.Users.update_one({'username': username}, {'$set': {'watched': watched_list, 'diary': diary_list}})
+    print('All op in: ' + str(time.time() - start))
 
 
 def fullOperation(username, watched=None):
@@ -178,28 +178,11 @@ def fullOperation(username, watched=None):
 
     y = None
     db.Users.update_one({'username': username}, {'$set': {'stats': y}})
-    json3 = getStats(username)
-    for x in json3:
-        y = x
-
-    if y != None:
-        min = y['totalyear'][0]['_id']
-        max = y['totalyear'][-1]['_id']
-
-        y2 = []
-        for i in range(min, max + 1):
-            check = False
-            for a in y['totalyear']:
-                if a['_id'] == i:
-                    y2.append(a)
-                    check = True
-                    break
-            if not check:
-                y2.append({'_id': i, 'average': 0, 'sum': 0})
-        y['totalyear'] = y2
-
-        db.Users.update_one({'username': username}, {'$set': {'stats': y}})
-        year_stats(username)
-
+    t1 = Thread(target=getStats, args=(username,))
+    t2 = Thread(target=year_stats, args=(username,))
+    t1.start()
+    t2.start()
+    t1.join()
+    t2.join()
 
 #fullUpdate('giudimax')
