@@ -11,6 +11,7 @@ from threading import Thread
 import time
 from multiprocessing import Pool
 import sys
+from year_stats import year_stats
 
 global watched_list, diary_list
 
@@ -181,7 +182,6 @@ def fullOperation(username, watched=None):
     for x in json3:
         y = x
 
-
     if y != None:
         min = y['totalyear'][0]['_id']
         max = y['totalyear'][-1]['_id']
@@ -199,6 +199,7 @@ def fullOperation(username, watched=None):
         y['totalyear'] = y2
 
         db.Users.update_one({'username': username}, {'$set': {'stats': y}})
+        year_stats(username)
 
 
 #fullUpdate('giudimax')

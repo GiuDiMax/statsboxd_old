@@ -23,7 +23,7 @@ def main(username):
         user = getFromusername(username.lower())
         if user is not None:
             if 'stats' in user:
-                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html)
+                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="")
             else:
                 return redirect('/'+username+"/update/")
     return render_template('username.html')
