@@ -5,8 +5,9 @@ for field in field2 + field3:
     op_role = []
     op_role.append({'$unwind': '$info.' + field})
     op_role.append({'$group': {'_id': '$info.' + field,
-                               'average': {'$avg': '$watched.rating'},
+                               'average': {'$avg': '$diary.dRating'},
                                'sum': {'$sum': 1}}})
+    op_role.append({'$match': {"sum": {'$gt': 1}}})
     op_role.append({'$sort': {'sum': -1}})
     op_role.append({'$limit': 20})
     if field in field2:
@@ -20,8 +21,9 @@ for field in field2 + field3:
         op_role = []
         op_role.append({'$unwind': '$info.' + field})
         op_role.append({'$group': {'_id': '$info.' + field,
-                                   'average': {'$avg': '$watched.rating'},
+                                   'average': {'$avg': '$diary.dRating'},
                                    'sum': {'$sum': 1}}})
+        op_role.append({'$match': {"sum": {'$gt': 1}}})
         op_role.append({'$match': {"sum": {'$gt': 1}}})
         op_role.append({'$sort': {'average': -1}})
         op_role.append({'$limit': 20})
@@ -93,3 +95,19 @@ op_role = []
 op_role.append({'$sort': {'diary.date': -1}})
 op_role.append({'$limit': 1})
 json_operations['lastMovie'] = op_role
+
+
+for field in ['country']:
+    op_role = []
+    op_role.append({'$unwind': '$info.' + field})
+    op_role.append({'$group': {'_id': '$info.' + field,
+                               'average': {'$avg': '$diary.dRating'},
+                               'sum': {'$sum': 1}}})
+    op_role.append({'$lookup': {
+        'from': 'Countries',
+        'localField': '_id',
+        'foreignField': 'uri',
+        'as': 'info'}})
+    op_role.append({'$unwind': '$info'})
+    op_role.append({'$sort': {'_id': 1}})
+    json_operations['total' + field.rsplit(".", 1)[0]] = op_role

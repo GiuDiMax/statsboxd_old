@@ -24,7 +24,11 @@
         </div>
         <div id="content" class="content">
             <section class="mainTitlesec">
-                <h1 class="mainTitle">A Life in Film</h1>
+                {% if year == '' %}
+                    <h1 class="mainTitle">A Life in Film</h1>
+                {% else %}
+                    <h1 class="mainTitle yearTitle">{{ yearnum }}</h1>
+                {% endif %}
                 <div class="numbersStats">
                     <div>
                         <span class="number">{{ format_comma(user['stats'+year].total[0].movies) }}</span>
@@ -34,6 +38,7 @@
                         <span class="number">{{ format_comma(user['stats'+year].total[0].runtime/60) }}</span>
                         <span class="text">Hours</span>
                     </div>
+                    {% if year == '' %}
                     <div>
                         <span class="number">{{ format_comma(user['stats'+year].totalDirectors[0].count) }}</span>
                         <span class="text">Directors</span>
@@ -42,8 +47,10 @@
                         <span class="number">{{ format_comma(user['stats'+year].totalCountry[0].count) }}</span>
                         <span class="text">Countries</span>
                     </div>
+                    {% endif %}
                 </div>
             </section>
+            {% if year == '' %}
             <section class="sectionStats">
                 <div class="sepline">
                     <span>By release year</span>
@@ -78,6 +85,7 @@
                     </div>
                 {%endfor%}
             </section>
+            {% endif %}
             <section class="sectionStats">
                 <div class="sepline">
                     <span>Genres, Countries & Languages</span>
@@ -88,7 +96,7 @@
                     <div class="labels2">
                         {% for i in range(10) %}
                             <div>
-                                <a class="clickable label1" href="{{ lbdurl }}{{ user.username }}/films/{{ type[1] }}/{{ user['stats'+year]['mostWatched'+type[0]][i]['_id'] }}">
+                                <a class="clickable label1" href="{{ lbdurl }}{{ user.username }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}{{ type[1] }}/{{ user['stats'+year]['mostWatched'+type[0]][i]['_id'] }}">
                                     {{ firstUpper(user['stats'+year]['mostWatched'+type[0]][i]['_id']) }}
                                 </a>
                                 <div>
@@ -110,7 +118,7 @@
                     {% for type in ['theme','mini-theme'] %}
                     <div class="labels">
                         {% for i in range(10) %}
-                                <a class="clickable label2" href="{{ lbdurl }}{{ user.username }}/films/{{type}}/{{ user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id'] }}">
+                                <a class="clickable label2" href="{{ lbdurl }}{{ user.username }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}{{type}}/{{ user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id'] }}">
 
                                     <span class="leftText">
                                         {{ firstUpper(user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id']) }}
@@ -125,6 +133,7 @@
                      {%endfor%}
                 </div>
             </section>
+            {% if year == '' %}
             <section class="sectionStats">
                 <div class="sepline">
                     <span>List progress</span>
@@ -207,7 +216,7 @@
                         {%endfor%}
                 </div>
             </section>
-
+            {% endif %}
             {%for role in [['actor', 'Stars', 'a', 'actors'], ['director', 'Directors', 'd', 'crew_director']]%}
             <section class="sectionStats">
                 <div class="sepline">
@@ -228,7 +237,7 @@
                             {% endif %}
                             {%for element in list%}
                                 <div class="container_people">
-                                    <a href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">
+                                    <a href="{{ lbdurl }}{{ user.username }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">
                                         <img class="holeperson lazy" src="{{ url_for('static', filename = 'images/'+role[0]+'.jpg') }}"
                                             {% if 'tmdbImg' in element.info[0] %}
                                                  data-src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"
@@ -236,12 +245,12 @@
                                         alt="{{ element._id }}"/>
                                     </a>
                                         {% if element.info|length > 0 %}
-                                            <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ element.info[0].name }}</a>
+                                            <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.info[0].name }}</a>
                                         {% else %}
-                                            <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ firstUpperBis(element._id) }}</a>
+                                            <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ firstUpperBis(element._id) }}</a>
                                         {% endif %}
                                     {% if type[2]=='w' %}
-                                        <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[0] }}/{{ element._id }}">{{ element.sum }} films</a>
+                                        <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.sum }} films</a>
                                     {% else %}
                                         <span class="sottotitolo">★ {{ "%.1f"|format(element.average/2) }}</span>
                                     {% endif %}
@@ -272,7 +281,7 @@
                             <span class="titlerole">{{ role[2] }}</span>
                             {%for element in user['stats'+year][type+role[0]]%}
                                 <div class="{{ type }}limit {% if loop.index > 5 %}hide{% endif %}">
-                                    <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/with/{{ role[1] }}/{{ element._id }}">
+                                    <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}/with/{{ role[1] }}/{{ element._id }}">
                                          {% if element.info|length > 0 %}
                                             {{ element.info[0].name }}
                                         {% else %}
@@ -460,7 +469,7 @@
                         responsive: true,
                         onClick: (e, items) => {
                             if (!isMobile) {
-                            location.href = '{{ lbdurl }}{{ user.username }}/films/year/'+ releaseYearChart.data.datasets[0].data[items[0].index].x + '/' ;
+                            location.href = '{{ lbdurl }}{{ user.username }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}year/'+ releaseYearChart.data.datasets[0].data[items[0].index].x + '/' ;
                         }}
                     }
                 });

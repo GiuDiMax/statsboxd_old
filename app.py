@@ -23,7 +23,21 @@ def main(username):
         user = getFromusername(username.lower())
         if user is not None:
             if 'stats' in user:
-                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="")
+                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
+            else:
+                return redirect('/'+username+"/update/")
+    return render_template('username.html')
+
+
+@app.route('/<username>/<year>')
+def main_year(username, year):
+    if '.ico' not in username:
+        if beta_test and username.lower() not in beta_users:
+            return render_template('username.html')
+        user = getFromusername(username.lower())
+        if user is not None:
+            if 'stats' in user:
+                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year='_'+year, yearnum=year)
             else:
                 return redirect('/'+username+"/update/")
     return render_template('username.html')
