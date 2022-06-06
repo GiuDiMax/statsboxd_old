@@ -42,6 +42,20 @@ op_role.append({'$group': {'_id': '$_id',
 json_operations['total'] = op_role
 
 op_role = []
+op_role.append({'$project': {'dayWeek': {'$dayOfWeek': '$diary.date'}}})
+op_role.append({'$group': {'_id': '$dayWeek',
+                           'sum': {'$sum': 1}}})
+op_role.append({'$sort': {'_id': 1}})
+json_operations['dayOfWeek'] = op_role
+
+op_role = []
+op_role.append({'$project': {'week': {'$week': '$diary.date'}}})
+op_role.append({'$group': {'_id': '$week',
+                           'sum': {'$sum': 1}}})
+op_role.append({'$sort': {'_id': 1}})
+json_operations['week'] = op_role
+
+op_role = []
 op_role.append({'$group': {'_id': '$diary.dRating',
                            'sum': {'$sum': 1}}})
 json_operations['rating'] = op_role
