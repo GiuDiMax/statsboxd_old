@@ -348,11 +348,15 @@
                         //pointFormat: '<span class="ttSubtitle">Year {point.name}</span>',
                         //footerFormat: '</div>',
                         formatter: function(){
-                            return '<div class="ttYear"><span class="ttTitle">' + (parseInt(this.y) - 1).toString() +' films</span></div>' +
+                            return '<div class="ttYear"><span class="ttTitle">' + (parseInt(this.y) - 1).toString() +' films</span>' +
                                 '<span class="ttSubtitle">Year '+ this.points[0].key + '</span></div>'
                         },
                         shared: true,
-                        useHTML: true
+                        useHTML: true,
+                        shape: 'square',
+                        borderWidth:0,
+                        shadow: false,
+                        backgroundColor: null,
                     },
                     plotOptions: {column: {pointPadding: 0.2, borderWidth: 0, borderRadius: 3, groupPadding: 0,}},
                     series: [{
@@ -367,6 +371,53 @@
                             color: {
                                 linearGradient: [0, 0, $('.chart-container').width(), 0],
                                 stops: [[0.00, '#00e054'], [1.00, '#3fbcf2']]
+                            },
+                            point: {
+                                events: {
+                                    click: function () {
+                                        if (!isMobile) {
+                                            location.href = '{{ lbdurl }}{{ user.username }}/films/year/' + this.options.name + "/";
+                                        }
+                                    }
+                                }
+                            }
+                        }],
+                });
+
+                Highcharts.chart('ratingYear', {
+                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0},
+                    xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    yAxis: {min: -1, labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    legend:{enabled:false},
+                    title: {text:null},
+                    tooltip: {
+                        //headerFormat: '<div class="ttYear"><span class="ttTitle">{ return parseInt(point.y) } films</span>',
+                        //pointFormat: '<span class="ttSubtitle">Year {point.name}</span>',
+                        //footerFormat: '</div>',
+                        formatter: function(){
+                            return '<div class="ttYear"><span class="ttTitle">Average ' + parseFloat(this.y - 0.1).toFixed(2).toString() +'</span>' +
+                                '<span class="ttSubtitle">Year '+ this.points[0].key + '</span></div>'
+                        },
+                        shared: true,
+                        useHTML: true,
+                        shape: 'square',
+                        borderWidth:0,
+                        shadow: false,
+                        backgroundColor: null,
+                    },
+                    plotOptions: {column: {pointPadding: 0.2, borderWidth: 0, borderRadius: 3, groupPadding: 0,}},
+                    series: [{
+                            data: [
+                                {%for element in user['stats'+year].totalyear%}
+                                    {name: "{{ element['_id'] }}", y: {{ ifNull0_divide2(element['average']) + 0.1 }},
+                                            {% if ifNull0_divide2(element['average']) == 0 %}color: "#445566"{% endif %}
+                                    },
+                                {%endfor%}
+                            ],
+                            label: {enabled: false},
+                            color: {
+                                linearGradient: [0, 0, $('.chart-container').width(), 0],
+                                stops: [[0.00, '#ffb860'], [1.00, '#ffe870']]
                             },
                             point: {
                                 events: {
