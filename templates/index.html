@@ -13,6 +13,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js"></script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://rawgit.com/highcharts/rounded-corners/master/rounded-corners.js"></script>
     </head>
     <body>
         <div id="isMobile"></div>
@@ -59,8 +61,8 @@
                     <span class="clickable" data-show="ratingYear" data-hide="yearChart">Ratings</span>
                 </div>
                 <div class="chart-container">
-                    <canvas id="releaseYear" class="yearChart"></canvas>
-                    <canvas id="ratingYear" class="yearChart hide"></canvas>
+                    <div id="releaseYear" class="yearChart"></div>
+                    <div id="ratingYear" class="yearChart hide"></div>
                 </div>
                 <div class="years">
                     <span>{{ user['stats'+year].totalyear[0]._id }}</span>
@@ -334,6 +336,50 @@
                     $(this).siblings().removeClass('active');
                 })
 
+                //BYYEARCHART
+                Highcharts.chart('releaseYear', {
+                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0},
+                    xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    yAxis: {min: -1, labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    legend:{enabled:false},
+                    title: {text:null},
+                    tooltip: {
+                        //headerFormat: '<div class="ttYear"><span class="ttTitle">{ return parseInt(point.y) } films</span>',
+                        //pointFormat: '<span class="ttSubtitle">Year {point.name}</span>',
+                        //footerFormat: '</div>',
+                        formatter: function(){
+                            return '<div class="ttYear"><span class="ttTitle">' + (parseInt(this.y) - 1).toString() +' films</span></div>' +
+                                '<span class="ttSubtitle">Year '+ this.points[0].key + '</span></div>'
+                        },
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {column: {pointPadding: 0.2, borderWidth: 0, borderRadius: 3, groupPadding: 0,}},
+                    series: [{
+                            data: [
+                                {%for element in user['stats'+year].totalyear%}
+                                    {name: "{{ element['_id'] }}", y: {{ (element['sum']) + 1 }},
+                                            {% if (element['sum']) == 0 %}color: "#445566"{% endif %}
+                                    },
+                                {%endfor%}
+                            ],
+                            label: {enabled: false},
+                            color: {
+                                linearGradient: [0, 0, $('.chart-container').width(), 0],
+                                stops: [[0.00, '#00e054'], [1.00, '#3fbcf2']]
+                            },
+                            point: {
+                                events: {
+                                    click: function () {
+                                        if (!isMobile) {
+                                            location.href = '{{ lbdurl }}{{ user.username }}/films/year/' + this.options.name + "/";
+                                        }
+                                    }
+                                }
+                            }
+                        }],
+                });
+
                 //WORLDMAP
                 var worldData = {
                     {%for element in user['stats'+year].totalcountry%}
@@ -395,84 +441,6 @@
                       }
                 }
 
-                //BYYEARCHART
-                var ctx = document.getElementById('releaseYear');
-                var ctx2 = document.getElementById('ratingYear');
-                var context = ctx.getContext('2d');
-                var context2 = ctx2.getContext('2d');
-                var gradient = context.createLinearGradient(0, 0, 950, 150);
-                var gradient2 = context2.createLinearGradient(0, 0, 950, 150);
-                gradient.addColorStop(0, 'rgba(6, 221, 98, 1)');
-                gradient.addColorStop(1, 'rgba(63, 188, 242, 1)');
-                gradient2.addColorStop(0, 'rgba(255, 184, 96, 1)');
-                gradient2.addColorStop(1, 'rgba(255, 232, 112, 1)');
-                var releaseYearChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        datasets: [{
-                            data: [
-                                {%for element in user['stats'+year].totalyear%}
-                                    {x: "{{ element['_id'] }}", y: {{ (element['sum']) }}},
-                                {%endfor%}
-                            ],
-                            backgroundColor: gradient,
-                            borderWidth: 0,
-                            borderRadius: 3,
-                            borderSkipped: false,
-                            borderSkipped: false,
-                        }]
-                    },
-                    options: {
-                        plugins: {legend: {display: false}},
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {beginAtZero: true, display:false},
-                            x: {display:false},
-                            offset: false,
-                        },
-                        interaction: {
-                            mode: 'nearest'
-                        },
-                        responsive: true,
-                        onClick: (e, items) => {
-                            if (!isMobile) {
-                            location.href = '{{ lbdurl }}{{ user.username }}/films/year/'+ releaseYearChart.data.datasets[0].data[items[0].index].x + '/' ;
-                        }}
-                    }
-                });
-                new Chart(ctx2, {
-                    type: 'bar',
-                    data: {
-                        datasets: [{
-                            data: [
-                                {%for element in user['stats'+year].totalyear%}
-                                    {x: "{{ element['_id'] }}", y: {{ ifNull0_divide2(element['average']) }}},
-                                {%endfor%}
-                            ],
-                            backgroundColor: gradient2,
-                            borderWidth: 0,
-                            borderRadius: 3,
-                            borderSkipped: false,
-                        }]
-                    },
-                    options: {
-                        plugins: {legend: {display: false}},
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {beginAtZero: true, display:false},
-                            x: {display:false},
-                            offset: false,
-                        },
-                        interaction: {
-                            mode: 'nearest'
-                        },
-                        responsive: true,
-                        onClick: (e, items) => {
-                            if (!isMobile) {
-                            location.href = '{{ lbdurl }}{{ user.username }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}year/'+ releaseYearChart.data.datasets[0].data[items[0].index].x + '/' ;
-                        }}
-                    }
-                });
 
             })
         </script>
