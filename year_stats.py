@@ -49,11 +49,16 @@ def year_stats(username):
     #for x in a:
     #    y = a
     #    break
+    years = []
     for x in a:
-        if x['sum'] > 10:
+        if x['sum'] >= 50:
+            years.append(x['_id'])
             t = Thread(target=singleYear, args=(x['_id'], username))
             threads.append(t)
     for x in threads:
         x.start()
     for x in threads:
         x.join()
+    years.sort(reverse=True)
+    db.Users.update_one({'_id': username}, {'$set': {'years': years}})
+
