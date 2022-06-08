@@ -44,12 +44,12 @@ def singleYear(year, username):
 
 def year_stats(username):
     a = getYears(username)
-    y = {}
+    #y = {}
     threads = []
+    #for x in a:
+    #    y = a
+    #    break
     for x in a:
-        y = a
-        break
-    for x in y:
         if x['sum'] > 10:
             t = Thread(target=singleYear, args=(x['_id'], username))
             threads.append(t)

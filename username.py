@@ -47,6 +47,7 @@ async def get_watched3(url, session, diary):
         soup = BeautifulSoup(ret, 'lxml', parse_only=SoupStrainer(['tr'])).find_all('tr')
         for sup in soup[1:]:
             diary_function(sup)
+
         #sys.setrecursionlimit(0x100000)
         #if __name__ == '__main__':
         #    with Pool(5) as p:
@@ -103,9 +104,17 @@ def get_watched(username, diary=False):
     except:
         urls = [url]
 
-    #asyncio.get_event_loop().run_until_complete(get_watched2(urls, diary))
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
     asyncio.get_event_loop().run_until_complete(get_watched2(urls, diary))
+
+
+def threadgeneral(username):
+    start3 = time.time()
+    resp = requests.get('http://letterboxd.com/' + str(username))
+    soup = BeautifulSoup(resp.text, 'lxml', parse_only=SoupStrainer('div', {'id': 'content'}))
+    sup = soup.find('div', class_="profile-summary")
+    db.Users.update_one({'_id': username}, {'$set': {'name': sup.find('h1', {'class': 'title-1'}).text, 'image': sup.find('img')['src']}}, True)
+    print('general in: ' + str(time.time() - start3))
 
 
 def threadxwatched(username):
@@ -131,10 +140,13 @@ def fullUpdate(username):
     start = time.time()
     t1 = Thread(target=threadxwatched, args=(username,)) #WATCHED
     t2 = Thread(target=threadxdiary, args=(username,)) #DIARY
+    t3 = Thread(target=threadgeneral, args=(username,)) #GENERAL
     t1.start()
     t2.start()
+    t3.start()
     t1.join()
     t2.join()
+    t3.join()
     fullOperation(username, watched_list)
     print('All op in: ' + str(time.time() - start))
 
@@ -167,15 +179,17 @@ def fullOperation(username, watched=None):
         else:
             break
 
-    y = None
+    #y = None
     getStats(username)
     #db.Users.update_one({'_id': username}, {'$set': {'stats': y}})
+    start4 = time.time()
     t1 = Thread(target=getStats, args=(username,))
     t2 = Thread(target=year_stats, args=(username,))
     t1.start()
     t2.start()
     t1.join()
     t2.join()
+    print('stats in: ' + str(time.time() - start4))
 
 
 def getFromusername(username):
@@ -185,5 +199,3 @@ def getFromusername(username):
     fullUpdate(username)
     return db.Users.find_one({"_id": username})
 
-
-fullUpdate('giudimax')
