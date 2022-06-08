@@ -12,7 +12,6 @@ import time
 from multiprocessing import Pool
 import sys
 from year_stats import year_stats
-
 global watched_list, diary_list
 
 
@@ -109,29 +108,10 @@ def get_watched(username, diary=False):
     asyncio.get_event_loop().run_until_complete(get_watched2(urls, diary))
 
 
-def getFromusername(username):
-    obj = db.Users.find_one({"username": username})
-    if obj is not None:
-        return obj
-    fullCreation(username)
-    obj = db.Users.find_one({"username": username})
-    if obj is not None:
-        return obj
-
-
-def fullCreation(username):
-    global watched_list, diary_list
-    get_watched(username, False)
-    if len(watched_list) > 0:
-        get_watched(username, True)
-        db.Users.insert_one({'username': username, 'watched': watched_list, 'diary': diary_list})
-        #db.Users.insert_one({'username': username, 'watched': watched_list})
-        fullOperation(username)
-
-
 def threadxwatched(username):
     global watched_list
     get_watched(username, False)
+    db.Users.update_one({'_id': username}, {'$set': {'watched': watched_list}}, True)
     start2 = time.time()
     fullOperation(username, watched_list)
     print('Stats in: ' + str(time.time() - start2))
@@ -140,33 +120,34 @@ def threadxwatched(username):
 def fullUpdate(username):
     global watched_list, diary_list
     start = time.time()
-    t1 = Thread(target=threadxwatched, args=(username,))
-    t2 = Thread(target=get_watched, args=(username, True))
+    t1 = Thread(target=threadxwatched, args=(username,)) #WATCHED
+    t2 = Thread(target=get_watched, args=(username, True)) #DIARY
     t1.start()
     t2.start()
     t1.join()
     t2.join()
-    db.Users.update_one({'username': username}, {'$set': {'watched': watched_list, 'diary': diary_list}})
     print('All op in: ' + str(time.time() - start))
 
 
 def fullOperation(username, watched=None):
     if watched is None:
-        username_object = getFromusername(username)
+        username_object = db.Users.find_one({"_id": username})
         watched = username_object['watched']
     ids = []
     uris = []
+    start3 = time.time()
     for movie in watched:
         ids.append(movie['id'])
         uris.append(movie['uri'])
 
-    db.tmpUris.delete_many({})
-    if len(uris) > 0:
-        db.tmpUris.insert_many(watched)
+    #db.tmpUris.delete_many({})
+    #if len(uris) > 0:
+    #    db.tmpUris.insert_many(watched)
 
     while True:
         obj1 = db.Film.find({"_id": {"$in": ids}})
         uris2 = list(set(uris) - set(obj1.distinct('uri')))
+        print('check new in: ' + str(time.time() - start3))
         print('film da aggiungere: ' + str(len(uris2)))
         if len(uris2) > 0:
             try:
@@ -177,7 +158,7 @@ def fullOperation(username, watched=None):
             break
 
     y = None
-    db.Users.update_one({'username': username}, {'$set': {'stats': y}})
+    #db.Users.update_one({'_id': username}, {'$set': {'stats': y}})
     t1 = Thread(target=getStats, args=(username,))
     t2 = Thread(target=year_stats, args=(username,))
     t1.start()
@@ -185,4 +166,11 @@ def fullOperation(username, watched=None):
     t1.join()
     t2.join()
 
-#fullUpdate('giudimax')
+
+def getFromusername(username):
+    obj = db.Users.find_one({"_id": username})
+    if obj is not None:
+        return obj
+    fullUpdate(username)
+    return db.Users.find_one({"_id": username})
+

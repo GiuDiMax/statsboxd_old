@@ -2,10 +2,11 @@ from mongodb import db
 from config import *
 from jsonoOpAllTime import json_operations
 
-def getStats(username):
+def getStats():
     # db.Users.update_one({'username': username}, {'$set': {'a': 'b'}})
 
-    json_op1 = [{'$match': {"_id": username}},
+    json_op1 = [
+                {'$match': {"_id": '$$username'}},
                 {'$unwind': '$watched'},
                 {'$lookup': {
                     'from': 'Film',
@@ -13,21 +14,26 @@ def getStats(username):
                     'foreignField': '_id',
                     'as': 'info'}},
                 {'$unwind': '$info'},
-                {'$facet': json_operations}]
+                {'$facet': json_operations},
+    ]
 
-    '''
+    json_op2 = [{'$map': {'input': ['giudimax','ale_ich'], 'as': 'username', 'in': json_op1}}]
+
+
     db.command({
-        "create": username + "_alltimestats",
+        "create": "alltimestats",
         "viewOn": "Users",
         "pipeline": json_op1
     })
-    '''
 
-    ob3 = db.Users.aggregate(json_op1)
 
-    for x in ob3:
-        y = x
+    #ob3 = db.Users.aggregate(json_op2)
 
+    #for x in ob3:
+    #    print(x)
+
+
+'''
     if y != None:
         min = y['totalyear'][0]['_id']
         max = y['totalyear'][-1]['_id']
@@ -43,5 +49,8 @@ def getStats(username):
             if not check:
                 y2.append({'_id': i, 'average': 0, 'sum': 0})
         y['totalyear'] = y2
+'''
 
-        db.Users.update_one({'_id': username}, {'$set': {'stats': y}})
+        #db.Users.update_one({'username': username}, {'$set': {'stats': y}})
+
+getStats()
