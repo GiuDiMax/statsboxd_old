@@ -8,7 +8,7 @@ from jsonOpYear import json_operations
 
 def getYears(username):
     ob3 = db.Users.aggregate([
-        {'$match': {"username": username}},
+        {'$match': {"_id": username}},
         #{'$project': {'_id': None, 'diary': '$diary'}},
         {'$unwind': '$diary'},
         #{'$unwind': '$info'},
@@ -23,7 +23,7 @@ def getYears(username):
 
 def singleYear(year, username):
     ob3 = db.Users.aggregate([
-        {'$match': {"username": username}},
+        {'$match': {"_id": username}},
         {'$unwind': '$diary'},
         {'$project': {'diary': '$diary', 'year': {'$year': '$diary.date'}}},
         {'$match': {"year": {'$eq': year}}},
@@ -39,7 +39,7 @@ def singleYear(year, username):
     for x in ob3:
         y = x
         break
-    db.Users.update_one({'username': username}, {'$set': {'stats_'+str(year): y}})
+    db.Users.update_one({'_id': username}, {'$set': {'stats_'+str(year): y}})
 
 
 def year_stats(username):

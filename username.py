@@ -110,22 +110,32 @@ def get_watched(username, diary=False):
 
 def threadxwatched(username):
     global watched_list
+    start2 = time.time()
     get_watched(username, False)
     db.Users.update_one({'_id': username}, {'$set': {'watched': watched_list}}, True)
-    start2 = time.time()
-    fullOperation(username, watched_list)
-    print('Stats in: ' + str(time.time() - start2))
+    #fullOperation(username, watched_list)
+    print('watched in: ' + str(time.time() - start2))
+
+
+def threadxdiary(username):
+    global diary_list
+    start3 = time.time()
+    get_watched(username, True)
+    db.Users.update_one({'_id': username}, {'$set': {'diary': diary_list}}, True)
+    #year_stats(username)
+    print('diary in: ' + str(time.time() - start3))
 
 
 def fullUpdate(username):
     global watched_list, diary_list
     start = time.time()
     t1 = Thread(target=threadxwatched, args=(username,)) #WATCHED
-    t2 = Thread(target=get_watched, args=(username, True)) #DIARY
+    t2 = Thread(target=threadxdiary, args=(username,)) #DIARY
     t1.start()
     t2.start()
     t1.join()
     t2.join()
+    fullOperation(username, watched_list)
     print('All op in: ' + str(time.time() - start))
 
 
@@ -158,6 +168,7 @@ def fullOperation(username, watched=None):
             break
 
     y = None
+    getStats(username)
     #db.Users.update_one({'_id': username}, {'$set': {'stats': y}})
     t1 = Thread(target=getStats, args=(username,))
     t2 = Thread(target=year_stats, args=(username,))
@@ -174,3 +185,5 @@ def getFromusername(username):
     fullUpdate(username)
     return db.Users.find_one({"_id": username})
 
+
+fullUpdate('giudimax')
