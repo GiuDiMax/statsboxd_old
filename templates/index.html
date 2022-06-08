@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>&lrm;{{ user.username }}’s all-time stats &bull; Letterboxd</title>
+        <title>&lrm;{{ user._id }}’s all-time stats &bull; Letterboxd</title>
         <script src="//cdn.jsdelivr.net/npm/chart.js"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -15,6 +15,7 @@
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js"></script>
         <script src="https://code.highcharts.com/highcharts.js"></script>
         <script src="https://rawgit.com/highcharts/rounded-corners/master/rounded-corners.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,200,0,0" />
     </head>
     <body>
         <div id="isMobile"></div>
@@ -24,6 +25,7 @@
             </a>
             <span class="madeby">Project made by GiuDiMax</span>
         </div>
+        <div class="loader hide"></div>
         <div id="content" class="content">
             <section class="mainTitlesec">
                 {% if year == '' %}
@@ -31,6 +33,17 @@
                 {% else %}
                     <h1 class="mainTitle yearTitle">{{ yearnum }}</h1>
                 {% endif %}
+                <div class="mainSubtitle">
+                    <a href="{{ lbdurl }}/{{ user._id }}"><img class="avatar" src="{{ user.image }}" alt="{{ user._id }}"/></a>
+                    <span><a href="{{ lbdurl }}/{{ user._id }}" class="clickable">{{ user.name }}</a>'s
+                        {% if year == '' %}
+                            all-time stats
+                        {% else %}
+                            year in review
+                        {% endif %}
+                    </span>
+                </div>
+                <a class="clickable seeallbutton updatebutton" href="/{{ user._id }}/update"><span class="material-symbols-rounded icon">sync</span>Update</a>
                 <div class="numbersStats">
                     <div>
                         <span class="number">{{ format_comma(user['stats'+year].total[0].movies) }}</span>
@@ -98,7 +111,7 @@
                     <div class="labels2">
                         {% for i in range(10) %}
                             <div>
-                                <a class="clickable label1" href="{{ lbdurl }}{{ user.username }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}{{ type[1] }}/{{ user['stats'+year]['mostWatched'+type[0]][i]['_id'] }}">
+                                <a class="clickable label1" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}{{ type[1] }}/{{ user['stats'+year]['mostWatched'+type[0]][i]['_id'] }}">
                                     {{ firstUpper(user['stats'+year]['mostWatched'+type[0]][i]['_id']) }}
                                 </a>
                                 <div>
@@ -120,7 +133,7 @@
                     {% for type in ['theme','mini-theme'] %}
                     <div class="labels">
                         {% for i in range(10) %}
-                                <a class="clickable label2" href="{{ lbdurl }}{{ user.username }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}{{type}}/{{ user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id'] }}">
+                                <a class="clickable label2" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}{{type}}/{{ user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id'] }}">
 
                                     <span class="leftText">
                                         {{ firstUpper(user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id']) }}
@@ -239,7 +252,7 @@
                             {% endif %}
                             {%for element in list%}
                                 <div class="container_people">
-                                    <a href="{{ lbdurl }}{{ user.username }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">
+                                    <a href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">
                                         <img class="holeperson lazy" src="{{ url_for('static', filename = 'images/'+role[0]+'.jpg') }}"
                                             {% if 'tmdbImg' in element.info[0] %}
                                                  data-src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"
@@ -247,12 +260,12 @@
                                         alt="{{ element._id }}"/>
                                     </a>
                                         {% if element.info|length > 0 %}
-                                            <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.info[0].name }}</a>
+                                            <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.info[0].name }}</a>
                                         {% else %}
-                                            <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ firstUpperBis(element._id) }}</a>
+                                            <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ firstUpperBis(element._id) }}</a>
                                         {% endif %}
                                     {% if type[2]=='w' %}
-                                        <a class="sottotitolo" href="{{ lbdurl }}{{ user.username }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.sum }} films</a>
+                                        <a class="sottotitolo" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.sum }} films</a>
                                     {% else %}
                                         <span class="sottotitolo">★ {{ "%.1f"|format(element.average/2) }}</span>
                                     {% endif %}
@@ -283,7 +296,7 @@
                             <span class="titlerole">{{ role[2] }}</span>
                             {%for element in user['stats'+year][type+role[0]]%}
                                 <div class="{{ type }}limit {% if loop.index > 5 %}hide{% endif %}">
-                                    <a class="clickable" href="{{ lbdurl }}{{ user.username }}/films{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}/with/{{ role[1] }}/{{ element._id }}">
+                                    <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}/with/{{ role[1] }}/{{ element._id }}">
                                          {% if element.info|length > 0 %}
                                             {{ element.info[0].name }}
                                         {% else %}
@@ -327,6 +340,11 @@
                 $(function() {
                     $('.lazy').Lazy();
                 });
+
+                $('.updatebutton').click(function(){
+                    $('.loader').removeClass('hide');
+                    $('#content').hide();
+                })
 
                 $('.clickable').click(function() {
                     $('.'+$(this).attr('data-hide')).addClass('hide');
@@ -376,7 +394,7 @@
                                 events: {
                                     click: function () {
                                         if (!isMobile) {
-                                            location.href = '{{ lbdurl }}{{ user.username }}/films/year/' + this.options.name + "/";
+                                            location.href = '{{ lbdurl }}{{ user._id }}/films/year/' + this.options.name + "/";
                                         }
                                     }
                                 }
@@ -391,9 +409,6 @@
                     legend:{enabled:false},
                     title: {text:null},
                     tooltip: {
-                        //headerFormat: '<div class="ttYear"><span class="ttTitle">{ return parseInt(point.y) } films</span>',
-                        //pointFormat: '<span class="ttSubtitle">Year {point.name}</span>',
-                        //footerFormat: '</div>',
                         formatter: function(){
                             return '<div class="ttYear"><span class="ttTitle">Average ' + parseFloat(this.y - 0.1).toFixed(2).toString() +'</span>' +
                                 '<span class="ttSubtitle">Year '+ this.points[0].key + '</span></div>'
@@ -423,7 +438,7 @@
                                 events: {
                                     click: function () {
                                         if (!isMobile) {
-                                            location.href = '{{ lbdurl }}{{ user.username }}/films/year/' + this.options.name + "/";
+                                            location.href = '{{ lbdurl }}{{ user._id }}/films/year/' + this.options.name + "/";
                                         }
                                     }
                                 }
@@ -488,7 +503,7 @@
 
                 function clickMap(el){
                       if (typeof worldDataUri[el] !== 'undefined') {
-                          location.href = '{{ lbdurl }}{{ user.username }}/films/country/' + worldDataUri[el] + '/';
+                          location.href = '{{ lbdurl }}{{ user._id }}/films/country/' + worldDataUri[el] + '/';
                       }
                 }
 
