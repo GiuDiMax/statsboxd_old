@@ -28,11 +28,25 @@
         <div class="loader hide"></div>
         <div id="content" class="content">
             <section class="mainTitlesec">
-                {% if year == '' %}
-                    <h1 class="mainTitle">A Life in Film</h1>
-                {% else %}
-                    <h1 class="mainTitle yearTitle">{{ yearnum }}</h1>
-                {% endif %}
+                <div class="mainT">
+                    {% if year == '' %}
+                        <h1 class="mainTitle">A Life in Film</h1>
+                    {% else %}
+                        <h1 class="mainTitle yearTitle">{{ yearnum }}</h1>
+                    {% endif %}
+                    <a href="#" class="popupButton" data-show="popupYear"><div class="arrow-down"></div></a>
+                </div>
+                <div id="popupYear" class="popupYear hide">
+                    <div class="arrow-up"></div>
+                    <div class="listaAnni">
+                        <div>
+                                <a href="/{{ user._id }}">All time</a>
+                            {% for y in user.years %}
+                                <a href="/{{ user._id }}/{{ y }}">{{ y }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
                 <div class="mainSubtitle">
                     <a href="{{ lbdurl }}/{{ user._id }}"><img class="avatar" src="{{ user.image }}" alt="{{ user._id }}"/></a>
                     <span><a href="{{ lbdurl }}/{{ user._id }}" class="clickable">{{ user.name }}</a>'s
@@ -109,7 +123,11 @@
                 <div class="attributes-chart threeColumns">
                     {% for type in [['genres_main', 'genre', 'rgb(0, 224, 84)'], ['country','country', 'rgb(64, 188, 244)'], ['language','language', 'rgb(255, 128, 0)']] %}
                     <div class="labels2">
-                        {% for i in range(10) %}
+                        {% set num = 10 %}
+                        {% if  user['stats'+year]['mostWatched'+type[0]]|length < 10 %}
+                            {% set num =  user['stats'+year]['mostWatched'+type[0]]|length %}
+                        {% endif %}
+                        {% for i in range(num) %}
                             <div>
                                 <a class="clickable label1" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}{{ type[1] }}/{{ user['stats'+year]['mostWatched'+type[0]][i]['_id'] }}">
                                     {{ firstUpper(user['stats'+year]['mostWatched'+type[0]][i]['_id']) }}
@@ -132,7 +150,11 @@
                 <div class="attributes-chart twocolumn">
                     {% for type in ['theme','mini-theme'] %}
                     <div class="labels">
-                        {% for i in range(10) %}
+                        {% set num = 10 %}
+                        {% if  user['stats'+year]['mostWatchedgenres_' + type + 's']|length < 10 %}
+                            {% set num =  user['stats'+year]['mostWatchedgenres_' + type + 's']|length %}
+                        {% endif %}
+                        {% for i in range(num) %}
                                 <a class="clickable label2" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}{{type}}/{{ user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id'] }}">
 
                                     <span class="leftText">
@@ -337,6 +359,8 @@
                     isMobile = true;
                 }
 
+                var popupOpen = false;
+
                 $(function() {
                     $('.lazy').Lazy();
                 });
@@ -344,6 +368,17 @@
                 $('.updatebutton').click(function(){
                     $('.loader').removeClass('hide');
                     $('#content').hide();
+                })
+
+                $('.popupButton').click(function(){
+                    if (popupOpen){
+                        $('#popupYear').addClass('hide');
+                        popupOpen = false;
+                    }
+                    else{
+                        $('#popupYear').removeClass('hide');
+                        popupOpen = true;
+                    }
                 })
 
                 $('.clickable').click(function() {

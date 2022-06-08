@@ -88,7 +88,13 @@ span{
     line-height: 1;
     text-align: center;
     text-shadow: 0 0 0.25em rgb(20 24 28 / 75%);
+    margin-top: 70px;
     margin-bottom:12px;
+}
+
+.yearTitle{
+    margin-top: 50px;
+    font-size: 160px;
 }
 
 .mainSubtitle{
@@ -116,6 +122,82 @@ span{
     font-family: Graphik-Regular-Web, sans-serif;
     font-size: 19px;
     color: #99aabb;
+}
+
+.mainT{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap:wrap;
+}
+
+.popupButton .arrow-down{
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #9ab;
+    margin-top:80px;
+    margin-left:20px;
+}
+
+.popupButton .arrow-down:hover{
+    color: #bcd
+}
+
+.popupYear{
+    float:right;
+    right:0;
+    top:0;
+    position:relative;
+    z-index:5;
+    height: 0;
+    width: 0;
+}
+
+.popupYear .arrow-up{
+    width: 0;
+    height: 0;
+    position:relative;
+    left:0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #89a;
+}
+
+.listaAnni div{
+    background-color: #89a;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 0 hsl(0deg 0% 100% / 20%), 0 5px 20px #000;
+    display:flex;
+    flex-direction: column;
+    width: 100px;
+}
+
+.listaAnni a{
+    border: 1px solid #7a8999;
+    font-family: Graphik-Regular-Web, sans-serif;
+    font-size: 18px;
+    color: #2c3440;
+    text-decoration: none;
+    padding: 8px;
+}
+
+.listaAnni a:hover{
+    border: 1px solid #678;
+    background-color: #678;
+    color: #ffffed;
+}
+
+.listaAnni a:first-child{
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.listaAnni a:last-child{
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 .updatebutton{
