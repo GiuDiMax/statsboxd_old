@@ -48,10 +48,11 @@ op_role.append({'$match': {'$expr': {'$eq': ["$year", '$info.year']}}})
 op_role.append({'$group': {'_id': '$diary.id',
                            'rated': {'$max': '$diary.dRating'},
                            'uri': {'$first': '$diary.uri'},
+                           'rating': {'$first': '$diary.dRating'},
                            'poster': {'$first': '$info.images.poster'},
                            'average': {'$first': '$info.rating.average'}}})
 op_role.append({'$sort': {'rated': -1, 'average': -1}})
-op_role.append({'$limit': 16})
+op_role.append({'$limit': 8})
 json_operations['topRatedCurrentYear'] = op_role
 
 op_role = []
@@ -59,6 +60,7 @@ op_role.append({'$match': {'$expr': {'$ne': ["$year", '$info.year']}}})
 op_role.append({'$group': {'_id': '$diary.id',
                            'rated': {'$max': '$diary.dRating'},
                            'uri': {'$first': '$diary.uri'},
+                           'rating': {'$first': '$diary.dRating'},
                            'poster': {'$first': '$info.images.poster'},
                            'average': {'$first': '$info.rating.average'}}})
 op_role.append({'$sort': {'rated': -1, 'average': -1}})
@@ -83,8 +85,8 @@ op_role.append({'$sort': {'_id': 1}})
 json_operations['dayOfWeek'] = op_role
 
 op_role = []
-op_role.append({'$project': {'week': {'$week': '$diary.date'}}})
-op_role.append({'$group': {'_id': '$week',
+op_role.append({'$project': {'week': {'$trunc': [{'$divide': [{'$subtract': [{'$dayOfYear': '$diary.date'}, 1]}, 7]}, 0]}}})
+op_role.append({'$group': {'_id': {'$toInt': {'$add': ['$week', 1]}},
                            'sum': {'$sum': 1}}})
 op_role.append({'$sort': {'_id': 1}})
 json_operations['week'] = op_role

@@ -124,6 +124,54 @@
                     </div>
                 {%endfor%}
             </section>
+            {% else %}
+                <section class="sectionStats">
+                    <div class="sepline">
+                        <span>Highest rated films</span>
+                        <div class="line"></div>
+                        <span class="clickable active" data-show="currentYearHRF" data-hide="secHRF">{{ yearnum }}</span>
+                        <span class="clickable" data-show="pastYearHRF" data-hide="secHRF">Older</span>
+                    </div>
+                    <div class="">
+                        <div id="currentYearHRF" class="secHRF filmList">
+                            {%for element in user['stats'+year].topRatedCurrentYear %}
+                                <div class="singleFilm" >
+                                    <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ element.uri }}">
+                                        <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                    </a>
+                                    <div>
+                                        <span class="sottotitolo stellineBig">{{ numToStars(element.rating) }}</span>
+                                    </div>
+                                </div>
+                            {%endfor%}
+                        </div>
+                        <div id="pastYearHRF" class="secHRF filmList hide">
+                             {%for element in user['stats'+year].topRatedOtherYears %}
+                                <div class="singleFilm" >
+                                    <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ element.uri }}">
+                                        <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                    </a>
+                                    <div>
+                                        <span class="sottotitolo stellineBig">{{ numToStars(element.rating) }}</span>
+                                    </div>
+                                </div>
+                            {%endfor%}
+                        </div>
+                    </div>
+                </section>
+                <section class="sectionStats">
+                    <div class="sepline">
+                        <span>Films by week</span>
+                        <div class="line"></div>
+                    </div>
+                    <div class="chart-container">
+                        <div id="watchedWeek" class="weekChart"></div>
+                    </div>
+                    <div class="years">
+                        <span>Jan</span>
+                        <span>Dec</span>
+                    </div>
+                </section>
             {% endif %}
             <section class="sectionStats">
                 <div class="sepline">
@@ -420,6 +468,8 @@
                     $(this).siblings().removeClass('active');
                 })
 
+                {% if year == '' %}
+
                 //BYYEARCHART
                 Highcharts.chart('releaseYear', {
                     chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0},
@@ -511,6 +561,58 @@
                             }
                         }],
                 });
+
+                {% else %}
+
+                Highcharts.chart('watchedWeek', {
+                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0},
+                    xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    yAxis: {min: -1, labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    legend:{enabled:false},
+                    title: {text:null},
+                    tooltip: {
+                        //headerFormat: '<div class="ttYear"><span class="ttTitle">{ return parseInt(point.y) } films</span>',
+                        //pointFormat: '<span class="ttSubtitle">Year {point.name}</span>',
+                        //footerFormat: '</div>',
+                        formatter: function(){
+                            return '<div class="ttYear"><span class="ttTitle">' + (parseInt(this.y)).toString() +' films</span>' +
+                                '<span class="ttSubtitle">Week '+ this.points[0].key + '</span></div>'
+                        },
+                        shared: true,
+                        useHTML: true,
+                        shape: 'square',
+                        borderWidth:0,
+                        shadow: false,
+                        backgroundColor: null,
+                    },
+                    plotOptions: {column: {pointPadding: 0.08, borderWidth: 0, borderRadius: 2, groupPadding: 0,}},
+                    series: [{
+                            data: [
+                                {%for element in fill_array(user['stats'+year].week, 1, 54) %}
+                                    {name: "{{ element._id }}", y: {{ element.sum }} + 0.1,
+                                            {% if element.sum == 0 %}color: "#445566"{% endif %}
+                                    },
+                                {%endfor%}
+                            ],
+                            label: {enabled: false},
+                            color: {
+                                linearGradient: [0, 0, $('#watchedWeek').width(), 0],
+                                stops: [[0.00, '#00e054'], [1.00, '#3fbcf2']]
+                            },
+                            point: {
+                                events: {
+                                    click: function () {
+                                        if (!isMobile) {
+                                            location.href = '{{ lbdurl }}{{ user._id }}/films/diary/for/{{ yearnum }}/week/' + this.options.name + "/";
+                                        }
+                                    }
+                                }
+                            }
+                        }],
+                });
+
+                {% endif %}
+
 
                 //WORLDMAP
                 var worldData = {

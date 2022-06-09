@@ -672,6 +672,10 @@ span{
     font-size: 15px;
 }
 
+.stellineBig{
+    font-size: 18px !important;
+}
+
 .poster{
     /*height: 167px;
     width: 112px;*/
@@ -916,6 +920,13 @@ span{
     object-fit: cover;
 }
 
+.secHRF{
+    row-gap: 3%;
+}
+
+.secHRF .singleFilm{
+    width: 7.5%;
+}
 
 
 @keyframes spin {
@@ -934,7 +945,7 @@ span{
     -webkit-tap-highlight-color: transparent;
 }
 
-.highcharts-tooltip{
+.yearChart .highcharts-tooltip{
     top:45px !important;
 }
 
@@ -950,6 +961,10 @@ span{
     text-align: center;
     padding: 10px 20px 8px 20px;
     box-shadow: 1px 1px 3px #000;
+}
+
+.weekChart .highcharts-tooltip{
+    top:20px !important;
 }
 
 .ttYear .ttTitle{
@@ -975,6 +990,15 @@ span{
     .singleFilm .poster{
         margin-bottom:5px;
     }
+
+    .secHRF .singleFilm .poster{
+        margin-bottom:0;
+    }
+
+    .weekChart{
+        height: 200px;
+    }
+
 
 
 @media only screen and (min-width: 1200px) {
@@ -1108,7 +1132,7 @@ span{
         height:100% !important;
     }
 
-    .singleFilm{
+    .filmList .singleFilm{
         width: 17%;
         margin: 0;
     }

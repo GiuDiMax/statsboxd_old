@@ -90,4 +90,4 @@ def year_stats(username):
     db.Users.update_one({'_id': username}, {'$set': {'years': years}})
 
 #singleYear(2021, 'giudimax')
-year_stats('giudimax')
+#year_stats('giudimax')
