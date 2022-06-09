@@ -79,6 +79,10 @@ span{
     display:none !important;
 }
 
+.bigsotto{
+    font-size: 15px !important;
+}
+
 .mainTitle{
     color: #fff;
     font-size: 96px;
@@ -127,19 +131,29 @@ span{
 .mainT{
     display:flex;
     flex-direction: row;
+    flex-wrap:nowrap;
     justify-content: center;
-    align-items: center;
-    flex-wrap:wrap;
+    align-items: flex-end;
+}
+
+.mainT .popupdiv{
+    width:0;
+}
+
+.popupButton{
+    height:0;
+    width: 100%;
 }
 
 .popupButton .arrow-down{
+    position:relative;
+    bottom: 45px;
+    left: 40px;
     width: 0;
     height: 0;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-top: 10px solid #9ab;
-    margin-top:80px;
-    margin-left:20px;
 }
 
 .popupButton .arrow-down:hover{
@@ -148,8 +162,8 @@ span{
 
 .popupYear{
     float:right;
-    right:0;
-    top:0;
+    left:2px;
+    top:-30px;
     position:relative;
     z-index:5;
     height: 0;
@@ -160,7 +174,7 @@ span{
     width: 0;
     height: 0;
     position:relative;
-    left:0;
+    left: 39px;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
     border-bottom: 8px solid #89a;
@@ -977,12 +991,50 @@ span{
         display:block !important;
     }
 
+    .hideMobile{
+        display:none;
+    }
+
+    .mainTitle{
+        font-size: 64px;
+    }
+
+    .yearTitle{
+       font-size: 112px;
+    }
+
     .headerbar{
         padding:5px;
         display:flex;
         flex-direction: column;
         justify-content: center;
         gap: 10px;
+    }
+
+    .mainT .popupdiv {
+        position: relative;
+        bottom: 0;
+    }
+
+    .arrow-down{
+    }
+
+    .ppyear{
+        right: 28px;
+    }
+
+    .ppalltime{
+        right: 120px;
+        top: 10px;
+    }
+
+    .popupYear {
+        left: -30px;
+        top: -37px;
+    }
+
+    .popupYear .arrow-up{
+        left: 72px;
     }
 
     .content{
