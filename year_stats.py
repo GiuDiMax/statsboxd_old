@@ -5,18 +5,37 @@ from threading import Thread
 import time
 from jsonOpYear import json_operations
 
+global json_operations4
+
+json_operations4 = {}
+op_role = []
+op_role.append({'$group': {'_id': '$diary.id', 'sum': {'$sum': 1}}})
+op_role.append({'$sort': {'sum': -1}})
+op_role.append({'$limit': 18})
+op_role.append({'$lookup': {
+                'from': 'Film',
+                'localField': '_id',
+                'foreignField': '_id',
+                'as': 'info'}})
+op_role.append({'$unwind': '$info'})
+json_operations4['mostWatched'] = op_role
+
+op_role = []
+op_role.append({'$group': {'_id': '$year', 'sum': {'$sum': 1}}})
+json_operations4['years'] = op_role
+
 
 def getYears(username):
+    global json_operations4
     ob3 = db.Users.aggregate([
         {'$match': {"_id": username}},
         #{'$project': {'_id': None, 'diary': '$diary'}},
         {'$unwind': '$diary'},
         #{'$unwind': '$info'},
         {'$project': {'diary': '$diary', 'year': {'$year': '$diary.date'}}},
-        {'$group': {'_id': '$year', 'sum': {'$sum': 1}}},
         #{'$unwind': '$list.diary.info.actors'},
         #{'$group': {'_id': '$list.info.actors', 'sum': {'$sum': 1}}},
-        #{'$facet': json_operations},
+        {'$facet': json_operations4},
     ])
     return ob3
 
@@ -50,7 +69,10 @@ def year_stats(username):
     #    y = a
     #    break
     years = []
-    for x in a:
+    for y in a:
+        k = y
+    db.Users.update_one({'_id': username}, {'$set': {'mostWatched': k['mostWatched']}})
+    for x in k['years']:
         if x['sum'] >= 50:
             years.append(x['_id'])
             t = Thread(target=singleYear, args=(x['_id'], username))
@@ -62,3 +84,5 @@ def year_stats(username):
     years.sort(reverse=True)
     db.Users.update_one({'_id': username}, {'$set': {'years': years}})
 
+#singleYear(2021, 'giudimax')
+year_stats('giudimax')

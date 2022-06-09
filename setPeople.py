@@ -9,8 +9,6 @@ from mongodb import db
 from datetime import datetime, timedelta
 from config import *
 
-json0 = []
-
 def fill_db(url, soup):
     json1 = {}
     json1['_id'] = url
@@ -24,22 +22,23 @@ def fill_db(url, soup):
     except:
         pass
     db.People.insert_one(json1)
-    return json1
+
 
 async def get(url, session):
     async with session.get(url='http://letterboxd.com/writer/' + url + "/") as response:
             resp = await response.read()
             soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div']))
-            json0.append(fill_db(url, soup))
+            fill_db(url, soup)
+
 
 async def main2(urls):
     async with aiohttp.ClientSession() as session:
         await asyncio.gather(*[get(url, session) for url in urls])
-        return json0
+
 
 def fillMongodb(urls):
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
-    return asyncio.get_event_loop().run_until_complete(main2(urls))
+    asyncio.get_event_loop().run_until_complete(main2(urls))
     #return asyncio.get_event_loop().run_until_complete(main2(urls))
 
 
@@ -50,7 +49,10 @@ def mainSetNames():
         op_role.append({'$unwind': '$'+field})
         op_role.append({'$group': {'_id': '$'+field,
                                    'sum': {'$sum': 1}}})
-        op_role.append({'$match': {"sum": {'$gt': 4}}})
+        if field == 'crew.director':
+            op_role.append({'$match': {"sum": {'$gt': 1}}})
+        else:
+            op_role.append({'$match': {"sum": {'$gt': 4}}})
         op_role.append({'$lookup': {
                             'from': 'People',
                             'localField': '_id',
@@ -80,4 +82,4 @@ def mainSetNames2():
     except:
         mainSetNames2()
 
-#mainSetNames2()
+mainSetNames2()
