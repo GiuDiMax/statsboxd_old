@@ -62,7 +62,7 @@ def utility_processor():
         return f'{int(number):,}'
     return dict(format_comma=format_comma)
 
-
+'''
 @app.context_processor
 def utility_processor2():
     def format_array(array):
@@ -71,6 +71,7 @@ def utility_processor2():
             array2.append({'x': element['_id'], 'y': element['sum']})
         return array2
     return dict(format_array=format_array)
+'''
 
 
 @app.context_processor
@@ -143,11 +144,29 @@ def utility_processor7():
 def utility_processor8():
     def replaceSize(src, height, width):
         try:
-            return src.split("-0-")[0] + "-0-" + str(height) + "-0-" + str(width) + "-crop.jpg"
+            return src.rsplit("-0-", 2)[0] + "-0-" + str(height) + "-0-" + str(width) + "-crop.jpg"
         except:
             print(src)
             return ""
     return dict(replaceSize=replaceSize)
+
+
+@app.context_processor
+def utility_processor9():
+    def fill_array(array, min, max):
+        array2 = []
+        z = 0
+        for i in range(min, max):
+            try:
+                if array[z]['_id'] == i:
+                    array2.append(array[z])
+                    z = z+1
+                else:
+                    array2.append({'_id': i, 'sum': 0})
+            except:
+                array2.append({'_id': i, 'sum': 0})
+        return array2
+    return dict(fill_array=fill_array)
 
 
 if __name__ == '__main__':
