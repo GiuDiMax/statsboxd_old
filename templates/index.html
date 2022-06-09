@@ -171,6 +171,9 @@
                         <span>Jan</span>
                         <span>Dec</span>
                     </div>
+                    <div>
+                        <div id="watchedDayWeek" class="weekDayChart"></div>
+                    </div>
                 </section>
             {% endif %}
             <section class="sectionStats">
@@ -610,6 +613,48 @@
                             }
                         }],
                 });
+
+                Highcharts.chart('watchedDayWeek', {
+                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0},
+                    xAxis: {labels: {enabled:true}, categories: ['M','T','W','T','F','S','S'], title:false, lineColor: 'transparent', visible:true},
+                    yAxis: {min: -1, labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    legend:{enabled:false},
+                    title: {text:null},
+                    tooltip: {
+                        //headerFormat: '<div class="ttYear"><span class="ttTitle">{ return parseInt(point.y) } films</span>',
+                        //pointFormat: '<span class="ttSubtitle">Year {point.name}</span>',
+                        //footerFormat: '</div>',
+                        formatter: function(){
+                            return '<div class="ttYear"><span class="ttTitle">' + (parseInt(this.y)).toString() +' films</span></div>'
+                        },
+                        shared: true,
+                        useHTML: true,
+                        shape: 'square',
+                        borderWidth:0,
+                        shadow: false,
+                        backgroundColor: null,
+                    },
+                    plotOptions: {column: {pointPadding: 0.08, borderWidth: 0, borderRadius: 2, groupPadding: 0,}},
+                    series: [{
+                            data: [
+                                {%for element in fill_array(user['stats'+year].dayOfWeek, 1, 8) %}
+                                    {name: "{{ element._id }}", y: {{ element.sum }} + 0.1
+                                    },
+                                {%endfor%}
+                            ],
+                            states: {
+                                hover: {
+                                    color: '#00e054',
+                                }
+                            },
+                            label: {enabled: true},
+                            color: '#445566',
+                        }],
+                });
+
+
+
+
 
                 {% endif %}
 
