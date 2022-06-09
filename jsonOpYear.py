@@ -3,9 +3,11 @@ from config import *
 
 for field in field2 + field3:
     op_role = []
+    op_role.append({'$group': {'_id': '$diary.id',
+                               'info': {'$first': '$info'}
+                               }})
     op_role.append({'$unwind': '$info.' + field})
     op_role.append({'$group': {'_id': '$info.' + field,
-                               'average': {'$avg': '$diary.dRating'},
                                'sum': {'$sum': 1}}})
     op_role.append({'$match': {"sum": {'$gt': 1}}})
     op_role.append({'$sort': {'sum': -1}})
@@ -23,8 +25,7 @@ for field in field2 + field3:
         op_role.append({'$group': {'_id': '$info.' + field,
                                    'average': {'$avg': '$diary.dRating'},
                                    'sum': {'$sum': 1}}})
-        op_role.append({'$match': {"sum": {'$gt': 1}}})
-        op_role.append({'$match': {"sum": {'$gt': 1}}})
+        #op_role.append({'$match': {"sum": {'$gt': 1}}})
         op_role.append({'$sort': {'average': -1}})
         op_role.append({'$limit': 20})
         if field in field2:
