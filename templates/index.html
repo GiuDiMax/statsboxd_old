@@ -30,20 +30,21 @@
             <section class="mainTitlesec">
                 <div class="mainT">
                     {% if year == '' %}
-                        <h1 class="mainTitle">A Life in Film</h1>
+                        <h1 class="mainTitle">A Life in Film</h1><div class="popupdiv ppalltime">
                     {% else %}
-                        <h1 class="mainTitle yearTitle">{{ yearnum }}</h1>
+                        <h1 class="mainTitle yearTitle">{{ yearnum }}</h1><div class="popupdiv ppyear">
                     {% endif %}
-                    <a href="#" class="popupButton" data-show="popupYear"><div class="arrow-down"></div></a>
-                </div>
-                <div id="popupYear" class="popupYear hide">
-                    <div class="arrow-up"></div>
-                    <div class="listaAnni">
-                        <div>
-                                <a href="/{{ user._id }}">All time</a>
-                            {% for y in user.years %}
-                                <a href="/{{ user._id }}/{{ y }}">{{ y }}</a>
-                            {% endfor %}
+                        <a href="#" class="popupButton" data-show="popupYear"><div class="arrow-down"></div></a>
+                        <div id="popupYear" class="popupYear hide">
+                            <div class="arrow-up"></div>
+                            <div class="listaAnni">
+                                <div>
+                                        <a href="/{{ user._id }}">All time</a>
+                                    {% for y in user.years %}
+                                        <a href="/{{ user._id }}/{{ y }}">{{ y }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -76,6 +77,15 @@
                         <span class="number">{{ format_comma(user['stats'+year].totalCountry[0].count) }}</span>
                         <span class="text">Countries</span>
                     </div>
+                    {% else %}
+                        <div>
+                            <span class="number">{{ format_comma(user['stats'+year].liked[0].sum) }}</span>
+                            <span class="text">Films liked</span>
+                        </div>
+                        <div>
+                            <span class="number">{{ format_comma(user['stats'+year].review[0].sum) }}</span>
+                            <span class="text">Reviews</span>
+                        </div>
                     {% endif %}
                 </div>
             </section>
@@ -129,7 +139,7 @@
                         {% endif %}
                         {% for i in range(num) %}
                             <div>
-                                <a class="clickable label1" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}{{ type[1] }}/{{ user['stats'+year]['mostWatched'+type[0]][i]['_id'] }}">
+                                <a class="clickable label1" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}{{ type[1] }}/{{ user['stats'+year]['mostWatched'+type[0]][i]['_id'] }}">
                                     {{ firstUpper(user['stats'+year]['mostWatched'+type[0]][i]['_id']) }}
                                 </a>
                                 <div>
@@ -213,6 +223,27 @@
                     </div>
                     <div id="almostCollection">
                     </div>
+                </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Most Watched</span>
+                    <div class="line"></div>
+                </div>
+                <div class="filmList">
+                        {%for element in user.mostWatched %}
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo bigsotto">{{ element.sum }} times</span>
+                                </div>
+                            </div>
+                        {%endfor%}
+                </div>
+                <div class="noflex">
+                    <a class="clickable seeallbutton" href="{{ lbdurl}}{{ user._id }}/films/diary/by/diary-count/">see more</a>
                 </div>
             </section>
             <section class="sectionStats">

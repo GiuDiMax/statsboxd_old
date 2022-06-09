@@ -25,7 +25,8 @@ for field in field2 + field3:
         op_role.append({'$group': {'_id': '$info.' + field,
                                    'average': {'$avg': '$diary.dRating'},
                                    'sum': {'$sum': 1}}})
-        #op_role.append({'$match': {"sum": {'$gt': 1}}})
+        if field == 'actors':
+            op_role.append({'$match': {"sum": {'$gt': 1}}})
         op_role.append({'$sort': {'average': -1}})
         op_role.append({'$limit': 20})
         if field in field2:
@@ -41,6 +42,38 @@ op_role.append({'$group': {'_id': '$_id',
                            'movies': {'$sum': 1},
                            'runtime': {'$sum': '$info.runtime'}}})
 json_operations['total'] = op_role
+
+op_role = []
+op_role.append({'$match': {'$expr': {'$eq': ["$year", '$info.year']}}})
+op_role.append({'$group': {'_id': '$diary.id',
+                           'rated': {'$max': '$diary.dRating'},
+                           'uri': {'$first': '$diary.uri'},
+                           'poster': {'$first': '$info.images.poster'},
+                           'average': {'$first': '$info.rating.average'}}})
+op_role.append({'$sort': {'rated': -1, 'average': -1}})
+op_role.append({'$limit': 16})
+json_operations['topRatedCurrentYear'] = op_role
+
+op_role = []
+op_role.append({'$match': {'$expr': {'$ne': ["$year", '$info.year']}}})
+op_role.append({'$group': {'_id': '$diary.id',
+                           'rated': {'$max': '$diary.dRating'},
+                           'uri': {'$first': '$diary.uri'},
+                           'poster': {'$first': '$info.images.poster'},
+                           'average': {'$first': '$info.rating.average'}}})
+op_role.append({'$sort': {'rated': -1, 'average': -1}})
+op_role.append({'$limit': 16})
+json_operations['topRatedOtherYears'] = op_role
+
+op_role = []
+op_role.append({'$group': {'_id': '$diary.id',
+                           'sum': {'$sum': 1},
+                           'uri': {'$first': '$info.uri'},
+                           'poster': {'$first': '$info.images.poster'}}})
+op_role.append({'$match': {"sum": {'$gt': 1}}})
+op_role.append({'$sort': {'sum': -1}})
+op_role.append({'$limit': 3})
+json_operations['mostWatched'] = op_role
 
 op_role = []
 op_role.append({'$project': {'dayWeek': {'$dayOfWeek': '$diary.date'}}})
@@ -64,21 +97,25 @@ json_operations['rating'] = op_role
 op_role = []
 op_role.append({'$group': {'_id': '$diary.dLike',
                            'sum': {'$sum': 1}}})
+op_role.append({'$sort': {'_id': -1}})
 json_operations['liked'] = op_role
 
 op_role = []
 op_role.append({'$group': {'_id': '$diary.rewatch',
                            'sum': {'$sum': 1}}})
+op_role.append({'$sort': {'_id': -1}})
 json_operations['rewatch'] = op_role
 
 op_role = []
 op_role.append({'$group': {'_id': '$diary.review',
                            'sum': {'$sum': 1}}})
+op_role.append({'$sort': {'_id': -1}})
 json_operations['review'] = op_role
 
 op_role = []
 op_role.append({'$group': {'_id': '$info.year',
                            'sum': {'$sum': 1}}})
+op_role.append({'$sort': {'_id': -1}})
 json_operations['years'] = op_role
 
 op_role = []

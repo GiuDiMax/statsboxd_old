@@ -51,6 +51,8 @@ def mainSetNames():
                                    'sum': {'$sum': 1}}})
         if field == 'crew.director':
             op_role.append({'$match': {"sum": {'$gt': 1}}})
+        elif field == 'actors':
+            op_role.append({'$match': {"sum": {'$gt': 2}}})
         else:
             op_role.append({'$match': {"sum": {'$gt': 4}}})
         op_role.append({'$lookup': {
@@ -82,4 +84,4 @@ def mainSetNames2():
     except:
         mainSetNames2()
 
-mainSetNames2()
+#mainSetNames2()
