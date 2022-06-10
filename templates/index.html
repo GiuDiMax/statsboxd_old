@@ -396,6 +396,24 @@
                         {%endfor%}
                 </div>
             </section>
+            {% else %}
+                <section class="sectionStats">
+                <div class="sepline">
+                    <span>Breakdown</span>
+                    <div class="line"></div>
+                    <div class="piecharts">
+                        <div class="piechart">
+                            <div id="currentYearpie" class="piech2"></div>
+                        </div>
+                        <div class="piechart">
+                            <div id="rewatchpie" class="piech2"></div>
+                        </div>
+                        <div class="piechart">
+                            <div id="reviewpie" class="piech2"></div>
+                        </div>
+                    </div>
+                </div>
+                </section>
             {% endif %}
             {%for role in [['actor', 'Stars', 'a', 'actors'], ['director', 'Directors', 'd', 'crew_director']]%}
             <section class="sectionStats">
@@ -718,6 +736,33 @@
                             color: '#445566',
                         }],
                 });
+
+                {% for type in ['currentYear', 'rewatch', 'review'] %}
+
+                Highcharts.chart('{{ type }}pie', {
+                    chart: {type: 'pie', backgroundColor: 'transparent', margin:0, border:0},
+                    xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    legend:{enabled:false},
+                    title: {text:null},
+                    yAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    tooltip: {
+                        formatter: function(){
+                            return '<div class="ttYear"><span class="ttPie"><b>' + (this.y * 100).toFixed(1).toString() +'%</b> ('+ (this.y * {{ user['stats'+year].total[0].movies }}).toString() + ' of {{ user['stats'+year].total[0].movies }})</span></div>'
+                        },
+                        //positioner: function () {return { x: 80, y: 50 };},
+                        shared: true, useHTML: true, shape: 'square', borderWidth:0, shadow: false, backgroundColor: null,
+                    },
+                    label: {enabled: false},
+                    plotOptions: {pie: {borderWidth: 0, dataLabels: {connectorWidth: 0}}},
+                    series: [{
+                            data: [
+                                {name: '', y: {{ user['stats'+year][type][0].sum/user['stats'+year].total[0].movies }}, color: '#00e054'},
+                                {name: '', y: {{ user['stats'+year][type][1].sum/user['stats'+year].total[0].movies  }}, color: '#456'},],
+                            states: {hover: {halo: {size:0}, animation: {duration:0}}, inactive: {enabled:false, opacity:1},},
+                        }],
+                });
+                {% endfor %}
+
                 {% endif %}
 
 

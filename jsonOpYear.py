@@ -115,10 +115,10 @@ op_role.append({'$sort': {'_id': -1}})
 json_operations['review'] = op_role
 
 op_role = []
-op_role.append({'$group': {'_id': '$info.year',
+op_role.append({'$group': {'_id': {'$eq': ['$info.year', '$year']},
                            'sum': {'$sum': 1}}})
 op_role.append({'$sort': {'_id': -1}})
-json_operations['years'] = op_role
+json_operations['currentYear'] = op_role
 
 op_role = []
 op_role.append({'$sort': {'info.rating.average': -1}})
