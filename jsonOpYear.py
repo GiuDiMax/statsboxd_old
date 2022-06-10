@@ -94,6 +94,7 @@ json_operations['week'] = op_role
 op_role = []
 op_role.append({'$group': {'_id': '$diary.dRating',
                            'sum': {'$sum': 1}}})
+op_role.append({'$sort': {'_id': 1}})
 json_operations['rating'] = op_role
 
 op_role = []

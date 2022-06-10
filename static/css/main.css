@@ -278,7 +278,7 @@ span{
     gap: 15px;
 }
 
-.sepline span, .wmTitle{
+.sepline span, .wmTitle, .linetitle{
     color: #fff;
     font-family: Graphik-Regular-Web,sans-serif;
     font-size: 15px;
@@ -1096,6 +1096,101 @@ span{
     margin-bottom:20px;
 }
 
+.piecharts{
+    display:flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+    gap:10%;
+    flex-basis: 100%;
+    justify-content: center;
+}
+
+.piech2{
+    height: 180px;
+}
+
+.piechart{
+    display:flex;
+    flex-basis: 25%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.legend{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.legend span{
+    color: white;
+    font-family: Graphik-Regular-Web, sans-serif;
+    font-size: 15px;
+    border-bottom: 2px solid #456;
+    margin: 0 3px;
+}
+
+.legend .green{
+    border-color: #00e054;
+}
+
+.breakdown{
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ratingSpread{
+    width: 330px;
+}
+
+.ratingSpreadsection{
+    padding-top:15px;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-end;
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    gap: 5px;
+}
+
+.ratingSpreadsection img{
+    width: 64px;
+    padding-bottom: 35px;
+}
+
+.ttStars{
+    color: #00e054;
+    font-size: 20px;
+    font-family: sans-serif;
+    margin-bottom:5px;
+}
+
+.ttStarsSub{
+    font-family: Graphik-Regular-Web,sans-serif;
+    font-size: 14px;
+    color: white;
+}
+
+.ratingSpread .highcharts-tooltip{
+    top:-15px !important;
+}
+
+.ttPie{
+    font-family: Graphik-Regular-Web,sans-serif!important;
+    font-size: 12px;
+    color: white;
+    font-weight: normal !important;
+}
+
+.ttPie .gray{
+    font-family: Graphik-Regular-Web,sans-serif!important;
+    color: #9ab;
+}
 
 @media only screen and (min-width: 1200px) {
     #isMobile{
