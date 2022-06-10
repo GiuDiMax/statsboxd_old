@@ -74,7 +74,7 @@ op_role.append({'$group': {'_id': '$diary.id',
                            'poster': {'$first': '$info.images.poster'}}})
 op_role.append({'$match': {"sum": {'$gt': 1}}})
 op_role.append({'$sort': {'sum': -1}})
-op_role.append({'$limit': 3})
+op_role.append({'$limit': 4})
 json_operations['mostWatched'] = op_role
 
 op_role = []

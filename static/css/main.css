@@ -273,7 +273,7 @@ span{
     display:flex;
     flex-direction: row;
     align-items: center;
-    padding-top:60px;
+    padding-top: 50px;
     padding-bottom: 35px;
     gap: 15px;
 }
@@ -1059,6 +1059,43 @@ span{
     flex-basis: 25%;
 }
 
+.msy{
+    display:flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+    justify-content: space-between;
+    flex-basis: 100%;
+}
+
+.msx2{
+    flex-basis:50%;
+}
+
+.msx{
+    display:flex;
+    flex-direction: column;
+    margin:0 2%;
+}
+
+.msx .singleFilm{
+    width: auto;
+}
+
+.mw2{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap:nowrap;
+}
+
+.msx > span{
+    color: #fff;
+    font-family: Graphik-Regular-Web,sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom:20px;
+}
+
 
 @media only screen and (min-width: 1200px) {
     #isMobile{
@@ -1205,7 +1242,7 @@ span{
         row-gap: 20px;
     }
 
-    .filmList > .singleFilm:nth-last-of-type(-n+2){
+    .hideLast > .singleFilm:nth-last-of-type(-n+2){
         display:none;
     }
 

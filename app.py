@@ -6,6 +6,7 @@ from setCollections import mainSetCollection2
 from setPeople import mainSetNames2
 from setLists import updateLists
 from config import *
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -167,6 +168,16 @@ def utility_processor9():
                 array2.append({'_id': i, 'sum': 0})
         return array2
     return dict(fill_array=fill_array)
+
+
+@app.context_processor
+def utility_processor10():
+    def date_toshort(date):
+        date2 = date.strftime("%b %e")
+        return date2
+    return dict(date_toshort=date_toshort)
+
+
 
 
 if __name__ == '__main__':
