@@ -191,6 +191,51 @@
                         <div class="wd2"><div id="watchedDayWeek" class="weekDayChart"></div></div>
                     </div>
                 </section>
+                <section class="sectionStats">
+                    <div class="sepline">
+                        <span>Milestones</span>
+                        <div class="line"></div>
+                    </div>
+                    <div class="msy">
+                        <div class="msx">
+                            <span>First Film</span>
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ user['stats'+year].firstMovie[0].info.uri }}">
+                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year].firstMovie[0].info.images.poster, 110, 165) }}" alt="{{ user['stats'+year].firstMovie[0].info.uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo bigsotto">{{ date_toshort(user['stats'+year].firstMovie[0].diary.date) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="msx msx2">
+                            <span>Most Watched</span>
+                            <div class="filmList mw2">
+                                {%for element in user['stats'+year].mostWatched %}
+                                    <div class="singleFilm" >
+                                        <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ element.uri }}/activity">
+                                            <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                        </a>
+                                        <div>
+                                            <span class="sottotitolo bigsotto">{{ element.sum }} times</span>
+                                        </div>
+                                    </div>
+                                {%endfor%}
+                            </div>
+                        </div>
+                        <div class="msx">
+                            <span>Last Film</span>
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ user['stats'+year].lastMovie[0].info.uri }}">
+                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year].lastMovie[0].info.images.poster, 110, 165) }}" alt="{{ user['stats'+year].lastMovie[0].info.uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo bigsotto">{{ date_toshort(user['stats'+year].lastMovie[0].diary.date) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             {% endif %}
             <section class="sectionStats">
                 <div class="sepline">
@@ -297,7 +342,7 @@
                     <span>Most Watched</span>
                     <div class="line"></div>
                 </div>
-                <div class="filmList">
+                <div class="filmList hideLast">
                         {%for element in user.mostWatched %}
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
@@ -318,7 +363,7 @@
                     <span>Rated higher then average</span>
                     <div class="line"></div>
                 </div>
-                <div class="filmList">
+                <div class="filmList hideLast">
                         {%for element in user['stats'+year].topToAverage%}
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
@@ -337,7 +382,7 @@
                     <span>Rated lower then average</span>
                     <div class="line"></div>
                 </div>
-                <div class="filmList">
+                <div class="filmList hideLast">
                         {%for element in user['stats'+year].flopToAverage%}
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
