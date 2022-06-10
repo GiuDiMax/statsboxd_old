@@ -171,8 +171,24 @@
                         <span>Jan</span>
                         <span>Dec</span>
                     </div>
-                    <div>
-                        <div id="watchedDayWeek" class="weekDayChart"></div>
+                    <div class="watchedDivided">
+                        <div class="wd1">
+                            <div class="wd1x">
+                                <span class="big">{{ user['stats'+year].total[0].movies }}</span>
+                                <span class="small">Films watched</span>
+                            </div>
+                            <img src="{{ url_for('static', filename='images/arrow.jpg') }}" alt="arrow"/>
+                            <div class="wd1x">
+                                <span class="big">{{ '{0:0.1f}'.format((user['stats'+year].total[0].movies)/12) }}</span>
+                                <span class="small">Average per month</span>
+                            </div>
+                            <img src="{{ url_for('static', filename='images/arrow.jpg') }}" alt="arrow"/>
+                            <div class="wd1x">
+                                <span class="big">{{ '{0:0.1f}'.format((user['stats'+year].total[0].movies)/53) }}</span>
+                                <span class="small">Average per week</span>
+                            </div>
+                        </div>
+                        <div class="wd2"><div id="watchedDayWeek" class="weekDayChart"></div></div>
                     </div>
                 </section>
             {% endif %}
@@ -616,14 +632,21 @@
 
                 Highcharts.chart('watchedDayWeek', {
                     chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0},
-                    xAxis: {labels: {enabled:true}, categories: ['M','T','W','T','F','S','S'], title:false, lineColor: 'transparent', visible:true},
-                    yAxis: {min: -1, labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    xAxis: {
+
+                        categories: ['M','T','W','T','F','S','S'],
+                        labels: {
+                            enabled: true,
+                            y: -55, x: 0,
+                            style: {color: 'white', fontSize: '12px', fontFamily: 'Graphik-Regular-Web'},
+                        },
+                        tickPosition:'inside',
+                        lineColor: 'transparent',
+                    },
                     legend:{enabled:false},
                     title: {text:null},
+                    yAxis: {min: -1, labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
                     tooltip: {
-                        //headerFormat: '<div class="ttYear"><span class="ttTitle">{ return parseInt(point.y) } films</span>',
-                        //pointFormat: '<span class="ttSubtitle">Year {point.name}</span>',
-                        //footerFormat: '</div>',
                         formatter: function(){
                             return '<div class="ttYear"><span class="ttTitle">' + (parseInt(this.y)).toString() +' films</span></div>'
                         },
@@ -634,7 +657,7 @@
                         shadow: false,
                         backgroundColor: null,
                     },
-                    plotOptions: {column: {pointPadding: 0.08, borderWidth: 0, borderRadius: 2, groupPadding: 0,}},
+                    plotOptions: {column: {pointPadding: 0.05, borderWidth: 0, borderRadius: 2, groupPadding: 0,}},
                     series: [{
                             data: [
                                 {%for element in fill_array(user['stats'+year].dayOfWeek, 1, 8) %}
@@ -647,15 +670,9 @@
                                     color: '#00e054',
                                 }
                             },
-                            label: {enabled: true},
                             color: '#445566',
                         }],
                 });
-
-
-
-
-
                 {% endif %}
 
 

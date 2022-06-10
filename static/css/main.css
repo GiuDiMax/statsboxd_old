@@ -274,7 +274,7 @@ span{
     flex-direction: row;
     align-items: center;
     padding-top:60px;
-    padding-bottom: 20px;
+    padding-bottom: 35px;
     gap: 15px;
 }
 
@@ -999,6 +999,65 @@ span{
         height: 200px;
     }
 
+    .weekDayChart{
+        height: 150px;
+        width: 100%;
+    }
+
+    .weekDayChart .highcharts-container, .weekDayChart .highcharts-root{
+    }
+
+    .weekDayChart .highcharts-tooltip{
+        top:-20px !important;
+    }
+
+    .weekDayChart .highcharts-xaxis-labels{
+
+    }
+
+.watchedDivided{
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    flex-basis: 100%;
+    margin: 0 2%;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.wd1{
+    flex-basis: 65%;
+    display:flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.wd1x{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.wd1x .big{
+    font-family: Graphik-Light-Web,sans-serif;
+    color: white;
+    font-size:54px;
+    margin-bottom:7px;
+}
+
+.wd1x .small{
+    font-family: Graphik-Regular-Web,sans-serif;
+    color: #678;
+    font-size:15px;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.wd2{
+    flex-basis: 25%;
+}
 
 
 @media only screen and (min-width: 1200px) {
