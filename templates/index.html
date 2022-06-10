@@ -401,18 +401,38 @@
                 <div class="sepline">
                     <span>Breakdown</span>
                     <div class="line"></div>
-                    <div class="piecharts">
-                        <div class="piechart">
-                            <div id="currentYearpie" class="piech2"></div>
-                        </div>
-                        <div class="piechart">
-                            <div id="rewatchpie" class="piech2"></div>
-                        </div>
-                        <div class="piechart">
-                            <div id="reviewpie" class="piech2"></div>
-                        </div>
-                    </div>
                 </div>
+                    <div class="breakdown">
+                        <div class="piecharts">
+                            <div class="piechart">
+                                <div class="legend">
+                                    <span class="green">{{ yearnum }} Releases</span>
+                                    <span class="">Older</span>
+                                </div>
+                                <div id="currentYearpie" class="piech2"></div>
+                            </div>
+                            <div class="piechart">
+                                <div class="legend">
+                                    <span class="green">Watches</span>
+                                    <span class="">Re-watches</span>
+                                </div>
+                                <div id="rewatchpie" class="piech2"></div>
+                            </div>
+                            <div class="piechart">
+                                <div class="legend">
+                                    <span class="green">Reviewed</span>
+                                    <span class="">Not Reviewed</span>
+                                </div>
+                                <div id="reviewpie" class="piech2"></div>
+                            </div>
+                        </div>
+                        <div class="ratingSpreadsection">
+                            <img src="{{ url_for('static', filename = 'images/1stars.png') }}" alt="1star"/>
+                            <div id="ratingSpread" class="ratingSpread"></div>
+                            <img src="{{ url_for('static', filename = 'images/5stars.png') }}" alt="5stars"/>
+                        </div>
+                        <span class="linetitle">Rating Spread</span>
+                    </div>
                 </section>
             {% endif %}
             {%for role in [['actor', 'Stars', 'a', 'actors'], ['director', 'Directors', 'd', 'crew_director']]%}
@@ -737,6 +757,53 @@
                         }],
                 });
 
+                Highcharts.chart('ratingSpread', {
+                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0, height: 150, width: 330},
+                    xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    legend:{enabled:false},
+                    title: {text:null},
+                    yAxis: {min: -1, labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    tooltip: {
+                        formatter: function(){
+                            var stringa = new String("");
+                            for (let i = 1; i < (this.x+1)/2; i++) {stringa += "★";}
+                            if ((this.x+1)/2 > parseInt((this.x+1)/2)) {stringa += "½";} else {stringa += "★";}
+                            return '<div class="ttYear"><span class="ttStars">'+ stringa +'</span><span class="ttStarsSub">' + (parseInt(this.y)).toString() +' films</span></div>'
+                        },
+                        shared: true,
+                        useHTML: true,
+                        shape: 'square',
+                        borderWidth:0,
+                        shadow: false,
+                        backgroundColor: null,
+                    },
+                    plotOptions: {column: {pointPadding: 0.05, borderWidth: 0, borderRadius: 2, groupPadding: 0,}},
+                    series: [{
+                            data: [
+                                {%for element in fill_array(user['stats'+year].rating[1:], 1, 10) %}
+                                    {name: "{{ element._id }}", y: {{ element.sum }} + 0.1
+                                    },
+                                {%endfor%}
+                            ],
+                            states: {
+                                hover: {
+                                    color: '#00e054',
+                                }
+                            },
+                            color: '#445566',
+                            point: {
+                                events: {
+                                    click: function () {
+                                        if (!isMobile) {
+                                            location.href = '{{ lbdurl }}{{ user._id }}/films/diary/for/{{ yearnum }}/rated/' + this.options.name + "/";
+                                        }
+                                    }
+                                }
+                            }
+                        }],
+                });
+
+
                 {% for type in ['currentYear', 'rewatch', 'review'] %}
 
                 Highcharts.chart('{{ type }}pie', {
@@ -747,13 +814,13 @@
                     yAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
                     tooltip: {
                         formatter: function(){
-                            return '<div class="ttYear"><span class="ttPie"><b>' + (this.y * 100).toFixed(1).toString() +'%</b> ('+ (this.y * {{ user['stats'+year].total[0].movies }}).toString() + ' of {{ user['stats'+year].total[0].movies }})</span></div>'
+                            return '<div class="ttYear"><span class="ttPie">' + (this.y * 100).toFixed(1).toString() +'% <span class="gray">('+ (this.y * {{ user['stats'+year].total[0].movies }}).toString() + ' of {{ user['stats'+year].total[0].movies }})</span></span></div>'
                         },
                         //positioner: function () {return { x: 80, y: 50 };},
                         shared: true, useHTML: true, shape: 'square', borderWidth:0, shadow: false, backgroundColor: null,
                     },
                     label: {enabled: false},
-                    plotOptions: {pie: {borderWidth: 0, dataLabels: {connectorWidth: 0}}},
+                    plotOptions: {pie: { size: 150, borderWidth: 0, dataLabels: {connectorWidth: 0}}},
                     series: [{
                             data: [
                                 {name: '', y: {{ user['stats'+year][type][0].sum/user['stats'+year].total[0].movies }}, color: '#00e054'},
