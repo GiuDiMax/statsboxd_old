@@ -1192,6 +1192,39 @@ span{
     color: #9ab;
 }
 
+.highLow{
+    display:flex;
+    flex-direction: row;
+    flex-basis: 100%;
+    justify-content: space-between;
+}
+
+.highLow .singleFilm{
+    flex-basis: 45%;
+}
+
+.sottofilm{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.highLow .suptitle{
+    color: #fff;
+    font-family: Graphik-Regular-Web,sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 15px;
+}
+
+.highLow .stellamedia{
+    color: #fff;
+    font-family: Graphik-Light-Web,sans-serif;
+    font-size: 24px;
+}
+
 @media only screen and (min-width: 1200px) {
     #isMobile{
         display:none;
@@ -1437,6 +1470,130 @@ span{
 
     .twocolumn .labels{
         width:100%;
+    }
+
+    .ratingSpreadsection{
+        width: 343px;
+        position: relative;
+        right: 8%;
+    }
+
+    .piecharts{
+        flex-direction: column;
+        row-gap: 20px;
+    }
+
+    .numbersStats{
+        flex-basis:100%;
+        gap: 5%;
+        row-gap:15px;
+    }
+
+    .numbersStats div{
+        flex-basis: 40%;
+    }
+
+    .secHRF{
+        flex-basis: 100%;
+        justify-content: center;
+        column-gap: 5%;
+    }
+
+    .secHRF .singleFilm{
+        flex-basis: 20%;
+    }
+
+    .watchedDivided{
+        flex-basis: 100%;
+    }
+
+    .wd1x .big{
+        font-size: 24px;
+    }
+
+    .wd1x .small{
+        font-size: 12px;
+    }
+
+    .wd1 img{
+        display: none;
+    }
+
+    .wd1x{
+        width: 20%;
+    }
+
+    .wd1{
+        flex-basis: 100%;
+    }
+
+    .wd2{
+        flex-basis:70%;
+        margin-left:auto;
+        margin-right:auto;
+        margin-top: 10px;
+        position: relative;
+        top: 40px;
+    }
+
+    .weekChartcontainer{
+        margin:0 3%;
+    }
+
+    .msy{
+        flex-wrap: wrap;
+    }
+
+    .msy span{
+        font-size: 12px !important;
+        margin: 15px 0;
+    }
+
+    .msy .msx2{
+        order: 3;
+        flex-basis: 100%;
+    }
+
+    .msx1{
+        margin: 0 8%;
+    }
+
+    .mw2{
+        gap: 3%;
+        flex-basis: 100%;
+
+    }
+
+    .mw2 .singleFilm{
+        width: 100%;
+        flex-basis: 22%;
+    }
+
+    .highLow{
+        justify-content: center;
+        gap: 10%;
+        flex-wrap: wrap;
+        row-gap: 20px;
+    }
+
+    .highLow .singleFilm{
+        flex-basis: 35%;
+    }
+
+    .highLow .suptitle{
+        font-size: 14px;
+    }
+
+    .highLow img{
+    }
+
+    .highLow .stellamedia{
+        font-size: 22px
+    }
+
+    .sottofilm{
+        flex-direction: row !important;
+        margin-top: 10px;
     }
 
 }

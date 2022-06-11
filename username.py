@@ -199,4 +199,7 @@ def getFromusername(username):
     fullUpdate(username)
     return db.Users.find_one({"_id": username})
 
+def checkUsername(username):
+    return db.Users.find_one({"_id": username})
+
 #fullUpdate('giudimax')

@@ -164,7 +164,7 @@
                         <span>Films by week</span>
                         <div class="line"></div>
                     </div>
-                    <div class="chart-container">
+                    <div class="chart-container weekChartcontainer">
                         <div id="watchedWeek" class="weekChart"></div>
                     </div>
                     <div class="years">
@@ -197,7 +197,7 @@
                         <div class="line"></div>
                     </div>
                     <div class="msy">
-                        <div class="msx">
+                        <div class="msx msx1">
                             <span>First Film</span>
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ user['stats'+year].firstMovie[0].info.uri }}">
@@ -223,7 +223,7 @@
                                 {%endfor%}
                             </div>
                         </div>
-                        <div class="msx">
+                        <div class="msx msx1">
                             <span>Last Film</span>
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ user['stats'+year].lastMovie[0].info.uri }}">
@@ -524,6 +524,33 @@
                 </section>
                 {%endfor%}
             </section>
+
+            {% if year != '' %}
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Highs and Lows</span>
+                    <div class="line"></div>
+                </div>
+                <div class="highLow">
+                    {% for type in [['bestMovie', 'Highest Average'],['worstMovie', 'Lowest Average'],
+                                    ['mostPopularMovie', 'Most Popular'],['lessPopularMovie', 'Most Obscure']] %}
+                    <div class="singleFilm" >
+                        <span class="suptitle">{{ type[1] }}</span>
+                        <a class="poster" href="{{ lbdurl }}film/{{ user['stats'+year][type[0]][0].info.uri }}">
+                            {% if 'images' in user['stats'+year][type[0]][0].info %}
+                                <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year][type[0]][0].info.images.poster, 110, 165) }}" alt="{{ user['stats'+year][type[0]][0].info.uri }}" />
+                            {% else %}
+                                <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" alt="{{ user['stats'+year][type[0]][0].info.uri }}" />
+                            {% endif %}
+                        </a>
+                        <div class="sottofilm">
+                            <img src="{{ url_for('static', filename='images/orangestar.jpg') }}" /><span class="sottotitolo stellamedia">{{ '{0:0.1f}'.format(user['stats'+year][type[0]][0].info.rating.average) }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
 
             <section class="wMap noselect">
                 <span class="wmTitle">World Map</span>
@@ -890,7 +917,11 @@
 
                 function clickMap(el){
                       if (typeof worldDataUri[el] !== 'undefined') {
-                          location.href = '{{ lbdurl }}{{ user._id }}/films/country/' + worldDataUri[el] + '/';
+                          {% if year == '' %}
+                              location.href = '{{ lbdurl }}{{ user._id }}/films/country/' + worldDataUri[el] + '/';
+                          {% else %}
+                              location.href = '{{ lbdurl }}{{ user._id }}/films/diary/for/{{ yearnum }}/country/' + worldDataUri[el] + '/by/rating';
+                          {% endif %}
                       }
                 }
 
