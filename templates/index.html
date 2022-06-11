@@ -2,7 +2,11 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>&lrm;{{ user._id }}’s all-time stats &bull; Letterboxd</title>
+        {% if year == '' %}
+            <title>&lrm;{{ user.name }}’s all-time stats &bull; Letterboxd</title>
+        {% else %}
+            <title>&lrm;{{ user.name }}'s {{ yearnum }} in review; Letterboxd</title>
+        {% endif %}
         <script src="//cdn.jsdelivr.net/npm/chart.js"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -785,7 +789,7 @@
                 });
 
                 Highcharts.chart('ratingSpread', {
-                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0, height: 150, width: 330},
+                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0, height: 150},
                     xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
                     legend:{enabled:false},
                     title: {text:null},
