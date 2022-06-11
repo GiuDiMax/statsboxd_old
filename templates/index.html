@@ -855,7 +855,11 @@
                     series: [{
                             data: [
                                 {name: '', y: {{ user['stats'+year][type][0].sum/user['stats'+year].total[0].movies }}, color: '#00e054'},
-                                {name: '', y: {{ user['stats'+year][type][1].sum/user['stats'+year].total[0].movies  }}, color: '#456'},],
+                                {% if user['stats'+year][type]|length > 1 %}
+                                    {name: '', y: {{ user['stats'+year][type][1].sum/user['stats'+year].total[0].movies  }}, color: '#456'},],
+                                {% else %}
+                                    {name: '', y: 0, color: '#456'},],
+                                {% endif %}
                             states: {hover: {halo: {size:0}, animation: {duration:0}}, inactive: {enabled:false, opacity:1},},
                         }],
                 });
