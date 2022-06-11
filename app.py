@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from username import getFromusername, fullUpdate
+from username import checkUsername, fullUpdate
 import gunicorn
 import time
 from setCollections import mainSetCollection2
@@ -21,12 +21,10 @@ def main(username):
             mainSetCollection2()
             updateLists()
             return render_template('username.html')
-        user = getFromusername(username.lower())
+        user = checkUsername(username.lower())
         if user is not None:
-            if 'stats' in user:
-                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
-            else:
-                return redirect('/'+username+"/update/")
+            return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
+        return render_template('loading.html', redirect=(username.lower() + "/update/"))
     return render_template('username.html')
 
 
@@ -35,12 +33,10 @@ def main_year(username, year):
     if '.ico' not in username:
         if beta_test and username.lower() not in beta_users:
             return render_template('username.html')
-        user = getFromusername(username.lower())
+        user = checkUsername(username.lower())
         if user is not None:
-            if 'stats' in user:
-                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year='_'+year, yearnum=year)
-            else:
-                return redirect('/'+username+"/update/")
+            return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year='_'+year, yearnum=year)
+        return render_template('loading.html', redirect=(username.lower() + "/update/"))
     return render_template('username.html')
 
 

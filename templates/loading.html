@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Please wait...</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="isMobile"></div>
+        <div class="headerbar">
+            <a href="https://letterboxd.com/">
+                <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="letterboxdlogo"/>
+            </a>
+            <span class="madeby">Project made by GiuDiMax</span>
+        </div>
+        <div class="loader"></div>
+    </body>
+    <footer>
+        <script>
+            $(document).ready(function () {
+
+                var isMobile = false;
+                if($('#isMobile').is(':visible')) {
+                    isMobile = true;
+                }
+
+                window.location.replace("/{{ redirect }}");
+
+            })
+        </script>
+    </footer>
+</html>
