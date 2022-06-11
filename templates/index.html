@@ -515,7 +515,7 @@
                                         {% if type == 'mostWatched' %}
                                             {{ element.sum }}
                                         {% else %}
-                                            {{ '%0.1f'| format(element.average/2) }}
+                                            {{ '%0.1f'| format(zeroIfNone(element.average)/2) }}
                                         {% endif %}
                                     </span>
                                 </div>

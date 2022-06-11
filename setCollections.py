@@ -69,3 +69,5 @@ def mainSetCollection2():
             break
         except:
             pass
+
+#mainSetCollection2()
