@@ -44,8 +44,12 @@ def main_year(username, year):
 def main_update(username):
     if beta_test and username.lower() not in beta_users:
         return render_template('username.html')
-    fullUpdate(username.lower())
-    return redirect('/' + username)
+    while True:
+        try:
+            fullUpdate(username.lower())
+            return redirect('/' + username)
+        except:
+            pass
 
 
 @app.route('/')
