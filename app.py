@@ -23,7 +23,10 @@ def main(username):
             return render_template('username.html')
         user = checkUsername(username.lower())
         if user is not None:
-            return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
+            try:
+                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
+            except:
+                pass
         return render_template('loading.html', redirect=(username.lower() + "/update/"))
     return render_template('username.html')
 
