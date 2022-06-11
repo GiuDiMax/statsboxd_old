@@ -178,6 +178,14 @@ def utility_processor10():
     return dict(date_toshort=date_toshort)
 
 
+@app.context_processor
+def utility_processor11():
+    def zeroIfNone(value):
+        if value is None:
+            return 0
+        return value
+    return dict(zeroIfNone=zeroIfNone)
+
 
 
 if __name__ == '__main__':
