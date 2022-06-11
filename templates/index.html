@@ -5,7 +5,7 @@
         {% if year == '' %}
             <title>&lrm;{{ user.name }}’s all-time stats &bull; Letterboxd</title>
         {% else %}
-            <title>&lrm;{{ user.name }}'s {{ yearnum }} in review; Letterboxd</title>
+            <title>&lrm;{{ user.name }}'s {{ yearnum }} in review &bull; Letterboxd</title>
         {% endif %}
         <script src="//cdn.jsdelivr.net/npm/chart.js"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
