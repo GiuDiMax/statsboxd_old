@@ -1,10 +1,10 @@
 from mongodb import db
 import time
 
-db.Users.delete_many({})
+#db.Users.delete_many({})
 #db.Film.delete_many({})
 
-#a = db.delete_many.find({ 'images': { '$exists': False }})
+db.Film.delete_many({ 'images': { '$exists': False }})
 
 '''
 print(1)
