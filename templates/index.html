@@ -503,7 +503,7 @@
                             <span class="titlerole">{{ role[2] }}</span>
                             {%for element in user['stats'+year][type+role[0]]%}
                                 <div class="{{ type }}limit {% if loop.index > 5 %}hide{% endif %}">
-                                    <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}/with/{{ role[1] }}/{{ element._id }}">
+                                    <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}/with/{{ role[1] }}/{{ element._id }}">
                                          {% if element.info|length > 0 %}
                                             {{ element.info[0].name }}
                                         {% else %}
