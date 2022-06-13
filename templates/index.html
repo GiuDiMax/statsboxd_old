@@ -281,7 +281,7 @@
                             {% set num =  user['stats'+year]['mostWatchedgenres_' + type + 's']|length %}
                         {% endif %}
                         {% for i in range(num) %}
-                                <a class="clickable label2" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}{{type}}/{{ user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id'] }}">
+                                <a class="clickable label2" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}{{type}}/{{ user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id'] }}">
 
                                     <span class="leftText">
                                         {{ firstUpper(user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id']) }}
