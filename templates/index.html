@@ -668,7 +668,7 @@
                         shadow: false,
                         backgroundColor: null,
                     },
-                    plotOptions: {column: {pointPadding: 0.2, borderWidth: 0, borderRadius: 3, groupPadding: 0,}},
+                    plotOptions: {column: {pointPadding: 0.1, borderWidth: 0, borderRadius: 3, groupPadding: 0.1,}},
                     series: [{
                             data: [
                                 {%for element in user['stats'+year].totalyear%}
@@ -717,7 +717,7 @@
                         shadow: false,
                         backgroundColor: null,
                     },
-                    plotOptions: {column: {pointPadding: 0.08, borderWidth: 0, borderRadius: 2, groupPadding: 0,}},
+                    plotOptions: {column: {pointPadding: 0.1, borderWidth: 0, borderRadius: 2, groupPadding: 0.1,}},
                     series: [{
                             data: [
                                 {%for element in fill_array(user['stats'+year].week, 1, 54) %}
@@ -770,7 +770,7 @@
                         shadow: false,
                         backgroundColor: null,
                     },
-                    plotOptions: {column: {pointPadding: 0.05, borderWidth: 0, borderRadius: 2, groupPadding: 0,}},
+                    plotOptions: {column: {pointPadding: 0.05, borderWidth: 0, borderRadius: 2, groupPadding: 0.05,}},
                     series: [{
                             data: [
                                 {%for element in fill_array(user['stats'+year].dayOfWeek, 1, 8) %}
@@ -807,7 +807,7 @@
                         shadow: false,
                         backgroundColor: null,
                     },
-                    plotOptions: {column: {pointPadding: 0.05, borderWidth: 0, borderRadius: 2, groupPadding: 0,}},
+                    plotOptions: {column: {pointPadding: 0, borderWidth: 0, borderRadius: 2, groupPadding: 0.1,}},
                     series: [{
                             data: [
                                 {%for element in fill_array(user['stats'+year].rating[1:], 1, 10) %}

@@ -1602,4 +1602,9 @@ span{
         margin-right: auto;
     }
 
+    .stellineBig{
+        font-size:15px !important;
+        margin-top:5px;
+    }
+
 }
