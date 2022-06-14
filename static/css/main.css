@@ -1389,6 +1389,10 @@ span{
         display:none;
     }
 
+    .hideLast2 > .singleFilm:nth-child(16), .hideLast > .singleFilm:nth-child(17), .hideLast > .singleFilm:nth-child(18){
+        display:none;
+    }
+
     .container_people{
         width: 50%;
         margin:0;
