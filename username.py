@@ -199,7 +199,10 @@ def getFromusername(username):
     fullUpdate(username)
     return db.Users.find_one({"_id": username})
 
+
 def checkUsername(username):
     return db.Users.find_one({"_id": username})
 
-#fullUpdate('giudimax')
+
+if __name__ == '__main__':
+    fullUpdate('giudimax')

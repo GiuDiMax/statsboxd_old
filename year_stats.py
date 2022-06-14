@@ -20,6 +20,7 @@ op_role.append({'$lookup': {
                 'as': 'info'}})
 op_role.append({'$unwind': '$info'})
 op_role.append({'$sort': {'info.rating.num': -1}})
+op_role.append({'$sort': {'num': -1}})
 op_role.append({'$limit': 18})
 op_role.append({'$project': {'_id': '$_id', 'uri': '$info.uri', 'sum': '$num', 'poster': '$info.images.poster'}})
 json_operations4['mostWatched'] = op_role
