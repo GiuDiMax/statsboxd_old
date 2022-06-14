@@ -917,13 +917,19 @@ span{
 }
 
 .secHRF{
-    row-gap: 3%;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 0;
 }
 
 .secHRF .singleFilm{
-    width: 7.5%;
+    width: 10%;
+    margin: 1% !important;
 }
 
+.secHRF img{
+    width: 100%;
+}
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
