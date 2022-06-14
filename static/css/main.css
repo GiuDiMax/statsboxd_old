@@ -1498,7 +1498,8 @@ span{
     .secHRF{
         flex-basis: 100%;
         justify-content: center;
-        column-gap: 5%;
+        column-gap: 2%;
+        flex-wrap: wrap;
     }
 
     .secHRF .singleFilm{
