@@ -1,26 +1,26 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, redirect, url_for
 from username import checkUsername, fullUpdate
-import gunicorn
-import time
-from setCollections import mainSetCollection2
-from setPeople import mainSetNames2
-from setLists import updateLists
+from utils.setCollections import mainSetCollection2
+from utils.setPeople import mainSetNames2
+from utils.setLists import updateLists
 from config import *
-from datetime import datetime
+from utils.refreshLastTwoYears import refresh
+from utils.cleanUsers import cleanUsers
 
 app = Flask(__name__)
-
 
 @app.route('/<username>/')
 def main(username):
     if '.ico' not in username:
         if beta_test and username.lower() not in beta_users:
             return render_template('username.html')
-        if username.lower() == 'aupdate':
+        if username.lower() == 'update':
+            refresh()
             mainSetCollection2()
             updateLists()
+            cleanUsers()
             return render_template('username.html')
-        if username.lower() == 'pupdate':
+        if username.lower() == 'people':
             mainSetNames2()
             return render_template('username.html')
         user = checkUsername(username.lower())
