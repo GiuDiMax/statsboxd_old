@@ -75,7 +75,7 @@ def mainSetNames():
 
     if len(uris) > 0:
         print('da aggiungere persone ' + str(len(uris)))
-        fillMongodb(uris)
+        #fillMongodb(uris)
 
 
 def mainSetNames2():
