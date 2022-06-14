@@ -16,10 +16,12 @@ def main(username):
     if '.ico' not in username:
         if beta_test and username.lower() not in beta_users:
             return render_template('username.html')
-        if username.lower() == 'adminupdate':
-            mainSetNames2()
+        if username.lower() == 'aupdate':
             mainSetCollection2()
             updateLists()
+            return render_template('username.html')
+        if username.lower() == 'pupdate':
+            mainSetNames2()
             return render_template('username.html')
         user = checkUsername(username.lower())
         if user is not None:

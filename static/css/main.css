@@ -646,7 +646,7 @@ span{
     display:flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 .singleFilm{
@@ -677,17 +677,12 @@ span{
 }
 
 .poster{
-    /*height: 167px;
-    width: 112px;*/
-    margin-left:auto;
-    margin-right:auto;
+    /*margin-left:auto;
+    margin-right:auto;*/
 }
 
 .poster img{
     margin:1px;
-    /*background-image: linear-gradient(90deg,hsla(0,0%,100%,0) 0,hsla(0,0%,100%,.5) 50%,hsla(0,0%,100%,0));
-    background-repeat: no-repeat;
-    background-size: 100% 1px;*/
     border-radius: 4px;
     box-sizing: border-box;
     box-shadow: 0 0 0 1px rgb(221 238 255 / 35%);
