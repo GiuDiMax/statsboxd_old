@@ -647,16 +647,20 @@ span{
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
-    gap: 5%;
+    gap: 2%;
 }
 
 .singleFilm{
     width: 12%;
-    margin: 1% 2%;
+    margin: 1%;
     display:flex;
     flex-direction: column;
     align-content: center;
     justify-content: center;
+}
+
+.poster img{
+    width:100%;
 }
 
 .sottotitolo{
@@ -1227,6 +1231,7 @@ span{
     font-size: 24px;
 }
 
+
 @media only screen and (min-width: 1200px) {
     #isMobile{
         display:none;
@@ -1358,6 +1363,10 @@ span{
         height:100% !important;
     }
 
+    .filmList{
+        gap: 3%;
+    }
+
     .filmList .singleFilm{
         width: 17%;
         margin: 0;
@@ -1368,11 +1377,15 @@ span{
         flex-direction:column;
     }
 
+    .stelline, .bigsotto{
+        font-size: 12px !important;
+    }
+
     .filmList{
         row-gap: 20px;
     }
 
-    .hideLast > .singleFilm:nth-last-of-type(-n+2){
+    .hideLast > .singleFilm:nth-child(11), .hideLast > .singleFilm:nth-child(12){
         display:none;
     }
 
@@ -1447,12 +1460,14 @@ span{
 
     .decPosters {
         width: 100%;
-        gap: 5px;
+        gap: 3%;
+        row-gap: 4px;
     }
 
     .decPosterImg {
-        width: 18%;
-        height: 40%;
+        width: 17%;
+        height: 100%;
+        margin: 0!important;
     }
 
     .chart-container, .years{
