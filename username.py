@@ -6,11 +6,8 @@ from mongodb import db
 from datetime import datetime
 from stats import getStats
 from operations import fillMongodb
-from setPeople import mainSetNames2
 from threading import Thread
 import time
-from multiprocessing import Pool
-import sys
 from year_stats import year_stats
 global watched_list, diary_list
 
