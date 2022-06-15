@@ -8,22 +8,27 @@ from operations import fillMongodb
 
 #db.Film.delete_many({ 'images': { '$exists': False }})
 
-datex = datetime.today()
-datex = datex - timedelta(days=7)
-
-current_year = date.today().year
-a = db.Film.aggregate([
-    {'$match': {"year": {'$gt': current_year - 2}}},
-    {'$match': {"updateDate": {'$lt': datex}}},
-    {'$project': {'uri': 1}}
+a = db.Users.aggregate([
+    {'$match': {"_id": 'moviefinger'}},
+    {'$unwind': '$watched'},
+    {'$lookup': {
+        'from': 'Film',
+        'localField': 'watched.id',
+        'foreignField': '_id',
+        'as': 'info'}},
+    {'$unwind': '$info'},
+    {'$sort': {'info.uri': 1}},
+    {'$unwind': '$info.actors'},
+    {'$group': {'_id': '$info.actors',
+                'average': {'$avg': '$watched.rating'},
+                'list': {'$push': '$info.uri'},
+                'sum': {'$sum': 1}}},
+    {'$sort': {'sum': -1}},
+    {'$limit': 2},
 ])
 
-uris = []
 for x in a:
-    uris.append(x['uri'])
-
-print(len(uris))
-fillMongodb(uris)
+    print(x)
 
 '''
 print(1)

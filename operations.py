@@ -79,8 +79,12 @@ def fill_db(url, soup):
         for actor in actors:
             try:
                 code = actor['href'].split('/actor/')[-1][:-1]
+                try:
+                    title = actor['title']
+                except:
+                    title = ""
                 #if 'uncredited' not in actor['title'] and 'voice' not in actor['title']:
-                if code not in exclude_people and 'uncredited' not in actor['title']:
+                if code not in exclude_people and 'uncredited' not in title:
                     json1['actors'].append(code)
             except:
                 pass
@@ -131,7 +135,8 @@ def fill_db(url, soup):
     #DATE
     json1['updateDate'] = datetime.today()
     json1['modifiedDate'] = datetime.strptime(json_lb['dateModified'], '%Y-%m-%d')
-    #print(json1)
+    if __name__ == '__main__':
+        print(json1)
     try:
         db.Film.insert_one(json1)
     except:
@@ -154,4 +159,6 @@ def fillMongodb(urls):
     asyncio.get_event_loop().run_until_complete(main2(urls))
     #return asyncio.get_event_loop().run_until_complete(main2(urls))
 
-#fillMongodb(['the-blues-brothers'])
+
+if __name__ == '__main__':
+    fillMongodb(['risate-allitaliana'])
