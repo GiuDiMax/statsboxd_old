@@ -1,7 +1,6 @@
 from mongodb import db
 from operations import fillMongodb
 
-
 def refresh():
     a = db.Film.aggregate([
         {'$project': {'uri': 1}}
