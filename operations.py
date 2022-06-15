@@ -40,7 +40,7 @@ def fill_db(url, soup):
 
     # RUNTIME
     try:
-        json1['runtime'] = int(soup.find('p', class_="text-link text-footer").text.strip().split("mins", 1)[0].strip().replace(",", ""))
+        json1['runtime'] = int(soup.find('p', class_="text-link text-footer").text.replace("Adult", "").strip().split("min", 1)[0].strip().replace(",", ""))
     except:
         pass
 
@@ -165,4 +165,5 @@ def fillMongodb(urls):
 
 
 if __name__ == '__main__':
-    fillMongodb(['twin-peaks-the-return'])
+    fillMongodb(['deep-throat'])
+    fillMongodb(['the-batman'])
