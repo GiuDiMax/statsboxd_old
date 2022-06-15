@@ -177,7 +177,7 @@ def fullOperation(username, watched=None):
             break
 
     #y = None
-    getStats(username)
+    #getStats(username)
     #db.Users.update_one({'_id': username}, {'$set': {'stats': y}})
     start4 = time.time()
     t1 = Thread(target=getStats, args=(username,))
@@ -202,4 +202,4 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    fullUpdate('giudimax')
+    fullUpdate('moviefinger')

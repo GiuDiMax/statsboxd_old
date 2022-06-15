@@ -4,13 +4,8 @@ from operations import fillMongodb
 
 
 def refresh():
-    datex = datetime.today()
-    datex = datex - timedelta(days=7)
-
-    current_year = date.today().year
     a = db.Film.aggregate([
-        {'$match': {"year": {'$gt': current_year - 2}}},
-        {'$match': {"updateDate": {'$lt': datex}}},
+        {'$match': {'actors': {'$exists': True, '$eq': []}}},
         {'$project': {'uri': 1}}
     ])
 
