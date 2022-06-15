@@ -5,7 +5,7 @@ from operations import fillMongodb
 
 def refresh():
     a = db.Film.aggregate([
-        {'$match': {'runtime': {'$exists': False}}},
+        {'$match': {'crew.directors': {'$exists': True, '$eq': []}}},
         {'$project': {'uri': 1}}
     ])
 
@@ -14,7 +14,7 @@ def refresh():
         uris.append(x['uri'])
 
     print(len(uris))
-    fillMongodb(uris)
+    #fillMongodb(uris)
 
 
 if __name__ == '__main__':
