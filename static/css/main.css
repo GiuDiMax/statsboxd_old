@@ -681,6 +681,10 @@ span{
     font-size: 18px !important;
 }
 
+#pastYearHRF{
+    flex-wrap:wrap !important;
+}
+
 .poster{
     /*margin-left:auto;
     margin-right:auto;*/
