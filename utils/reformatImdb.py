@@ -18,9 +18,11 @@ def reformat_imdb(username):
         {'$project': {'_id': '$info.imdb', 'rating': '$rating'}}
     ])
 
+    '''
     for watch in watched:
-        watched = watched
+        watched = watch
         break
+    '''
 
     df = pd.DataFrame(columns=['Const', 'Your Rating', 'Date Rated', 'Title', 'URL', 'Title Type',
                                'IMDb Rating', 'Runtime (mins)', 'Year', 'Genres', 'Num Votes',
