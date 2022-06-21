@@ -52,6 +52,10 @@ span{
     font-family: Graphik-Semibold-Web, sans-serif;
 }
 
+.logoup{
+    width: 250px;
+}
+
 .madeby{
     font-weight: 700;
     color: #9ab;
@@ -1254,6 +1258,16 @@ span{
         display:block !important;
     }
 
+    .logoup{
+        width:200px;
+        margin-top:10px;
+    }
+
+    .madeby{
+        margin-bottom:5px;
+        font-size: 10px;
+    }
+
     .hideMobile{
         display:none;
     }
@@ -1271,7 +1285,8 @@ span{
         display:flex;
         flex-direction: column;
         justify-content: center;
-        gap: 10px;
+        gap: 5px;
+        height:auto;
     }
 
     .mainT .popupdiv {
