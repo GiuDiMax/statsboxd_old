@@ -9,6 +9,7 @@ from utils.cleanUsers import cleanUsers
 
 app = Flask(__name__)
 
+
 @app.route('/<username>/')
 def main(username):
     if '.ico' not in username:
