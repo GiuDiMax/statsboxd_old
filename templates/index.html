@@ -3,9 +3,9 @@
     <head>
         <meta charset="UTF-8">
         {% if year == '' %}
-            <title>&lrm;{{ user.name }}’s all-time stats &bull; Letterboxd</title>
+            <title>&lrm;{{ user.name }}’s all-time stats &bull; Statsboxd</title>
         {% else %}
-            <title>&lrm;{{ user.name }}'s {{ yearnum }} in review &bull; Letterboxd</title>
+            <title>&lrm;{{ user.name }}'s {{ yearnum }} in review &bull; Statsboxd</title>
         {% endif %}
         <script src="//cdn.jsdelivr.net/npm/chart.js"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=2.0.0">
@@ -24,8 +24,8 @@
     <body>
         <div id="isMobile"></div>
         <div class="headerbar">
-            <a href="https://letterboxd.com/">
-                <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="letterboxdlogo"/>
+            <a href="/">
+                <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="statsboxdlogo" class="logoup"/>
             </a>
             <span class="madeby">Project made by GiuDiMax</span>
         </div>
