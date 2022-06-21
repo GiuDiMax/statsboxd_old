@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Please wait...</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=2.1.0">
         <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,7 @@
         <div id="isMobile"></div>
         <div class="headerbar">
             <a href="https://letterboxd.com/">
-                <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="letterboxdlogo"/>
+                <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="statsboxdlogo" class="logoup"/>
             </a>
             <span class="madeby">Project made by GiuDiMax</span>
         </div>
