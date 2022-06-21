@@ -12,8 +12,8 @@ app = Flask(__name__)
 @app.route('/<username>/')
 def main(username):
     if '.ico' not in username:
-        if beta_test and username.lower() not in beta_users:
-            return render_template('username.html')
+        #if beta_test and username.lower() not in beta_users:
+        #    return render_template('username.html')
         if username.lower() == 'update':
             refresh()
             mainSetCollection2()
@@ -36,8 +36,8 @@ def main(username):
 @app.route('/<username>/<year>')
 def main_year(username, year):
     if '.ico' not in username:
-        if beta_test and username.lower() not in beta_users:
-            return render_template('username.html')
+        #if beta_test and username.lower() not in beta_users:
+        #    return render_template('username.html')
         user = checkUsername(username.lower())
         if user is not None:
             return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year='_'+year, yearnum=year)
@@ -47,10 +47,12 @@ def main_year(username, year):
 
 @app.route('/<username>/update/')
 def main_update(username):
-    if beta_test and username.lower() not in beta_users:
-        return render_template('username.html')
-    fullUpdate(username.lower())
-    return redirect('/' + username)
+    #if beta_test and username.lower() not in beta_users:
+    #    return render_template('username.html')
+    if fullUpdate(username.lower()):
+        return redirect('/' + username)
+    else:
+        return render_template('error.html')
 
 
 @app.route('/')

@@ -144,9 +144,12 @@ def fullUpdate(username):
     t1.join()
     t2.join()
     t3.join()
-    fullOperation(username, watched_list)
-    print('All op in: ' + str(time.time() - start))
-
+    if len(watched_list) > 0:
+        fullOperation(username, watched_list)
+        print('All op in: ' + str(time.time() - start))
+        return True
+    else:
+        return False
 
 def fullOperation(username, watched=None):
     if watched is None:
