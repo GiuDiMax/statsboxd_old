@@ -37,6 +37,11 @@
 	src: url('/static/fonts/Graphik-Semibold-Web.woff') format("woff");
 }
 
+.shortTitle{
+    text-align: center;
+    padding: 5% 10%;
+}
+
 body{
     margin:0;
     background: #14181c url(https://s.ltrbxd.com/static/img/content-bg.0d9a0f0f.png) 0 -1px repeat-x;
