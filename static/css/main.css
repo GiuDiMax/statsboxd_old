@@ -14,6 +14,7 @@
 	font-style: normal;
 	font-weight: 400;
 	src: url('/static/fonts/TiemposTextWeb-Semibold.woff') format("woff");
+    font-display: swap;
 }
 
 @font-face {
@@ -21,6 +22,7 @@
 	font-style: normal;
 	font-weight: 400;
 	src: url('/static/fonts/Graphik-Light-Web.woff') format("woff");
+    font-display: swap;
 }
 
 @font-face {
@@ -28,6 +30,7 @@
 	font-style: normal;
 	font-weight: 400;
 	src: url('/static/fonts/Graphik-Regular-Web.woff') format("woff");
+    font-display: swap;
 }
 
 @font-face {
@@ -35,6 +38,7 @@
 	font-style: normal;
 	font-weight: 400;
 	src: url('/static/fonts/Graphik-Semibold-Web.woff') format("woff");
+    font-display: swap;
 }
 
 .shortTitle{
