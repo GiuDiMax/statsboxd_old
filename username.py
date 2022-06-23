@@ -135,6 +135,7 @@ def threadxdiary(username):
 def fullUpdate(username):
     global watched_list, diary_list
     start = time.time()
+    print('analysis username')
     t1 = Thread(target=threadxwatched, args=(username,)) #WATCHED
     t2 = Thread(target=threadxdiary, args=(username,)) #DIARY
     t3 = Thread(target=threadgeneral, args=(username,)) #GENERAL

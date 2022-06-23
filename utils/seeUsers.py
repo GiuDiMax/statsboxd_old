@@ -3,7 +3,7 @@ from utils.cleanUsers import cleanUsers
 
 
 def seeUsers():
-    cleanUsers()
+    #cleanUsers()
     a = db.Users.aggregate([
         {'$project': {'_id': 1, 'name': 1}},
     ])
