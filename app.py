@@ -16,10 +16,12 @@ def main(username):
         #if beta_test and username.lower() not in beta_users:
         #    return render_template('username.html')
         if username.lower() == 'update':
-            refresh()
             mainSetCollection2()
             updateLists()
             cleanUsers()
+            return render_template('username.html')
+        if username.lower() == 'refresh':
+            refresh()
             return render_template('username.html')
         if username.lower() == 'people':
             mainSetNames2()
