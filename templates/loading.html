@@ -19,16 +19,9 @@
     </body>
     <footer>
         <script>
-            $(document).ready(function () {
-
-                var isMobile = false;
-                if($('#isMobile').is(':visible')) {
-                    isMobile = true;
-                }
-
+            window.onload = function() {
                 window.location.replace("/{{ redirect }}");
-
-            })
+            };
         </script>
     </footer>
 </html>
