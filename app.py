@@ -54,7 +54,7 @@ def main_update(username):
     #    return render_template('username.html')
     print("send " + username)
     if fullUpdate(username.lower()):
-        return render_template('loading.html', redirect=(username.lower()))
+        return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
     else:
         return render_template('error.html')
 
