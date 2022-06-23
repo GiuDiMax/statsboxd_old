@@ -54,7 +54,7 @@ def main_update(username):
     #    return render_template('username.html')
     print("send " + username)
     if fullUpdate(username.lower()):
-        return redirect('/' + username)
+        return render_template('loading.html', redirect=(username.lower()))
     else:
         return render_template('error.html')
 
