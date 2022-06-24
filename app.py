@@ -7,6 +7,7 @@ from config import *
 from utils.refreshLastTwoYears import refresh
 from utils.cleanUsers import cleanUsers
 from getUsersList import *
+import sys
 
 app = Flask(__name__)
 
@@ -25,6 +26,8 @@ def main(username):
         if username.lower() == 'people':
             mainSetNames2()
             return render_template('username.html')
+        if username.lower() == 'exit':
+            sys.exit()
         if username.lower() not in users_list:
             return render_template('noallowed.html')
         user = checkUsername(username.lower())
