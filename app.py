@@ -13,8 +13,6 @@ app = Flask(__name__)
 @app.route('/<username>/')
 def main(username):
     if '.ico' not in username:
-        #if beta_test and username.lower() not in beta_users:
-        #    return render_template('username.html')
         if username.lower() == 'update':
             mainSetCollection2()
             updateLists()
@@ -26,12 +24,14 @@ def main(username):
         if username.lower() == 'people':
             mainSetNames2()
             return render_template('username.html')
+        if username.lower() not in beta_users:
+            return render_template('noallowed.html')
         user = checkUsername(username.lower())
         if user is not None:
-            try:
+            #try:
                 return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
-            except:
-                pass
+            #except:
+            #    return render_template('error_flask.html')
         return render_template('loading.html', redirect=(username.lower() + "/update/"))
     return render_template('username.html')
 
@@ -164,7 +164,7 @@ def utility_processor9():
     def fill_array(array, min, max):
         array2 = []
         z = 0
-        for i in range(min, max):
+        for i in range(min, max+1):
             try:
                 if array[z]['_id'] == i:
                     array2.append(array[z])
@@ -173,6 +173,7 @@ def utility_processor9():
                     array2.append({'_id': i, 'sum': 0})
             except:
                 array2.append({'_id': i, 'sum': 0})
+        print(array2)
         return array2
     return dict(fill_array=fill_array)
 

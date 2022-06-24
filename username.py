@@ -15,7 +15,9 @@ global watched_list, diary_list
 def diary_function(sup):
     diaryx = {}
     diaryx['id'] = int(sup.find("div", class_="film-poster")['data-film-id'])
-    diaryx['dRating'] = int(sup.find("td", class_="td-rating rating-green").input['value'])
+    dRating = int(sup.find("td", class_="td-rating rating-green").input['value'])
+    if dRating > 0:
+        diaryx['dRating'] = dRating
     test = sup.find("td", class_="td-like center diary-like")
     if "icon-liked" in str(test):
         diaryx['dLike'] = True
@@ -60,9 +62,7 @@ async def get_watched3(url, session, diary):
                 rating = sup.p.span['class'][-1]
                 if 'rated' in rating:
                     rating = int(rating.split("-", 1)[1])
-                else:
-                    rating = ""
-                watched['rating'] = rating
+                    watched['rating'] = rating
             except:
                 pass
             if len(sup.p.find_all('span')) > 1:
@@ -206,4 +206,4 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    fullUpdate('moviefinger')
+    fullUpdate('lordofthebushes')

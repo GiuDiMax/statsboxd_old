@@ -21,6 +21,7 @@ for field in field2 + field3:
     json_operations['mostWatched' + field.replace('.', '_')] = op_role
     if field in field2 or field == 'studio':
         op_role = []
+        op_role.append({'$match': {'diary.dRating': {'$gt': 0}}})
         op_role.append({'$unwind': '$info.' + field})
         op_role.append({'$group': {'_id': '$info.' + field,
                                    'average': {'$avg': '$diary.dRating'},
@@ -106,7 +107,7 @@ json_operations['liked'] = op_role
 op_role = []
 op_role.append({'$group': {'_id': '$diary.rewatch',
                            'sum': {'$sum': 1}}})
-op_role.append({'$sort': {'_id': -1}})
+op_role.append({'$sort': {'_id': 1}})
 json_operations['rewatch'] = op_role
 
 op_role = []
