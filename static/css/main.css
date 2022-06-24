@@ -1220,6 +1220,13 @@ span{
     font-size: 24px;
 }
 
+.centerimg{
+    display: block;
+    margin-left:auto;
+    margin-right:auto;
+    width:25%;
+}
+
 
 @media only screen and (min-width: 1200px) {
     #isMobile{
@@ -1633,4 +1640,7 @@ span{
         width:100%;
     }
 
+    .centerimg{
+        width:85%;
+    }
 }

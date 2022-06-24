@@ -19,6 +19,7 @@ for field in field2 + field3:
     if field in field2 or field == 'studio':
         op_role = []
         op_role.append({'$unwind': '$info.' + field})
+        op_role.append({'$match': {'watched.rating': {'$gt': 0}}})
         op_role.append({'$group': {'_id': '$info.' + field,
                                    'average': {'$avg': '$watched.rating'},
                                    'sum': {'$sum': 1}}})
@@ -102,13 +103,14 @@ op_role.append({'$group': {'_id': '$watched.id',
                            'uri': {'$first': '$info.uri'},
                            'poster': {'$first': '$info.images.poster'},
                            'rating': {'$first': '$watched.rating'}}})
+op_role.append({'$match': {'rating': {'$gt': 0}}})
 op_role.append({'$sort': {'rating': -1}})
 op_role.append({'$addFields': {'decade': {'$substr': [{'$toString': '$year'}, 0, 3]}}}),
 op_role.append({'$group': {'_id': '$decade',
                            'average': {'$avg': '$rating'},
                            'posters': {'$push': {'img': "$poster", 'uri': '$uri'}},
                            'sum': {'$sum': 1}}})
-op_role.append({'$match': {"sum": {'$gt': 10}}})
+op_role.append({'$match': {"sum": {'$gt': 9}}})
 op_role.append({'$sort': {'average': -1}})
 op_role.append({'$limit': 3})
 op_role.append({'$project': {'_id': 1, 'average': 1, 'posters': {'$slice': ['$posters', 20]}}})

@@ -65,6 +65,7 @@ def mainSetCollection():
         for y in x:
             for z in x[y]:
                 uris.append(z['_id'])
+    print(len(uris))
     fillMongodb(uris)
 
 

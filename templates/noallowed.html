@@ -2,8 +2,8 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Please wait...</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=2.1.0">
+        <title>Not Allowed - Statsboxd</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=2.3.0">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
@@ -15,11 +15,12 @@
             </a>
             <span class="madeby">Project made by GiuDiMax</span>
         </div>
-        <div class="loader"></div>
+        <div class="shortTitle">
+            <h2>This username is not allowed.</h2>
+            <h3>Please contact the dev.</h3>
+        </div>
+        <img src="{{ url_for('static', filename='images/noallowed.gif') }}" alt="notallowed" class="centerimg"/>
     </body>
     <footer>
-        <script>
-            window.location.href = "/{{ redirect }}";
-        </script>
     </footer>
 </html>
