@@ -26,9 +26,12 @@ def main(username):
         if username.lower() == 'people':
             mainSetNames2()
             return render_template('username.html')
-        if username.lower() == 'exit':
+        if username.lower() == 'reset':
             sys.exit()
+        print(username.lower())
+        print(users_list)
         if username.lower() not in users_list:
+
             return render_template('noallowed.html')
         user = checkUsername(username.lower())
         if user is not None:
