@@ -28,10 +28,8 @@ def main(username):
             return render_template('username.html')
         if username.lower() == 'reset':
             sys.exit()
-        print(username.lower())
-        print(users_list)
+        print("requested: " + username.lower())
         if username.lower() not in users_list:
-
             return render_template('noallowed.html')
         user = checkUsername(username.lower())
         if user is not None:
