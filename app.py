@@ -6,6 +6,7 @@ from utils.setLists import updateLists
 from config import *
 from utils.refreshLastTwoYears import refresh
 from utils.cleanUsers import cleanUsers
+from getUsersList import *
 
 app = Flask(__name__)
 
@@ -24,7 +25,7 @@ def main(username):
         if username.lower() == 'people':
             mainSetNames2()
             return render_template('username.html')
-        if username.lower() not in beta_users:
+        if username.lower() not in users_list:
             return render_template('noallowed.html')
         user = checkUsername(username.lower())
         if user is not None:
@@ -193,7 +194,6 @@ def utility_processor11():
             return 0
         return value
     return dict(zeroIfNone=zeroIfNone)
-
 
 
 if __name__ == '__main__':

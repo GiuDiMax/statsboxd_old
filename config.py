@@ -38,6 +38,4 @@ crew_html = [
 ]
 
 exclude_people = ['mickie-mcgowan', 'stan-lee', 'jack-angel', 'sherry-lynn', 'frank-welker']
-
-beta_test = False
-beta_users = ['giudimax']
+users_list_url = 'https://gist.githubusercontent.com/GiuDiMax/84c8ba608c932d4671d5fe83d5f5e9c4/raw/f4627aaad2ad70a3277fbc2f1e2397818d819639/users_lbd'
