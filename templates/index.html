@@ -2,26 +2,25 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>&lrm;{{ user._id }}’s all-time stats &bull; Letterboxd</title>
-        <script src="//cdn.jsdelivr.net/npm/chart.js"></script>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        {% if year == '' %}
+            <title>&lrm;{{ user.name }}’s all-time stats &bull; Statsboxd</title>
+        {% else %}
+            <title>&lrm;{{ user.name }}'s {{ yearnum }} in review &bull; Statsboxd</title>
+        {% endif %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=2.1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css') }}?q=1.0.0" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.css') }}" media="print" onload="this.media='all'">
         <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
-        <link rel="stylesheet" href="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.css') }}">
         <script src="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.min.js') }}"></script>
-        <script src="//jvectormap.com/js/jquery-jvectormap-world-mill.js"></script>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js"></script>
-        <script src="https://code.highcharts.com/highcharts.js"></script>
-        <script src="https://rawgit.com/highcharts/rounded-corners/master/rounded-corners.js"></script>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,200,0,0" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,200,0,0" media="print" onload="this.media='all'">
     </head>
     <body>
         <div id="isMobile"></div>
         <div class="headerbar">
-            <a href="https://letterboxd.com/">
-                <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="letterboxdlogo"/>
+            <a href="/">
+                <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="statsboxdlogo" class="logoup"/>
             </a>
             <span class="madeby">Project made by GiuDiMax</span>
         </div>
@@ -164,7 +163,7 @@
                         <span>Films by week</span>
                         <div class="line"></div>
                     </div>
-                    <div class="chart-container">
+                    <div class="chart-container weekChartcontainer">
                         <div id="watchedWeek" class="weekChart"></div>
                     </div>
                     <div class="years">
@@ -197,7 +196,7 @@
                         <div class="line"></div>
                     </div>
                     <div class="msy">
-                        <div class="msx">
+                        <div class="msx msx1">
                             <span>First Film</span>
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ user['stats'+year].firstMovie[0].info.uri }}">
@@ -223,7 +222,7 @@
                                 {%endfor%}
                             </div>
                         </div>
-                        <div class="msx">
+                        <div class="msx msx1">
                             <span>Last Film</span>
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ user['stats'+year].lastMovie[0].info.uri }}">
@@ -277,7 +276,7 @@
                             {% set num =  user['stats'+year]['mostWatchedgenres_' + type + 's']|length %}
                         {% endif %}
                         {% for i in range(num) %}
-                                <a class="clickable label2" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}{{type}}/{{ user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id'] }}">
+                                <a class="clickable label2" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}{{type}}/{{ user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id'] }}">
 
                                     <span class="leftText">
                                         {{ firstUpper(user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id']) }}
@@ -342,7 +341,7 @@
                     <span>Most Watched</span>
                     <div class="line"></div>
                 </div>
-                <div class="filmList hideLast">
+                <div class="filmList hideLast2">
                         {%for element in user.mostWatched %}
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
@@ -470,7 +469,7 @@
                                     {% if type[2]=='w' %}
                                         <a class="sottotitolo" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.sum }} films</a>
                                     {% else %}
-                                        <span class="sottotitolo">★ {{ "%.1f"|format(element.average/2) }}</span>
+                                        <span class="sottotitolo">★ {{ "%.1f"|format(ifNull0_divide2(element.average)) }}</span>
                                     {% endif %}
                                 </div>
                             {%endfor%}
@@ -499,19 +498,18 @@
                             <span class="titlerole">{{ role[2] }}</span>
                             {%for element in user['stats'+year][type+role[0]]%}
                                 <div class="{{ type }}limit {% if loop.index > 5 %}hide{% endif %}">
-                                    <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}/with/{{ role[1] }}/{{ element._id }}">
+                                    <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}/with/{{ role[1] }}/{{ element._id }}">
                                          {% if element.info|length > 0 %}
                                             {{ element.info[0].name }}
                                         {% else %}
                                             {{ firstUpperBis(element._id) }}
                                         {% endif %}
-
                                     </a>
                                     <span class="sottotitolo">
                                         {% if type == 'mostWatched' %}
                                             {{ element.sum }}
                                         {% else %}
-                                            {{ '%0.1f'| format(element.average/2) }}
+                                            {{ '%0.1f'| format(zeroIfNone(element.average)/2) }}
                                         {% endif %}
                                     </span>
                                 </div>
@@ -525,6 +523,33 @@
                 {%endfor%}
             </section>
 
+            {% if year != '' %}
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Highs and Lows</span>
+                    <div class="line"></div>
+                </div>
+                <div class="highLow">
+                    {% for type in [['bestMovie', 'Highest Average'],['worstMovie', 'Lowest Average'],
+                                    ['mostPopularMovie', 'Most Popular'],['lessPopularMovie', 'Most Obscure']] %}
+                    <div class="singleFilm" >
+                        <span class="suptitle">{{ type[1] }}</span>
+                        <a class="poster" href="{{ lbdurl }}film/{{ user['stats'+year][type[0]][0].info.uri }}">
+                            {% if 'images' in user['stats'+year][type[0]][0].info %}
+                                <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year][type[0]][0].info.images.poster, 110, 165) }}" alt="{{ user['stats'+year][type[0]][0].info.uri }}" />
+                            {% else %}
+                                <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" alt="{{ user['stats'+year][type[0]][0].info.uri }}" />
+                            {% endif %}
+                        </a>
+                        <div class="sottofilm">
+                            <img src="{{ url_for('static', filename='images/orangestar.jpg') }}" /><span class="sottotitolo stellamedia">{{ '{0:0.1f}'.format(user['stats'+year][type[0]][0].info.rating.average) }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
             <section class="wMap noselect">
                 <span class="wmTitle">World Map</span>
                 <div class="worldmap noselect" id="world-map"></div>
@@ -532,19 +557,15 @@
         </div>
     </body>
     <footer>
+
+        <script src="//jvectormap.com/js/jquery-jvectormap-world-mill.js" async onload="worldMapx()"></script>
+        <script src="//code.highcharts.com/highcharts.js" async onload="chartFunc()"></script>
+        <script src="//rawgit.com/highcharts/rounded-corners/master/rounded-corners.js" async></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js" async onload="lazyLoadFunc()"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js" async></script>
         <script>
             $(document).ready(function () {
-
-                var isMobile = false;
-                if($('#isMobile').is(':visible')) {
-                    isMobile = true;
-                }
-
                 var popupOpen = false;
-
-                $(function() {
-                    $('.lazy').Lazy();
-                });
 
                 $('.updatebutton').click(function(){
                     $('.loader').removeClass('hide');
@@ -570,6 +591,85 @@
                     $(this).siblings().removeClass('active');
                 })
 
+
+            })
+        </script>
+        <script>
+            function worldMapx() {
+
+                var isMobile = false;
+                if($('#isMobile').is(':visible')) {
+                    isMobile = true;
+                }
+
+                //WORLDMAP
+                    var worldData = {
+                        {%for element in user['stats'+year].totalcountry%}
+                            '{{ element['info']['_id'] }}': {{ element['sum'] }},
+                        {%endfor%}
+                    };
+
+                    var worldDataUri = {
+                        {%for element in user['stats'+year].totalcountry%}
+                            '{{ element['info']['_id'] }}': '{{ element['info']['uri'] }}',
+                        {%endfor%}
+                    };
+
+                    $('#world-map').vectorMap({
+                      map: 'world_mill',
+                      backgroundColor: "",
+                      series: {
+                        regions: [{
+                          values: worldData,
+                          scale: ['#007834', '#00e054'],
+                        }]
+                      },
+                      tooltip: {
+                          enabled: false,
+                      },
+                      regionStyle: {
+                        initial: {
+                            fill: '#303c44'
+                        },
+                        hover:{
+                            fill: '#40bcf4'
+                        }
+                      },
+                      onRegionTipShow: function(e, el, code) {
+                          var text = "0"
+                          if (typeof worldDataUri[code] !== 'undefined') {
+                              text = worldData[code]
+                          }
+                          el.html($("<span/>", {'class': 'ttTitle', 'html': el.html()}));
+                          el.append($("<br/>"));
+                          el.append($("<span/>", {'class': 'ttSubtitle', 'html': "Films watched: " + text}));
+                          el.html($("<div/>", {'class': 'maptt', 'html': el.html()}));
+                          el.append($("<div/>", {'class': 'ttPointer'}));
+                          el.html($("<a/>", {'class': 'maptt2', 'onClick':'alert(0);', 'href': 'www.google.com', 'html': el.html()}));
+                      },
+                      onRegionClick: function(e, el, code){
+                          if (!isMobile) {
+                            clickMap(el);
+                          }
+                      },
+                      onMarkerClick: function(e, code){
+                          alert(code);
+                      },
+                    });
+
+                    function clickMap(el){
+                          if (typeof worldDataUri[el] !== 'undefined') {
+                              {% if year == '' %}
+                                  location.href = '{{ lbdurl }}{{ user._id }}/films/country/' + worldDataUri[el] + '/';
+                              {% else %}
+                                  location.href = '{{ lbdurl }}{{ user._id }}/films/diary/for/{{ yearnum }}/country/' + worldDataUri[el] + '/by/rating';
+                              {% endif %}
+                          }
+                    }
+         }
+        </script>
+        <script>
+            function chartFunc() {
                 {% if year == '' %}
 
                 //BYYEARCHART
@@ -611,9 +711,7 @@
                             point: {
                                 events: {
                                     click: function () {
-                                        if (!isMobile) {
-                                            location.href = '{{ lbdurl }}{{ user._id }}/films/year/' + this.options.name + "/";
-                                        }
+                                        location.href = '{{ lbdurl }}{{ user._id }}/films/year/' + this.options.name + "/";
                                     }
                                 }
                             }
@@ -638,7 +736,7 @@
                         shadow: false,
                         backgroundColor: null,
                     },
-                    plotOptions: {column: {pointPadding: 0.2, borderWidth: 0, borderRadius: 3, groupPadding: 0,}},
+                    plotOptions: {column: {pointPadding: 0.1, borderWidth: 0, borderRadius: 3, groupPadding: 0.1,}},
                     series: [{
                             data: [
                                 {%for element in user['stats'+year].totalyear%}
@@ -655,9 +753,7 @@
                             point: {
                                 events: {
                                     click: function () {
-                                        if (!isMobile) {
-                                            location.href = '{{ lbdurl }}{{ user._id }}/films/year/' + this.options.name + "/";
-                                        }
+                                        location.href = '{{ lbdurl }}{{ user._id }}/films/year/' + this.options.name + "/";
                                     }
                                 }
                             }
@@ -687,10 +783,10 @@
                         shadow: false,
                         backgroundColor: null,
                     },
-                    plotOptions: {column: {pointPadding: 0.08, borderWidth: 0, borderRadius: 2, groupPadding: 0,}},
+                    plotOptions: {column: {pointPadding: 0.1, borderWidth: 0, borderRadius: 2, groupPadding: 0.1,}},
                     series: [{
                             data: [
-                                {%for element in fill_array(user['stats'+year].week, 1, 54) %}
+                                {%for element in fill_array(user['stats'+year].week, 1, 53) %}
                                     {name: "{{ element._id }}", y: {{ element.sum }} + 0.1,
                                             {% if element.sum == 0 %}color: "#445566"{% endif %}
                                     },
@@ -704,9 +800,7 @@
                             point: {
                                 events: {
                                     click: function () {
-                                        if (!isMobile) {
-                                            location.href = '{{ lbdurl }}{{ user._id }}/films/diary/for/{{ yearnum }}/week/' + this.options.name + "/";
-                                        }
+                                        location.href = '{{ lbdurl }}{{ user._id }}/films/diary/for/{{ yearnum }}/week/' + this.options.name + "/";
                                     }
                                 }
                             }
@@ -740,10 +834,10 @@
                         shadow: false,
                         backgroundColor: null,
                     },
-                    plotOptions: {column: {pointPadding: 0.05, borderWidth: 0, borderRadius: 2, groupPadding: 0,}},
+                    plotOptions: {column: {pointPadding: 0.05, borderWidth: 0, borderRadius: 2, groupPadding: 0.05,}},
                     series: [{
                             data: [
-                                {%for element in fill_array(user['stats'+year].dayOfWeek, 1, 8) %}
+                                {%for element in fill_array(user['stats'+year].dayOfWeek, 1, 7) %}
                                     {name: "{{ element._id }}", y: {{ element.sum }} + 0.1
                                     },
                                 {%endfor%}
@@ -758,7 +852,7 @@
                 });
 
                 Highcharts.chart('ratingSpread', {
-                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0, height: 150, width: 330},
+                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0, height: 150},
                     xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
                     legend:{enabled:false},
                     title: {text:null},
@@ -777,7 +871,7 @@
                         shadow: false,
                         backgroundColor: null,
                     },
-                    plotOptions: {column: {pointPadding: 0.05, borderWidth: 0, borderRadius: 2, groupPadding: 0,}},
+                    plotOptions: {column: {pointPadding: 0, borderWidth: 0, borderRadius: 2, groupPadding: 0.1,}},
                     series: [{
                             data: [
                                 {%for element in fill_array(user['stats'+year].rating[1:], 1, 10) %}
@@ -794,9 +888,7 @@
                             point: {
                                 events: {
                                     click: function () {
-                                        if (!isMobile) {
-                                            location.href = '{{ lbdurl }}{{ user._id }}/films/diary/for/{{ yearnum }}/rated/' + this.options.name + "/";
-                                        }
+                                        location.href = '{{ lbdurl }}{{ user._id }}/films/diary/for/{{ yearnum }}/rated/' + String(parseInt(this.options.name)/2) + "/";
                                     }
                                 }
                             }
@@ -824,7 +916,11 @@
                     series: [{
                             data: [
                                 {name: '', y: {{ user['stats'+year][type][0].sum/user['stats'+year].total[0].movies }}, color: '#00e054'},
-                                {name: '', y: {{ user['stats'+year][type][1].sum/user['stats'+year].total[0].movies  }}, color: '#456'},],
+                                {% if user['stats'+year][type]|length > 1 %}
+                                    {name: '', y: {{ user['stats'+year][type][1].sum/user['stats'+year].total[0].movies  }}, color: '#456'},],
+                                {% else %}
+                                    {name: '', y: 0, color: '#456'},],
+                                {% endif %}
                             states: {hover: {halo: {size:0}, animation: {duration:0}}, inactive: {enabled:false, opacity:1},},
                         }],
                 });
@@ -832,70 +928,12 @@
 
                 {% endif %}
 
-
-                //WORLDMAP
-                var worldData = {
-                    {%for element in user['stats'+year].totalcountry%}
-                        '{{ element['info']['_id'] }}': {{ element['sum'] }},
-                    {%endfor%}
-                };
-
-                var worldDataUri = {
-                    {%for element in user['stats'+year].totalcountry%}
-                        '{{ element['info']['_id'] }}': '{{ element['info']['uri'] }}',
-                    {%endfor%}
-                };
-
-                $('#world-map').vectorMap({
-                  map: 'world_mill',
-                  backgroundColor: "",
-                  series: {
-                    regions: [{
-                      values: worldData,
-                      scale: ['#007834', '#00e054'],
-                    }]
-                  },
-                  tooltip: {
-                      enabled: false,
-                  },
-                  regionStyle: {
-                    initial: {
-                        fill: '#303c44'
-                    },
-                    hover:{
-                        fill: '#40bcf4'
-                    }
-                  },
-                  onRegionTipShow: function(e, el, code) {
-                      var text = "0"
-                      if (typeof worldDataUri[code] !== 'undefined') {
-                          text = worldData[code]
-                      }
-                      el.html($("<span/>", {'class': 'ttTitle', 'html': el.html()}));
-                      el.append($("<br/>"));
-                      el.append($("<span/>", {'class': 'ttSubtitle', 'html': "Films watched: " + text}));
-                      el.html($("<div/>", {'class': 'maptt', 'html': el.html()}));
-                      el.append($("<div/>", {'class': 'ttPointer'}));
-                      el.html($("<a/>", {'class': 'maptt2', 'onClick':'alert(0);', 'href': 'www.google.com', 'html': el.html()}));
-                  },
-                  onRegionClick: function(e, el, code){
-                      if (!isMobile) {
-                        clickMap(el);
-                      }
-                  },
-                  onMarkerClick: function(e, code){
-                      alert(code);
-                  },
-                });
-
-                function clickMap(el){
-                      if (typeof worldDataUri[el] !== 'undefined') {
-                          location.href = '{{ lbdurl }}{{ user._id }}/films/country/' + worldDataUri[el] + '/';
-                      }
-                }
-
-
-            })
+            }
+        </script>
+        <script>
+            function lazyLoadFunc(){
+                $('.lazy').Lazy();
+            }
         </script>
     </footer>
 </html>

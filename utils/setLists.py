@@ -49,5 +49,6 @@ def updateLists():
             db.Lists.update_one({'_id': list[0]}, {'$set': {'name': list[1], 'num': len(uris), 'uris': uris, 'isStats': True, 'order': list[2]}})
         db.Film.update_many({"uri": {"$in": uris}}, {'$push': {'statsLists': list[0]}})
 
-#updateLists()
-        
+
+if __name__ == '__main__':
+    updateLists()

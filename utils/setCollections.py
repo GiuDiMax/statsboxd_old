@@ -9,6 +9,7 @@ from mongodb import db
 from datetime import datetime, timedelta
 from config import *
 
+
 def fill_db(url, soup):
     try:
         json2 = {}
@@ -21,20 +22,24 @@ def fill_db(url, soup):
     except:
         pass
 
+
 async def get(url, session):
     async with session.get(url='https://letterboxd.com/films/in/' + url + "/") as response:
         resp = await response.read()
         soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div']))
         fill_db(url, soup)
 
+
 async def main2(urls):
     async with aiohttp.ClientSession() as session:
         await asyncio.gather(*[get(url, session) for url in urls])
+
 
 def fillMongodb(urls):
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
     asyncio.get_event_loop().run_until_complete(main2(urls))
     #asyncio.get_event_loop().run_until_complete(main2(urls))
+
 
 def mainSetCollection():
     json_operations = {}
@@ -60,7 +65,9 @@ def mainSetCollection():
         for y in x:
             for z in x[y]:
                 uris.append(z['_id'])
+    print(len(uris))
     fillMongodb(uris)
+
 
 def mainSetCollection2():
     while True:
@@ -69,3 +76,7 @@ def mainSetCollection2():
             break
         except:
             pass
+
+
+if __name__ == '__main__':
+    mainSetCollection2()

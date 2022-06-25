@@ -1,12 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for
-from username import getFromusername, fullUpdate
-import gunicorn
-import time
-from setCollections import mainSetCollection2
-from setPeople import mainSetNames2
-from setLists import updateLists
+from flask import Flask, render_template, redirect, url_for
+from username import checkUsername, fullUpdate
+from utils.setCollections import mainSetCollection2
+from utils.setPeople import mainSetNames2
+from utils.setLists import updateLists
 from config import *
-from datetime import datetime
+from utils.refreshLastTwoYears import refresh
+from utils.cleanUsers import cleanUsers
+from getUsersList import *
+import sys
 
 app = Flask(__name__)
 
@@ -14,42 +15,55 @@ app = Flask(__name__)
 @app.route('/<username>/')
 def main(username):
     if '.ico' not in username:
-        if beta_test and username.lower() not in beta_users:
-            return render_template('username.html')
-        if username.lower() == 'adminupdate':
-            mainSetNames2()
+        if username.lower() == 'update':
             mainSetCollection2()
             updateLists()
+            cleanUsers()
             return render_template('username.html')
-        user = getFromusername(username.lower())
+        if username.lower() == 'refresh':
+            refresh()
+            return render_template('username.html')
+        if username.lower() == 'people':
+            mainSetNames2()
+            return render_template('username.html')
+        if username.lower() == 'reset':
+            sys.exit()
+        print(username.lower())
+        print(users_list)
+        if username.lower() not in users_list:
+
+            return render_template('noallowed.html')
+        user = checkUsername(username.lower())
         if user is not None:
-            if 'stats' in user:
+            #try:
                 return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
-            else:
-                return redirect('/'+username+"/update/")
+            #except:
+            #    return render_template('error_flask.html')
+        return render_template('loading.html', redirect=(username.lower() + "/update/"))
     return render_template('username.html')
 
 
 @app.route('/<username>/<year>')
 def main_year(username, year):
     if '.ico' not in username:
-        if beta_test and username.lower() not in beta_users:
-            return render_template('username.html')
-        user = getFromusername(username.lower())
+        #if beta_test and username.lower() not in beta_users:
+        #    return render_template('username.html')
+        user = checkUsername(username.lower())
         if user is not None:
-            if 'stats' in user:
-                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year='_'+year, yearnum=year)
-            else:
-                return redirect('/'+username+"/update/")
+            return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year='_'+year, yearnum=year)
+        return render_template('loading.html', redirect=(username.lower() + "/update/"))
     return render_template('username.html')
 
 
 @app.route('/<username>/update/')
 def main_update(username):
-    if beta_test and username.lower() not in beta_users:
-        return render_template('username.html')
-    fullUpdate(username.lower())
-    return redirect('/' + username)
+    #if beta_test and username.lower() not in beta_users:
+    #    return render_template('username.html')
+    print("send " + username)
+    if fullUpdate(username.lower()):
+        return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
+    else:
+        return render_template('error.html')
 
 
 @app.route('/')
@@ -157,7 +171,7 @@ def utility_processor9():
     def fill_array(array, min, max):
         array2 = []
         z = 0
-        for i in range(min, max):
+        for i in range(min, max+1):
             try:
                 if array[z]['_id'] == i:
                     array2.append(array[z])
@@ -166,6 +180,7 @@ def utility_processor9():
                     array2.append({'_id': i, 'sum': 0})
             except:
                 array2.append({'_id': i, 'sum': 0})
+        print(array2)
         return array2
     return dict(fill_array=fill_array)
 
@@ -178,6 +193,13 @@ def utility_processor10():
     return dict(date_toshort=date_toshort)
 
 
+@app.context_processor
+def utility_processor11():
+    def zeroIfNone(value):
+        if value is None:
+            return 0
+        return value
+    return dict(zeroIfNone=zeroIfNone)
 
 
 if __name__ == '__main__':
