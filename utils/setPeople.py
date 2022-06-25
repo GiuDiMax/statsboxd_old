@@ -106,15 +106,16 @@ def mainSetNames():
 
     if len(uris) > 0:
         print('da aggiungere persone (con immagini) ' + str(len(uris)))
-        print('da aggiungere persone (no immagini) ' + str(len(uris2)))
-        #fillMongodb(uris, True)
+        fillMongodb(uris, True)
         #fillMongodb(uris2, False)
+        '''
         t1 = Thread(target=fillMongodb, args=(uris, True))
         t2 = Thread(target=fillMongodb, args=(uris2, False))
         t1.start()
         t2.start()
         t1.join()
         t2.join()
+        '''
     elif len(uris2) > 0:
         print('da aggiungere persone (no immagini) ' + str(len(uris2)))
         fillMongodb(uris2, False)
