@@ -24,9 +24,7 @@ def fill_db(url, soup, image):
             json1['tmdbImg'] = x.text.rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
         except:
             pass
-        db.People.update_one({'_id': json1['_id']}, {'$set': json1})
-    else:
-        db.People.insert_one(json1)
+    db.People.update_one({'_id': json1['_id']}, {'$set': json1})
 
 
 async def get(url, session, image):
@@ -48,13 +46,13 @@ def fillMongodb2(urls, image):
 
 
 def fillMongodb(urls, image):
-    if len(urls) > 1000:
-        urlsx = urls[:1000]
+    if len(urls) < 1000:
+        fillMongodb2(urls, image)
     else:
-        urlsx = urls
-    fillMongodb2(urlsx, image)
-    print("added 1000 new records")
-    fillMongodb(urls[1000:], image)
+        urlsx = urls[:1000]
+        fillMongodb2(urlsx, image)
+        print("added 1000 new records")
+        fillMongodb(urls[1000:], image)
 
 
 def mainSetNames():
@@ -107,7 +105,6 @@ def mainSetNames():
     if len(uris) > 0:
         print('da aggiungere persone (con immagini) ' + str(len(uris)))
         fillMongodb(uris, True)
-        #fillMongodb(uris2, False)
         '''
         t1 = Thread(target=fillMongodb, args=(uris, True))
         t2 = Thread(target=fillMongodb, args=(uris2, False))
@@ -116,7 +113,7 @@ def mainSetNames():
         t1.join()
         t2.join()
         '''
-    elif len(uris2) > 0:
+    if len(uris2) > 0:
         print('da aggiungere persone (no immagini) ' + str(len(uris2)))
         fillMongodb(uris2, False)
 
