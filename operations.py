@@ -10,6 +10,7 @@ from config import exclude_people
 
 json0 = []
 
+
 def fill_db(url, soup):
     json1 = {}
     json_lb = json.loads(soup.find("script", {"type": "application/ld+json"}).text.split('*/', 1)[1].split('/*', 1)[0])
@@ -39,7 +40,7 @@ def fill_db(url, soup):
 
     # RUNTIME
     try:
-        json1['runtime'] = int(soup.find('p', class_="text-link text-footer").text.strip().split("mins", 1)[0].strip())
+        json1['runtime'] = int(soup.find('p', class_="text-link text-footer").text.replace("Adult", "").strip().split("min", 1)[0].strip().replace(",", ""))
     except:
         pass
 
@@ -79,8 +80,12 @@ def fill_db(url, soup):
         for actor in actors:
             try:
                 code = actor['href'].split('/actor/')[-1][:-1]
+                try:
+                    title = actor['title']
+                except:
+                    title = ""
                 #if 'uncredited' not in actor['title'] and 'voice' not in actor['title']:
-                if code not in exclude_people and 'uncredited' not in actor['title']:
+                if code not in exclude_people and 'uncredited' not in title:
                     json1['actors'].append(code)
             except:
                 pass
@@ -131,11 +136,14 @@ def fill_db(url, soup):
     #DATE
     json1['updateDate'] = datetime.today()
     json1['modifiedDate'] = datetime.strptime(json_lb['dateModified'], '%Y-%m-%d')
+    if __name__ == '__main__':
+        print(json1)
     try:
         db.Film.insert_one(json1)
     except:
         db.Film.update_one({'_id': json1['_id']}, {'$set': json1})
     return json1
+
 
 async def get(url, session):
     async with session.get(url='http://letterboxd.com/film/' + url + "/") as response:
@@ -143,13 +151,19 @@ async def get(url, session):
             soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div', 'a', 'p', 'h1', 'small', 'script']))
             json0.append(fill_db(url, soup))
 
+
 async def main2(urls):
     async with aiohttp.ClientSession() as session:
         await asyncio.gather(*[get(url, session) for url in urls])
         return json0
+
 
 def fillMongodb(urls):
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
     asyncio.get_event_loop().run_until_complete(main2(urls))
     #return asyncio.get_event_loop().run_until_complete(main2(urls))
 
+
+if __name__ == '__main__':
+    fillMongodb(['deep-throat'])
+    fillMongodb(['the-batman'])

@@ -43,5 +43,8 @@ def getStats(username):
             if not check:
                 y2.append({'_id': i, 'average': 0, 'sum': 0})
         y['totalyear'] = y2
-
         db.Users.update_one({'_id': username}, {'$set': {'stats': y}})
+
+
+if __name__ == '__main__':
+    getStats('lordofthebushes')

@@ -6,11 +6,8 @@ from mongodb import db
 from datetime import datetime
 from stats import getStats
 from operations import fillMongodb
-from setPeople import mainSetNames2
 from threading import Thread
 import time
-from multiprocessing import Pool
-import sys
 from year_stats import year_stats
 global watched_list, diary_list
 
@@ -18,7 +15,9 @@ global watched_list, diary_list
 def diary_function(sup):
     diaryx = {}
     diaryx['id'] = int(sup.find("div", class_="film-poster")['data-film-id'])
-    diaryx['dRating'] = int(sup.find("td", class_="td-rating rating-green").input['value'])
+    dRating = int(sup.find("td", class_="td-rating rating-green").input['value'])
+    if dRating > 0:
+        diaryx['dRating'] = dRating
     test = sup.find("td", class_="td-like center diary-like")
     if "icon-liked" in str(test):
         diaryx['dLike'] = True
@@ -63,9 +62,7 @@ async def get_watched3(url, session, diary):
                 rating = sup.p.span['class'][-1]
                 if 'rated' in rating:
                     rating = int(rating.split("-", 1)[1])
-                else:
-                    rating = ""
-                watched['rating'] = rating
+                    watched['rating'] = rating
             except:
                 pass
             if len(sup.p.find_all('span')) > 1:
@@ -138,6 +135,7 @@ def threadxdiary(username):
 def fullUpdate(username):
     global watched_list, diary_list
     start = time.time()
+    print('analysis username')
     t1 = Thread(target=threadxwatched, args=(username,)) #WATCHED
     t2 = Thread(target=threadxdiary, args=(username,)) #DIARY
     t3 = Thread(target=threadgeneral, args=(username,)) #GENERAL
@@ -147,9 +145,12 @@ def fullUpdate(username):
     t1.join()
     t2.join()
     t3.join()
-    fullOperation(username, watched_list)
-    print('All op in: ' + str(time.time() - start))
-
+    if len(watched_list) > 0:
+        fullOperation(username, watched_list)
+        print('All op in: ' + str(time.time() - start))
+        return True
+    else:
+        return False
 
 def fullOperation(username, watched=None):
     if watched is None:
@@ -180,7 +181,7 @@ def fullOperation(username, watched=None):
             break
 
     #y = None
-    getStats(username)
+    #getStats(username)
     #db.Users.update_one({'_id': username}, {'$set': {'stats': y}})
     start4 = time.time()
     t1 = Thread(target=getStats, args=(username,))
@@ -199,4 +200,10 @@ def getFromusername(username):
     fullUpdate(username)
     return db.Users.find_one({"_id": username})
 
-#fullUpdate('giudimax')
+
+def checkUsername(username):
+    return db.Users.find_one({"_id": username})
+
+
+if __name__ == '__main__':
+    fullUpdate('lordofthebushes')

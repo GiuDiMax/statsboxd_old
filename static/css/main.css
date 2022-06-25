@@ -9,32 +9,9 @@
     text-align: center;
 }
 
-@font-face {
-	font-family: TiemposTextWeb-Semibold;
-	font-style: normal;
-	font-weight: 400;
-	src: url('/static/fonts/TiemposTextWeb-Semibold.woff') format("woff");
-}
-
-@font-face {
-	font-family: Graphik-Light-Web;
-	font-style: normal;
-	font-weight: 400;
-	src: url('/static/fonts/Graphik-Light-Web.woff') format("woff");
-}
-
-@font-face {
-	font-family: Graphik-Regular-Web;
-	font-style: normal;
-	font-weight: 400;
-	src: url('/static/fonts/Graphik-Regular-Web.woff') format("woff");
-}
-
-@font-face {
-	font-family: Graphik-Semibold-Web;
-	font-style: normal;
-	font-weight: 400;
-	src: url('/static/fonts/Graphik-Semibold-Web.woff') format("woff");
+.shortTitle{
+    text-align: center;
+    padding: 5% 10%;
 }
 
 body{
@@ -50,6 +27,10 @@ h1, h2, h3, h4, h5, label, span, a {
 
 span{
     font-family: Graphik-Semibold-Web, sans-serif;
+}
+
+.logoup{
+    width: 220px;
 }
 
 .madeby{
@@ -646,16 +627,21 @@ span{
     display:flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 2%;
 }
 
 .singleFilm{
     width: 12%;
-    margin: 1% 2%;
+    margin: 1%;
     display:flex;
     flex-direction: column;
     align-content: center;
     justify-content: center;
+}
+
+.poster img{
+    width:100%;
 }
 
 .sottotitolo{
@@ -676,18 +662,17 @@ span{
     font-size: 18px !important;
 }
 
+#pastYearHRF{
+    flex-wrap:wrap !important;
+}
+
 .poster{
-    /*height: 167px;
-    width: 112px;*/
-    margin-left:auto;
-    margin-right:auto;
+    /*margin-left:auto;
+    margin-right:auto;*/
 }
 
 .poster img{
     margin:1px;
-    /*background-image: linear-gradient(90deg,hsla(0,0%,100%,0) 0,hsla(0,0%,100%,.5) 50%,hsla(0,0%,100%,0));
-    background-repeat: no-repeat;
-    background-size: 100% 1px;*/
     border-radius: 4px;
     box-sizing: border-box;
     box-shadow: 0 0 0 1px rgb(221 238 255 / 35%);
@@ -921,13 +906,19 @@ span{
 }
 
 .secHRF{
-    row-gap: 3%;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 0;
 }
 
 .secHRF .singleFilm{
-    width: 7.5%;
+    width: 10%;
+    margin: 1% !important;
 }
 
+.secHRF img{
+    width: 100%;
+}
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
@@ -1192,6 +1183,51 @@ span{
     color: #9ab;
 }
 
+.highLow{
+    display:flex;
+    flex-direction: row;
+    flex-basis: 100%;
+    gap: 12%;
+    justify-content: space-between;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.highLow .singleFilm{
+    flex-basis: 25%;
+}
+
+.sottofilm{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.highLow .suptitle{
+    color: #fff;
+    font-family: Graphik-Regular-Web,sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 15px;
+}
+
+.highLow .stellamedia{
+    color: #fff;
+    font-family: Graphik-Light-Web,sans-serif;
+    font-size: 24px;
+}
+
+.centerimg{
+    display: block;
+    margin-left:auto;
+    margin-right:auto;
+    width:25%;
+}
+
+
 @media only screen and (min-width: 1200px) {
     #isMobile{
         display:none;
@@ -1204,6 +1240,16 @@ span{
     #isMobile{
         height: 0;
         display:block !important;
+    }
+
+    .logoup{
+        width:200px;
+        margin-top:10px;
+    }
+
+    .madeby{
+        margin-bottom:5px;
+        font-size: 10px;
     }
 
     .hideMobile{
@@ -1223,7 +1269,8 @@ span{
         display:flex;
         flex-direction: column;
         justify-content: center;
-        gap: 10px;
+        gap: 5px;
+        height:auto;
     }
 
     .mainT .popupdiv {
@@ -1323,6 +1370,10 @@ span{
         height:100% !important;
     }
 
+    .filmList{
+        gap: 3%;
+    }
+
     .filmList .singleFilm{
         width: 17%;
         margin: 0;
@@ -1333,11 +1384,19 @@ span{
         flex-direction:column;
     }
 
+    .stelline, .bigsotto{
+        font-size: 12px !important;
+    }
+
     .filmList{
         row-gap: 20px;
     }
 
-    .hideLast > .singleFilm:nth-last-of-type(-n+2){
+    .hideLast > .singleFilm:nth-child(11), .hideLast > .singleFilm:nth-child(12){
+        display:none;
+    }
+
+    .hideLast2 > .singleFilm:nth-child(16), .hideLast2 > .singleFilm:nth-child(17), .hideLast2 > .singleFilm:nth-child(18){
         display:none;
     }
 
@@ -1412,12 +1471,14 @@ span{
 
     .decPosters {
         width: 100%;
-        gap: 5px;
+        gap: 3%;
+        row-gap: 4px;
     }
 
     .decPosterImg {
-        width: 18%;
-        height: 40%;
+        width: 17%;
+        height: 100%;
+        margin: 0!important;
     }
 
     .chart-container, .years{
@@ -1439,4 +1500,147 @@ span{
         width:100%;
     }
 
+    .ratingSpreadsection{
+        width: 343px;
+        position: relative;
+        right: 8%;
+    }
+
+    .piecharts{
+        flex-direction: column;
+        row-gap: 20px;
+    }
+
+    .numbersStats{
+        flex-basis:100%;
+        gap: 5%;
+        row-gap:15px;
+    }
+
+    .numbersStats div{
+        flex-basis: 40%;
+    }
+
+    .secHRF{
+        flex-basis: 100%;
+        justify-content: center;
+        column-gap: 2%;
+        flex-wrap: wrap;
+    }
+
+    .secHRF .singleFilm{
+        flex-basis: 20%;
+    }
+
+    .watchedDivided{
+        flex-basis: 100%;
+    }
+
+    .wd1x .big{
+        font-size: 24px;
+    }
+
+    .wd1x .small{
+        font-size: 12px;
+    }
+
+    .wd1 img{
+        display: none;
+    }
+
+    .wd1x{
+        width: 20%;
+    }
+
+    .wd1{
+        flex-basis: 100%;
+    }
+
+    .wd2{
+        flex-basis:70%;
+        margin-left:auto;
+        margin-right:auto;
+        margin-top: 10px;
+        position: relative;
+        top: 40px;
+    }
+
+    .weekChartcontainer{
+        margin:0 3%;
+    }
+
+    .msy{
+        flex-wrap: wrap;
+    }
+
+    .msy span{
+        font-size: 12px !important;
+        margin: 15px 0;
+    }
+
+    .msy .msx2{
+        order: 3;
+        flex-basis: 100%;
+    }
+
+    .msx1{
+        margin: 0 8%;
+    }
+
+    .mw2{
+        gap: 3%;
+        flex-basis: 100%;
+
+    }
+
+    .mw2 .singleFilm{
+        width: 100%;
+        flex-basis: 22%;
+    }
+
+    .highLow{
+        justify-content: center;
+        gap: 10%;
+        flex-wrap: wrap;
+        row-gap: 20px;
+    }
+
+    .highLow .singleFilm{
+        flex-basis: 35%;
+    }
+
+    .highLow .suptitle{
+        font-size: 14px;
+    }
+
+    .highLow img{
+    }
+
+    .highLow .stellamedia{
+        font-size: 22px
+    }
+
+    .sottofilm{
+        flex-direction: row !important;
+        margin-top: 10px;
+    }
+
+    .piech2{
+        width:50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .stellineBig{
+        font-size:15px !important;
+        margin-top:5px;
+    }
+
+    .highLow{
+        width:100%;
+    }
+
+    .centerimg{
+        width:85%;
+    }
 }
