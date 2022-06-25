@@ -7,7 +7,6 @@ import requests
 
 global uri
 
-
 async def get_watched3(url, session):
     global uris
     async with session.get(url=url) as response:
@@ -50,5 +49,5 @@ def updateLists():
         db.Film.update_many({"uri": {"$in": uris}}, {'$push': {'statsLists': list[0]}})
 
 
-if __name__ == '__main__':
-    updateLists()
+#if __name__ == '__main__':
+#    updateLists()
