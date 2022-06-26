@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from username import checkUsername, fullUpdate
 from utils.setCollections import mainSetCollection2
 from utils.setPeople import mainSetNames2
@@ -7,6 +7,7 @@ from config import *
 from utils.refreshLastTwoYears import refresh
 from utils.cleanUsers import cleanUsers
 from getUsersList import *
+from mongodb import db
 import sys
 
 app = Flask(__name__)
@@ -28,6 +29,10 @@ def main(username):
             return render_template('username.html')
         if username.lower() == 'reset':
             sys.exit()
+        if username.lower() == 'faq':
+            return render_template('faq.html')
+        if username.lower() == 'contact':
+            return render_template('contact.html')
         print("requested: " + username.lower())
         if username.lower() not in users_list:
             return render_template('noallowed.html')
@@ -67,6 +72,12 @@ def main_update(username):
 @app.route('/')
 def main_std():
     return render_template('username.html')
+
+
+@app.route('/handle_data', methods=['POST'])
+def handle_data():
+    db.Suggestion.insert_one({'text': request.form['suggestion']})
+    return render_template('success.html')
 
 
 @app.context_processor
