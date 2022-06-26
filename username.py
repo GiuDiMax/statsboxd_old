@@ -10,6 +10,7 @@ from threading import Thread
 import time
 from year_stats import year_stats
 global watched_list, diary_list
+from datetime import datetime
 
 
 def diary_function(sup):
@@ -77,7 +78,7 @@ async def get_watched2(urlx, diary):
         await asyncio.gather(*[get_watched3(url, session, diary) for url in urlx])
 
 
-def get_watched(username, diary=False):
+def get_watched(username, diary, fastUpdate):
     global watched_list, diary_list
     watched_list = []
     diary_list = []
@@ -94,7 +95,10 @@ def get_watched(username, diary=False):
         if diary:
             for i in range(pages):
                 if diary:
-                    urls.append('http://letterboxd.com/' + str(username) + '/films/diary/page/' + str(i+1) +"/")
+                    if fastUpdate:
+                        urls.append('http://letterboxd.com/' + str(username) + '/films/diary/for/' + str(datetime.now().year) + '/page/' + str(i+1) +"/")
+                    else:
+                        urls.append('http://letterboxd.com/' + str(username) + '/films/diary/page/' + str(i + 1) + "/")
         else:
             for i in range(pages):
                     urls.append('http://letterboxd.com/' + str(username) + '/films/page/' + str(i + 1) + "/")
@@ -105,40 +109,41 @@ def get_watched(username, diary=False):
     asyncio.get_event_loop().run_until_complete(get_watched2(urls, diary))
 
 
-def threadgeneral(username):
-    start3 = time.time()
-    resp = requests.get('http://letterboxd.com/' + str(username))
-    soup = BeautifulSoup(resp.text, 'lxml', parse_only=SoupStrainer('div', {'id': 'content'}))
-    sup = soup.find('div', class_="profile-summary")
-    db.Users.update_one({'_id': username}, {'$set': {'name': sup.find('h1', {'class': 'title-1'}).text, 'image': sup.find('img')['src']}}, True)
-    print('general in: ' + str(time.time() - start3))
+def threadgeneral(username, fastUpdate=False):
+    if not fastUpdate:
+        start3 = time.time()
+        resp = requests.get('http://letterboxd.com/' + str(username))
+        soup = BeautifulSoup(resp.text, 'lxml', parse_only=SoupStrainer('div', {'id': 'content'}))
+        sup = soup.find('div', class_="profile-summary")
+        db.Users.update_one({'_id': username}, {'$set': {'name': sup.find('h1', {'class': 'title-1'}).text, 'image': sup.find('img')['src']}}, True)
+        print('general in: ' + str(time.time() - start3))
 
 
-def threadxwatched(username):
+def threadxwatched(username, fastUpdate=False):
     global watched_list
     start2 = time.time()
-    get_watched(username, False)
+    get_watched(username, False, fastUpdate)
     db.Users.update_one({'_id': username}, {'$set': {'watched': watched_list}}, True)
     #fullOperation(username, watched_list)
     print('watched in: ' + str(time.time() - start2))
 
 
-def threadxdiary(username):
+def threadxdiary(username, fastUpdate=False):
     global diary_list
     start3 = time.time()
-    get_watched(username, True)
+    get_watched(username, True, fastUpdate)
     db.Users.update_one({'_id': username}, {'$set': {'diary': diary_list}}, True)
     #year_stats(username)
     print('diary in: ' + str(time.time() - start3))
 
 
-def fullUpdate(username):
+def fullUpdate(username, fastUpdate):
     global watched_list, diary_list
     start = time.time()
     print('analysis username')
     t1 = Thread(target=threadxwatched, args=(username,)) #WATCHED
-    t2 = Thread(target=threadxdiary, args=(username,)) #DIARY
-    t3 = Thread(target=threadgeneral, args=(username,)) #GENERAL
+    t2 = Thread(target=threadxdiary, args=(username, fastUpdate)) #DIARY
+    t3 = Thread(target=threadgeneral, args=(username, fastUpdate)) #GENERAL
     t1.start()
     t2.start()
     t3.start()
@@ -146,13 +151,14 @@ def fullUpdate(username):
     t2.join()
     t3.join()
     if len(watched_list) > 0:
-        fullOperation(username, watched_list)
+        fullOperation(username, fastUpdate, watched_list)
         print('All op in: ' + str(time.time() - start))
         return True
     else:
         return False
 
-def fullOperation(username, watched=None):
+
+def fullOperation(username, fastUpdate, watched=None):
     if watched is None:
         username_object = db.Users.find_one({"_id": username})
         watched = username_object['watched']
@@ -185,7 +191,7 @@ def fullOperation(username, watched=None):
     #db.Users.update_one({'_id': username}, {'$set': {'stats': y}})
     start4 = time.time()
     t1 = Thread(target=getStats, args=(username,))
-    t2 = Thread(target=year_stats, args=(username,))
+    t2 = Thread(target=year_stats, args=(username, fastUpdate))
     t1.start()
     t2.start()
     t1.join()
