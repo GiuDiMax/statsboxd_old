@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Error - Statsboxd</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=2.2.0">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="isMobile"></div>
+        <div class="headerbar">
+            <a href="https://letterboxd.com/">
+                <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="statsboxdlogo" class="logoup"/>
+            </a>
+            <div class="navbar">
+                <a href="//letterboxd.com/giudimax/">Project made by GiuDiMax</a>
+                <a href="/faq">FAQ</a>
+                <a href="/contact">Contact Me</a>
+            </div>
+        </div>
+        <div id="content" class="content">
+            <h1>FAQ</h1>
+            <div class="justifytext">
+                <span class="bold">Why among the languages/countries that are most present in my films are there some that I don't think I have seen so many films of?</span>
+                <span>Each film can correspond to multiple languages/countries. Even if a language is only spoken for a few seconds or if a country has countered the production, they will be counted.</span>
+                <span class="bold">Why do the counts in the themes/nano-genres section not correspond to those proposed by letterboxd?</span>
+                <span>In the letterboxd statistics it does not count all the themes and nano-genres present on the movie page. And I still haven't figured out what the choice criterion is. This system counts everything.</span>
+                <span class="bold">Why do some actors have a certain count, but clicking on it, letterboxd proposes another one?</span>
+                <span>Some actors are considered as "cameos" within the film page. Unfortunately there is no way to understand which ones, so I ask you to report this type of difference to me via the form. Specify your username and case.</span>
+                <span class="bold">How can I propose some new stats?</span>
+                <span>Use the form in contact me.</span>
+            </div>
+        </div>
+    </body>
+    <footer>
+    </footer>
+</html>

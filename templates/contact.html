@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Statsboxd</title>
+        <title>Error - Statsboxd</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=2.2.0">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,11 +13,18 @@
             <a href="https://letterboxd.com/">
                 <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="statsboxdlogo" class="logoup"/>
             </a>
+            <div class="navbar">
+                <a href="//letterboxd.com/giudimax/">Project made by GiuDiMax</a>
+                <a href="/faq">FAQ</a>
+                <a href="/contact">Contact Me</a>
+            </div>
         </div>
-        <div class="shortTitle">
-            <h2>Insert your username after "/" in url</h2>
-            <h3>You can find your username in url of your Letterboxd profile page.</h3>
-            <h3>Example: https://statsboxd.ml/NicolasCage</h3>
+        <div id="content" class="content">
+            <h1>Contact me</h1>
+            <form action="{{ url_for('handle_data') }}" method="post" class="formx">
+                <textarea name="suggestion" cols="40" rows="5" class="form"></textarea>
+                <input class="seeallbutton" type="submit">
+            </form>
         </div>
     </body>
     <footer>
