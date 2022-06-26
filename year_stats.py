@@ -67,7 +67,7 @@ def singleYear(year, username):
     db.Users.update_one({'_id': username}, {'$set': {'stats_'+str(year): y}})
 
 
-def year_stats(username):
+def year_stats(username, fastUpdate):
     a = getYears(username)
     #y = {}
     threads = []
@@ -78,15 +78,18 @@ def year_stats(username):
     for y in a:
         k = y
     db.Users.update_one({'_id': username}, {'$set': {'mostWatched': k['mostWatched']}})
-    for x in k['years']:
-        if x['sum'] >= 50:
-            years.append(x['_id'])
-            t = Thread(target=singleYear, args=(x['_id'], username))
-            threads.append(t)
-    for x in threads:
-        x.start()
-    for x in threads:
-        x.join()
+    if fastUpdate:
+        singleYear(datetime.now().year, username)
+    else:
+        for x in k['years']:
+            if x['sum'] >= 50:
+                years.append(x['_id'])
+                t = Thread(target=singleYear, args=(x['_id'], username))
+                threads.append(t)
+        for x in threads:
+            x.start()
+        for x in threads:
+            x.join()
     #years.sort(reverse=True)
     db.Users.update_one({'_id': username}, {'$set': {'years': years}})
 

@@ -2,6 +2,7 @@ from mongodb import db
 from config import *
 from jsonoOpAllTime import json_operations
 
+
 def getStats(username):
     # db.Users.update_one({'username': username}, {'$set': {'a': 'b'}})
 
@@ -25,6 +26,7 @@ def getStats(username):
 
     ob3 = db.Users.aggregate(json_op1)
 
+    y = None
     for x in ob3:
         y = x
 

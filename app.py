@@ -33,11 +33,12 @@ def main(username):
             return render_template('noallowed.html')
         user = checkUsername(username.lower())
         if user is not None:
-            #try:
-                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
-            #except:
-            #    return render_template('error_flask.html')
-        return render_template('loading.html', redirect=(username.lower() + "/update/"))
+            return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
+        if fullUpdate(username.lower(), False):
+            return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/',
+                                   roles=crew_html, year="", yearnum=0)
+        else:
+            return render_template('error.html')
     return render_template('username.html')
 
 
@@ -57,8 +58,7 @@ def main_year(username, year):
 def main_update(username):
     #if beta_test and username.lower() not in beta_users:
     #    return render_template('username.html')
-    print("send " + username)
-    if fullUpdate(username.lower()):
+    if fullUpdate(username.lower(), True):
         return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
     else:
         return render_template('error.html')
