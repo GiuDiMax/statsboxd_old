@@ -91,7 +91,7 @@ def year_stats(username, fastUpdate):
         for x in threads:
             x.join()
     #years.sort(reverse=True)
-    db.Users.update_one({'_id': username}, {'$set': {'years': years}})
+        db.Users.update_one({'_id': username}, {'$set': {'years': years}})
 
 #singleYear(2021, 'giudimax')
 #year_stats('giudimax')
