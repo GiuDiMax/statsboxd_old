@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css') }}?q=1.0.0" media="print" onload="this.media='all'">
         <link rel="stylesheet" href="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.css') }}" media="print" onload="this.media='all'">
         <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="//code.highcharts.com/highcharts.js"></script>
         <script src="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.min.js') }}"></script>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -570,7 +571,7 @@
     </body>
     <footer>
         <script src="//jvectormap.com/js/jquery-jvectormap-world-mill.js" async onload="worldMapx()"></script>
-        <script src="//code.highcharts.com/highcharts.js" async onload="chartFunc()"></script>
+        <!--<script src="//code.highcharts.com/highcharts.js" async onload="chartFunc()"></script>-->
         <script src="//code.highcharts.com/highcharts-more.js" async onload="studioFunc()"></script>
         <script src="//rawgit.com/highcharts/rounded-corners/master/rounded-corners.js" async></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js" async onload="lazyLoadFunc()"></script>
@@ -976,8 +977,8 @@
                         useHTML: true,
                         formatter: function () {
                             let image = '/static/images/studios/' + this.point.extra + '.png';
-                            return '<img width="'+this.point.graphic.width*0.55+'" class="bubbleImg"' +
-                                'style="top:-'+this.point.graphic.height/6+'px"' +
+                            return '<img width="'+this.point.graphic.width*0.7+'" class="bubbleImg"' +
+                                'style="top:-'+((this.point.graphic.height/6)+(Math.pow(this.point.graphic.height,2)*0.001))+'px"' +
                                 'src="'+image+'"/>'
                         }
                       }

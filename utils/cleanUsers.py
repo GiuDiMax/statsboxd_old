@@ -8,4 +8,4 @@ def cleanUsers():
 
 
 if __name__ == '__main__':
-    cleanUsers()
+    db.Users.delete_many({})
