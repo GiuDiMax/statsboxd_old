@@ -950,6 +950,7 @@ span{
     top:45px !important;
 }
 
+
 .ttYear{
     position:relative;
     background-color: #445566;
@@ -963,6 +964,7 @@ span{
     padding: 10px 20px 8px 20px;
     box-shadow: 1px 1px 3px #000;
 }
+
 
 .weekChart .highcharts-tooltip{
     top:20px !important;
@@ -1279,6 +1281,14 @@ span{
     font-size:15px;
     line-height: 22px;
     font-family: sans-serif;
+}
+
+.studiosBubble{
+    height:500px;
+}
+
+.bubbleImg{
+    position:relative;
 }
 
 @media only screen and (min-width: 1200px) {

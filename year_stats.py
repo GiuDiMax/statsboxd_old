@@ -77,10 +77,10 @@ def year_stats(username, fastUpdate):
     years = []
     for y in a:
         k = y
-    db.Users.update_one({'_id': username}, {'$set': {'mostWatched': k['mostWatched']}})
     if fastUpdate:
         singleYear(datetime.now().year, username)
     else:
+        db.Users.update_one({'_id': username}, {'$set': {'mostWatched': k['mostWatched']}})
         for x in k['years']:
             if x['sum'] >= 50:
                 years.append(x['_id'])
