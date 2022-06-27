@@ -346,7 +346,7 @@
                     <div class="line"></div>
                 </div>
                 <div class="filmList hideLast2">
-                        {%for element in user.mostWatched %}
+                        {% for element in user['mostWatched'] %}
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
                                     <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
@@ -355,7 +355,7 @@
                                     <span class="sottotitolo bigsotto">{{ element.sum }} times</span>
                                 </div>
                             </div>
-                        {%endfor%}
+                        {% endfor %}
                 </div>
                 <div class="noflex">
                     <a class="clickable seeallbutton" href="{{ lbdurl}}{{ user._id }}/films/diary/by/diary-count/">see more</a>
@@ -490,7 +490,15 @@
 
             <section class="sectionStats">
                 <div class="sepline">
-                    <span>Crew & Studios</span>
+                    <span>Studios</span>
+                    <div class="line"></div>
+                </div>
+                <div id="studiosBubble" class="studiosBubble"></div>
+            </section>
+
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Crew</span>
                     <div class="line"></div>
                     <span class="clickable active" data-show="crewmostWatched" data-hide="crewbis">Most Watched</span>
                     <span class="clickable" data-show="crewtopRated" data-hide="crewbis">Highest Rated</span>
@@ -561,9 +569,9 @@
         </div>
     </body>
     <footer>
-
         <script src="//jvectormap.com/js/jquery-jvectormap-world-mill.js" async onload="worldMapx()"></script>
         <script src="//code.highcharts.com/highcharts.js" async onload="chartFunc()"></script>
+        <script src="//code.highcharts.com/highcharts-more.js" async onload="studioFunc()"></script>
         <script src="//rawgit.com/highcharts/rounded-corners/master/rounded-corners.js" async></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js" async onload="lazyLoadFunc()"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js" async></script>
@@ -595,6 +603,7 @@
                     $(this).siblings().removeClass('active');
                 })
 
+                chartFunc()
 
             })
         </script>
@@ -921,17 +930,76 @@
                             data: [
                                 {name: '', y: {{ user['stats'+year][type][0].sum/user['stats'+year].total[0].movies }}, color: '#00e054'},
                                 {% if user['stats'+year][type]|length > 1 %}
-                                    {name: '', y: {{ user['stats'+year][type][1].sum/user['stats'+year].total[0].movies  }}, color: '#456'},],
+                                    {name: '', y: {{ user['stats'+year][type][1].sum/user['stats'+year].total[0].movies  }}, color: '#456'}
                                 {% else %}
-                                    {name: '', y: 0, color: '#456'},],
+                                    {name: '', y: 0, color: '#456'}
                                 {% endif %}
+                            ,],
                             states: {hover: {halo: {size:0}, animation: {duration:0}}, inactive: {enabled:false, opacity:1},},
                         }],
-                });
+                    });
+
                 {% endfor %}
 
                 {% endif %}
 
+
+
+                }
+            function studioFunc(){
+                Highcharts.chart('studiosBubble', {
+                  chart: {type: 'packedbubble', backgroundColor: 'transparent', margin:0, border:0, height: '500px'},
+                  xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                  legend:{enabled:false},
+                  title: {text:null},
+                  yAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                  tooltip: {
+                        formatter: function(){
+                            return '<div class="ttYear"><span class="ttTitle">' + this.key +'</span>' +
+                                   '<span class="ttSubtitle">Films watched: '+ (this.y).toString() + '</span></div>'
+                        },
+                      shared: true,
+                      useHTML: true,
+                      shape: 'square',
+                      borderWidth:0,
+                      shadow: false,
+                      backgroundColor: null,
+                  },
+                  plotOptions: {
+                    packedbubble: {
+                        useSimulation: false,
+                        layoutAlgorithm: {bubblePadding:50},
+                      minSize: '10%',
+                      maxSize: '100%',
+                      dataLabels: {
+                        enabled: true,
+                        useHTML: true,
+                        formatter: function () {
+                            let image = '/static/images/studios/' + this.point.extra + '.png';
+                            return '<img width="'+this.point.graphic.width*0.55+'" class="bubbleImg"' +
+                                'style="top:-'+this.point.graphic.height/6+'px"' +
+                                'src="'+image+'"/>'
+                        }
+                      }
+                    }
+                  },
+                  series: [{data:[
+                          {% for element in user['stats'+year]['mostWatchedstudio'] %}
+                              {name:'{{ firstUpperBis(element._id) }}', value: {{ element.sum }}, extra:'{{ element._id }}', color: '#456'},
+                          {% endfor %}
+                  ], states: {hover: {halo: {size:0}, animation: {duration:0}}, inactive: {enabled:false, opacity:0.8},},
+                  point: {
+                        events: {
+                            click: function () {
+                                location.href = '{{ lbdurl }}{{ user._id }}/films/with/studio/' + this.extra + "/";
+                            }
+                        }
+                    }
+                  }]
+                });
+                $(".bubbleImg").on("error", function(){
+                    $(this).attr('src', '/static/images/studios/studio.png');
+                });
             }
         </script>
         <script>

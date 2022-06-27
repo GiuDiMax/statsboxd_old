@@ -212,4 +212,4 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    fullUpdate('lordofthebushes')
+    fullUpdate('giudimax', False)

@@ -11,7 +11,10 @@ for field in field2 + field3:
                                'sum': {'$sum': 1}}})
     op_role.append({'$match': {"sum": {'$gt': 1}}})
     op_role.append({'$sort': {'sum': -1}})
-    op_role.append({'$limit': 20})
+    if field != 'studio':
+        op_role.append({'$limit': 20})
+    else:
+        op_role.append({'$limit': 50})
     if field in field2:
         op_role.append({'$lookup': {
             'from': 'People',
