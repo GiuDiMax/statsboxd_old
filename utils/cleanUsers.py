@@ -4,7 +4,7 @@ from recommend.multiUsers import createAlgo
 
 
 def cleanUsers():
-    #createAlgo()
+    createAlgo()
     #db.Users.delete_many({})
     db.Users.delete_many({'name': {'$exists': False}})
     db.Users.update_many({}, {'$unset': {'diary': 1, 'stats': 1}})
