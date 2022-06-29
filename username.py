@@ -125,9 +125,11 @@ def threadxwatched(username, fastUpdate=False):
     start2 = time.time()
     get_watched(username, False, fastUpdate)
     db.Users.update_one({'_id': username}, {'$set': {'watched': watched_list}}, True)
-    #if not fastUpdate:
-    #    predictUser(username, watched_list)
     #fullOperation(username, watched_list)
+    if not fastUpdate:
+        start2 = time.time()
+        predictUser(username, watched_list)
+        print('Recommendations in : ' + str(time.time() - start2))
     print('watched in: ' + str(time.time() - start2))
 
 
@@ -153,8 +155,6 @@ def fullUpdate(username, fastUpdate):
     t1.join()
     t2.join()
     t3.join()
-    if not fastUpdate:
-        predictUser(username, watched_list)
     if len(watched_list) > 0:
         fullOperation(username, fastUpdate, watched_list)
         print('All op in: ' + str(time.time() - start))
