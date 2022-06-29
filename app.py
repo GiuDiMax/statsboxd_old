@@ -9,6 +9,7 @@ from utils.cleanUsers import cleanUsers
 from getUsersList import *
 from mongodb import db
 import sys
+from threading import Thread
 
 app = Flask(__name__)
 
@@ -17,9 +18,14 @@ app = Flask(__name__)
 def main(username):
     if '.ico' not in username:
         if username.lower() == 'update':
-            mainSetCollection2()
-            updateLists()
-            cleanUsers()
+            #mainSetCollection2()
+            #updateLists()
+            t1 = Thread(target=mainSetCollection2)
+            t2 = Thread(target=updateLists)
+            t1.start()
+            t2.start()
+            t1.join()
+            t2.join()
             return render_template('username.html')
         if username.lower() == 'refresh':
             refresh()
@@ -55,7 +61,7 @@ def main_year(username, year):
         user = checkUsername(username.lower())
         if user is not None:
             return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year='_'+year, yearnum=year)
-        return render_template('loading.html', redirect=(username.lower() + "/update/"))
+        return render_template('loading.html', redirect=(username.lower()))
     return render_template('username.html')
 
 
