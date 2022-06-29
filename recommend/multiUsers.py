@@ -7,7 +7,7 @@ import random
 import os
 
 
-def createAlgo():
+def createAlgo(populate=False):
     df = pd.read_csv('movies.csv', low_memory=False)
     movielist = df['movieId'].tolist()
     obj = db.Users.aggregate([
@@ -35,18 +35,34 @@ def createAlgo():
     with open('userslist.pickle', 'wb') as handle:
         pickle.dump(userslist, handle)
     os.remove(filename)
+    if populate:
+        for user in userslist:
+            print("recommendations for " + user)
+            predictUser(user)
 
 
-def predictUser(username, watched_list):
+def predictUser(username, watched_list=None):
     num = 12
-    if len(watched_list) <= 0:
-        return
-    with open('recommend/userslist.pickle', 'rb') as handle:
-        userslist = pickle.load(handle)
-        if username not in userslist:
+    if watched_list is None:
+        obj = db.Users.aggregate([
+            {'$match': {'_id': username}},
+            {'$project': {'movieId': '$watched.id'}},
+        ])
+        a = []
+        for x in obj:
+            a = x
+            a = a['movieId']
+            break
+        watched = pd.DataFrame({'movieId': a})
+    else:
+        if len(watched_list) <= 0:
             return
-    watched = pd.DataFrame(watched_list)
-    watched = watched.rename(columns={'id': 'movieId'})
+        with open('recommend/userslist.pickle', 'rb') as handle:
+            userslist = pickle.load(handle)
+            if username not in userslist:
+                return
+        watched = pd.DataFrame(watched_list)
+        watched = watched.rename(columns={'id': 'movieId'})
     movies = pd.read_csv('recommend/movies.csv', low_memory=False)
     unwatched = pd.merge(movies, watched, on='movieId', how="outer", indicator=True).query('_merge=="left_only"')
     unwatched = unwatched['movieId'].tolist()
@@ -77,6 +93,5 @@ def predictUser(username, watched_list):
 
 if __name__ == '__main__':
     start = time.time()
-    createAlgo()
-    #predictUser('giudimax')
+    createAlgo(True)
     print(time.time() - start)
