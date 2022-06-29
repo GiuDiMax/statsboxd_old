@@ -112,7 +112,7 @@
             </section>
             <section class="sectionStats">
                 <div class="sepline">
-                    <span>Recommended Films for You</span>
+                    <span>Recommended Films (SVD)</span>
                     <div class="line"></div>
                 </div>
                 {% if user['sug']|length > 0 %}
@@ -130,7 +130,8 @@
                         {% endfor %}
                 </div>
                 {% else %}
-                    <span class="norecctext">As you are a new user, the recommendations are not yet available, but they will be soon.</span>
+                    <span class="norecctext">As you are a new user, the recommendations are not yet available, but they will be soon.
+                        <br>Recommendations are generated approximately once a month.</span>
                 {% endif %}
             </section>
             <section class="sectionStats">

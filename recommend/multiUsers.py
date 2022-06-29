@@ -4,6 +4,7 @@ import time
 from mongodb import db
 from surprise import Dataset, Reader, SVD
 import random
+import numpy as np
 import os
 
 
@@ -18,6 +19,9 @@ def createAlgo():
         {'$project': {'_id': 1, 'movieId': '$watched.id', 'rating': '$watched.rating'}},
     ])
     dfx = pd.DataFrame(obj)
+    userslist = dfx['_id'].unique().tolist()
+    with open('userslist.pickle', 'wb') as handle:
+        pickle.dump(userslist, handle)
     dfx.rename(columns={'_id': 'userId'}, inplace=True)
     #userslist = dfx.drop_duplicates(subset=['userId'])['userId'].tolist()
     df = pd.read_csv('ratings_clean.csv', low_memory=False)
@@ -38,6 +42,10 @@ def predictUser(username, watched_list):
     num = 12
     if len(watched_list) <= 0:
         return
+    with open('recommend/userslist.pickle', 'rb') as handle:
+        userslist = pickle.load(handle)
+        if username not in userslist:
+            return
     watched = pd.DataFrame(watched_list)
     watched = watched.rename(columns={'id': 'movieId'})
     movies = pd.read_csv('recommend/movies.csv', low_memory=False)
