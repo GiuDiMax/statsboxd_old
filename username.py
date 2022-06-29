@@ -125,7 +125,7 @@ def threadxwatched(username, fastUpdate=False):
     start2 = time.time()
     get_watched(username, False, fastUpdate)
     db.Users.update_one({'_id': username}, {'$set': {'watched': watched_list}}, True)
-    predictUser(username)
+    predictUser(username, watched_list)
     #fullOperation(username, watched_list)
     print('watched in: ' + str(time.time() - start2))
 

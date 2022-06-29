@@ -43,7 +43,7 @@ def main(username):
         if username.lower() not in users_list:
             return render_template('noallowed.html')
         user = checkUsername(username.lower())
-        if user is not None:
+        if (user is not None) and ('diary' in user):
             return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
         if fullUpdate(username.lower(), False):
             return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/',
