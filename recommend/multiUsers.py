@@ -34,24 +34,16 @@ def createAlgo():
     os.remove(filename)
 
 
-def predictUser(username):
+def predictUser(username, watched_list):
     num = 12
-    obj = db.Users.aggregate([
-        {'$match': {'_id': username}},
-        {'$project': {'movieId': '$watched.id'}},
-    ])
-    a = []
-    for x in obj:
-        a = x
-        a = a['movieId']
-        break
-    if len(a) <= 0:
+    if len(watched_list) <= 0:
         return
-    watched = pd.DataFrame({'movieId': a})
-    movies = pd.read_csv('movies.csv', low_memory=False)
+    watched = pd.DataFrame(watched_list)
+    watched = watched.rename(columns={'id': 'movieId'})
+    movies = pd.read_csv('recommend/movies.csv', low_memory=False)
     unwatched = pd.merge(movies, watched, on='movieId', how="outer", indicator=True).query('_merge=="left_only"')
     unwatched = unwatched['movieId'].tolist()
-    with open('algo.pickle', 'rb') as handle:
+    with open('recommend/algo.pickle', 'rb') as handle:
         algo = pickle.load(handle)
         prediction_set = [(username, str(x), '0') for x in unwatched]
         predictions = algo.test(prediction_set)
