@@ -638,7 +638,7 @@ span{
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
-    gap: 2%;
+    gap: 3%;
 }
 
 .singleFilm{
@@ -668,9 +668,17 @@ span{
     font-size: 15px;
 }
 
+.recommend div{
+    display: flex;
+    flex-direction: row !important;
+    justify-content: center;
+    align-items: center;
+}
+
 .cuoricino{
-    font-size: 20px;
+    font-size: 20px !important;
     color:#ff9010;
+    margin-right:5px;
 }
 
 .norecctext{
@@ -1722,5 +1730,9 @@ span{
 
     .centerimg{
         width:85%;
+    }
+
+    .cuoricino{
+        font-size: 13px !important;
     }
 }
