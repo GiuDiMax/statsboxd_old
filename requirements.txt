@@ -8,4 +8,4 @@ lxml>=4.8.0
 dnspython>=2.2.1
 pandas>=1.1.5
 surprise>=0.1
-pickle>=4.0
+#pickle>=4.0
