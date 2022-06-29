@@ -125,7 +125,8 @@ def threadxwatched(username, fastUpdate=False):
     start2 = time.time()
     get_watched(username, False, fastUpdate)
     db.Users.update_one({'_id': username}, {'$set': {'watched': watched_list}}, True)
-    predictUser(username, watched_list)
+    if not fastUpdate:
+        predictUser(username, watched_list)
     #fullOperation(username, watched_list)
     print('watched in: ' + str(time.time() - start2))
 
@@ -143,7 +144,7 @@ def fullUpdate(username, fastUpdate):
     global watched_list, diary_list
     start = time.time()
     print('analysis username')
-    t1 = Thread(target=threadxwatched, args=(username,)) #WATCHED
+    t1 = Thread(target=threadxwatched, args=(username, fastUpdate)) #WATCHED
     t2 = Thread(target=threadxdiary, args=(username, fastUpdate)) #DIARY
     t3 = Thread(target=threadgeneral, args=(username, fastUpdate)) #GENERAL
     t1.start()
