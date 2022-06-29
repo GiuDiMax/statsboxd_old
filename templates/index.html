@@ -7,7 +7,7 @@
         {% else %}
             <title>&lrm;{{ user.name }}'s {{ yearnum }} in review &bull; Statsboxd</title>
         {% endif %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=3.1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=3.2.0">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css') }}?q=1.0.0" media="print" onload="this.media='all'">
         <link rel="stylesheet" href="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.css') }}" media="print" onload="this.media='all'">
         <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -109,6 +109,29 @@
                     <span>{{ user['stats'+year].totalyear[0]._id }}</span>
                     <span>{{ user['stats'+year].totalyear[-1]._id }}</span>
                 </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Recommended Films for You</span>
+                    <div class="line"></div>
+                </div>
+                {% if user['sug']|length > 0 %}
+                <div class="filmList hideLast2">
+                        {% for element in user['sug'] %}
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo cuoricino">❤</span>
+                                    <span class="sottotitolo bigsotto">{{ element.perc }}%</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                </div>
+                {% else %}
+                    <span class="norecctext">As you are a new user, the recommendations are not yet available, but they will be soon.</span>
+                {% endif %}
             </section>
             <section class="sectionStats">
                 <div class="sepline">

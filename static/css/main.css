@@ -668,6 +668,17 @@ span{
     font-size: 15px;
 }
 
+.cuoricino{
+    font-size: 18px;
+}
+
+.norecctext{
+    text-align: center;
+    font-family: Graphik-Regular-Web, sans-serif;
+    font-weight: normal;
+    font-size:15px;
+}
+
 .stellineBig{
     font-size: 18px !important;
 }
