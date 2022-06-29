@@ -16,22 +16,6 @@ app = Flask(__name__)
 @app.route('/<username>/')
 def main(username):
     if '.ico' not in username:
-        if username.lower() == 'update':
-            #mainSetCollection2()
-            #updateLists()
-            t1 = Thread(target=mainSetCollection2)
-            t2 = Thread(target=updateLists)
-            t1.start()
-            t2.start()
-            t1.join()
-            t2.join()
-            return render_template('username.html')
-        if username.lower() == 'refresh':
-            refresh()
-            return render_template('username.html')
-        if username.lower() == 'people':
-            mainSetNames2()
-            return render_template('username.html')
         if username.lower() == 'reset':
             sys.exit()
         if username.lower() == 'faq':

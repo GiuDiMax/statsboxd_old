@@ -24,7 +24,10 @@ def fill_db(url, soup, image):
             json1['tmdbImg'] = x.text.rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
         except:
             pass
-    db.People.update_one({'_id': json1['_id']}, {'$set': json1})
+    try:
+        db.People.insert_one(json1)
+    except:
+        db.People.update_one({'_id': json1['_id']}, {'$set': json1})
 
 
 async def get(url, session, image):
@@ -101,7 +104,6 @@ def mainSetNames():
             else:
                 for z in x[y]:
                     uris2.append(z['_id'])
-
     if len(uris) > 0:
         print('da aggiungere persone (con immagini) ' + str(len(uris)))
         fillMongodb(uris, True)
