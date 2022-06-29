@@ -7,10 +7,13 @@ for field in field2 + field3:
     op_role.append({'$group': {'_id': '$info.' + field,
                                'average': {'$avg': '$watched.rating'},
                                'sum': {'$sum': 1}}})
-    op_role.append({'$sort': {'sum': -1}})
     if field != 'studio':
+        op_role.append({'$match': {"sum": {'$gt': 2}}})
+        op_role.append({'$sort': {'sum': -1}})
         op_role.append({'$limit': 20})
     else:
+        op_role.append({'$match': {"sum": {'$gt': 3}}})
+        op_role.append({'$sort': {'sum': -1}})
         op_role.append({'$limit': 50})
     #op_role.append({'$limit': 20})
     if field in field2:

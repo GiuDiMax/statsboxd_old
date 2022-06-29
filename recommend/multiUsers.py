@@ -4,7 +4,6 @@ import time
 from mongodb import db
 from surprise import Dataset, Reader, SVD
 import random
-import numpy as np
 import os
 
 
@@ -20,8 +19,6 @@ def createAlgo():
     ])
     dfx = pd.DataFrame(obj)
     userslist = dfx['_id'].unique().tolist()
-    with open('userslist.pickle', 'wb') as handle:
-        pickle.dump(userslist, handle)
     dfx.rename(columns={'_id': 'userId'}, inplace=True)
     #userslist = dfx.drop_duplicates(subset=['userId'])['userId'].tolist()
     df = pd.read_csv('ratings_clean.csv', low_memory=False)
@@ -35,6 +32,8 @@ def createAlgo():
     algo = algo.fit(trainset)
     with open('algo.pickle', 'wb') as handle:
         pickle.dump(algo, handle)
+    with open('userslist.pickle', 'wb') as handle:
+        pickle.dump(userslist, handle)
     os.remove(filename)
 
 
