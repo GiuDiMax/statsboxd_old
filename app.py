@@ -1,12 +1,11 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, url_for, request
 from username import checkUsername, fullUpdate
 from utils.setCollections import mainSetCollection2
 from utils.setPeople import mainSetNames2
 from utils.setLists import updateLists
 from config import *
 from utils.refreshLastTwoYears import refresh
-from utils.cleanUsers import cleanUsers
-from getUsersList import *
+from utils.getUsersList import *
 from mongodb import db
 import sys
 from threading import Thread
