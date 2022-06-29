@@ -78,5 +78,5 @@ def mainSetCollection2():
             pass
 
 
-#if __name__ == '__main__':
-#    mainSetCollection2()
+if __name__ == '__main__':
+    mainSetCollection2()
