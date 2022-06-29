@@ -57,16 +57,16 @@ def predictUser(username, watched_list=None):
     else:
         if len(watched_list) <= 0:
             return
-        with open('recommend/userslist.pickle', 'rb') as handle:
+        with open('userslist.pickle', 'rb') as handle:
             userslist = pickle.load(handle)
             if username not in userslist:
                 return
         watched = pd.DataFrame(watched_list)
         watched = watched.rename(columns={'id': 'movieId'})
-    movies = pd.read_csv('recommend/movies.csv', low_memory=False)
+    movies = pd.read_csv('movies.csv', low_memory=False)
     unwatched = pd.merge(movies, watched, on='movieId', how="outer", indicator=True).query('_merge=="left_only"')
     unwatched = unwatched['movieId'].tolist()
-    with open('recommend/algo.pickle', 'rb') as handle:
+    with open('algo.pickle', 'rb') as handle:
         algo = pickle.load(handle)
         prediction_set = [(username, str(x), '0') for x in unwatched]
         predictions = algo.test(prediction_set)
