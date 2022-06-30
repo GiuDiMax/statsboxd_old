@@ -343,26 +343,32 @@
             </section>
             <section class="sectionStats">
                 <div class="sepline">
-                    <span>Collections (WIP)</span>
+                    <span>Collections</span>
                     <div class="line"></div>
-                    <!--<<span class="clickable active" data-show="completeCollection" data-hide="collections">Complete</span>
-                    <span class="clickable" data-show="almostCollection" data-hide="collections">Almost Complete</span>-->
+                    <!--<span class="clickable active" data-show="mostPopularCollection" data-hide="collectionsx">Most Popular</span>-->
+                    <span class="clickable active" data-show="completeCollection" data-hide="collectionsx">Complete</span>
+                    <span class="clickable" data-show="almostCollection" data-hide="collectionsx">Almost Complete</span>
                 </div>
                 <div class="collections">
-                    <div id="completeCollection">
-                            {%for element in user['stats'+year].collections%}
+                {% for elementx in user['stats'].collections %}
+                    <div id="{{ elementx['_id'] }}Collection" class="collectionsx {% if elementx['_id'] != 'complete' %}hide{% endif %}">
+                            {%for element in elementx.collections%}
                                 <div class="singleCollection" >
-                                    <a class="name" href="{{ lbdurl }}films/in/{{ element['_id'] }}/by/release-earliest/size/large/">
-                                        {{ element['name'] }}
+                                    <a class="threeposters" href="{{ lbdurl }}films/in/{{ element['_id'] }}/by/release-earliest/size/large/">
+                                        {% for poster in element.posters %}
+                                            <img class="lazy" src="{{ url_for('static', filename='images/poster_70.jpg') }}" data-src="{{ replaceSize(poster, 70, 105) }}" alt="" />
+                                        {% endfor %}
                                     </a>
-                                    <span class="progress sottotitolo">
+                                    <span>
+                                        <a class="name" href="{{ lbdurl }}films/in/{{ element['_id'] }}/by/release-earliest/size/large/">
+                                            {{ element['name'] }}
+                                        </a>
                                         {{ element['num'] }} watched
                                     </span>
                                 </div>
                             {%endfor%}
                     </div>
-                    <div id="almostCollection">
-                    </div>
+                {% endfor %}
                 </div>
             </section>
             <section class="sectionStats">

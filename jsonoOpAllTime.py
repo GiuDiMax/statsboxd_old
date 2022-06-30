@@ -133,10 +133,20 @@ op_role.append({'$lookup': {
 op_role.append({'$unwind': '$info'})
 op_role.append({'$match': {"info.num": {'$gt': 2}}})
 op_role.append({'$addFields': {"diff": {'$subtract': ['$info.num', '$num']}}})
-op_role.append({'$match': {'diff': {'$lt': 2}}})
-op_role.append({'$project': {'_id': '$_id', 'name': '$info.name', 'list': '$list',
+op_role.append({'$match': {'diff': {'$lt': 3}}})
+op_role.append({'$project': {'_id': '$_id', 'name': '$info.name', 'list': '$list', 'numRat': '$info.numRat',
                              'perc': {'$divide': ['$num', '$info.num']},
-                             'num': {'$concat': [{'$toString': '$num'}, '/', {'$toString': '$info.num'}]}}})
+                             'complete': {'$cond': {'if': {'$eq': [{'$divide': ['$num', '$info.num']}, 1]}, 'then': 'complete', 'else': 'almost'}},
+                             'num': {'$concat': [{'$toString': '$num'}, '/', {'$toString': '$info.num'}]},
+                             'posters': '$info.posters'}})
+op_role.append({'$match': {"posters": {'$exists': True}}})
+#op_role.append({'$match': {"posters": {'$ne': []}}})
+op_role.append({'$match': {'perc': {'$gt': 0.65}}})
+op_role.append({'$sort': {'numRat': -1, 'perc': -1}})
+op_role.append({'$project': {'_id': 1, 'name': 1, 'num': 1, 'posters': 1, 'complete': 1}})
+op_role.append({'$group': {'_id': '$complete', 'collections': {'$push': '$$ROOT'}}})
+op_role.append({'$unset': ['collections.complete']})
+op_role.append({'$sort': {'_id': -1}})
 json_operations['collections'] = op_role
 
 op_role = []
