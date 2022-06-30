@@ -17,14 +17,14 @@ for field in field2 + field3:
         op_role.append({'$match': {"sum": {'$gt': 2}}})
         op_role.append({'$sort': {'sum': -1}})
         op_role.append({'$limit': 50})
-    if field in field2:
+    if (field in field2) or (field == 'studio'):
         op_role.append({'$lookup': {
             'from': 'People',
             'localField': '_id',
             'foreignField': '_id',
             'as': 'info'}})
     json_operations['mostWatched' + field.replace('.', '_')] = op_role
-    if field in field2 or field == 'studio':
+    if (field in field2) or (field == 'studio'):
         op_role = []
         op_role.append({'$match': {'diary.dRating': {'$gt': 0}}})
         op_role.append({'$unwind': '$info.' + field})
@@ -35,12 +35,11 @@ for field in field2 + field3:
             op_role.append({'$match': {"sum": {'$gt': 1}}})
         op_role.append({'$sort': {'average': -1}})
         op_role.append({'$limit': 20})
-        if field in field2:
-            op_role.append({'$lookup': {
-                'from': 'People',
-                'localField': '_id',
-                'foreignField': '_id',
-                'as': 'info'}})
+        op_role.append({'$lookup': {
+            'from': 'People',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'info'}})
         json_operations['topRated' + field.replace('.', '_')] = op_role
 
 op_role = []
