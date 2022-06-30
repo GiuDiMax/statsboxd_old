@@ -1497,6 +1497,24 @@ span{
         width: 45%;
     }
 
+    .singleCollection .name {
+        font-size: 13.5px;
+    }
+
+    .threeposters:hover{
+        outline: 0;
+        outline-offset: 0;
+    }
+
+    .threeposters img{
+        flex: 0 0 0;
+        height: 70px !important;
+    }
+
+    .threeposters img:nth-child(2), .threeposters img:nth-child(3){
+        margin-left: -7px;
+    }
+
     .singleFilm .poster, .singleFilm .poster img{
         width:100% !important;
         height:100% !important;
