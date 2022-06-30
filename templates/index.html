@@ -1009,8 +1009,15 @@
                   },
                   series: [{data:[
                           {% for element in user['stats'+year]['mostWatchedstudio'] %}
-                              {name:'{{ firstUpperBis(element._id) }}', value: {{ element.sum }}, extra:'{{ element._id }}', color: '#456'},
+                              {name:
+                                {% if element.info|length > 0 %}
+                                    '{{ element.info[0].name }}'
+                                {% else %}
+                                    '{{ firstUpperBis(element._id) }}'
+                                {% endif %}
+                              , value: {{ element.sum }}, extra:'{{ element._id }}', color: '#456'},
                           {% endfor %}
+
                   ], states: {hover: {halo: {size:0}, animation: {duration:0}}, inactive: {enabled:false, opacity:0.8},},
                   point: {
                         events: {
