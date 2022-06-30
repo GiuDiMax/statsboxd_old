@@ -605,28 +605,41 @@ span{
     margin:1.5%;
 }
 
-
 .collections>div{
     display:flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
     align-content: flex-start;
+    gap: 6.5%;
+    row-gap: 20px;
 }
 
 .singleCollection{
     display:flex;
     flex-direction: column;
     width: 20%;
-    margin: 2.5%;
+    'margin: 2% 2.5%;
+    justify-content: flex-start;
+}
+
+.singleCollection span{
+    font-family: Graphik-Regular-Web-Web,sans-serif;
+    font-size: 12px;
+    text-decoration: none;
+    color: #678;
+    text-align: left;
+    margin-top:8px;
+    margin-bottom:5px;
+    line-height: 20px;
 }
 
 .singleCollection .name{
     font-family: Graphik-Semibold-Web,sans-serif;
     font-size: 15px;
     text-decoration: none;
-    margin-top:5px;
-    margin-bottom:5px;
+    margin-right: 5px;
+    text-align: left;
 }
 
 .singleCollection .progress{
@@ -701,6 +714,37 @@ span{
     margin-right:auto;*/
 }
 
+.threeposters{
+    border-radius: 4px;
+    display:flex;
+    flex-direction: row;
+    width: auto;
+}
+
+.threeposters img:nth-child(1){
+    z-index: -1;
+    box-shadow: 0 0 0 1px rgb(221 238 255 / 35%),  2px 0 7px #000;
+}
+
+.threeposters img:nth-child(2){
+    margin-left: -11px;
+    z-index: -2;
+    box-shadow: 0 0 0 1px rgb(221 238 255 / 35%),  2px 0 7px #000;
+}
+
+.threeposters img:nth-child(3){
+    margin-left: -11px;
+    z-index: -3;
+    box-shadow: 0 0 0 1px rgb(221 238 255 / 35%);
+}
+
+.threeposters img{
+    flex: 0 0 70px;
+    margin:1px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
 .poster img{
     margin:1px;
     border-radius: 4px;
@@ -708,7 +752,7 @@ span{
     box-shadow: 0 0 0 1px rgb(221 238 255 / 35%);
 }
 
-.poster img:hover{
+.poster img:hover, .threeposters:hover{
     outline: 3px solid  #00e054;
     outline-offset: -3px;
     transition-duration: 0.15s;

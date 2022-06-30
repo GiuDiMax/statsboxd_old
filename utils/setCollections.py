@@ -18,7 +18,21 @@ def fill_db(url, soup):
         x = requests.get('https://letterboxd.com/films/ajax/in/' + url + "/")
         soup = BeautifulSoup(x.content, 'lxml', parse_only=SoupStrainer(['div', 'section']))
         json2['num'] = int(soup.text.split("are ", 1)[1].split("\xa0", 1)[0])
-        db.Collections.insert_one(json2)
+        json2['numRat'] = 0
+        json2['posters'] = []
+        ob3 = db.Film.aggregate([
+            {'$match': {'collection': url}},
+            {'$sort': {'year': 1}},
+            {'$limit': 3},
+            {'$project': {'_id': 1, 'poster': '$images.poster', 'numRat': '$rating.num'}}
+        ])
+        for x in ob3:
+            json2['posters'].append(x['poster'])
+            json2['numRat'] = json2['numRat'] + x['numRat']
+        try:
+            db.Collections.insert_one(json2)
+        except:
+            db.Collections.update_one({'_id': json2['_id']}, {'$set': json2})
     except:
         pass
 
@@ -54,6 +68,7 @@ def mainSetCollection():
                         'foreignField': '_id',
                         'as': 'info'}})
     op_role.append({'$match': {"info": {'$eq': []}}})
+    #op_role.append({'$match': {"info.numRat": {'$exists': False}}})
     json_operations['collection'] = op_role
 
     ob3 = db.Film.aggregate([
@@ -79,4 +94,5 @@ def mainSetCollection2():
 
 
 if __name__ == '__main__':
-    mainSetCollection2()
+    #mainSetCollection2()
+    fillMongodb(['venom-collection-1'])
