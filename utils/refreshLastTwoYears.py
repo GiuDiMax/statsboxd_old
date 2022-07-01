@@ -9,8 +9,12 @@ def refresh():
 
     current_year = date.today().year
     a = db.Film.aggregate([
-        {'$match': {"year": {'$gt': current_year - 2}}},
-        {'$match': {"updateDate": {'$lt': datex}}},
+        #{'$match': {"year": {'$gt': current_year - 2}}},
+        # {'$match': {"updateDate": {'$lt': datex}}},
+
+        {'$sort': {'updateDate': 1}},
+        {'$limit': 1000},
+
         {'$project': {'uri': 1}}
     ])
 
@@ -18,9 +22,17 @@ def refresh():
     for x in a:
         uris.append(x['uri'])
 
-    print(len(uris))
     fillMongodb(uris)
 
 
+def refreshata():
+    try:
+        refresh()
+    except:
+        refreshata()
+
+
 if __name__ == '__main__':
-    refresh()
+    for i in range(25):
+        refreshata()
+        print('1000 done')

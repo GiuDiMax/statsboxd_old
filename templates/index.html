@@ -1037,7 +1037,7 @@
                         formatter: function () {
                             let image = '/static/images/studios/' + this.point.extra + '.png';
                             return '<img width="'+this.point.graphic.width*0.7+'" class="bubbleImg"' +
-                                'style="top:-'+((this.point.graphic.height/6)+(Math.pow(this.point.graphic.height,2)*0.001))+'px"' +
+                                'style="top:-'+((this.point.graphic.height/6)+(Math.pow(this.point.graphic.height,2)*0.001))+'px !important"' +
                                 'src="'+image+'"/>'
                         }
                       }

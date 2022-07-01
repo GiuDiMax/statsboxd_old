@@ -47,7 +47,8 @@ def fill_db(url, soup):
     #GENRES
     try:
         genres = soup.find('div', {"id": "tab-genres"}).select('a')
-        json1['genres'] = {'main': [], 'themes': [], 'mini-themes': []}
+        #json1['genres'] = {'main': [], 'themes': [], 'mini-themes': []}
+        json1['genres'] = {'main': []}
         for genre in genres:
             '''
             if "/theme/" in str(genre['href']):
@@ -142,14 +143,14 @@ def fill_db(url, soup):
     json1['modifiedDate'] = datetime.strptime(json_lb['dateModified'], '%Y-%m-%d')
 
     # RELATEDMOVIES
+    json1['related'] = []
+    rels = soup.find_all('div', {"class": "linked-film-poster"})
+    for rel in rels:
+        json1['related'].append(rel['data-film-id'])
 
     if __name__ == '__main__':
         print(json1)
-    else:
-        try:
-            db.Film.insert_one(json1)
-        except:
-            db.Film.update_one({'_id': json1['_id']}, {'$set': json1})
+    db.Film.update_one({'_id': json1['_id']}, {'$set': json1}, True)
 
 
 async def get(url, session):
