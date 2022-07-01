@@ -793,6 +793,12 @@ span{
     object-fit: cover;
 }
 
+.studiohole{
+    padding:15px;
+    width:120px;
+    height:120px;
+}
+
 .holeperson:hover{
     border: 1px solid hsla(0,0%,100%,.50);
 }
@@ -1558,6 +1564,13 @@ span{
     .holeperson{
         width: 123.75px;
         height: 123.75px;
+    }
+
+
+    .studiohole{
+        padding:10px;
+        width:113.75px;
+        height:113.75px;
     }
 
     .people{

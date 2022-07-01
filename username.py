@@ -35,7 +35,7 @@ def diary_function(sup):
         diaryx['review'] = False
 
     date = sup.find("td", class_="td-day diary-day center").a['href'].split("/", 5)[5][:-1]
-    diaryx['uri'] = sup.find("td", class_="td-film-details").div['data-film-slug'].split("/")[-2]
+    #diaryx['uri'] = sup.find("td", class_="td-film-details").div['data-film-slug'].split("/")[-2]
     diaryx['date'] = datetime.strptime(date, '%Y/%m/%d')
     diary_list.append(diaryx)
 
@@ -67,10 +67,10 @@ async def get_watched3(url, session, diary):
                     watched['rating'] = rating
             except:
                 pass
-            if len(sup.p.find_all('span')) > 1:
-                watched['liked'] = True
-            else:
-                watched['liked'] = False
+            #if len(sup.p.find_all('span')) > 1:
+            #    watched['liked'] = True
+            #else:
+            #    watched['liked'] = False
             watched_list.append(watched)
 
 
