@@ -7,7 +7,7 @@
         {% else %}
             <title>&lrm;{{ user.name }}'s {{ yearnum }} in review &bull; Statsboxd</title>
         {% endif %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=4.1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=4.2.0">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css') }}?q=1.0.0" media="print" onload="this.media='all'">
         <link rel="stylesheet" href="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.css') }}" media="print" onload="this.media='all'">
         <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -228,11 +228,11 @@
                         <div class="msx msx1">
                             <span>First Film</span>
                             <div class="singleFilm" >
-                                <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ user['stats'+year].firstMovie[0].info.uri }}">
-                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year].firstMovie[0].info.images.poster, 110, 165) }}" alt="{{ user['stats'+year].firstMovie[0].info.uri }}" />
+                                <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ user['stats'+year].firstMovie[0].uri }}">
+                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year].firstMovie[0].poster, 110, 165) }}" alt="{{ user['stats'+year].firstMovie[0].uri }}" />
                                 </a>
                                 <div>
-                                    <span class="sottotitolo bigsotto">{{ date_toshort(user['stats'+year].firstMovie[0].diary.date) }}</span>
+                                    <span class="sottotitolo bigsotto">{{ date_toshort(user['stats'+year].firstMovie[0].date) }}</span>
                                 </div>
                             </div>
                         </div>
@@ -254,11 +254,11 @@
                         <div class="msx msx1">
                             <span>Last Film</span>
                             <div class="singleFilm" >
-                                <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ user['stats'+year].lastMovie[0].info.uri }}">
-                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year].lastMovie[0].info.images.poster, 110, 165) }}" alt="{{ user['stats'+year].lastMovie[0].info.uri }}" />
+                                <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ user['stats'+year].lastMovie[0].uri }}">
+                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year].lastMovie[0].poster, 110, 165) }}" alt="{{ user['stats'+year].lastMovie[0].uri }}" />
                                 </a>
                                 <div>
-                                    <span class="sottotitolo bigsotto">{{ date_toshort(user['stats'+year].lastMovie[0].diary.date) }}</span>
+                                    <span class="sottotitolo bigsotto">{{ date_toshort(user['stats'+year].lastMovie[0].date) }}</span>
                                 </div>
                             </div>
                         </div>
@@ -490,20 +490,20 @@
                                 <div class="container_people">
                                     <a href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">
                                         <img class="holeperson lazy" src="{{ url_for('static', filename = 'images/'+role[0]+'.jpg') }}"
-                                            {% if 'tmdbImg' in element.info[0] %}
-                                                 data-src="https://image.tmdb.org/t/p/w185/{{ element.info[0].tmdbImg }}"
+                                            {% if 'img' in element %}
+                                                 data-src="//image.tmdb.org/t/p/w185/{{ element.img }}"
                                             {% endif %}
                                         alt="{{ element._id }}"/>
                                     </a>
-                                        {% if element.info|length > 0 %}
-                                            <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.info[0].name }}</a>
+                                        {% if 'name' in element %}
+                                            <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.name }}</a>
                                         {% else %}
                                             <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ firstUpperBis(element._id) }}</a>
                                         {% endif %}
                                     {% if type[2]=='w' %}
                                         <a class="sottotitolo" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.sum }} films</a>
                                     {% else %}
-                                        <span class="sottotitolo">★ {{ "%.1f"|format(ifNull0_divide2(element.average)) }}</span>
+                                        <span class="sottotitolo">★ {{ "%.1f"|format(ifNull0_divide2(element.avg)) }}</span>
                                     {% endif %}
                                 </div>
                             {%endfor%}
@@ -522,8 +522,39 @@
                 <div class="sepline">
                     <span>Studios</span>
                     <div class="line"></div>
+                    <span class="clickable active" data-show="mostWatchedStudios" data-hide="studiosStats">Most Watched</span>
+                    <span class="clickable" data-show="topRatedStudios" data-hide="studiosStats">Highest Rated</span>
                 </div>
-                <div id="studiosBubble" class="studiosBubble"></div>
+                <section class="studiosStats" id="mostWatchedStudios"><div id="studiosBubble" class="studiosBubble"></div></section>
+                <section class="studiosStats hide" id="topRatedStudios">
+                        {%for num in [['1', ''], ['2', 'hide']]%}
+                        <div id="studio{{ num[0] }}" class="people {{ num[1] }}">
+                            {% if num[0] == '1' %}
+                                {% set list = user['stats'+year]['topRatedstudio'][:10] %}
+                            {% else %}
+                                {% set list = user['stats'+year]['topRatedstudio'][10:] %}
+                            {% endif %}
+                            {%for element in list%}
+                                <div class="container_people">
+                                    <a href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/studio/{{ element._id }}">
+                                        <img class="holeperson studiohole lazy" src="{{ url_for('static', filename = 'images/studios/studio.png') }}"
+                                             data-src="{{ url_for('static', filename = 'images/studios/'+element._id+'.png') }}"
+                                        alt="{{ element._id }}"/>
+                                    </a>
+                                        {% if 'name' in element %}
+                                            <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/studio/{{ element._id }}">{{ element.name }}</a>
+                                        {% else %}
+                                            <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/studio/{{ element._id }}">{{ firstUpperBis(element._id) }}</a>
+                                        {% endif %}
+                                    <span class="sottotitolo">★ {{ "%.1f"|format(ifNull0_divide2(element.avg)) }}</span>
+                                </div>
+                            {%endfor%}
+                        </div>
+                        {%endfor%}
+                        <div class="noflex">
+                            <a class="clickable seeallbutton studio2btn" data-show="studio2" data-hide="studio2btn">see more</a>
+                        </div>
+                    </section>
             </section>
 
             <section class="sectionStats">
@@ -541,8 +572,8 @@
                             {%for element in user['stats'+year][type+role[0]]%}
                                 <div class="{{ type }}limit {% if loop.index > 5 %}hide{% endif %}">
                                     <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}/with/{{ role[1] }}/{{ element._id }}">
-                                         {% if element.info|length > 0 %}
-                                            {{ element.info[0].name }}
+                                         {% if 'name' in element %}
+                                            {{ element.name }}
                                         {% else %}
                                             {{ firstUpperBis(element._id) }}
                                         {% endif %}
@@ -551,7 +582,7 @@
                                         {% if type == 'mostWatched' %}
                                             {{ element.sum }}
                                         {% else %}
-                                            {{ '%0.1f'| format(zeroIfNone(element.average)/2) }}
+                                            {{ '%0.1f'| format(zeroIfNone(element.avg)/2) }}
                                         {% endif %}
                                     </span>
                                 </div>
@@ -576,15 +607,15 @@
                                     ['mostPopularMovie', 'Most Popular'],['lessPopularMovie', 'Most Obscure']] %}
                     <div class="singleFilm" >
                         <span class="suptitle">{{ type[1] }}</span>
-                        <a class="poster" href="{{ lbdurl }}film/{{ user['stats'+year][type[0]][0].info.uri }}">
-                            {% if 'images' in user['stats'+year][type[0]][0].info %}
-                                <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year][type[0]][0].info.images.poster, 110, 165) }}" alt="{{ user['stats'+year][type[0]][0].info.uri }}" />
+                        <a class="poster" href="{{ lbdurl }}film/{{ user['stats'+year][type[0]][0].uri }}">
+                            {% if 'poster' in user['stats'+year][type[0]][0] %}
+                                <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year][type[0]][0].poster, 110, 165) }}" alt="{{ user['stats'+year][type[0]][0].uri }}" />
                             {% else %}
-                                <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" alt="{{ user['stats'+year][type[0]][0].info.uri }}" />
+                                <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" alt="{{ user['stats'+year][type[0]][0].uri }}" />
                             {% endif %}
                         </a>
                         <div class="sottofilm">
-                            <img src="{{ url_for('static', filename='images/orangestar.jpg') }}" /><span class="sottotitolo stellamedia">{{ '{0:0.1f}'.format(user['stats'+year][type[0]][0].info.rating.average) }}</span>
+                            <img src="{{ url_for('static', filename='images/orangestar.jpg') }}" /><span class="sottotitolo stellamedia">{{ '{0:0.1f}'.format(user['stats'+year][type[0]][0].avg) }}</span>
                         </div>
                     </div>
                     {% endfor %}
@@ -648,13 +679,13 @@
                 //WORLDMAP
                     var worldData = {
                         {%for element in user['stats'+year].totalcountry%}
-                            '{{ element['info']['_id'] }}': {{ element['sum'] }},
+                            '{{ element['_id'] }}': {{ element['sum'] }},
                         {%endfor%}
                     };
 
                     var worldDataUri = {
                         {%for element in user['stats'+year].totalcountry%}
-                            '{{ element['info']['_id'] }}': '{{ element['info']['uri'] }}',
+                            '{{ element['_id'] }}': '{{ element['uri'] }}',
                         {%endfor%}
                     };
 
@@ -1015,8 +1046,8 @@
                   series: [{data:[
                           {% for element in user['stats'+year]['mostWatchedstudio'] %}
                               {name:
-                                {% if element.info|length > 0 %}
-                                    '{{ element.info[0].name }}'
+                                {% if 'name' in element %}
+                                    '{{ element.name }}'
                                 {% else %}
                                     '{{ firstUpperBis(element._id) }}'
                                 {% endif %}
