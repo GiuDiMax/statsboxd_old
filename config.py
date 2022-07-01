@@ -5,7 +5,7 @@ field2 = ['actors', 'crew.director', 'crew.producer', 'crew.writer', 'crew.edito
           'crew.set-decoration', 'crew.visual-effects', 'crew.composer', 'crew.sound',
           'crew.costumes', 'crew.make-up']
 
-field3 = ['country', 'studio', 'language', 'genres.main', 'genres.themes', 'genres.mini-themes']
+field3 = ['country', 'studio', 'language', 'genres.main', 'genres.theme', 'genres.nanogenre'] #, 'genres.mini-themes']
 
 field4 = ['country', 'year']
 

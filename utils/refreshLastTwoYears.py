@@ -5,7 +5,7 @@ from operations import fillMongodb
 
 def refresh():
     datex = datetime.today()
-    datex = datex - timedelta(days=15)
+    datex = datex - timedelta(days=7)
 
     current_year = date.today().year
     a = db.Film.aggregate([

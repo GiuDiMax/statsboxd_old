@@ -3,9 +3,15 @@ from config import *
 
 for field in field2 + field3:
     op_role = []
-    op_role.append({'$unwind': '$info.' + field})
-    op_role.append({'$group': {'_id': '$info.' + field,
-                               'average': {'$avg': '$watched.rating'},
+    if field == 'genres.theme':
+        op_role.append({'$project': {'themesunion': {'$concatArrays': [{'$ifNull': ['$info.genres.mini-theme', []]}, {'$ifNull': ['$info.genres.theme', []]}]}}})
+        op_role.append({'$unwind': '$themesunion'})
+        op_role.append({'$group': {'_id': '$themesunion',
+                                   'sum': {'$sum': 1}}})
+    else:
+        op_role.append({'$unwind': '$info.' + field})
+        op_role.append({'$group': {'_id': '$info.' + field,
+                               #'average': {'$avg': '$watched.rating'},
                                'sum': {'$sum': 1}}})
     if field != 'studio':
         op_role.append({'$match': {"sum": {'$gt': 2}}})
@@ -22,6 +28,14 @@ for field in field2 + field3:
             'localField': '_id',
             'foreignField': '_id',
             'as': 'info'}})
+    elif field in ['genres.theme', 'genres.nanogenre']:
+        op_role.append({'$lookup': {
+            'from': 'Themes',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'info'}})
+        op_role.append({'$unwind': '$info'})
+        op_role.append({'$project': {'_id': 1, 'sum': 1, 'name': '$info.name', 'uri': '$info.uri', 'type': '$info.type'}})
     json_operations['mostWatched' + field.replace('.', '_')] = op_role
     if (field in field2) or (field == 'studio'):
         op_role = []
@@ -165,16 +179,19 @@ json_operations['statsLists'] = op_role
 
 # ZONA TEST
 
-json_operations2 = {}
-
+json_operations1 = {}
 op_role = []
-op_role.append({'$unwind': '$info.actors'})
-op_role.append({'$group': {'_id': '$info.actors',
-                           'average': {'$avg': '$watched.rating'},
-                           'sum': {'$sum': 1},
-                           'list': {'$push': '$info.uri'}}})
+
+op_role.append({'$project': {'rating': '$watched.rating',
+                             'themesunion': {'$concatArrays': ['$info.genres.mini-theme', '$info.genres.theme']}}})
+
+
+op_role.append({'$unwind': '$themesunion'})
+op_role.append({'$group': {'_id': '$themesunion',
+                           'average': {'$avg': '$rating'},
+                           'sum': {'$sum': 1}}})
 op_role.append({'$sort': {'sum': -1}})
 op_role.append({'$limit': 10})
-json_operations2['test'] = op_role
+json_operations1['test'] = op_role
 
 

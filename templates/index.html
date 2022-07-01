@@ -298,22 +298,21 @@
                     <div class="line"></div>
                 </div>
                 <div class="attributes-chart twocolumn">
-                    {% for type in ['theme','mini-theme'] %}
+                    {% for type in ['theme', 'nanogenre'] %}
                     <div class="labels">
                         {% set num = 10 %}
-                        {% if  user['stats'+year]['mostWatchedgenres_' + type + 's']|length < 10 %}
-                            {% set num =  user['stats'+year]['mostWatchedgenres_' + type + 's']|length %}
+                        {% if  user['stats'+year]['mostWatchedgenres_' + type]|length < 10 %}
+                            {% set num =  user['stats'+year]['mostWatchedgenres_' + type]|length %}
                         {% endif %}
                         {% for i in range(num) %}
-                                <a class="clickable label2" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}{{type}}/{{ user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id'] }}">
-
+                                <a class="clickable label2" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}{{ user['stats'+year]['mostWatchedgenres_' + type][i]['type'] }}/{{ user['stats'+year]['mostWatchedgenres_' + type][i]['uri'] }}">
                                     <span class="leftText">
-                                        {{ firstUpper(user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['_id']) }}
+                                        {{ firstUpper(user['stats'+year]['mostWatchedgenres_' + type][i]['name']) }}
                                     </span>
                                     <span class="bold right">
-                                        {{ user['stats'+year]['mostWatchedgenres_' + type + 's'][i]['sum'] }} films
+                                        {{ user['stats'+year]['mostWatchedgenres_' + type][i]['sum'] }} films
                                     </span>
-                                    <div class="labcontainer" style="width:{{ user.stats['mostWatchedgenres_' + type + 's'][i]['sum'] * 100 /user.stats['mostWatchedgenres_' + type + 's'][0]['sum'] }}%;"></div>
+                                    <div class="labcontainer" style="width:{{ user.stats['mostWatchedgenres_' + type][i]['sum'] * 100 /user.stats['mostWatchedgenres_' + type][0]['sum'] }}%;"></div>
                                 </a>
                         {%endfor%}
                     </div>
