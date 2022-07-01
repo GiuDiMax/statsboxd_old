@@ -127,8 +127,10 @@ def fill_db(url, soup):
     #POSTERS
     try:
         poster = soup.find('div', {"class": "film-poster"}).select('img')[0]['src']
+        poster = poster.rsplit("-0-", 2)[0].replace("https://a.ltrbxd.com/resized/", "")
         try:
             backdrop = soup.find('div', {"class": "backdrop-wrapper"})['data-backdrop']
+            backdrop = backdrop.rsplit("-1200-1200-", 1)[0].replace("https://a.ltrbxd.com/resized/", "")
             json1['images'] = {'poster': poster, 'backdrop': backdrop}
         except:
             json1['images'] = {'poster': poster}
@@ -138,26 +140,28 @@ def fill_db(url, soup):
     #DATE
     json1['updateDate'] = datetime.today()
     json1['modifiedDate'] = datetime.strptime(json_lb['dateModified'], '%Y-%m-%d')
+
+    # RELATEDMOVIES
+
     if __name__ == '__main__':
         print(json1)
-    try:
-        db.Film.insert_one(json1)
-    except:
-        db.Film.update_one({'_id': json1['_id']}, {'$set': json1})
-    return json1
+    else:
+        try:
+            db.Film.insert_one(json1)
+        except:
+            db.Film.update_one({'_id': json1['_id']}, {'$set': json1})
 
 
 async def get(url, session):
     async with session.get(url='http://letterboxd.com/film/' + url + "/") as response:
             resp = await response.read()
             soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div', 'a', 'p', 'h1', 'small', 'script']))
-            json0.append(fill_db(url, soup))
+            fill_db(url, soup)
 
 
 async def main2(urls):
     async with aiohttp.ClientSession() as session:
         await asyncio.gather(*[get(url, session) for url in urls])
-        return json0
 
 
 def fillMongodb(urls):
@@ -167,5 +171,4 @@ def fillMongodb(urls):
 
 
 if __name__ == '__main__':
-    fillMongodb(['deep-throat'])
     fillMongodb(['the-batman'])

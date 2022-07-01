@@ -82,10 +82,13 @@ def predictUser(username, watched_list=None):
         ])
         top = []
         for x in obj:
+            j = {}
             for y in top_num:
                 if x['_id'] == int(y[0]):
-                    x['perc'] = int(y[1]*10)
-                    top.append(x)
+                    j['uri'] = x['uri']
+                    j['poster'] = x['poster']
+                    j['perc'] = int(y[1]*10)
+                    top.append(j)
                     break
         top = sorted(top, key=lambda d: d['perc'], reverse=True)
         db.Users.update_one({'_id': username}, {'$set': {'sug': top}})
