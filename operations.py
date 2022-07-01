@@ -49,10 +49,12 @@ def fill_db(url, soup):
         genres = soup.find('div', {"id": "tab-genres"}).select('a')
         json1['genres'] = {'main': [], 'themes': [], 'mini-themes': []}
         for genre in genres:
+            '''
             if "/theme/" in str(genre['href']):
                 json1['genres']['themes'].append(genre['href'].split("/")[3])
             if "/mini-theme/" in str(genre['href']):
                 json1['genres']['mini-themes'].append(genre['href'].split("/")[3])
+            '''
             if "/genre/" in str(genre['href']):
                 json1['genres']['main'].append(genre['href'].split("/")[3])
     except:

@@ -16,19 +16,13 @@ def getStats(username):
                 {'$unwind': '$info'},
                 {'$facet': json_operations}]
 
-    '''
-    db.command({
-        "create": username + "_alltimestats",
-        "viewOn": "Users",
-        "pipeline": json_op1
-    })
-    '''
 
     ob3 = db.Users.aggregate(json_op1)
 
     y = None
     for x in ob3:
         y = x
+    #print(y['mostWatchedgenres_theme'])
 
     if y != None:
         min = y['totalyear'][0]['_id']
@@ -45,7 +39,6 @@ def getStats(username):
             if not check:
                 y2.append({'_id': i, 'average': 0, 'sum': 0})
         y['totalyear'] = y2
-        print(y['collections'])
         db.Users.update_one({'_id': username}, {'$set': {'stats': y}})
 
 
