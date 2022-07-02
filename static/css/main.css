@@ -688,12 +688,6 @@ span{
     align-items: center;
 }
 
-.cuoricino{
-    font-size: 20px !important;
-    color:#ff9010;
-    margin-right:5px;
-}
-
 .norecctext{
     text-align: center;
     font-family: Graphik-Regular-Web, sans-serif;
@@ -784,6 +778,11 @@ span{
     color: #79999d;
 }
 
+.container_studio .clickable, .container_studio .sottotitolo{
+    font-size: 15px;
+}
+
+
 .holeperson{
     position: relative;
     width: 150px;
@@ -795,8 +794,8 @@ span{
 
 .studiohole{
     padding:15px;
-    width:120px;
-    height:120px;
+    width:100px;
+    height:100px;
 }
 
 .holeperson:hover{
@@ -1296,10 +1295,16 @@ span{
     margin-bottom: 15px;
 }
 
-.highLow .stellamedia, .recSec .stellamedia{
+.highLow .stellamedia{
     color: #fff;
     font-family: Graphik-Light-Web,sans-serif;
     font-size: 24px;
+}
+
+.recSec .cuoricino{
+    color: #fff;
+    font-family: Graphik-Light-Web,sans-serif;
+    font-size: 18px;
 }
 
 .centerimg{
@@ -1569,8 +1574,8 @@ span{
 
     .studiohole{
         padding:10px;
-        width:113.75px;
-        height:113.75px;
+        width:80px;
+        height:80px;
     }
 
     .people{
@@ -1585,6 +1590,10 @@ span{
 
     .container_people .sottotitolo{
         font-size: 15px;
+    }
+
+    .container_studio .clickable, .container_studio .sottotitolo{
+        font-size: 10px;
     }
 
     .crewbis {
@@ -1779,13 +1788,22 @@ span{
     .highLow img{
     }
 
-    .highLow .stellamedia, .recSec .stellamedia{
+    .highLow .stellamedia{
         font-size: 22px
+    }
+
+    .recSec .cuoricino{
+        font-size: 12px
     }
 
     .sottofilm{
         flex-direction: row !important;
         margin-top: 10px;
+        gap:5px;
+    }
+
+    .sottofilm img{
+        height: 13px;
     }
 
     .piech2{
@@ -1807,7 +1825,4 @@ span{
         width:85%;
     }
 
-    .cuoricino{
-        font-size: 13px !important;
-    }
 }
