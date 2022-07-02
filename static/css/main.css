@@ -793,9 +793,9 @@ span{
 }
 
 .studiohole{
-    padding:15px;
-    width:100px;
-    height:100px;
+    padding:12px;
+    width:90px;
+    height:90px;
 }
 
 .holeperson:hover{
@@ -1573,9 +1573,9 @@ span{
 
 
     .studiohole{
-        padding:10px;
-        width:80px;
-        height:80px;
+        padding:8px;
+        width:75px;
+        height:75px;
     }
 
     .people{
@@ -1593,7 +1593,7 @@ span{
     }
 
     .container_studio .clickable, .container_studio .sottotitolo{
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .crewbis {
