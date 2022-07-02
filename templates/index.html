@@ -7,7 +7,7 @@
         {% else %}
             <title>&lrm;{{ user.name }}'s {{ yearnum }} in review &bull; Statsboxd</title>
         {% endif %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=4.2.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=4.3.0">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css') }}?q=1.0.0" media="print" onload="this.media='all'">
         <link rel="stylesheet" href="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.css') }}" media="print" onload="this.media='all'">
         <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -112,27 +112,36 @@
             </section>
             <section class="sectionStats">
                 <div class="sepline">
-                    <span>Recommended Films (SVD)</span>
+                    <span>Recommended Films</span>
                     <div class="line"></div>
+                    <span class="clickable active" data-show="sug" data-hide="recSec">Collaborative Filter</span>
+                    <span class="clickable" data-show="sug2" data-hide="recSec">Item-Based</span>
                 </div>
-                {% if user['sug']|length > 0 %}
-                <div class="filmList hideLast">
-                        {% for element in user['sug'] %}
-                            <div class="singleFilm recommend" >
-                                <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
-                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
-                                </a>
-                                <div>
-                                    <span class="sottotitolo cuoricino">❤</span>
-                                    <span class="sottotitolo bigsotto">{{ element.perc }}%</span>
+                {% for type in [[user['sug'],'sug',''], [user['stats']['sug2'],'sug2','hide']] %}
+                <section id="{{ type[1] }}" class="recSec {{type[2]}}">
+                    {% if type[0]|length > 0 %}
+                    <div class="filmList hideLast">
+                            {% for element in type[0] %}
+                                <div class="singleFilm recommend" >
+                                    <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                        <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                    </a>
+                                    <!--<div>
+                                        <span class="sottotitolo cuoricino">❤</span>
+                                        <span class="sottotitolo bigsotto">{{ element.perc }}%</span>
+                                    </div>-->
+                                    <div class="sottofilm">
+                                        <img src="{{ url_for('static', filename='images/orangeheart.jpg') }}" /><span class="sottotitolo stellamedia">{{ element.perc }}%</span>
+                                    </div>
                                 </div>
-                            </div>
-                        {% endfor %}
-                </div>
-                {% else %}
-                    <span class="norecctext">As you are a new user, the recommendations are not yet available, but they will be soon.
-                        <br>Recommendations are generated approximately once a month.</span>
-                {% endif %}
+                            {% endfor %}
+                    </div>
+                    {% else %}
+                        <span class="norecctext">As you are a new user, the recommendations are not yet available, but they will be soon.
+                            <br>Recommendations are generated approximately once a month.</span>
+                    {% endif %}
+                </section>
+                {% endfor %}
             </section>
             <section class="sectionStats">
                 <div class="sepline">

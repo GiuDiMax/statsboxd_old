@@ -1296,7 +1296,7 @@ span{
     margin-bottom: 15px;
 }
 
-.highLow .stellamedia{
+.highLow .stellamedia, .recSec .stellamedia{
     color: #fff;
     font-family: Graphik-Light-Web,sans-serif;
     font-size: 24px;
@@ -1779,7 +1779,7 @@ span{
     .highLow img{
     }
 
-    .highLow .stellamedia{
+    .highLow .stellamedia, .recSec .stellamedia{
         font-size: 22px
     }
 

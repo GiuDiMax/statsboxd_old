@@ -13,13 +13,20 @@ json0 = []
 
 def fill_db(url, soup):
     json1 = {}
-    json_lb = json.loads(soup.find("script", {"type": "application/ld+json"}).text.split('*/', 1)[1].split('/*', 1)[0])
+
+    try:
+        json_lb = json.loads(soup.find("script", {"type": "application/ld+json"}).text.split('*/', 1)[1].split('/*', 1)[0])
+    except:
+        print("elimino " + url)
+        db.Film.delete_one({'uri': url})
+        return
 
     #ID
     try:
         json1['_id'] = int(soup.find("div", {"class": "film-poster"})['data-film-id'])
     except:
-        return json1
+        print("errore " + url)
+        return
     json1['uri'] = url
 
     #TITLE & YEAR
@@ -138,19 +145,24 @@ def fill_db(url, soup):
     except:
         pass
 
-    #DATE
-    json1['updateDate'] = datetime.today()
-    json1['modifiedDate'] = datetime.strptime(json_lb['dateModified'], '%Y-%m-%d')
-
     # RELATEDMOVIES
     json1['related'] = []
     rels = soup.find_all('div', {"class": "linked-film-poster"})
     for rel in rels:
-        json1['related'].append(rel['data-film-id'])
+        json1['related'].append(int(rel['data-film-id']))
+
+    #DATE
+    json1['updateDate'] = datetime.today()
+    json1['modifiedDate'] = datetime.strptime(json_lb['dateModified'], '%Y-%m-%d')
+
 
     if __name__ == '__main__':
         print(json1)
+
+    db.Film.delete_one({'uri': json1['uri']})
     db.Film.update_one({'_id': json1['_id']}, {'$set': json1}, True)
+
+    #db.Film.update_one({'uri': json1['uri']}, {'$set': json1}, True)
 
 
 async def get(url, session):
@@ -172,4 +184,4 @@ def fillMongodb(urls):
 
 
 if __name__ == '__main__':
-    fillMongodb(['the-batman'])
+    fillMongodb(['black-mirror-white-christmas'])

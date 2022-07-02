@@ -22,7 +22,8 @@ def getStats(username):
     y = None
     for x in ob3:
         y = x
-    #print(y['mostWatchedgenres_theme'])
+    if __name__ == '__main__':
+        print(y['test'])
 
     if y != None:
         min = y['totalyear'][0]['_id']
