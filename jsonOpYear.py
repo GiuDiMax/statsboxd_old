@@ -47,11 +47,11 @@ for field in field2 + field3:
         op_role.append({'$match': {'diary.dRating': {'$gt': 0}}})
         op_role.append({'$unwind': '$info.' + field})
         op_role.append({'$group': {'_id': '$info.' + field,
-                                   'average': {'$avg': '$diary.dRating'},
+                                   'avg': {'$avg': '$diary.dRating'},
                                    'sum': {'$sum': 1}}})
         if field == 'actors':
             op_role.append({'$match': {"sum": {'$gt': 1}}})
-        op_role.append({'$sort': {'avg': -1}})
+        op_role.append({'$sort': {'avg': -1, 'sum': -1, 'info.rating.average': -1}})
         op_role.append({'$limit': 20})
         op_role.append({'$lookup': {
             'from': 'People',

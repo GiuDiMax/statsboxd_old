@@ -49,7 +49,7 @@ for field in field2 + field3:
             op_role.append({'$match': {"sum": {'$gt': 3}}})
         else:
             op_role.append({'$match': {"sum": {'$gt': 1}}})
-        op_role.append({'$sort': {'avg': -1}})
+        op_role.append({'$sort': {'avg': -1, 'sum': -1, 'info.rating.average': -1}})
         op_role.append({'$limit': 20})
         op_role.append({'$lookup': {
             'from': 'People',
