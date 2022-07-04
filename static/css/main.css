@@ -120,6 +120,7 @@ span{
 }
 
 .mainT{
+    padding-top:20px;
     display:flex;
     flex-direction: row;
     flex-wrap:nowrap;
@@ -210,6 +211,7 @@ span{
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    background-color: #14181c;
 }
 
 .updatebutton .icon{
@@ -223,9 +225,7 @@ span{
 }
 
 
-.mainTitlesec{
 
-}
 
 .numbersStats{
     display:flex;
@@ -1370,6 +1370,18 @@ span{
     #isMobile{
         display:none;
     }
+
+    .sfondo{
+        background-image: url("/static/images/sfondo2.webp");
+        background-repeat: no-repeat;
+        background-size: contain;
+        position: absolute;
+        top: 71px;
+        left: 0;
+        width: 100vw;
+        height: 100%;
+        z-index: -1;
+    }
 }
 
 /* MOBILE PART */
@@ -1378,6 +1390,18 @@ span{
     #isMobile{
         height: 0;
         display:block !important;
+    }
+
+    .sfondo{
+        background-image: url("/static/images/sfondomobile.webp");
+        background-repeat: no-repeat;
+        background-size: contain;
+        position: absolute;
+        top: 95px;
+        left: 0;
+        width: 100vw;
+        height: 100%;
+        z-index: -1;
     }
 
     .logoup{
