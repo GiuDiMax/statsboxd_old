@@ -1390,7 +1390,7 @@ span{
 
 @media only screen and (min-width: 800px) and (max-width: 1399px) {
     .sfondo{
-        background-image: url("/static/images/sfondoint.jpg");
+        background-image: url("/static/images/sfondoint.webp");
         background-repeat: no-repeat;
         background-size: contain;
         position: absolute;
