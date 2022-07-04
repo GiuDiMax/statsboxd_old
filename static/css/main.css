@@ -1367,19 +1367,35 @@ span{
 }
 
 @media only screen and (min-width: 1200px) {
-    #isMobile{
-        display:none;
+    #isMobile {
+        display: none;
     }
+}
 
+@media only screen and (min-width: 801px) {
     .sfondo{
         background-image: url("/static/images/sfondo2.webp");
         background-repeat: no-repeat;
         background-size: contain;
         position: absolute;
         top: 71px;
+        left: 0.5vw;
+        width: 99vw;
+        height: 100%;
+        z-index: -1;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .sfondo{
+        background-image: url("/static/images/sfondomobile.webp");
+        background-repeat: no-repeat;
+        background-size: contain;
+        position: absolute;
+        top: 95px;
         left: 0;
         width: 100vw;
-        height: 100%;
+        height: 150vh;
         z-index: -1;
     }
 }
@@ -1392,17 +1408,6 @@ span{
         display:block !important;
     }
 
-    .sfondo{
-        background-image: url("/static/images/sfondomobile.webp");
-        background-repeat: no-repeat;
-        background-size: contain;
-        position: absolute;
-        top: 95px;
-        left: 0;
-        width: 100vw;
-        height: 100%;
-        z-index: -1;
-    }
 
     .logoup{
         width:200px;
