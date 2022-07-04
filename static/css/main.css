@@ -1381,7 +1381,7 @@ span{
         background-size: contain;
         position: absolute;
         top: 71px;
-        left: 0.5vw;
+        left: 0;
         width: 99vw;
         height: 100%;
         z-index: -1;
@@ -1396,7 +1396,7 @@ span{
         position: absolute;
         top: 95px;
         left: 0;
-        width: 100vw;
+        width: 99vw;
         height: 150vh;
         z-index: -1;
     }
@@ -1410,7 +1410,7 @@ span{
         position: absolute;
         top: 95px;
         left: 0;
-        width: 100vw;
+        width: 99vw;
         height: 150vh;
         z-index: -1;
     }
@@ -1425,7 +1425,7 @@ span{
         position: absolute;
         top: 95px;
         left: 0;
-        width: 100vw;
+        width: 99vw;
         height: 150vh;
         z-index: -1;
     }
