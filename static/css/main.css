@@ -1372,7 +1372,9 @@ span{
     }
 }
 
-@media only screen and (min-width: 801px) {
+
+/*SFONDO*/
+@media only screen and (min-width: 1400px) {
     .sfondo{
         background-image: url("/static/images/sfondo2.webp");
         background-repeat: no-repeat;
@@ -1386,7 +1388,36 @@ span{
     }
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen and (min-width: 800px) and (max-width: 1399px) {
+    .sfondo{
+        background-image: url("/static/images/sfondoint.jpg");
+        background-repeat: no-repeat;
+        background-size: contain;
+        position: absolute;
+        top: 95px;
+        left: 0;
+        width: 100vw;
+        height: 150vh;
+        z-index: -1;
+    }
+}
+
+@media only screen and (min-width: 500px) and (max-width: 799px) {
+    .sfondo{
+        background-image: url("/static/images/sfondoint2.webp");
+        background-repeat: no-repeat;
+        background-size: contain;
+        position: absolute;
+        top: 95px;
+        left: 0;
+        width: 100vw;
+        height: 150vh;
+        z-index: -1;
+    }
+}
+
+
+@media only screen and (max-width: 499px) {
     .sfondo{
         background-image: url("/static/images/sfondomobile.webp");
         background-repeat: no-repeat;
@@ -1401,6 +1432,14 @@ span{
 }
 
 /* MOBILE PART */
+@media only screen and (min-width: 500px) and (max-width: 1199px) {
+    .arrow-down {
+        left: 130px !important;
+    }
+    .popupYear {
+        left: 60px !important;
+    }
+}
 
 @media only screen and (max-width: 1199px) {
     #isMobile{
@@ -1430,6 +1469,8 @@ span{
 
     .mainTitle{
         font-size: 64px;
+        padding-left:15px;
+        padding-right:15px;
     }
 
     .yearTitle{
@@ -1450,8 +1491,6 @@ span{
         bottom: 0;
     }
 
-    .arrow-down{
-    }
 
     .ppyear{
         right: 28px;
