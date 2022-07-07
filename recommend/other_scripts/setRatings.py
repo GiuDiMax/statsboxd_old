@@ -33,8 +33,8 @@ def threadFunction(user):
     try:
         pages = int(soup.find_all('li', class_="paginate-page")[-1].text)
         urls = []
-        if pages > 25:
-            pages = 25
+        if pages > 20:
+            pages = int(pages*0.8)
         for i in range(pages):
             urls.append('http://letterboxd.com/' + user[1] + '/films/by/popular/page/' + str(i + 1) + "/")
     except:
