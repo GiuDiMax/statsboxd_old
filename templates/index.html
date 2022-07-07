@@ -124,7 +124,7 @@
                 <section id="{{ type[1] }}" class="recSec {{type[2]}}">
                     {% if type[0]|length > 0 %}
                     <div class="filmList hideLast">
-                            {% for element in type[0] %}
+                            {% for element in type[0][:12] %}
                                 <div class="singleFilm recommend" >
                                     <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
                                         <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
@@ -138,6 +138,21 @@
                                     </div>
                                 </div>
                             {% endfor %}
+                    </div>
+                    <div class="filmList hideLastfour hide" id="{{ type[1] }}more">
+                            {% for element in type[0][10:] %}
+                                <div class="singleFilm recommend" >
+                                    <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                        <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                    </a>
+                                    <div class="sottofilm">
+                                        <img src="{{ url_for('static', filename='images/orangeheart.jpg') }}" /><span class="sottotitolo cuoricino">{{ element.perc }}%</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                    </div>
+                    <div class="noflex">
+                        <a class="clickable seeallbutton {{ type[1] }}btn" data-show="{{ type[1] }}more" data-hide="{{ type[1] }}btn">see more</a>
                     </div>
                     {% else %}
                         <span class="norecctext">As you are a new user, the recommendations are not yet available, but they will be soon.
@@ -530,16 +545,16 @@
                 </div>
             </section>
             {%endfor%}
-
+            {% if year == '' %}
             <section class="sectionStats">
                 <div class="sepline">
                     <span>Studios</span>
                     <div class="line"></div>
-                    <span class="clickable active" data-show="mostWatchedStudios" data-hide="studiosStats">Most Watched</span>
-                    <span class="clickable" data-show="topRatedStudios" data-hide="studiosStats">Highest Rated</span>
+                    <!--<span class="clickable active" data-show="mostWatchedStudios" data-hide="studiosStats">Most Watched</span>
+                    <span class="clickable" data-show="topRatedStudios" data-hide="studiosStats">Highest Rated</span>-->
                 </div>
                 <section class="studiosStats" id="mostWatchedStudios"><div id="studiosBubble" class="studiosBubble"></div></section>
-                <section class="studiosStats hide" id="topRatedStudios">
+                <!--<section class="studiosStats hide" id="topRatedStudios">
                         {%for num in [['1', ''], ['2', 'hide']]%}
                         <div id="studio{{ num[0] }}" class="people {{ num[1] }}">
                             {% if num[0] == '1' %}
@@ -567,12 +582,12 @@
                         <div class="noflex">
                             <a class="clickable seeallbutton studio2btn" data-show="studio2" data-hide="studio2btn">see more</a>
                         </div>
-                    </section>
+                    </section>-->
             </section>
-
+            {% endif %}
             <section class="sectionStats">
                 <div class="sepline">
-                    <span>Crew</span>
+                    <span>Crew & Studios</span>
                     <div class="line"></div>
                     <span class="clickable active" data-show="crewmostWatched" data-hide="crewbis">Most Watched</span>
                     <span class="clickable" data-show="crewtopRated" data-hide="crewbis">Highest Rated</span>
