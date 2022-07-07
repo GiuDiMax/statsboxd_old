@@ -5,6 +5,7 @@ from mongodb import db
 from surprise import Dataset, Reader, SVD
 import random
 import os
+from threading import Thread
 
 
 def createAlgo(populate=False):
@@ -35,10 +36,30 @@ def createAlgo(populate=False):
     with open('userslist.pickle', 'wb') as handle:
         pickle.dump(userslist, handle)
     os.remove(filename)
+    num = 5
     if populate:
+        for i in range(int(len(userslist)/num)):
+            for j in range(num):
+                threads = []
+                t = Thread(target=predictUser, args=(userslist[j + i*num]))
+                threads.append(t)
+                for x in threads:
+                    x.start()
+                for x in threads:
+                    x.join()
+        for j in range(int(len(userslist)/num), len(userslist)):
+            threads = []
+            t = Thread(target=predictUser, args=(userslist[j]))
+            threads.append(t)
+            for x in threads:
+                x.start()
+            for x in threads:
+                x.join()
+        '''
         for user in userslist:
             print("recommendations for " + user)
             predictUser(user)
+        '''
 
 
 def predictUser(username, watched_list=None):
