@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup, SoupStrainer
 import lxml
 from threading import Thread
 import csv
+import time
 
 
 async def get_watched3(url, userId, session):
@@ -28,6 +29,7 @@ async def get_watched2(urlx, userId):
 
 
 def threadFunction(user):
+    #print(user[0])
     resp = requests.get('http://letterboxd.com/' + user[1] + '/films/by/popular/')
     soup = BeautifulSoup(resp.text, 'lxml', parse_only=SoupStrainer('div', {'class': 'paginate-pages'}))
     try:
@@ -44,7 +46,7 @@ def threadFunction(user):
     asyncio.get_event_loop().run_until_complete(get_watched2(urls, user[0]))
 
 
-def get_watched(username = None):
+def get_watched(username=None):
     global writer
 
     #for user in data:
@@ -57,17 +59,17 @@ def get_watched(username = None):
         f.close()
 
     else:
-        f = open('lbd/ratings.csv', 'w', newline='')
+        f = open('ratings.csv', 'w', newline='')
         writer = csv.writer(f)
         writer.writerow(['userId', 'movieId', 'rating'])
-
-        with open('lbd/users.csv', newline='') as f:
+        with open('users.csv', newline='') as f:
             reader = csv.reader(f)
             data = list(reader)[1:]
 
-        rangex = 20
+        rangex = 10
 
         for z in range(int(len(data)/rangex) + 1):
+            start = time.time()
             try:
                 threads = []
                 for k in range(rangex):
@@ -83,9 +85,9 @@ def get_watched(username = None):
                         threadFunction(data[z * rangex + k])
                     except:
                         pass
+            print(str(rangex * z) + " in " + str(time.time()-start))
 
 
 if __name__ == '__main__':
-    get_watched('giudimax')
-    #get_watched(None)
-
+    #get_watched('giudimax')
+    get_watched()

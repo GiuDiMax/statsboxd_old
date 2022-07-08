@@ -24,11 +24,11 @@ async def get_users2(urlx):
 def get_users(url):
     global writer, y
     y = 0
-    f = open('lbd/users.csv', 'w', newline='')
+    f = open('users.csv', 'w', newline='')
     writer = csv.writer(f)
     writer.writerow(['id', 'username'])
     urls = []
-    for i in range(50):
+    for i in range(100):
         urls.append(url + str(i + 1) + "/")
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
     asyncio.get_event_loop().run_until_complete(get_users2(urls,))
