@@ -18,4 +18,3 @@ def seeUsers():
 
 if __name__ == '__main__':
     seeUsers()
-
