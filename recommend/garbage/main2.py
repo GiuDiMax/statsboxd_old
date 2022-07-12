@@ -37,7 +37,7 @@ def save_object(obj, filename):
 
 
 def main2():
-    data = sparse('../lbd/ratings_clean.csv')
+    data = sparse('../lbd/ratings.csv')
     save_object(data, 'sparseMatrix.pkl')
     model = LightFM(loss='warp')
     model = model.fit(data, epochs=30, num_threads=2)

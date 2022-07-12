@@ -1,6 +1,6 @@
 import pandas as pd
 
-ratings = pd.read_csv('../lbd/ratings_clean.csv', low_memory=False)
+ratings = pd.read_csv('../lbd/ratings.csv', low_memory=False)
 movies = pd.read_csv('../lbd/movies.csv', low_memory=False)
 
 ratings2 = pd.merge(ratings, movies, on='movieId', how='left')
