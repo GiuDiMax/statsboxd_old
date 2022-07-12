@@ -42,7 +42,7 @@ def main():
     #movies = pd.read_csv("dataset/movies.csv", sep=",", low_memory=False)
     #tags = pd.read_csv("dataset/tags.csv", sep=",", low_memory=False)
     reader = Reader(sep=',', skip_lines=1, line_format='user item rating', rating_scale=(1, 10))
-    data = Dataset.load_from_file("lbd/ratings_clean.csv", reader=reader)
+    data = Dataset.load_from_file("lbd/ratings.csv", reader=reader)
     #data = Dataset.load_from_file("dataset/ratings_min.csv", reader=reader)
 
     test(data)

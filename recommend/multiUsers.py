@@ -20,8 +20,10 @@ def createAlgo(populate=False, algo=False):
             {'$project': {'_id': 1, 'movieId': '$watched.id', 'rating': '$watched.rating'}},
         ])
         dfx = pd.DataFrame(obj)
+        #dfx = pd.merge(dfx, df, on='movieId', how='right')
         userslist = dfx['_id'].unique().tolist()
         dfx.rename(columns={'_id': 'userId'}, inplace=True)
+        #dfx = dfx.drop(columns=['uri', 'average']).dropna().sort_values(by=['userId'])
         #userslist = dfx.drop_duplicates(subset=['userId'])['userId'].tolist()
         df = pd.read_csv('ratings_clean.csv', low_memory=False)
         df = pd.concat([df, dfx])
@@ -29,9 +31,13 @@ def createAlgo(populate=False, algo=False):
         df.to_csv(filename, index=False)
         reader = Reader(sep=',', skip_lines=1, line_format='user item rating', rating_scale=(1, 10))
         data = Dataset.load_from_file(filename, reader=reader)
+        #reader = Reader(rating_scale=(1, 10))
+        #data = Dataset.load_from_df(df, reader=reader)
         trainset = data.build_full_trainset()
+        print("trainset ready, fitting...")
         algo = SVD()
         algo = algo.fit(trainset)
+        print("predicting...")
         with open('algo.pickle', 'wb') as handle:
             pickle.dump(algo, handle)
         with open('userslist.pickle', 'wb') as handle:
@@ -45,30 +51,26 @@ def createAlgo(populate=False, algo=False):
         algox = pickle.load(handle)
     if populate:
         for i in range(int(len(userslist)/num)):
+            threads = []
             for j in range(num):
-                threads = []
                 t = Thread(target=predictUser, args=(userslist[j + i*num], algox))
                 threads.append(t)
-                for x in threads:
-                    x.start()
-                for x in threads:
-                    x.join()
-            for j in range(int(len(userslist)/num), len(userslist)):
-                threads = []
-                t = Thread(target=predictUser, args=(userslist[j], algox))
-                threads.append(t)
-                for x in threads:
-                    x.start()
-                for x in threads:
-                    x.join()
-        '''
-        for user in userslist:
-            print("recommendations for " + user)
-            predictUser(user)
-        '''
+            for x in threads:
+                x.start()
+            for x in threads:
+                x.join()
+        threads2 = []
+        for z in range(int(len(userslist)/num), len(userslist)):
+            t2 = Thread(target=predictUser, args=(userslist[z], algox))
+            threads2.append(t2)
+        for x2 in threads2:
+            x2.start()
+        for x2 in threads2:
+            x2.join()
 
 
 def predictUser(username, algo, watched_list=None):
+    print("predicting " + username)
     num = 24
     if watched_list is None:
         obj = db.Users.aggregate([
@@ -121,5 +123,5 @@ def predictUser(username, algo, watched_list=None):
 
 if __name__ == '__main__':
     start = time.time()
-    createAlgo(True, True)
+    createAlgo(True, False)
     print(time.time() - start)

@@ -8,7 +8,7 @@ def cleanRatings(df, single=False):
     df = df.dropna().astype(int).drop_duplicates()
     movies = pd.read_csv('movies.csv', low_memory=False, error_bad_lines=False)
     df = pd.merge(df, movies, on='movieId', how='right')
-    df = df.drop(columns=['uri', 'average']).dropna().sort_values(by=['userId'])
+    df = df.drop(columns=['uri']).dropna().sort_values(by=['userId'])
     '''
     df['rating'] = df['rating'] - df['average']/5
     df['rating'] = df['rating'].round(1)

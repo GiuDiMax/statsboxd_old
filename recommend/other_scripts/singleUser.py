@@ -10,7 +10,7 @@ import time
 def singleUser(username, direct=False):
     get_watched(username)
     dfx = pd.read_csv('lbd/'+username+'.csv')
-    df = pd.read_csv('lbd/ratings_clean.csv', low_memory=False)
+    df = pd.read_csv('lbd/ratings.csv', low_memory=False)
     movies = pd.read_csv('lbd/movies.csv', low_memory=False)
     df2 = cleanRatings(dfx)
     unwatched = pd.merge(movies, df2, on='movieId', how="outer", indicator=True).query('_merge=="left_only"')
