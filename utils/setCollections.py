@@ -94,5 +94,4 @@ def mainSetCollection2():
 
 
 if __name__ == '__main__':
-    #mainSetCollection2()
-    fillMongodb(['venom-collection-1'])
+    mainSetCollection2()

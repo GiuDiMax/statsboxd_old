@@ -123,5 +123,5 @@ def predictUser(username, algo, watched_list=None):
 
 if __name__ == '__main__':
     start = time.time()
-    createAlgo(True, False)
+    createAlgo(True, True)
     print(time.time() - start)
