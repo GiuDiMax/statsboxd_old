@@ -14,24 +14,27 @@ from threading import Thread
 def fill_db(url, soup, image, studio):
     json1 = {}
     json1['_id'] = url
-    json1['name'] = (str(soup.find("h1", {"class": "title-1"})).split("</span>", 1)[1].split("</h1>", 1)[0]).strip()
-    if not studio:
-        try:
-            tmdb = int(soup.find("div", {"class": "js-tmdb-person-bio"})['data-tmdb-id'])
-            json1['tmdb'] = tmdb
-            if image:
-                req = "https://api.themoviedb.org/3/person/" + str(tmdb) + "?api_key=" + api_tmdb + "&language=en-US"
-                x = requests.get(req)
-                try:
-                    json1['tmdbImg'] = x.text.rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
-                except:
-                    pass
-        except:
-            print('error tmdb for ' + url)
     try:
-        db.People.insert_one(json1)
+        json1['name'] = (str(soup.find("h1", {"class": "title-1"})).split("</span>", 1)[1].split("</h1>", 1)[0]).strip()
+        if not studio:
+            try:
+                tmdb = int(soup.find("div", {"class": "js-tmdb-person-bio"})['data-tmdb-id'])
+                json1['tmdb'] = tmdb
+                if image:
+                    req = "https://api.themoviedb.org/3/person/" + str(tmdb) + "?api_key=" + api_tmdb + "&language=en-US"
+                    x = requests.get(req)
+                    try:
+                        json1['tmdbImg'] = x.text.rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
+                    except:
+                        pass
+            except:
+                print('error tmdb for ' + url)
+        try:
+            db.People.insert_one(json1)
+        except:
+            db.People.update_one({'_id': json1['_id']}, {'$set': json1})
     except:
-        db.People.update_one({'_id': json1['_id']}, {'$set': json1})
+        pass
 
 
 async def get(url, session, image, studio):
@@ -112,17 +115,11 @@ def mainSetNames():
             else:
                 for z in x[y]:
                     uris2.append(z['_id'])
+
     if len(uris) > 0:
         print('da aggiungere con immagini ' + str(len(uris)))
         fillMongodb(uris, True)
-        '''
-        t1 = Thread(target=fillMongodb, args=(uris, True))
-        t2 = Thread(target=fillMongodb, args=(uris2, False))
-        t1.start()
-        t2.start()
-        t1.join()
-        t2.join()
-        '''
+
     if len(uris2) > 0:
         print('da aggiungere no immagini ' + str(len(uris2)))
         fillMongodb(uris2, False)
