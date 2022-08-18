@@ -133,9 +133,11 @@ def fill_db(url, soup):
     except:
         pass
 
-    #POSTERS
+    #POSTERS and BACKDROP
     try:
-        poster = soup.find('div', {"class": "film-poster"}).select('img')[0]['src']
+        #poster = soup.find('div', {"class": "film-poster"}).select('img')[0]['src']
+        #poster = poster.rsplit("-0-", 2)[0].replace("https://a.ltrbxd.com/resized/", "")
+        poster = soup.find('script', {"type": "application/ld+json"}).text.split('"image":"', 1)[1].split('",', 1)[0]
         poster = poster.rsplit("-0-", 2)[0].replace("https://a.ltrbxd.com/resized/", "")
         try:
             backdrop = soup.find('div', {"class": "backdrop-wrapper"})['data-backdrop']
@@ -161,9 +163,9 @@ def fill_db(url, soup):
         print(json1)
 
     db.Film.delete_one({'uri': json1['uri']})
-    db.Film.update_one({'_id': json1['_id']}, {'$set': json1}, True)
+    #db.Film.update_one({'_id': json1['_id']}, {'$set': json1}, True)
 
-    #db.Film.update_one({'uri': json1['uri']}, {'$set': json1}, True)
+    #OLD#db.Film.update_one({'uri': json1['uri']}, {'$set': json1}, True)
 
 
 async def get(url, session):
@@ -185,4 +187,4 @@ def fillMongodb(urls):
 
 
 if __name__ == '__main__':
-    fillMongodb(['black-mirror-white-christmas'])
+    fillMongodb(['breakfast-at-tiffanys'])
