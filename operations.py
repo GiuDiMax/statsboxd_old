@@ -163,7 +163,7 @@ def fill_db(url, soup):
         print(json1)
 
     db.Film.delete_one({'uri': json1['uri']})
-    #db.Film.update_one({'_id': json1['_id']}, {'$set': json1}, True)
+    db.Film.update_one({'_id': json1['_id']}, {'$set': json1}, True)
 
     #OLD#db.Film.update_one({'uri': json1['uri']}, {'$set': json1}, True)
 

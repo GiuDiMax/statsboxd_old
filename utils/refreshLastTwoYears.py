@@ -6,8 +6,8 @@ import time
 
 def refresh():
     datex = datetime.today()
-    datex = datex - timedelta(days=10)
-    #datex = datex - timedelta(days=1)
+    #datex = datex - timedelta(days=10)
+    datex = datex - timedelta(hours=3)
 
     current_year = date.today().year
     a = db.Film.aggregate([
