@@ -11,55 +11,63 @@ from config import *
 from threading import Thread
 
 
-def fill_db(url, soup, image):
+def fill_db(url, soup, image, studio):
     json1 = {}
     json1['_id'] = url
-    json1['name'] = (str(soup.find("h1", {"class": "title-1"})).split("</span>", 1)[1].split("</h1>", 1)[0]).strip()
-    tmdb = int(soup.find("div", {"class": "js-tmdb-person-bio"})['data-tmdb-id'])
-    json1['tmdb'] = tmdb
-    if image:
-        req = "https://api.themoviedb.org/3/person/"+str(tmdb)+"?api_key="+api_tmdb+"&language=en-US"
-        x = requests.get(req)
+    try:
+        json1['name'] = (str(soup.find("h1", {"class": "title-1"})).split("</span>", 1)[1].split("</h1>", 1)[0]).strip()
+        if not studio:
+            try:
+                tmdb = int(soup.find("div", {"class": "js-tmdb-person-bio"})['data-tmdb-id'])
+                json1['tmdb'] = tmdb
+                if image:
+                    req = "https://api.themoviedb.org/3/person/" + str(tmdb) + "?api_key=" + api_tmdb + "&language=en-US"
+                    x = requests.get(req)
+                    try:
+                        json1['tmdbImg'] = x.text.rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
+                    except:
+                        pass
+            except:
+                print('error tmdb for ' + url)
         try:
-            json1['tmdbImg'] = x.text.rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
+            db.People.insert_one(json1)
         except:
-            pass
-        db.People.update_one({'_id': json1['_id']}, {'$set': json1})
-    else:
-        db.People.insert_one(json1)
+            db.People.update_one({'_id': json1['_id']}, {'$set': json1})
+    except:
+        pass
 
 
-async def get(url, session, image):
+async def get(url, session, image, studio):
     async with session.get(url='http://letterboxd.com/writer/' + url + "/") as response:
             resp = await response.read()
             soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div']))
-            fill_db(url, soup, image)
+            fill_db(url, soup, image, studio)
 
 
-async def main2(urls, image):
+async def main2(urls, image, studio):
     async with aiohttp.ClientSession() as session:
-        await asyncio.gather(*[get(url, session, image) for url in urls])
+        await asyncio.gather(*[get(url, session, image, studio) for url in urls])
 
 
-def fillMongodb2(urls, image):
+def fillMongodb2(urls, image, studio):
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
-    asyncio.get_event_loop().run_until_complete(main2(urls, image))
+    asyncio.get_event_loop().run_until_complete(main2(urls, image, studio))
     #return asyncio.get_event_loop().run_until_complete(main2(urls))
 
 
-def fillMongodb(urls, image):
-    if len(urls) > 1000:
-        urlsx = urls[:1000]
+def fillMongodb(urls, image, studio=False):
+    if len(urls) < 1000:
+        fillMongodb2(urls, image, studio)
     else:
-        urlsx = urls
-    fillMongodb2(urlsx, image)
-    print("added 1000 new records")
-    fillMongodb(urls[1000:], image)
+        urlsx = urls[:1000]
+        fillMongodb2(urlsx, image, studio)
+        print("added 1000 new records")
+        fillMongodb(urls[1000:], studio)
 
 
 def mainSetNames():
     json_operations = {}
-    for field in field2:
+    for field in field2 + ['studio']:
         op_role = []
         op_role.append({'$unwind': '$'+field})
         op_role.append({'$group': {'_id': '$'+field,
@@ -95,29 +103,30 @@ def mainSetNames():
 
     uris = []
     uris2 = []
+    uris3 = []
     for x in ob3:
         for y in x:
             if (y == 'actors_img') or (y == 'crew_director_img'):
                 for z in x[y]:
                     uris.append(z['_id'])
+            elif y == 'studio':
+                for z in x[y]:
+                    uris3.append(z['_id'])
             else:
                 for z in x[y]:
                     uris2.append(z['_id'])
 
     if len(uris) > 0:
-        print('da aggiungere persone (con immagini) ' + str(len(uris)))
-        print('da aggiungere persone (no immagini) ' + str(len(uris2)))
-        #fillMongodb(uris, True)
-        #fillMongodb(uris2, False)
-        t1 = Thread(target=fillMongodb, args=(uris, True))
-        t2 = Thread(target=fillMongodb, args=(uris2, False))
-        t1.start()
-        t2.start()
-        t1.join()
-        t2.join()
-    elif len(uris2) > 0:
-        print('da aggiungere persone (no immagini) ' + str(len(uris2)))
+        print('da aggiungere con immagini ' + str(len(uris)))
+        fillMongodb(uris, True)
+
+    if len(uris2) > 0:
+        print('da aggiungere no immagini ' + str(len(uris2)))
         fillMongodb(uris2, False)
+
+    if len(uris3) > 0:
+        print('da aggiungere studios ' + str(len(uris3)))
+        fillMongodb(uris3, False, True)
 
 
 def mainSetNames2():

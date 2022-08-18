@@ -1,13 +1,14 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, url_for, request
 from username import checkUsername, fullUpdate
 from utils.setCollections import mainSetCollection2
 from utils.setPeople import mainSetNames2
 from utils.setLists import updateLists
 from config import *
 from utils.refreshLastTwoYears import refresh
-from utils.cleanUsers import cleanUsers
-from getUsersList import *
+from utils.getUsersList import *
+from mongodb import db
 import sys
+from threading import Thread
 
 app = Flask(__name__)
 
@@ -15,31 +16,23 @@ app = Flask(__name__)
 @app.route('/<username>/')
 def main(username):
     if '.ico' not in username:
-        if username.lower() == 'update':
-            mainSetCollection2()
-            updateLists()
-            cleanUsers()
-            return render_template('username.html')
-        if username.lower() == 'refresh':
-            refresh()
-            return render_template('username.html')
-        if username.lower() == 'people':
-            mainSetNames2()
-            return render_template('username.html')
         if username.lower() == 'reset':
             sys.exit()
-        print(username.lower())
-        print(users_list)
+        if username.lower() == 'faq':
+            return render_template('faq.html')
+        if username.lower() == 'contact':
+            return render_template('contact.html')
+        print("requested: " + username.lower())
         if username.lower() not in users_list:
-
             return render_template('noallowed.html')
         user = checkUsername(username.lower())
-        if user is not None:
-            #try:
-                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
-            #except:
-            #    return render_template('error_flask.html')
-        return render_template('loading.html', redirect=(username.lower() + "/update/"))
+        if (user is not None) and ('diary' in user):
+            return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
+        if fullUpdate(username.lower(), False):
+            return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/',
+                                   roles=crew_html, year="", yearnum=0)
+        else:
+            return render_template('error.html')
     return render_template('username.html')
 
 
@@ -51,7 +44,7 @@ def main_year(username, year):
         user = checkUsername(username.lower())
         if user is not None:
             return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year='_'+year, yearnum=year)
-        return render_template('loading.html', redirect=(username.lower() + "/update/"))
+        return render_template('loading.html', redirect=(username.lower()))
     return render_template('username.html')
 
 
@@ -59,8 +52,7 @@ def main_year(username, year):
 def main_update(username):
     #if beta_test and username.lower() not in beta_users:
     #    return render_template('username.html')
-    print("send " + username)
-    if fullUpdate(username.lower()):
+    if fullUpdate(username.lower(), True):
         return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
     else:
         return render_template('error.html')
@@ -69,6 +61,12 @@ def main_update(username):
 @app.route('/')
 def main_std():
     return render_template('username.html')
+
+
+@app.route('/handle_data', methods=['POST'])
+def handle_data():
+    db.Suggestion.insert_one({'text': request.form['suggestion']})
+    return render_template('success.html')
 
 
 @app.context_processor
@@ -158,11 +156,18 @@ def utility_processor7():
 @app.context_processor
 def utility_processor8():
     def replaceSize(src, height, width):
-        try:
-            return src.rsplit("-0-", 2)[0] + "-0-" + str(height) + "-0-" + str(width) + "-crop.jpg"
-        except:
-            print(src)
-            return ""
+        if 'a.ltrbxd' in src:
+            try:
+                return src.rsplit("-0-", 2)[0] + "-0-" + str(height) + "-0-" + str(width) + "-crop.jpg"
+            except:
+                print(src)
+                return ""
+        else:
+            try:
+                return '//a.ltrbxd.com/resized/' + src + "-0-" + str(height) + "-0-" + str(width) + "-crop.jpg"
+            except:
+                print(src)
+                return ""
     return dict(replaceSize=replaceSize)
 
 
