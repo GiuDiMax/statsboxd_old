@@ -3,17 +3,16 @@
     <head>
         <meta charset="UTF-8">
         <title>Please wait...</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=2.1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=2.2.0">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         <div id="isMobile"></div>
         <div class="headerbar">
-            <a href="https://letterboxd.com/">
+            <a href="/">
                 <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="statsboxdlogo" class="logoup"/>
             </a>
-            <span class="madeby">Project made by GiuDiMax</span>
         </div>
         <div class="loader"></div>
     </body>

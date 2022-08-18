@@ -5,7 +5,7 @@ field2 = ['actors', 'crew.director', 'crew.producer', 'crew.writer', 'crew.edito
           'crew.set-decoration', 'crew.visual-effects', 'crew.composer', 'crew.sound',
           'crew.costumes', 'crew.make-up']
 
-field3 = ['country', 'studio', 'language', 'genres.main', 'genres.themes', 'genres.mini-themes']
+field3 = ['country', 'studio', 'language', 'genres.main', 'genres.theme', 'genres.nanogenre'] #, 'genres.mini-themes']
 
 field4 = ['country', 'year']
 
@@ -37,5 +37,8 @@ crew_html = [
      ['studio', 'studio', 'Studio']
 ]
 
-exclude_people = ['mickie-mcgowan', 'stan-lee', 'jack-angel', 'sherry-lynn', 'frank-welker']
+exclude_people = ['mickie-mcgowan', 'stan-lee', 'jack-angel', 'sherry-lynn', 'fred-tatasciore', 'jim-cummings',
+                  'frank-welker', 'laraine-newman', 'bob-bergen', 'jess-harnell', 'jan-rabson', 'bob-peterson',
+                  'fred-tatasciore', 'dee-bradley-baker', 'grey-delisle', 'tara-strong', 'scott-menville']
+
 users_list_url = 'https://gist.githubusercontent.com/GiuDiMax/84c8ba608c932d4671d5fe83d5f5e9c4/raw/users_lbd'

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Error - Statsboxd</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=3.0.0">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="isMobile"></div>
+        <div class="headerbar">
+            <a href="/">
+                <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="statsboxdlogo" class="logoup"/>
+            </a>
+            <div class="navbar">
+                <a href="//letterboxd.com/giudimax/">Project made by GiuDiMax</a>
+                <a href="/faq">FAQ</a>
+                <a href="/contact">Contact Me</a>
+            </div>
+        </div>
+        <div id="content" class="content">
+            <h1>Contact me</h1>
+            <form action="{{ url_for('handle_data') }}" method="post" class="formx">
+                <textarea name="suggestion" cols="40" rows="5" class="form"></textarea>
+                <input class="seeallbutton" type="submit">
+            </form>
+        </div>
+    </body>
+    <footer>
+    </footer>
+</html>

@@ -3,21 +3,25 @@
     <head>
         <meta charset="UTF-8">
         <title>Error - Statsboxd</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=2.2.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=3.0.0">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         <div id="isMobile"></div>
         <div class="headerbar">
-            <a href="https://letterboxd.com/">
+            <a href="/">
                 <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="statsboxdlogo" class="logoup"/>
             </a>
-            <span class="madeby">Project made by GiuDiMax</span>
+            <div class="navbar">
+                <a href="//letterboxd.com/giudimax/">Project made by GiuDiMax</a>
+                <a href="/faq">FAQ</a>
+                <a href="/contact">Contact Me</a>
+            </div>
         </div>
         <div class="shortTitle">
             <h2>An error has occurred!</h2>
-            <h3>Please report your username to my reddit DM: GiuDiMax or to my email: ccl.leg@gmail.com.</h3>
+            <h3>Please report your username <a href="/contact">here</a>.</h3>
         </div>
     </body>
     <footer>

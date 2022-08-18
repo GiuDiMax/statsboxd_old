@@ -2,6 +2,7 @@ from mongodb import db
 from config import *
 from jsonoOpAllTime import json_operations
 
+
 def getStats(username):
     # db.Users.update_one({'username': username}, {'$set': {'a': 'b'}})
 
@@ -15,18 +16,14 @@ def getStats(username):
                 {'$unwind': '$info'},
                 {'$facet': json_operations}]
 
-    '''
-    db.command({
-        "create": username + "_alltimestats",
-        "viewOn": "Users",
-        "pipeline": json_op1
-    })
-    '''
 
     ob3 = db.Users.aggregate(json_op1)
 
+    y = None
     for x in ob3:
         y = x
+    if __name__ == '__main__':
+        print(y['test'])
 
     if y != None:
         min = y['totalyear'][0]['_id']
@@ -47,4 +44,4 @@ def getStats(username):
 
 
 if __name__ == '__main__':
-    getStats('lordofthebushes')
+    getStats('giudimax')
