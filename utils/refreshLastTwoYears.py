@@ -11,7 +11,7 @@ def refresh():
 
     current_year = date.today().year
     a = db.Film.aggregate([
-        {'$match': {"year": {'$gt': current_year - 2}}},
+        #{'$match': {"year": {'$gt': current_year - 2}}},
         {'$match': {"updateDate": {'$lt': datex}}},
         {'$sort': {'updateDate': 1}},
         {'$limit': 1000},
@@ -35,7 +35,7 @@ def refreshata():
 
 
 if __name__ == '__main__':
-    for i in range(5):
+    for i in range(50):
         start = time.time()
         refreshata()
         #refresh()
