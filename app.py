@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, redirect
 from username import checkUsername, fullUpdate
 from utils.setCollections import mainSetCollection2
 from utils.setPeople import mainSetNames2
@@ -9,6 +9,7 @@ from utils.getUsersList import *
 from mongodb import db
 import sys
 from threading import Thread
+from utils.collage import collage
 
 app = Flask(__name__)
 
@@ -56,6 +57,11 @@ def main_update(username):
         return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
     else:
         return render_template('error.html')
+
+
+@app.route('/<username>/collage/')
+def main_collage(username):
+    return redirect(collage(username), code=302)
 
 
 @app.route('/')

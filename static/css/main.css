@@ -212,6 +212,7 @@ span{
     justify-content: center;
     align-items: center;
     background-color: #14181c;
+    margin:0 !important;
 }
 
 .updatebutton .icon{
@@ -224,7 +225,13 @@ span{
     color: #d0eee2 !important;
 }
 
-
+.buttonstart{
+    display:flex;
+    gap:30px;
+    flex-wrap:wrap;
+    flex-direction: row;
+    justify-content: center;
+}
 
 
 .numbersStats{
@@ -824,7 +831,15 @@ span{
     margin-left:auto;
     margin-right: auto;
     flex: none;
-    'width:100%;
+}
+
+.collagebutton{
+    color: #00c9a3;
+    border: 1px solid #00c9a3;
+}
+
+.collagebutton .icon{
+    color: #00c9a3 !important;
 }
 
 .seeallbutton:hover{

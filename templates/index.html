@@ -65,7 +65,10 @@
                     </span>
                 </div>
                 {% if year == '' %}
-                <a class="clickable seeallbutton updatebutton" href="/{{ user._id }}/update"><span class="material-symbols-rounded icon">sync</span>Update</a>
+                    <div class="buttonstart">
+                        <a class="clickable seeallbutton updatebutton" href="/{{ user._id }}/update"><span class="material-symbols-rounded icon">sync</span>Update</a>
+                        <a class="clickable seeallbutton updatebutton collagebutton" href="/{{ user._id }}/collage"><span class="material-symbols-rounded icon">grid_on</span>Generate last month collage</a>
+                    </div>
                 {% endif %}
                 <div class="numbersStats">
                     <div>
