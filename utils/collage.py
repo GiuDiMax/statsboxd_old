@@ -41,7 +41,7 @@ def collage(username):
 
     #img = Image.open(requests.get('https://wallpaperaccess.com/full/1554870.jpg', stream=True).raw).convert("RGBA")
     #img = img.resize((1080, 1920))
-    img = Image.open("sfondo.jpg").convert("RGBA").resize((1080, 1920))
+    img = Image.open("utils/sfondo.jpg").convert("RGBA").resize((1080, 1920))
     combined = img
     bordistandard = 25
 
@@ -107,7 +107,7 @@ def collage(username):
 
         if film['like'] or film['rewatch']:
             out = Image.new("RGBA", (length, int(bordivert * 0.5)), (255, 0, 0, 0))
-            fnt = ImageFont.truetype("dejavusans-bold.ttf", int(150 / j))
+            fnt = ImageFont.truetype("utils/dejavusans-bold.ttf", int(150 / j))
             try:
                 msg = u"\u2605" * int(int(film['rating']) / 2) + u"\u00BD" * int(int(film['rating']) % 2) + \
                       " " + u"\u2665" * film['like'] + u"\u27F3" * film['rewatch']
@@ -115,7 +115,7 @@ def collage(username):
                 msg = ""
         else:
             out = Image.new("RGBA", (length, int(bordivert*0.5)), (255, 0, 0, 0))
-            fnt = ImageFont.truetype("dejavusans-bold.ttf", int(170/j))
+            fnt = ImageFont.truetype("utils/dejavusans-bold.ttf", int(170/j))
             try:
                 msg = u"\u2605" * int(int(film['rating'])/2) + u"\u00BD" * int(int(film['rating']) % 2)
             except:
@@ -130,7 +130,7 @@ def collage(username):
 
     out = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
 
-    fnt = ImageFont.truetype("Moonrising.ttf", int(bordoalto*0.5))
+    fnt = ImageFont.truetype("utils/Moonrising.ttf", int(bordoalto*0.5))
     dictmonth = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',
                  7:'July', 8:'August',9:'September',10:'October',11:'November',12:'December'}
     msg = dictmonth[int(month)] + " " + str(year)
@@ -140,8 +140,8 @@ def collage(username):
     combined = Image.alpha_composite(combined, out)
     #combined.show()
     rgb_im = combined.convert('RGB')
-    rgb_im.save('tmp.jpg')
-    files = {'image': open('tmp.jpg', 'rb')}
+    rgb_im.save('utils/tmp.jpg')
+    files = {'image': open('utils/tmp.jpg', 'rb')}
     urlreq = 'https://api.imgbb.com/1/upload?key=d75924aaec91be8dcb79c3c5ec3547cc'
     r = requests.post(urlreq, files=files)
     jsonx = json.loads(r.text)
