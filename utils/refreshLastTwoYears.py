@@ -8,11 +8,11 @@ def refresh():
     datex = datetime.today()
     #datex = datex - timedelta(days=10)
     datex = datex - timedelta(hours=3)
-
     current_year = date.today().year
+
     a = db.Film.aggregate([
-        #{'$match': {"year": {'$gt': current_year - 2}}},
-        {'$match': {"updateDate": {'$lt': datex}}},
+        {'$match': {"year": {'$gt': current_year - 2}}},
+        #{'$match': {"updateDate": {'$lt': datex}}},
         {'$sort': {'updateDate': 1}},
         {'$limit': 1000},
         {'$project': {'uri': 1}}

@@ -137,14 +137,16 @@ def fill_db(url, soup):
     try:
         #poster = soup.find('div', {"class": "film-poster"}).select('img')[0]['src']
         #poster = poster.rsplit("-0-", 2)[0].replace("https://a.ltrbxd.com/resized/", "")
+
         poster = soup.find('script', {"type": "application/ld+json"}).text.split('"image":"', 1)[1].split('",', 1)[0]
-        poster = poster.rsplit("-0-", 2)[0].replace("https://a.ltrbxd.com/resized/", "")
-        try:
-            backdrop = soup.find('div', {"class": "backdrop-wrapper"})['data-backdrop']
-            backdrop = backdrop.rsplit("-1200-1200-", 1)[0].replace("https://a.ltrbxd.com/resized/", "")
-            json1['images'] = {'poster': poster, 'backdrop': backdrop}
-        except:
-            json1['images'] = {'poster': poster}
+        if "https://a.ltrbxd.com/resized/" in poster:
+            poster = poster.rsplit("-0-", 2)[0].replace("https://a.ltrbxd.com/resized/", "")
+            try:
+                backdrop = soup.find('div', {"class": "backdrop-wrapper"})['data-backdrop']
+                backdrop = backdrop.rsplit("-1200-1200-", 1)[0].replace("https://a.ltrbxd.com/resized/", "")
+                json1['images'] = {'poster': poster, 'backdrop': backdrop}
+            except:
+                json1['images'] = {'poster': poster}
     except:
         pass
 
