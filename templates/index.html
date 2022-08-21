@@ -7,7 +7,7 @@
         {% else %}
             <title>&lrm;{{ user.name }}'s {{ yearnum }} in review &bull; Statsboxd</title>
         {% endif %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=5.4.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=6.0.0">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css') }}?q=1.0.0" media="print" onload="this.media='all'">
         <link rel="stylesheet" href="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.css') }}" media="print" onload="this.media='all'">
         <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -17,6 +17,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="//jvectormap.com/js/jquery-jvectormap-world-mill.js"></script>
         <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,200,0,0" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/brands.min.css" media="print" onload="this.media='all'">
     </head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMKEGDRHD5"></script>
@@ -76,7 +77,7 @@
                 {% if year == '' %}
                     <div class="buttonstart">
                         <a class="clickable seeallbutton updatebutton" href="/{{ user._id }}/update"><span class="material-symbols-rounded icon">sync</span>Update</a>
-                        <a class="clickable seeallbutton updatebutton collagebutton" href="/{{ user._id }}/collage"><span class="material-symbols-rounded icon">grid_on</span>Generate last month collage</a>
+                        <a class="clickable seeallbutton updatebutton collagebutton" href="/{{ user._id }}/collage"><span class="fa-brands fa-instagram icon icon2"></span>Generate last month collage</a>
                     </div>
                 {% endif %}
                 <div class="numbersStats">
