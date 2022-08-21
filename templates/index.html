@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMKEGDRHD5"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-BMKEGDRHD5');
+        </script>
         <meta charset="UTF-8">
         {% if year == '' %}
             <title>&lrm;{{ user.name }}’s all-time stats &bull; Statsboxd</title>
@@ -20,14 +28,7 @@
         <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/brands.min.css" media="print" onload="this.media='all'">
     </head>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMKEGDRHD5"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
 
-      gtag('config', 'G-BMKEGDRHD5');
-    </script>
     <body>
         <div id="isMobile"></div>
         <div class="headerbar">
