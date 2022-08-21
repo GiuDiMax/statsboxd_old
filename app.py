@@ -13,6 +13,10 @@ from utils.collage import collage
 
 app = Flask(__name__)
 
+@app.route('/handle_data', methods=['POST'])
+def handle_data():
+    db.Suggestion.insert_one({'text': request.form['suggestion']})
+    return render_template('success.html')
 
 @app.route('/<username>/')
 def main(username):
@@ -68,11 +72,6 @@ def main_collage(username):
 def main_std():
     return render_template('username.html')
 
-
-@app.route('/handle_data', methods=['POST'])
-def handle_data():
-    db.Suggestion.insert_one({'text': request.form['suggestion']})
-    return render_template('success.html')
 
 
 @app.context_processor
