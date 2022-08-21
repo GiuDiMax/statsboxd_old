@@ -143,7 +143,7 @@ def collage(username):
     rgb_im = combined.convert('RGB')
     rgb_im.save('./utils/tmp.jpg')
     files = {'image': open('./utils/tmp.jpg', 'rb')}
-    urlreq = 'https://api.imgbb.com/1/upload?key=d75924aaec91be8dcb79c3c5ec3547cc'
+    urlreq = 'https://api.imgbb.com/1/upload?expiration=600&key=d75924aaec91be8dcb79c3c5ec3547cc'
     r = requests.post(urlreq, files=files)
     jsonx = json.loads(r.text)
     return(jsonx['data']['url'].replace("\/","/"))
