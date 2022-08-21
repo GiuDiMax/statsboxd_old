@@ -108,7 +108,7 @@ def collage(username):
 
         if film['like'] or film['rewatch']:
             out = Image.new("RGBA", (length, int(bordivert * 0.5)), (255, 0, 0, 0))
-            fnt = ImageFont.truetype("./utils/dejavusans-bold.ttf", int(150 / j))
+            fnt = ImageFont.truetype("./utils/DejaVuSans-Bold.ttf", int(150 / j))
             try:
                 msg = u"\u2605" * int(int(film['rating']) / 2) + u"\u00BD" * int(int(film['rating']) % 2) + \
                       " " + u"\u2665" * film['like'] + u"\u27F3" * film['rewatch']
@@ -116,7 +116,7 @@ def collage(username):
                 msg = ""
         else:
             out = Image.new("RGBA", (length, int(bordivert*0.5)), (255, 0, 0, 0))
-            fnt = ImageFont.truetype("./utils/dejavusans-bold.ttf", int(170/j))
+            fnt = ImageFont.truetype("./utils/DejaVuSans-Bold.ttf", int(170/j))
             try:
                 msg = u"\u2605" * int(int(film['rating'])/2) + u"\u00BD" * int(int(film['rating']) % 2)
             except:
