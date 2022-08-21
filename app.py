@@ -14,12 +14,6 @@ from utils.collage import collage
 app = Flask(__name__)
 
 
-@app.route('/handle_data', methods=['POST'])
-def handle_data():
-    db.Suggestion.insert_one({'text': request.form['suggestion']})
-    return render_template('success.html')
-
-
 @app.route('/<username>/')
 def main(username):
     if '.ico' not in username and 'handle_data' not in username:
@@ -41,6 +35,18 @@ def main(username):
         else:
             return render_template('error.html')
     return render_template('username.html')
+
+
+@app.route('/handle_data', methods=['POST'])
+def handle_data():
+    db.Suggestion.insert_one({'name': request.form['name'], 'text': request.form['suggestion']})
+    return render_template('success.html')
+
+
+@app.route('/handle_data')
+def handle_data():
+    db.Suggestion.insert_one({'name': request.form['name'], 'text': request.form['suggestion']})
+    return render_template('success.html')
 
 
 @app.route('/<username>/<year>')

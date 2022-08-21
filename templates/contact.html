@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Error - Statsboxd</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=3.0.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=5.0.0">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
@@ -31,7 +31,8 @@
             <h1 style="margin-bottom:10px;">Contact me</h1>
             <h3><a href="https://t.me/giudimax">Also on telegram</a></h3>
             <form action="{{ url_for('handle_data') }}" method="post" class="formx">
-                <textarea name="suggestion" cols="40" rows="5" class="form"></textarea>
+                <textarea name="name" placeholder="Telegram username or mail" class="form2" required></textarea>
+                <textarea name="suggestion" cols="40" rows="5" class="form" required></textarea>
                 <input class="seeallbutton" type="submit" value="Submit">
             </form>
         </div>
