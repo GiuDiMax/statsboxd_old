@@ -43,12 +43,6 @@ def handle_data():
     return render_template('success.html')
 
 
-@app.route('/handle_data')
-def handle_data():
-    db.Suggestion.insert_one({'name': request.form['name'], 'text': request.form['suggestion']})
-    return render_template('success.html')
-
-
 @app.route('/<username>/<year>')
 def main_year(username, year):
     if '.ico' not in username:
