@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 @app.route('/<username>/')
 def main(username):
-    if '.ico' not in username and 'handle_data' not in username:
+    if '.ico' not in username and 'success' not in username:
         if username.lower() == 'reset':
             sys.exit()
         if username.lower() == 'faq':
@@ -40,8 +40,11 @@ def main(username):
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
     db.Suggestion.insert_one({'name': request.form['name'], 'text': request.form['suggestion']})
-    return render_template('success.html')
+    return redirect(url_for('hello'))
 
+@app.route('/success')
+def success():
+    return render_template('success.html')
 
 @app.route('/<username>/<year>')
 def main_year(username, year):
