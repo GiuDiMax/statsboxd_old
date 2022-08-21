@@ -37,7 +37,7 @@ def main(username):
     return render_template('username.html')
 
 
-@app.route('/handle_data', methods=['POST'])
+@app.route('/handle_data', methods=['POST', 'GET'])
 def handle_data():
     db.Suggestion.insert_one({'name': request.form['name'], 'text': request.form['suggestion']})
     return redirect(url_for('success'))
