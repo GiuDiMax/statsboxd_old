@@ -22,7 +22,7 @@ def handle_data():
 
 @app.route('/<username>/')
 def main(username):
-    if '.ico' not in username:
+    if '.ico' not in username and 'handle_data' not in username:
         if username.lower() == 'reset':
             sys.exit()
         if username.lower() == 'faq':
