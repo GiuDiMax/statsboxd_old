@@ -40,11 +40,13 @@ def main(username):
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
     db.Suggestion.insert_one({'name': request.form['name'], 'text': request.form['suggestion']})
-    return redirect(url_for('hello'))
+    return redirect(url_for('success'))
+
 
 @app.route('/success')
 def success():
     return render_template('success.html')
+
 
 @app.route('/<username>/<year>')
 def main_year(username, year):
