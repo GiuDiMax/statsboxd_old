@@ -221,6 +221,10 @@ span{
     padding-right:8px;
 }
 
+.updatebutton .icon2{
+    font-size: 25px;
+}
+
 .updatebutton:hover .icon{
     color: #d0eee2 !important;
 }
