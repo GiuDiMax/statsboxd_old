@@ -132,9 +132,9 @@ def collage(username):
     out = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
 
     fnt = ImageFont.truetype("./utils/Moonrising.ttf", int(bordoalto*0.5))
-    dictmonth = {1:'January',2:'February',3:'March',4:'April',5:'May',6:'June',
-                 7:'July', 8:'August',9:'September',10:'October',11:'November',12:'December'}
-    msg = dictmonth[int(month)] + " " + str(year)
+    dictmonth = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',
+                 7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'}
+    msg = dictmonth[int(month-1)] + " " + str(year)
     w, h = fnt.getsize(msg)
     d = ImageDraw.Draw(out)
     d.text((int(1080-bordiestremi-w), int(bordoalto*0.2+bordisupplemento/2)), msg, font=fnt, fill=(173, 255, 47, 255))
