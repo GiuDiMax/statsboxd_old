@@ -26,7 +26,7 @@ def fill_db(url, soup, image, studio):
                     try:
                         json1['tmdbImg'] = x.text.rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
                     except:
-                        pass
+                        json1['imgNone'] = True
             except:
                 print('error tmdb for ' + url)
         try:
@@ -83,18 +83,24 @@ def mainSetNames():
         op_role.append({'$match': {"info": {'$eq': []}}})
         json_operations[field.replace(".", "_")] = op_role
 
-    for field in ['actors', 'crew.director']:
+    for field in ['crew.director', 'actors']:
         op_role = []
         op_role.append({'$unwind': '$'+field})
         op_role.append({'$group': {'_id': '$'+field,
                                    'sum': {'$sum': 1}}})
-        op_role.append({'$match': {"sum": {'$gt': 9}}})
+        if 'director' in field:
+            op_role.append({'$match': {"sum": {'$gt': 4}}})
+        else:
+            op_role.append({'$match': {"sum": {'$gt': 9}}})
+        op_role.append({'$sort': {"sum": -1}})
         op_role.append({'$lookup': {
                             'from': 'People',
                             'localField': '_id',
                             'foreignField': '_id',
                             'as': 'info'}})
-        op_role.append({'$match': {"info": {'$eq': []}}})
+        #op_role.append({'$match': {"info": {'$eq': []}}})
+        op_role.append({'$match': {"info.tmdbImg": {'$exists': False}}})
+        op_role.append({'$match': {"info.imgNone": {'$exists': False}}})
         json_operations[field.replace(".", "_")+'_img'] = op_role
 
     ob3 = db.Film.aggregate([
