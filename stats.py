@@ -16,14 +16,14 @@ def getStats(username):
                 {'$unwind': '$info'},
                 {'$facet': json_operations}]
 
-
     ob3 = db.Users.aggregate(json_op1)
 
     y = None
     for x in ob3:
         y = x
     if __name__ == '__main__':
-        print(y['test'])
+        #print(y['test'])
+        print(y['mostWatchedactors'])
 
     if y != None:
         min = y['totalyear'][0]['_id']
