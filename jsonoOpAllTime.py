@@ -47,6 +47,7 @@ for field in field2 + field3:
                                    'sum': {'$sum': 1}}})
         if field == 'actors':
             op_role.append({'$match': {"sum": {'$gt': 3}}})
+            op_role.append({'$match': {"_id": {'$nin': exclude_people}}})
         else:
             op_role.append({'$match': {"sum": {'$gt': 1}}})
         op_role.append({'$sort': {'avg': -1, 'sum': -1, 'info.rating.average': -1}})
