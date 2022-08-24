@@ -65,7 +65,8 @@ def main_update(username):
     #if beta_test and username.lower() not in beta_users:
     #    return render_template('username.html')
     if fullUpdate(username.lower(), True):
-        return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
+        #return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
+        return redirect("/"+username)
     else:
         return render_template('error.html')
 
@@ -78,7 +79,6 @@ def main_collage(username):
 @app.route('/')
 def main_std():
     return render_template('username.html')
-
 
 
 @app.context_processor
