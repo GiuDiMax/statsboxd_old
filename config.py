@@ -39,6 +39,7 @@ crew_html = [
 
 exclude_people = ['mickie-mcgowan', 'stan-lee', 'jack-angel', 'sherry-lynn', 'fred-tatasciore', 'jim-cummings',
                   'frank-welker', 'laraine-newman', 'bob-bergen', 'jess-harnell', 'jan-rabson', 'bob-peterson',
-                  'fred-tatasciore', 'dee-bradley-baker', 'grey-delisle', 'tara-strong', 'scott-menville']
+                  'fred-tatasciore', 'dee-bradley-baker', 'grey-delisle', 'tara-strong', 'scott-menville',
+                  'mona-marshall', 'danny-mann', 'bill-farmer']
 
 users_list_url = 'https://gist.githubusercontent.com/GiuDiMax/84c8ba608c932d4671d5fe83d5f5e9c4/raw/users_lbd'
