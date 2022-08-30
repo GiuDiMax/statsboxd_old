@@ -690,7 +690,7 @@
                 script.onload = function () {
                     worldMapx();
                 };
-                script.src = "//jvectormap.com/js/jquery-jvectormap-world-mill.js";
+                script.src = "{{ url_for('static', filename='js/jquery-jvectormap-world-mill.js') }}";
                 document.head.appendChild(script); //or something of the likes
              }
 
