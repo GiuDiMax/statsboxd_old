@@ -20,6 +20,10 @@
     <orderEntry type="library" name="highcharts" level="application" />
     <orderEntry type="library" name="jquery-jvectormap-world-mill" level="application" />
     <orderEntry type="library" name="brands" level="application" />
+    <orderEntry type="library" name="jquery.lazy.plugins" level="application" />
+    <orderEntry type="library" name="jquery.lazy" level="application" />
+    <orderEntry type="library" name="rounded-corners" level="application" />
+    <orderEntry type="library" name="highcharts-more" level="application" />
   </component>
   <component name="PackageRequirementsSettings">
     <option name="versionSpecifier" value="Greater or equal (&gt;=x.y.z)" />
