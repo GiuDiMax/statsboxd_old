@@ -12,3 +12,4 @@ cryptography>=37.0.2
 numpy>=1.22.4
 scipy>=1.8.1
 Pillow>=9.2.0
+flask_compress>=1.12

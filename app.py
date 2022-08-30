@@ -10,8 +10,10 @@ from mongodb import db
 import sys
 from threading import Thread
 from utils.collage import collage
+from flask_compress import Compress
 
 app = Flask(__name__)
+Compress(app)
 
 
 @app.route('/<username>/')
