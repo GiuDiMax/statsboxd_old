@@ -581,7 +581,7 @@
                                 <div class="container_people container_studio">
                                     <a href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/studio/{{ element._id }}">
                                         <img class="holeperson studiohole lazy" src="{{ url_for('static', filename = 'images/studios/studio.png') }}"
-                                             data-src="{{ url_for('static', filename = 'images/studios/'+element._id+'.png') }}"
+                                            data-src="images/studios/{{ element._id }}.png"
                                         alt="{{ element._id }}"/>
                                     </a>
                                         {% if 'name' in element %}
