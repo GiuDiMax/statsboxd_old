@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, make_response
 from username import checkUsername, fullUpdate
 from utils.setCollections import mainSetCollection2
 from utils.setPeople import mainSetNames2
@@ -11,6 +11,7 @@ import sys
 from threading import Thread
 from utils.collage import collage
 from flask_compress import Compress
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 Compress(app)
@@ -36,7 +37,11 @@ def main(username):
                                    roles=crew_html, year="", yearnum=0)
         else:
             return render_template('error.html')
-    return render_template('username.html')
+    expiry_time = datetime.utcnow() + timedelta(100)
+    response = render_template('username.html')
+    response.mimetype = "text/plain"
+    response.headers["Expires"] = expiry_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
+    return response
 
 
 @app.route('/handle_data', methods=['POST', 'GET'])
