@@ -16,6 +16,10 @@
     <orderEntry type="library" name="main.8f96980a" level="application" />
     <orderEntry type="library" name="main.3fd28322" level="application" />
     <orderEntry type="library" name="pageos" level="application" />
+    <orderEntry type="library" name="jquery-3.6.0" level="application" />
+    <orderEntry type="library" name="highcharts" level="application" />
+    <orderEntry type="library" name="jquery-jvectormap-world-mill" level="application" />
+    <orderEntry type="library" name="brands" level="application" />
   </component>
   <component name="PackageRequirementsSettings">
     <option name="versionSpecifier" value="Greater or equal (&gt;=x.y.z)" />
