@@ -49,14 +49,6 @@ def success():
     return render_template('success.html')
 
 
-@app.route('/static/images/studio/<file>')
-def studiocheck():
-    try:
-        return
-    except:
-        return redirect('/static/images/studio/studio.png')
-
-
 @app.route('/<username>/<year>')
 def main_year(username, year):
     if '.ico' not in username:

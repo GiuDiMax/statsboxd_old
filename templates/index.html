@@ -14,13 +14,12 @@
         {% else %}
             <title>&lrm;{{ user.name }}'s {{ yearnum }} in review &bull; Statsboxd</title>
         {% endif %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=6.0.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=6.0.0" media="print" onload="this.media='all'">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/font.css') }}?q=1.0.0" media="print" onload="this.media='all'">
         <link rel="stylesheet" href="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.css') }}" media="print" onload="this.media='all'">
         <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!--<script defer src="//code.highcharts.com/highcharts.js"></script>-->
         <script defer src="//cdnjs.cloudflare.com/ajax/libs/highcharts/10.2.1/highcharts.min.js"></script>
         <script defer src="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.min.js') }}"></script>
         <script defer src="//jvectormap.com/js/jquery-jvectormap-world-mill.js"></script>
@@ -582,8 +581,7 @@
                                 <div class="container_people container_studio">
                                     <a href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/studio/{{ element._id }}">
                                         <img class="holeperson studiohole lazy" src="{{ url_for('static', filename = 'images/studios/studio.png') }}"
-                                            data-src="{{ url_for('static', filename='images/studios/'+element.id) }}"
-                                            data-src="/images/studios/{{ element._id }}.png"
+                                            data-src="{{ url_for('static', filename='images/studios/studio.png') }}"
                                         alt="{{ element._id }}"/>
                                     </a>
                                         {% if 'name' in element %}
@@ -677,7 +675,7 @@
     <footer>
         <!--<script src="//jvectormap.com/js/jquery-jvectormap-world-mill.js" async onload="worldMapx()"></script>-->
         <!--<script src="//code.highcharts.com/highcharts.js" async onload="chartFunc()"></script>-->
-        <script src="//code.highcharts.com/highcharts-more.js" async onload="studioFunc()"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highcharts/10.2.1/highcharts-more.min.js" async onload="studioFunc()"></script>
         <script src="//rawgit.com/highcharts/rounded-corners/master/rounded-corners.js" async></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js" async onload="lazyLoadFunc()"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js" async></script>
