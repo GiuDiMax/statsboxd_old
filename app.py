@@ -8,6 +8,7 @@ from utils.collage import collage
 from flask_compress import Compress
 
 app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
 Compress(app)
 
 
@@ -218,8 +219,8 @@ def utility_processor11():
 
 @app.after_request
 def add_header(response):
-    response.cache_control.public = True
-    response.cache_control.max_age = 300
+    if 'Cache-Control' not in response.headers:
+        response.headers['Cache-Control'] = 'no-store'
     return response
 
 
