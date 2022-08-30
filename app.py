@@ -10,9 +10,9 @@ from flask_cdn import CDN
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
-#app.config['CDN_DOMAIN'] = 'd2b3jqgdwv2xyj.cloudfront.net'
-#CDN(app)
-#Compress(app)
+app.config['CDN_DOMAIN'] = 'd2b3jqgdwv2xyj.cloudfront.net'
+CDN(app)
+Compress(app)
 
 
 @app.route('/<username>/')

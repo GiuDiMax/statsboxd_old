@@ -5,7 +5,37 @@
     <title>Title</title>
 </head>
 <body>
-
+                <!--<section class="studiosStats hide" id="topRatedStudios">
+                        {%for num in [['1', ''], ['2', 'hide']]%}
+                        <div id="studio{{ num[0] }}" class="people {{ num[1] }}">
+                            {% if num[0] == '1' %}
+                                {% set list = user['stats'+year]['topRatedstudio'][:10] %}
+                            {% else %}
+                                {% set list = user['stats'+year]['topRatedstudio'][10:] %}
+                            {% endif %}
+                            {%for element in list%}
+                                <div class="container_people container_studio">
+                                    <a href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/studio/{{ element._id }}">
+                                        <img class="holeperson studiohole lazy" src="{{ url_for('static', filename = 'images/studios/studio.png') }}"
+                                        {% if element.img %}
+                                            data-src="{{ url_for('static', filename='images/studios/'+element.img) }}"
+                                        {% endif %}
+                                        alt="{{ element._id }}"/>
+                                    </a>
+                                        {% if 'name' in element %}
+                                            <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/studio/{{ element._id }}">{{ element.name }}</a>
+                                        {% else %}
+                                            <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/studio/{{ element._id }}">{{ firstUpperBis(element._id) }}</a>
+                                        {% endif %}
+                                    <span class="sottotitolo">★ {{ "%.1f"|format(ifNull0_divide2(element.avg)) }}</span>
+                                </div>
+                            {%endfor%}
+                        </div>
+                        {%endfor%}
+                        <div class="noflex">
+                            <a class="clickable seeallbutton studio2btn" data-show="studio2" data-hide="studio2btn">see more</a>
+                        </div>
+                    </section>-->
 </body>
 </html>
 
