@@ -1,17 +1,11 @@
-from flask import Flask, render_template, url_for, request, redirect, make_response
+from flask import Flask, render_template, url_for, request, redirect
 from username import checkUsername, fullUpdate
-from utils.setCollections import mainSetCollection2
-from utils.setPeople import mainSetNames2
-from utils.setLists import updateLists
 from config import *
-from utils.refreshLastTwoYears import refresh
 from utils.getUsersList import *
 from mongodb import db
 import sys
-from threading import Thread
 from utils.collage import collage
 from flask_compress import Compress
-from datetime import datetime, timedelta
 
 app = Flask(__name__)
 Compress(app)
@@ -37,11 +31,7 @@ def main(username):
                                    roles=crew_html, year="", yearnum=0)
         else:
             return render_template('error.html')
-    expiry_time = datetime.utcnow() + timedelta(100)
-    response = render_template('username.html')
-    response.mimetype = "text/plain"
-    response.headers["Expires"] = expiry_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
-    return response
+    return render_template('username.html')
 
 
 @app.route('/handle_data', methods=['POST', 'GET'])
@@ -224,6 +214,13 @@ def utility_processor11():
             return 0
         return value
     return dict(zeroIfNone=zeroIfNone)
+
+
+@app.after_request
+def add_header(response):
+    response.cache_control.public = True
+    response.cache_control.max_age = 300
+    return response
 
 
 if __name__ == '__main__':
