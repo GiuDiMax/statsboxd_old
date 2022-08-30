@@ -30,7 +30,11 @@ for field in field2 + field3:
             'localField': '_id',
             'foreignField': '_id',
             'as': 'info'}})
-        op_role.append({'$project': {'_id': 1, 'sum': 1, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
+        if field == "studio":
+            op_role.append({'$project': {'_id': 1, 'sum': 1, 'name': {'$first': '$info.name'},
+                                         'img': {'$first': '$info.img'}}})
+        else:
+            op_role.append({'$project': {'_id': 1, 'sum': 1, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
     elif field in ['genres.theme', 'genres.nanogenre']:
         op_role.append({'$lookup': {
             'from': 'Themes',
