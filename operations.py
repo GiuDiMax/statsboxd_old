@@ -10,7 +10,6 @@ from datetime import datetime
 
 json0 = []
 
-
 def fill_db(url, soup):
     json1 = {}
 
