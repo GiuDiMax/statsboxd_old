@@ -14,7 +14,6 @@ app.config['CDN_DOMAIN'] = 'd2b3jqgdwv2xyj.cloudfront.net'
 CDN(app)
 Compress(app)
 
-
 @app.route('/<username>/')
 def main(username):
     if '.ico' not in username and 'success' not in username:
