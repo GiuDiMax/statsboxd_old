@@ -1,6 +1,7 @@
 from mongodb import db
-from config import *
+#from config import *
 from jsonoOpAllTime import json_operations
+from datetime import datetime
 
 
 def getStats(username):
@@ -40,7 +41,7 @@ def getStats(username):
             if not check:
                 y2.append({'_id': i, 'average': 0, 'sum': 0})
         y['totalyear'] = y2
-        db.Users.update_one({'_id': username}, {'$set': {'stats': y}})
+        db.Users.update_one({'_id': username}, {'$set': {'stats': y, 'update': datetime.today()}})
 
 
 if __name__ == '__main__':

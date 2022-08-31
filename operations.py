@@ -3,10 +3,10 @@ import asyncio
 import json
 from bs4 import BeautifulSoup, SoupStrainer
 from mongodb import db
-from datetime import datetime, timedelta
-import requests
-import lxml
-from config import exclude_people
+from datetime import datetime
+#import requests
+#import lxml
+#from config import exclude_people
 
 json0 = []
 
