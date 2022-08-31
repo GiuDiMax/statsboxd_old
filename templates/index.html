@@ -14,12 +14,12 @@
         {% else %}
             <title>&lrm;{{ user.name }}'s {{ yearnum }} in review &bull; Statsboxd</title>
         {% endif %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?q=6.0.0">
-        <!--<link rel="stylesheet" href="{{ url_for('static', filename='css/font.css') }}?q=1.0.0" media="print" onload="this.media='all'">-->
+        <link rel="stylesheet" href="{{ url_for('static', _external=True, _scheme='https', filename='css/main.css') }}?q=6.0.0">
+        <!--<link rel="stylesheet" href="{{ url_for('static', _external=True, _scheme='https', filename='css/font.css') }}?q=1.0.0" media="print" onload="this.media='all'">-->
         <link rel="stylesheet" href="/static/css/font.css?q=1.0.0" media="print" onload="this.media='all'">
-        <link rel="stylesheet" href="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.css') }}" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href="{{ url_for('static', _external=True, _scheme='https', filename='js/jquery-jvectormap-2.0.5.css') }}" media="print" onload="this.media='all'">
         <script src="//code.jquery.com/jquery-3.6.1.min.js"></script>
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <link rel="shortcut icon" href="{{ url_for('static', _external=True, _scheme='https', filename='favicon.ico') }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,200,0,0" media="print" onload="this.media='all'">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/brands.min.css" media="print" onload="this.media='all'">
@@ -30,7 +30,7 @@
         <div id="isMobile"></div>
         <div class="headerbar">
             <a href="/">
-                <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="statsboxdlogo" class="logoup"/>
+                <img src="{{ url_for('static', _external=True, _scheme='https',  filename='images/logo.webp') }}" alt="statsboxdlogo" class="logoup"/>
             </a>
             <div class="navbar">
                 <a href="//letterboxd.com/giudimax/">Project made by GiuDiMax</a>
@@ -140,14 +140,14 @@
                             {% for element in type[0][:12] %}
                                 <div class="singleFilm recommend" >
                                     <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
-                                        <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                        <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https',  filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
                                     </a>
                                     <!--<div>
                                         <span class="sottotitolo cuoricino">❤</span>
                                         <span class="sottotitolo bigsotto">{{ element.perc }}%</span>
                                     </div>-->
                                     <div class="sottofilm">
-                                        <img src="{{ url_for('static', filename='images/orangeheart.jpg') }}" /><span class="sottotitolo cuoricino">{{ element.perc }}%</span>
+                                        <img src="{{ url_for('static', _external=True, _scheme='https',  filename='images/orangeheart.jpg') }}" /><span class="sottotitolo cuoricino">{{ element.perc }}%</span>
                                     </div>
                                 </div>
                             {% endfor %}
@@ -156,10 +156,10 @@
                             {% for element in type[0][10:] %}
                                 <div class="singleFilm recommend" >
                                     <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
-                                        <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                        <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https',  filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
                                     </a>
                                     <div class="sottofilm">
-                                        <img src="{{ url_for('static', filename='images/orangeheart.jpg') }}" /><span class="sottotitolo cuoricino">{{ element.perc }}%</span>
+                                        <img src="{{ url_for('static', _external=True, _scheme='https', filename='images/orangeheart.jpg') }}" /><span class="sottotitolo cuoricino">{{ element.perc }}%</span>
                                     </div>
                                 </div>
                             {% endfor %}
@@ -186,7 +186,7 @@
                         <div class="decPosters">
                         {%for element2 in element.posters%}
                             <a class="poster decPosterImg" href="{{ lbdurl }}film/{{ element2.uri }}">
-                                <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element2.img, 70, 105) }}" alt="{{ element.uri }}" />
+                                <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element2.img, 70, 105) }}" alt="{{ element.uri }}" />
                             </a>
                         {%endfor%}
                         </div>
@@ -206,7 +206,7 @@
                             {%for element in user['stats'+year].topRatedCurrentYear %}
                                 <div class="singleFilm" >
                                     <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ element.uri }}">
-                                        <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                        <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
                                     </a>
                                     <div>
                                         <span class="sottotitolo stellineBig">{{ numToStars(element.rating) }}</span>
@@ -218,7 +218,7 @@
                              {%for element in user['stats'+year].topRatedOtherYears %}
                                 <div class="singleFilm" >
                                     <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ element.uri }}">
-                                        <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                        <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
                                     </a>
                                     <div>
                                         <span class="sottotitolo stellineBig">{{ numToStars(element.rating) }}</span>
@@ -246,12 +246,12 @@
                                 <span class="big">{{ user['stats'+year].total[0].movies }}</span>
                                 <span class="small">Films watched</span>
                             </div>
-                            <img src="{{ url_for('static', filename='images/arrow.jpg') }}" alt="arrow"/>
+                            <img src="{{ url_for('static', _external=True, _scheme='https', filename='images/arrow.jpg') }}" alt="arrow"/>
                             <div class="wd1x">
                                 <span class="big">{{ '{0:0.1f}'.format((user['stats'+year].total[0].movies)/12) }}</span>
                                 <span class="small">Average per month</span>
                             </div>
-                            <img src="{{ url_for('static', filename='images/arrow.jpg') }}" alt="arrow"/>
+                            <img src="{{ url_for('static', _external=True, _scheme='https', filename='images/arrow.jpg') }}" alt="arrow"/>
                             <div class="wd1x">
                                 <span class="big">{{ '{0:0.1f}'.format((user['stats'+year].total[0].movies)/53) }}</span>
                                 <span class="small">Average per week</span>
@@ -270,7 +270,7 @@
                             <span>First Film</span>
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ user['stats'+year].firstMovie[0].uri }}">
-                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year].firstMovie[0].poster, 110, 165) }}" alt="{{ user['stats'+year].firstMovie[0].uri }}" />
+                                    <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year].firstMovie[0].poster, 110, 165) }}" alt="{{ user['stats'+year].firstMovie[0].uri }}" />
                                 </a>
                                 <div>
                                     <span class="sottotitolo bigsotto">{{ date_toshort(user['stats'+year].firstMovie[0].date) }}</span>
@@ -283,7 +283,7 @@
                                 {%for element in user['stats'+year].mostWatched %}
                                     <div class="singleFilm" >
                                         <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ element.uri }}/activity">
-                                            <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                            <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
                                         </a>
                                         <div>
                                             <span class="sottotitolo bigsotto">{{ element.sum }} times</span>
@@ -296,7 +296,7 @@
                             <span>Last Film</span>
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ user['stats'+year].lastMovie[0].uri }}">
-                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year].lastMovie[0].poster, 110, 165) }}" alt="{{ user['stats'+year].lastMovie[0].uri }}" />
+                                    <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year].lastMovie[0].poster, 110, 165) }}" alt="{{ user['stats'+year].lastMovie[0].uri }}" />
                                 </a>
                                 <div>
                                     <span class="sottotitolo bigsotto">{{ date_toshort(user['stats'+year].lastMovie[0].date) }}</span>
@@ -396,7 +396,7 @@
                                 <div class="singleCollection" >
                                     <a class="threeposters" href="{{ lbdurl }}films/in/{{ element['_id'] }}/by/release-earliest/size/large/">
                                         {% for poster in element.posters %}
-                                            <img class="lazy" src="{{ url_for('static', filename='images/poster_70.jpg') }}" data-src="{{ replaceSize(poster, 70, 105) }}" alt="" />
+                                            <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster_70.jpg') }}" data-src="{{ replaceSize(poster, 70, 105) }}" alt="" />
                                         {% endfor %}
                                     </a>
                                     <span>
@@ -420,7 +420,7 @@
                         {% for element in user['mostWatched'] %}
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
-                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                    <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
                                 </a>
                                 <div>
                                     <span class="sottotitolo bigsotto">{{ element.sum }} times</span>
@@ -441,7 +441,7 @@
                         {%for element in user['stats'+year].topToAverage%}
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
-                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                    <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
                                 </a>
                                 <div>
                                     <span class="sottotitolo stelline">{{ numToStars(element.rating) }}</span>
@@ -460,7 +460,7 @@
                         {%for element in user['stats'+year].flopToAverage%}
                             <div class="singleFilm" >
                                 <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
-                                    <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                    <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https',  filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
                                 </a>
                                 <div>
                                     <span class="sottotitolo stelline">{{ numToStars(element.rating) }}</span>
@@ -501,9 +501,9 @@
                             </div>
                         </div>
                         <div class="ratingSpreadsection">
-                            <img src="{{ url_for('static', filename = 'images/1stars.png') }}" alt="1star"/>
+                            <img src="{{ url_for('static', _external=True, _scheme='https', filename = 'images/1stars.png') }}" alt="1star"/>
                             <div id="ratingSpread" class="ratingSpread"></div>
-                            <img src="{{ url_for('static', filename = 'images/5stars.png') }}" alt="5stars"/>
+                            <img src="{{ url_for('static', _external=True, _scheme='https', filename = 'images/5stars.png') }}" alt="5stars"/>
                         </div>
                         <span class="linetitle">Rating Spread</span>
                     </div>
@@ -530,7 +530,7 @@
                             {%for element in list%}
                                 <div class="container_people">
                                     <a href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">
-                                        <img class="holeperson lazy" src="{{ url_for('static', filename = 'images/'+role[0]+'.jpg') }}"
+                                        <img class="holeperson lazy" src="{{ url_for('static', _external=True, _scheme='https', filename = 'images/'+role[0]+'.jpg') }}"
                                             {% if 'img' in element %}
                                                  data-src="//image.tmdb.org/t/p/w185/{{ element.img }}"
                                             {% endif %}
@@ -622,13 +622,13 @@
                         <span class="suptitle">{{ type[1] }}</span>
                         <a class="poster" href="{{ lbdurl }}film/{{ user['stats'+year][type[0]][0].uri }}">
                             {% if 'poster' in user['stats'+year][type[0]][0] %}
-                                <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year][type[0]][0].poster, 110, 165) }}" alt="{{ user['stats'+year][type[0]][0].uri }}" />
+                                <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https',  filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year][type[0]][0].poster, 110, 165) }}" alt="{{ user['stats'+year][type[0]][0].uri }}" />
                             {% else %}
-                                <img class="lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" alt="{{ user['stats'+year][type[0]][0].uri }}" />
+                                <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" alt="{{ user['stats'+year][type[0]][0].uri }}" />
                             {% endif %}
                         </a>
                         <div class="sottofilm">
-                            <img src="{{ url_for('static', filename='images/orangestar.jpg') }}" /><span class="sottotitolo stellamedia">{{ '{0:0.1f}'.format(user['stats'+year][type[0]][0].avg) }}</span>
+                            <img src="{{ url_for('static', _external=True, _scheme='https', filename='images/orangestar.jpg') }}" /><span class="sottotitolo stellamedia">{{ '{0:0.1f}'.format(user['stats'+year][type[0]][0].avg) }}</span>
                         </div>
                     </div>
                     {% endfor %}
@@ -644,7 +644,7 @@
     </body>
     <footer>
         <script src="//cdnjs.cloudflare.com/ajax/libs/highcharts/10.2.1/highcharts.min.js" async onload="chartFunc()"></script>
-        <script src="{{ url_for('static', filename='js/jquery-jvectormap-2.0.5.min.js') }}" async onload="worldMap2()"></script>
+        <script src="{{ url_for('static', _external=True, _scheme='https', filename='js/jquery-jvectormap-2.0.5.min.js') }}" async onload="worldMap2()"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js" async onload="lazyLoad2()"></script>
         <script>
              $(window).on('load', function(){
@@ -689,7 +689,7 @@
                 script.onload = function () {
                     worldMapx();
                 };
-                script.src = "{{ url_for('static', filename='js/jquery-jvectormap-world-mill.js') }}";
+                script.src = "{{ url_for('static', _external=True, _scheme='https', filename='js/jquery-jvectormap-world-mill.js') }}";
                 document.head.appendChild(script); //or something of the likes
              }
 
@@ -1081,8 +1081,8 @@
                                     '{{ firstUpperBis(element._id) }}'
                                 {% endif %}
                               , value: {{ element.sum }},
-                              {% if element.img %} extra:'{{ url_for('static', filename='images/studios/' + element.img) }}'
-                              {% else %} extra:'{{ url_for('static', filename='images/studios/studio.png') }}'
+                              {% if element.img %} extra:'{{ url_for('static', _external=True, _scheme='https', filename='images/studios/' + element.img) }}'
+                              {% else %} extra:'{{ url_for('static', _external=True, _scheme='https', filename='images/studios/studio.png') }}'
                               {% endif %}, color: '#456'},
                           {% endfor %}
 
