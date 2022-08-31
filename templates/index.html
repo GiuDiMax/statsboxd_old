@@ -7,6 +7,7 @@
         {% else %}
             <title>&lrm;{{ user.name }}'s {{ yearnum }} in review &bull; Statsboxd</title>
         {% endif %}
+        <script src="//code.jquery.com/jquery-3.6.1.min.js"></script>
         <link rel="stylesheet" href="{{ url_for('static', _external=True, _scheme='https', filename='css/main.css') }}?q=6.0.0">
         <link rel="stylesheet" href="/static/css/font.css?q=1.0.0" media="print" onload="this.media='all'">
         <link rel="stylesheet" href="{{ url_for('static', _external=True, _scheme='https', filename='js/jquery-jvectormap-2.0.5.css') }}" media="print" onload="this.media='all'">
@@ -21,7 +22,6 @@
           gtag('js', new Date());
           gtag('config', 'G-BMKEGDRHD5');
         </script>
-        <script src="//code.jquery.com/jquery-3.6.1.min.js"></script>
     </head>
 
     <body>
