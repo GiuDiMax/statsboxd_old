@@ -193,4 +193,4 @@ def fillMongodb(urls):
 
 
 if __name__ == '__main__':
-    fillMongodb(['cosmos-a-spacetime-odyssey'])
+    fillMongodb(['the-batman'])

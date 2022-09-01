@@ -39,7 +39,7 @@ def refreshata(i):
 
 
 if __name__ == '__main__':
-    for i in range(70):
+    for i in range(68):
         start = time.time()
         refreshata(i+1)
         #refresh()
