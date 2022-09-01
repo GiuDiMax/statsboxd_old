@@ -5,13 +5,13 @@ import time
 from setLists import updateLists
 from setPeople import mainSetNames
 from setCollections import mainSetCollection2
-from setThemes import base, nanofun
+from setThemes import all
 
 
-def refresh():
+def refresh(i):
     datex = datetime.today()
     #datex = datex - timedelta(days=10)
-    datex = datex - timedelta(days=3)
+    datex = datex - timedelta(hours=1)
     current_year = date.today().year
 
     a = db.Film.aggregate([
@@ -26,26 +26,25 @@ def refresh():
     for x in a:
         uris.append(x['uri'])
     #print(uris)
-    print(len(uris))
+    print(len(uris)*i)
     fillMongodb(uris)
 
 
-def refreshata():
+def refreshata(i):
     try:
-        refresh()
+        refresh(i)
     except:
         time.sleep(100)
-        refreshata()
+        refreshata(i)
 
 
 if __name__ == '__main__':
-    for i in range(50):
+    for i in range(60):
         start = time.time()
-        refreshata()
+        refreshata(i+1)
         #refresh()
         print('Done in ' + str(time.time() - start))
-    base()
-    nanofun()
+    all()
     updateLists()
     mainSetNames()
     mainSetCollection2()
