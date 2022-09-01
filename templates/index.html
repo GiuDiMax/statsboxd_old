@@ -1079,7 +1079,7 @@
                                     '{{ firstUpperBis(element._id) }}'
                                 {% endif %}
                               , value: {{ element.sum }},
-                              extra_bis: {{ element._id }},
+                              extrabis: '{{ element._id }}',
                               {% if element.img %} extra:'{{ url_for('static', _external=True, _scheme='https', filename='images/studios/' + element.img) }}'
                               {% else %} extra:'{{ url_for('static', _external=True, _scheme='https', filename='images/studios/studio.png') }}'
                               {% endif %}, color: '#456'},
@@ -1089,7 +1089,7 @@
                   point: {
                         events: {
                             click: function () {
-                                location.href = '{{ lbdurl }}{{ user._id }}/films/with/studio/' + this.extra_bis + "/";
+                                location.href = '{{ lbdurl }}{{ user._id }}/films/with/studio/' + this.extrabis + "/";
                             }
                         }
                     }
