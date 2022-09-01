@@ -103,7 +103,7 @@ json_operations['totalCountry'] = op_role
 
 op_role = []
 op_role.append({'$group': {'_id': '$watched.id',
-                           'uri': {'$first': '$watched.uri'},
+                           'uri': {'$first': '$info.uri'},
                            'poster': {'$first': '$info.images.poster'},
                            'media': {'$first': '$info.rating.average'},
                            'rating': {'$first': '$watched.rating'}}})
@@ -116,7 +116,7 @@ json_operations['topToAverage'] = op_role
 
 op_role = []
 op_role.append({'$group': {'_id': '$watched.id',
-                           'uri': {'$first': '$watched.uri'},
+                           'uri': {'$first': '$info.uri'},
                            'poster': {'$first': '$info.images.poster'},
                            'media': {'$first': '$info.rating.average'},
                            'rating': {'$first': '$watched.rating'}}})
