@@ -5,6 +5,7 @@ import time
 from setLists import updateLists
 from setPeople import mainSetNames
 from setCollections import mainSetCollection2
+from setThemes import base, nanofun
 
 
 def refresh():
@@ -43,6 +44,8 @@ if __name__ == '__main__':
         refreshata()
         #refresh()
         print('Done in ' + str(time.time() - start))
+    base()
+    nanofun()
     updateLists()
     mainSetNames()
     mainSetCollection2()
