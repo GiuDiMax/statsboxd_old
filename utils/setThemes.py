@@ -66,6 +66,10 @@ def nanofun():
     print(str(len(nano)) + ' nanogenres ok')
 
 
-if __name__ == '__main__':
+def all():
     base()
     nanofun()
+
+
+if __name__ == '__main__':
+    all()
