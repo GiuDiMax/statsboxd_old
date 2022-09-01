@@ -39,7 +39,7 @@ def fill_db(url, soup):
     try:
         links = soup.findAll("a", {"class": "micro-button track-event"})
         if 'href' in str(links[0]):
-            json1['imdb'] = int(links[0]['href'].split('/')[-2].replace("tt", ""))
+            json1['imdb'] = str(links[0]['href'].split('/')[-2].replace("tt", ""))
             json1['tmdb'] = int(links[1]['href'].split('/')[-2])
     except:
         pass
