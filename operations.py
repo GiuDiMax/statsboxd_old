@@ -39,8 +39,13 @@ def fill_db(url, soup):
     try:
         links = soup.findAll("a", {"class": "micro-button track-event"})
         if 'href' in str(links[0]):
-            json1['imdb'] = str(links[0]['href'].split('/')[-2].replace("tt", ""))
-            json1['tmdb'] = int(links[1]['href'].split('/')[-2])
+            for link in links:
+                if 'TMDb' in link['data-track-action'] and 'movie' in link['href']:
+                    json1['tmdb'] = int(link['href'].split('/')[-2])
+                if 'TMDb' in link['data-track-action'] and 'tv' in link['href']:
+                    json1['tmdb_tv'] = int(link['href'].split('/')[-2])
+                if 'IMDb' in link['data-track-action']:
+                    json1['imdb'] = str(link['href'].split('/')[-2])
     except:
         pass
 
@@ -188,4 +193,4 @@ def fillMongodb(urls):
 
 
 if __name__ == '__main__':
-    fillMongodb(['breakfast-at-tiffanys'])
+    fillMongodb(['behind-her-eyes'])
