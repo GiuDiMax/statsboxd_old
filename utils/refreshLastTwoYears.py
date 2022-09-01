@@ -2,6 +2,9 @@ from mongodb import db
 from datetime import date, timedelta, datetime
 from operations import fillMongodb
 import time
+from setLists import updateLists
+from setPeople import mainSetNames
+from setCollections import mainSetCollection2
 
 
 def refresh():
@@ -40,3 +43,6 @@ if __name__ == '__main__':
         refreshata()
         #refresh()
         print('Done in ' + str(time.time() - start))
+    updateLists()
+    mainSetNames()
+    mainSetCollection2()
