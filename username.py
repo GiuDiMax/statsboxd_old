@@ -11,7 +11,7 @@ import time
 from year_stats import year_stats
 global watched_list, diary_list
 from datetime import datetime
-from recommend.multiUsers import predictUser
+#from recommend.multiUsers import predictUser
 
 
 def diary_function(sup):
