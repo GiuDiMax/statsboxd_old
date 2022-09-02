@@ -1,2 +1,4 @@
-/recommend/*
-/garbage/*
+/recommend/
+/garbage/
+/.idea/
+/__pycache__/
