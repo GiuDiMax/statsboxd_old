@@ -88,17 +88,6 @@ def utility_processor():
         return f'{int(number):,}'
     return dict(format_comma=format_comma)
 
-'''
-@app.context_processor
-def utility_processor2():
-    def format_array(array):
-        array2 = []
-        for element in array:
-            array2.append({'x': element['_id'], 'y': element['sum']})
-        return array2
-    return dict(format_array=format_array)
-'''
-
 
 @app.context_processor
 def utility_processor3():
