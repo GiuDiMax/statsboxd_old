@@ -209,7 +209,7 @@ def getFromusername(username):
     obj = db.Users.find_one({"_id": username})
     if obj is not None:
         return obj
-    fullUpdate(username)
+    fullUpdate(username, False)
     return db.Users.find_one({"_id": username})
 
 
