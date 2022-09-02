@@ -1,6 +1,5 @@
 /recommend/algo.pickle
 /recommend/ratings_clean.csv
-/recommend/
 /garbage/
 /.idea/
 /__pycache__/
