@@ -80,7 +80,7 @@ op_role.append({'$match': {'$expr': {'$eq': ["$year", '$info.year']}}})
 op_role.append({'$match': {'diary.dRating': {'$gt': 0}}})
 op_role.append({'$group': {'_id': '$diary.id',
                            'rated': {'$max': '$diary.dRating'},
-                           'uri': {'$first': '$diary.uri'},
+                           'uri': {'$first': '$info.uri'},
                            'rating': {'$first': '$diary.dRating'},
                            'poster': {'$first': '$info.images.poster'},
                            'average': {'$first': '$info.rating.average'}}})
