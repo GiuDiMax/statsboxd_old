@@ -77,6 +77,7 @@ json_operations['total'] = op_role
 
 op_role = []
 op_role.append({'$match': {'$expr': {'$eq': ["$year", '$info.year']}}})
+op_role.append({'$match': {'diary.dRating': {'$gt': 0}}})
 op_role.append({'$group': {'_id': '$diary.id',
                            'rated': {'$max': '$diary.dRating'},
                            'uri': {'$first': '$diary.uri'},

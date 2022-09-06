@@ -93,5 +93,5 @@ def year_stats(username, fastUpdate):
     #years.sort(reverse=True)
         db.Users.update_one({'_id': username}, {'$set': {'years': years}})
 
-#singleYear(2021, 'giudimax')
+#singleYear(2022, 'cristo_nolan')
 #year_stats('giudimax')
