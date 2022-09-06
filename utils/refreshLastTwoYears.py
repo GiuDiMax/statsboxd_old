@@ -11,11 +11,11 @@ from setThemes import all
 def refresh(i):
     datex = datetime.today()
     #datex = datex - timedelta(days=10)
-    datex = datex - timedelta(hours=1)
+    datex = datex - timedelta(hours=5)
     current_year = date.today().year
 
     a = db.Film.aggregate([
-        #{'$match': {"year": {'$gt': current_year - 2}}},
+        {'$match': {"year": {'$gt': current_year - 1}}},
         {'$match': {"updateDate": {'$lt': datex}}},
         {'$sort': {'updateDate': 1}},
         {'$limit': 1000},
