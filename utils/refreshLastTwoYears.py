@@ -6,6 +6,7 @@ from setLists import updateLists
 from setPeople import mainSetNames
 from setCollections import mainSetCollection2
 from setThemes import all
+from cleanUsers import cleanUsers
 
 
 def refresh(i):
@@ -48,3 +49,5 @@ if __name__ == '__main__':
     updateLists()
     mainSetNames()
     mainSetCollection2()
+    cleanUsers()
+    print("FINE")
