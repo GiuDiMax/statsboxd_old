@@ -109,7 +109,7 @@ def fillMongodb(urls, image, studio=False):
         urlsx = urls[:n]
         fillMongodb2(urlsx, image, studio)
         fillMongodb3(images_tmdb, image, studio)
-        print("added " + str(n) + " new records")
+        print("aggiunti " + str(n) + " nuovi record")
         fillMongodb(urls[n:], studio)
 
 
