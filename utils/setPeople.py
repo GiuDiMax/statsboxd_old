@@ -49,7 +49,6 @@ def fillMongodb3(urls, image, studio):
 
 def fill_db(url, soup, image, studio):
     global images_tmdb
-
     json1 = {}
     json1['_id'] = url
     passare_oltre = False
@@ -100,17 +99,19 @@ def fillMongodb2(urls, image, studio):
 
 def fillMongodb(urls, image, studio=False):
     global images_tmdb
-    images_tmdb = []
     n = 100
     if len(urls) < n:
         fillMongodb2(urls, image, studio)
-        fillMongodb3(images_tmdb, image, studio)
+        if image:
+            fillMongodb3(images_tmdb, image, studio)
     else:
         urlsx = urls[:n]
+        images_tmdb = []
         fillMongodb2(urlsx, image, studio)
-        fillMongodb3(images_tmdb, image, studio)
+        if image:
+            fillMongodb3(images_tmdb, image, studio)
         print("aggiunti " + str(n) + " nuovi record")
-        fillMongodb(urls[n:], studio)
+        fillMongodb(urls[n:], image, studio)
 
 
 def mainSetNames():
