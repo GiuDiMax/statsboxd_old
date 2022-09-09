@@ -52,6 +52,7 @@ def fill_db(url, soup, image, studio):
 
     json1 = {}
     json1['_id'] = url
+    passare_oltre = False
     try:
         name = (str(soup.find("h1", {"class": "title-1"})).split("</span>", 1)[1].split("</h1>", 1)[0]).strip()
         json1['name'] = name
@@ -67,12 +68,14 @@ def fill_db(url, soup, image, studio):
                     #    json1['tmdbImg'] = x.text.rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
                     #except:
                     #    json1['imgNone'] = True
+                    passare_oltre = True
             except:
                 print('error tmdb for ' + url)
-        try:
-            db.People.insert_one(json1)
-        except:
-            db.People.update_one({'_id': json1['_id']}, {'$set': json1})
+        if not passare_oltre:
+            try:
+                db.People.insert_one(json1)
+            except:
+                db.People.update_one({'_id': json1['_id']}, {'$set': json1})
     except:
         pass
 
