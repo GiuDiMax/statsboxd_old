@@ -145,7 +145,7 @@ def mainSetNames():
         #else:
         #    op_role.append({'$match': {"sum": {'$gt': 9}}})
         op_role.append({'$match': {'$or': [{"sum": {'$gt': 4}}, {"pop": {'$gt': 100000}}]}})
-        op_role.append({'$sort': {"sum": -1}})
+        op_role.append({'$sort': {"sum": -1, 'pop': -1}})
         op_role.append({'$lookup': {
                             'from': 'People',
                             'localField': '_id',
