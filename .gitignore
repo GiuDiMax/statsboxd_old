@@ -1,4 +1,5 @@
 /recommend/algo.pickle
+/recommend/trainset.csv
 /recommend/ratings_clean.csv
 /garbage/
 /.idea/
