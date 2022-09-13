@@ -101,6 +101,7 @@ def fillMongodb(urls, image, studio=False):
     global images_tmdb
     n = 100
     if len(urls) < n:
+        images_tmdb = []
         fillMongodb2(urls, image, studio)
         if image:
             fillMongodb3(images_tmdb, image, studio)
