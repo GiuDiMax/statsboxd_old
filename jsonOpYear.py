@@ -15,7 +15,7 @@ for field in field2 + field3:
     else:
         op_role.append({'$unwind': '$info.' + field})
         op_role.append({'$group': {'_id': '$info.' + field,
-                               #'average': {'$avg': '$watched.rating'},
+                               'avg': {'$avg': '$watched.rating'},
                                'sum': {'$sum': 1}}})
     if field == 'actors':
         op_role.append({'$match': {"_id": {'$nin': exclude_people}}})
@@ -25,7 +25,7 @@ for field in field2 + field3:
         op_role.append({'$limit': 20})
     else:
         op_role.append({'$match': {"sum": {'$gt': 2}}})
-        op_role.append({'$sort': {'sum': -1}})
+        op_role.append({'$sort': {'sum': -1, 'avg': -1}})
         op_role.append({'$limit': 50})
     if (field in field2) or (field == 'studio'):
         op_role.append({'$lookup': {
