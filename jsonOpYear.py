@@ -4,7 +4,8 @@ from config import *
 for field in field2 + field3:
     op_role = []
     op_role.append({'$group': {'_id': '$diary.id',
-                               'info': {'$first': '$info'}
+                               'info': {'$first': '$info'},
+                               'rat': {'$avg': '$diary.dRating'}
                                }})
     if field == 'genres.theme':
         op_role.append({'$project': {'themesunion': {'$concatArrays': [{'$ifNull': ['$info.genres.mini-theme', []]}, {'$ifNull': ['$info.genres.theme', []]}]}}})
@@ -15,13 +16,13 @@ for field in field2 + field3:
     else:
         op_role.append({'$unwind': '$info.' + field})
         op_role.append({'$group': {'_id': '$info.' + field,
-                               'avg': {'$avg': '$watched.rating'},
-                               'sum': {'$sum': 1}}})
+                                   'avg': {'$avg': '$rat'},
+                                   'sum': {'$sum': 1}}})
     if field == 'actors':
         op_role.append({'$match': {"_id": {'$nin': exclude_people}}})
     if field != 'studio':
         op_role.append({'$match': {"sum": {'$gt': 1}}})
-        op_role.append({'$sort': {'sum': -1}})
+        op_role.append({'$sort': {'sum': -1, 'avg': -1}})
         op_role.append({'$limit': 20})
     else:
         op_role.append({'$match': {"sum": {'$gt': 2}}})
