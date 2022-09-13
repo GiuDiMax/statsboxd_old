@@ -120,8 +120,9 @@ def mainSetNames():
         op_role = []
         op_role.append({'$unwind': '$'+field})
         op_role.append({'$group': {'_id': '$'+field,
-                                   'sum': {'$sum': 1}}})
-        op_role.append({'$match': {"sum": {'$gt': 4}}})
+                                   'sum': {'$sum': 1},
+                                   'pop': {'$avg': '$rating.num'}}})
+        op_role.append({'$match': {'$or': [{"sum": {'$gt': 3}}, {"pop": {'$gt': 100000}}]}})
         #if field in ['actors', 'crew.director']:
         #    op_role.append({'$match': {"sum": {'$lt': 10}}})
         op_role.append({'$lookup': {
@@ -136,12 +137,14 @@ def mainSetNames():
         op_role = []
         op_role.append({'$unwind': '$'+field})
         op_role.append({'$group': {'_id': '$'+field,
-                                   'sum': {'$sum': 1}}})
+                                   'sum': {'$sum': 1},
+                                   'pop': {'$avg': '$rating.num'}}})
+        op_role.append({'$match': {"pop": {'$gt': 0}}})
         #if 'director' in field:
         #    op_role.append({'$match': {"sum": {'$gt': 4}}})
         #else:
         #    op_role.append({'$match': {"sum": {'$gt': 9}}})
-        op_role.append({'$match': {"sum": {'$gt': 4}}})
+        op_role.append({'$match': {'$or': [{"sum": {'$gt': 4}}, {"pop": {'$gt': 100000}}]}})
         op_role.append({'$sort': {"sum": -1}})
         op_role.append({'$lookup': {
                             'from': 'People',
@@ -151,7 +154,9 @@ def mainSetNames():
         #op_role.append({'$match': {"info": {'$eq': []}}})
         op_role.append({'$match': {"info.tmdbImg": {'$exists': False}}})
         op_role.append({'$match': {"info.imgNone": {'$exists': False}}})
+
         json_operations[field.replace(".", "_")+'_img'] = op_role
+
 
     ob3 = db.Film.aggregate([
         {'$facet': json_operations},
