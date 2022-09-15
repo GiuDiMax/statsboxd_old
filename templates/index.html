@@ -8,7 +8,8 @@
             <title>&lrm;{{ user.name }}'s {{ yearnum }} in review &bull; Statsboxd</title>
         {% endif %}
         <script src="//code.jquery.com/jquery-3.6.1.min.js"></script>
-        <link rel="stylesheet" href="{{ url_for('static', _external=True, _scheme='https', filename='css/main.css') }}?q=6.0.0">
+        <link rel="stylesheet" href="{{ url_for('static', _external=True, _scheme='https', filename='css/main.css') }}?q=7.0.0">
+        <!--<link rel="stylesheet" href="/static/css/main.css?q=7.0.0" media="print" onload="this.media='all'">-->
         <link rel="stylesheet" href="/static/css/font.css?q=1.0.0" media="print" onload="this.media='all'">
         <link rel="stylesheet" href="{{ url_for('static', _external=True, _scheme='https', filename='js/jquery-jvectormap-2.0.5.css') }}" media="print" onload="this.media='all'">
         <link rel="shortcut icon" href="{{ url_for('static', _external=True, _scheme='https', filename='favicon.ico') }}">
@@ -61,6 +62,9 @@
                         </div>
                     </div>
                 </div>
+                 {% if year == '' %}
+                  <h3 class="arrowcheck">You can check the stats of each single year by clicking on the arrow on the right.</h3>
+                 {% endif %}
                 <div class="mainSubtitle">
                     <a href="{{ lbdurl }}/{{ user._id }}"><img class="avatar" src="{{ user.image }}" alt="{{ user._id }}"/></a>
                     <span><a href="{{ lbdurl }}/{{ user._id }}" class="clickable">{{ user.name }}</a>'s
