@@ -75,15 +75,30 @@ def fill_db(url, soup):
     # DETAILS
     try:
         details = soup.find('div', {"id": "tab-details"})
-        details = details.find_all('a', class_="text-slug")
-        for detail in details:
-            detail = detail['href']
-            type = detail.split("/")[-3]
+        details_set = details.find_all('a', class_="text-slug")
+        details_type = details.find_all('span')
+        for i in range(len(details_set)):
+            detail = details_set[i]['href']
             code = detail.split("/")[-2]
-            try:
-                json1[type].append(code)
-            except:
-                json1[type] = [code]
+            typex = str(details_type[i].text).lower()
+            if typex == 'language':
+                try:
+                    json1['language'].append(code)
+                    json1['spoken_lang'].append(code)
+                except:
+                    json1['language'] = [code]
+                    json1['s_lang'] = [code]
+            else:
+                if typex == 'original language':
+                    type = 'language'
+                elif typex == 'spoken languages':
+                    type = 'spoken_lang'
+                else:
+                    type = detail.split("/")[-3]
+                try:
+                    json1[type].append(code)
+                except:
+                    json1[type] = [code]
     except:
         pass
 
@@ -193,4 +208,4 @@ def fillMongodb(urls):
 
 
 if __name__ == '__main__':
-    fillMongodb(['cinema-vs-on-demand'])
+    fillMongodb(['the-pills-sempre-meglio-che-lavorare'])

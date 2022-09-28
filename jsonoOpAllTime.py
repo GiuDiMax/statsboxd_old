@@ -223,11 +223,28 @@ json_operations['sug2'] = op_role
 
 # ZONA TEST
 
-json_operations2 = {}
-op_role = []
+def test():
+    from mongodb import db
+    json_operations2 = {}
+    op_role = []
 
-op_role.append({'$project': {'user': '$_id', 'id': '$info.related', 'rating': '$watched.rating'}})
-op_role.append({'$limit': 12})
-json_operations2['test'] = op_role
+    json_op2 = [{'$match': {"_id": 'giudimax'}},
+                    {'$unwind': '$watched'},
+                    {'$lookup': {
+                        'from': 'Film',
+                        'localField': 'watched.id',
+                        'foreignField': '_id',
+                        'as': 'info'}},
+                    {'$unwind': '$info'},
+                    {'$unwind': '$info.language'},
+                    #{'$match': {'info.language': 'english'}},
+                    {'$project': {'_id': '$info.uri', 'language': '$info.language'}}]
+
+    ob3 = db.Users.aggregate(json_op2)
+    for x in ob3:
+        print(x)
 
 
+if __name__ == '__main__':
+    test()
+    #print(y['mostWatchedlanguage'])
