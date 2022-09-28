@@ -23,8 +23,8 @@ def getStats(username):
     for x in ob3:
         y = x
     if __name__ == '__main__':
-        #print(y['test'])
-        print(y['mostWatchedactors'])
+        print(y['test'])
+        #print(y['mostWatchedlanguage'])
 
     if y != None:
         min = y['totalyear'][0]['_id']

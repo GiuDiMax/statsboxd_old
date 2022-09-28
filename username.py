@@ -217,4 +217,4 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    fullUpdate('cbms', False)
+    fullUpdate('giudimax', False)
