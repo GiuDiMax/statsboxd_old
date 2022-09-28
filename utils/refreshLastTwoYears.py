@@ -6,16 +6,17 @@ from setLists import updateLists
 from setPeople import mainSetNames
 from setCollections import mainSetCollection2
 from setThemes import all
+from cleanUsers import cleanUsers
 
 
 def refresh(i):
     datex = datetime.today()
     #datex = datex - timedelta(days=10)
-    datex = datex - timedelta(hours=1)
+    datex = datex - timedelta(hours=5)
     current_year = date.today().year
 
     a = db.Film.aggregate([
-        #{'$match': {"year": {'$gt': current_year - 2}}},
+        {'$match': {"year": {'$gt': current_year - 1}}},
         {'$match': {"updateDate": {'$lt': datex}}},
         {'$sort': {'updateDate': 1}},
         {'$limit': 1000},
@@ -26,7 +27,7 @@ def refresh(i):
     for x in a:
         uris.append(x['uri'])
     #print(uris)
-    print(len(uris)*i)
+    print(len(uris) + i*1000)
     fillMongodb(uris)
 
 
@@ -39,12 +40,14 @@ def refreshata(i):
 
 
 if __name__ == '__main__':
-    for i in range(68):
+    for i in range(100):
         start = time.time()
         refreshata(i+1)
         #refresh()
         print('Done in ' + str(time.time() - start))
-    all()
+    #all()
     updateLists()
     mainSetNames()
     mainSetCollection2()
+    cleanUsers()
+    print("FINE")

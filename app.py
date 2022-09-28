@@ -146,30 +146,32 @@ def utility_processor6():
 @app.context_processor
 def utility_processor7():
     def numToStars(num, half=True):
-        if half:
-            num = num/2
-        result = int(num) * "★"
-        if num > int(num):
-            result = result + "½"
-        return result
+        if num is not None:
+            if half:
+                num = num/2
+            result = int(num) * "★"
+            if num > int(num):
+                result = result + "½"
+            return result
     return dict(numToStars=numToStars)
 
 
 @app.context_processor
 def utility_processor8():
     def replaceSize(src, height, width):
-        if 'a.ltrbxd' in src:
-            try:
-                return src.rsplit("-0-", 2)[0] + "-0-" + str(height) + "-0-" + str(width) + "-crop.jpg"
-            except:
-                print(src)
-                return ""
-        else:
-            try:
-                return '//a.ltrbxd.com/resized/' + src + "-0-" + str(height) + "-0-" + str(width) + "-crop.jpg"
-            except:
-                print(src)
-                return ""
+        if src is not None:
+            if 'a.ltrbxd' in src:
+                try:
+                    return src.rsplit("-0-", 2)[0] + "-0-" + str(height) + "-0-" + str(width) + "-crop.jpg"
+                except:
+                    print(src)
+                    return ""
+            else:
+                try:
+                    return '//a.ltrbxd.com/resized/' + src + "-0-" + str(height) + "-0-" + str(width) + "-crop.jpg"
+                except:
+                    print(src)
+                    return ""
     return dict(replaceSize=replaceSize)
 
 

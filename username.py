@@ -95,11 +95,10 @@ def get_watched(username, diary, fastUpdate):
         urls = []
         if diary:
             for i in range(pages):
-                if diary:
-                    if fastUpdate:
-                        urls.append('http://letterboxd.com/' + str(username) + '/films/diary/for/' + str(datetime.now().year) + '/page/' + str(i+1) +"/")
-                    else:
-                        urls.append('http://letterboxd.com/' + str(username) + '/films/diary/page/' + str(i + 1) + "/")
+                if fastUpdate:
+                    urls.append('http://letterboxd.com/' + str(username) + '/films/diary/for/' + str(datetime.now().year) + '/page/' + str(i+1) +"/")
+                else:
+                    urls.append('http://letterboxd.com/' + str(username) + '/films/diary/page/' + str(i + 1) + "/")
         else:
             for i in range(pages):
                     urls.append('http://letterboxd.com/' + str(username) + '/films/page/' + str(i + 1) + "/")
@@ -218,4 +217,4 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    fullUpdate('cliffordtess', False)
+    fullUpdate('cbms', False)

@@ -10,29 +10,71 @@ from datetime import datetime, timedelta
 from config import *
 from threading import Thread
 
+global images_tmdb
+
+
+def fill_db3(url, resp, image, studio):
+    json1 = {}
+    json1['_id'] = url[1]
+    json1['name'] = url[2]
+    try:
+        try:
+            json1['tmdbImg'] = str(resp).rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
+        except:
+            json1['imgNone'] = True
+    except:
+        print('error tmdb for ' + url[1])
+    try:
+        db.People.insert_one(json1)
+    except:
+        db.People.update_one({'_id': json1['_id']}, {'$set': json1})
+
+
+async def get3(url, session, image, studio):
+    async with session.get(url="https://api.themoviedb.org/3/person/" + str(url[0]) + "?api_key=" + api_tmdb + "&language=en-US") as response:
+            resp = await response.read()
+            #soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div']))
+            fill_db3(url, resp, image, studio)
+
+
+async def main3(urls, image, studio):
+    async with aiohttp.ClientSession() as session:
+        await asyncio.gather(*[get3(url, session, image, studio) for url in urls])
+
+
+def fillMongodb3(urls, image, studio):
+    asyncio.set_event_loop(asyncio.SelectorEventLoop())
+    asyncio.get_event_loop().run_until_complete(main3(urls, image, studio))
+
 
 def fill_db(url, soup, image, studio):
+    global images_tmdb
     json1 = {}
     json1['_id'] = url
+    passare_oltre = False
     try:
-        json1['name'] = (str(soup.find("h1", {"class": "title-1"})).split("</span>", 1)[1].split("</h1>", 1)[0]).strip()
+        name = (str(soup.find("h1", {"class": "title-1"})).split("</span>", 1)[1].split("</h1>", 1)[0]).strip()
+        json1['name'] = name
         if not studio:
             try:
                 tmdb = int(soup.find("div", {"class": "js-tmdb-person-bio"})['data-tmdb-id'])
                 json1['tmdb'] = tmdb
                 if image:
-                    req = "https://api.themoviedb.org/3/person/" + str(tmdb) + "?api_key=" + api_tmdb + "&language=en-US"
-                    x = requests.get(req)
-                    try:
-                        json1['tmdbImg'] = x.text.rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
-                    except:
-                        json1['imgNone'] = True
+                    images_tmdb.append([tmdb, url, name])
+                    #req = "https://api.themoviedb.org/3/person/" + str(tmdb) + "?api_key=" + api_tmdb + "&language=en-US"
+                    #x = requests.get(req)
+                    #try:
+                    #    json1['tmdbImg'] = x.text.rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
+                    #except:
+                    #    json1['imgNone'] = True
+                    passare_oltre = True
             except:
                 print('error tmdb for ' + url)
-        try:
-            db.People.insert_one(json1)
-        except:
-            db.People.update_one({'_id': json1['_id']}, {'$set': json1})
+        if not passare_oltre:
+            try:
+                db.People.insert_one(json1)
+            except:
+                db.People.update_one({'_id': json1['_id']}, {'$set': json1})
     except:
         pass
 
@@ -56,13 +98,21 @@ def fillMongodb2(urls, image, studio):
 
 
 def fillMongodb(urls, image, studio=False):
-    if len(urls) < 1000:
+    global images_tmdb
+    n = 100
+    if len(urls) < n:
+        images_tmdb = []
         fillMongodb2(urls, image, studio)
+        if image:
+            fillMongodb3(images_tmdb, image, studio)
     else:
-        urlsx = urls[:1000]
+        urlsx = urls[:n]
+        images_tmdb = []
         fillMongodb2(urlsx, image, studio)
-        print("added 1000 new records")
-        fillMongodb(urls[1000:], studio)
+        if image:
+            fillMongodb3(images_tmdb, image, studio)
+        print("aggiunti " + str(n) + " nuovi record")
+        fillMongodb(urls[n:], image, studio)
 
 
 def mainSetNames():
@@ -71,8 +121,9 @@ def mainSetNames():
         op_role = []
         op_role.append({'$unwind': '$'+field})
         op_role.append({'$group': {'_id': '$'+field,
-                                   'sum': {'$sum': 1}}})
-        op_role.append({'$match': {"sum": {'$gt': 4}}})
+                                   'sum': {'$sum': 1},
+                                   'pop': {'$avg': '$rating.num'}}})
+        op_role.append({'$match': {'$or': [{"sum": {'$gt': 3}}, {"pop": {'$gt': 100000}}]}})
         #if field in ['actors', 'crew.director']:
         #    op_role.append({'$match': {"sum": {'$lt': 10}}})
         op_role.append({'$lookup': {
@@ -87,12 +138,15 @@ def mainSetNames():
         op_role = []
         op_role.append({'$unwind': '$'+field})
         op_role.append({'$group': {'_id': '$'+field,
-                                   'sum': {'$sum': 1}}})
-        if 'director' in field:
-            op_role.append({'$match': {"sum": {'$gt': 4}}})
-        else:
-            op_role.append({'$match': {"sum": {'$gt': 9}}})
-        op_role.append({'$sort': {"sum": -1}})
+                                   'sum': {'$sum': 1},
+                                   'pop': {'$avg': '$rating.num'}}})
+        op_role.append({'$match': {"pop": {'$gt': 0}}})
+        #if 'director' in field:
+        #    op_role.append({'$match': {"sum": {'$gt': 4}}})
+        #else:
+        #    op_role.append({'$match': {"sum": {'$gt': 9}}})
+        op_role.append({'$match': {'$or': [{"sum": {'$gt': 4}}, {"pop": {'$gt': 100000}}]}})
+        op_role.append({'$sort': {"sum": -1, 'pop': -1}})
         op_role.append({'$lookup': {
                             'from': 'People',
                             'localField': '_id',
@@ -101,7 +155,9 @@ def mainSetNames():
         #op_role.append({'$match': {"info": {'$eq': []}}})
         op_role.append({'$match': {"info.tmdbImg": {'$exists': False}}})
         op_role.append({'$match': {"info.imgNone": {'$exists': False}}})
+
         json_operations[field.replace(".", "_")+'_img'] = op_role
+
 
     ob3 = db.Film.aggregate([
         {'$facet': json_operations},

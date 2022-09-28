@@ -1,6 +1,6 @@
 from mongodb import db
 from operations import fillMongodb
-from recommend.multiUsers import createAlgo
+#from recommend.multiUsers import createAlgo
 
 
 def cleanUsers():

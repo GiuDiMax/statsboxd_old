@@ -1,6 +1,8 @@
 /recommend/algo.pickle
+/recommend/trainset.csv
 /recommend/ratings_clean.csv
 /garbage/
 /.idea/
-/__pycache__/
+/utils/backup/
+/utils/backup.zip
 /venv/
