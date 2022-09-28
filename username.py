@@ -59,7 +59,7 @@ async def get_watched3(url, session, diary):
         for sup in soup:
             watched = {}
             watched['id'] = int(sup.div['data-film-id'])
-            #watched['uri'] = sup.div['data-film-slug'].split("/")[-2]
+            watched['uri'] = sup.div['data-film-slug'].split("/")[-2]
             try:
                 rating = sup.p.span['class'][-1]
                 if 'rated' in rating:
@@ -95,11 +95,10 @@ def get_watched(username, diary, fastUpdate):
         urls = []
         if diary:
             for i in range(pages):
-                if diary:
-                    if fastUpdate:
-                        urls.append('http://letterboxd.com/' + str(username) + '/films/diary/for/' + str(datetime.now().year) + '/page/' + str(i+1) +"/")
-                    else:
-                        urls.append('http://letterboxd.com/' + str(username) + '/films/diary/page/' + str(i + 1) + "/")
+                if fastUpdate:
+                    urls.append('http://letterboxd.com/' + str(username) + '/films/diary/for/' + str(datetime.now().year) + '/page/' + str(i+1) +"/")
+                else:
+                    urls.append('http://letterboxd.com/' + str(username) + '/films/diary/page/' + str(i + 1) + "/")
         else:
             for i in range(pages):
                     urls.append('http://letterboxd.com/' + str(username) + '/films/page/' + str(i + 1) + "/")
@@ -173,7 +172,7 @@ def fullOperation(username, fastUpdate, watched=None):
     start3 = time.time()
     for movie in watched:
         ids.append(movie['id'])
-        #uris.append(movie['uri'])
+        uris.append(movie['uri'])
 
     #db.tmpUris.delete_many({})
     #if len(uris) > 0:
@@ -218,4 +217,4 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    fullUpdate('giudimax', False)
+    fullUpdate('cbms', False)
