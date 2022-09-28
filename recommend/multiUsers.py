@@ -6,6 +6,11 @@ from surprise import Dataset, Reader, SVD
 import random
 import os
 from threading import Thread
+#from setLists import updateLists
+#from setPeople import mainSetNames
+#from setCollections import mainSetCollection2
+#from setThemes import all
+#from cleanUsers import cleanUsers
 
 
 def createAlgo(populate=False, algo=False):
@@ -124,4 +129,10 @@ def predictUser(username, algo, watched_list=None):
 if __name__ == '__main__':
     start = time.time()
     createAlgo(True, True)
+    '''
+    updateLists()
+    mainSetNames()
+    mainSetCollection2()
+    cleanUsers()
+    '''
     print(time.time() - start)

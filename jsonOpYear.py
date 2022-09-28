@@ -4,7 +4,8 @@ from config import *
 for field in field2 + field3:
     op_role = []
     op_role.append({'$group': {'_id': '$diary.id',
-                               'info': {'$first': '$info'}
+                               'info': {'$first': '$info'},
+                               'rat': {'$avg': '$diary.dRating'}
                                }})
     if field == 'genres.theme':
         op_role.append({'$project': {'themesunion': {'$concatArrays': [{'$ifNull': ['$info.genres.mini-theme', []]}, {'$ifNull': ['$info.genres.theme', []]}]}}})
@@ -15,17 +16,17 @@ for field in field2 + field3:
     else:
         op_role.append({'$unwind': '$info.' + field})
         op_role.append({'$group': {'_id': '$info.' + field,
-                               #'average': {'$avg': '$watched.rating'},
-                               'sum': {'$sum': 1}}})
+                                   'avg': {'$avg': '$rat'},
+                                   'sum': {'$sum': 1}}})
     if field == 'actors':
         op_role.append({'$match': {"_id": {'$nin': exclude_people}}})
     if field != 'studio':
         op_role.append({'$match': {"sum": {'$gt': 1}}})
-        op_role.append({'$sort': {'sum': -1}})
+        op_role.append({'$sort': {'sum': -1, 'avg': -1}})
         op_role.append({'$limit': 20})
     else:
         op_role.append({'$match': {"sum": {'$gt': 2}}})
-        op_role.append({'$sort': {'sum': -1}})
+        op_role.append({'$sort': {'sum': -1, 'avg': -1}})
         op_role.append({'$limit': 50})
     if (field in field2) or (field == 'studio'):
         op_role.append({'$lookup': {
@@ -77,9 +78,10 @@ json_operations['total'] = op_role
 
 op_role = []
 op_role.append({'$match': {'$expr': {'$eq': ["$year", '$info.year']}}})
+op_role.append({'$match': {'diary.dRating': {'$gt': 0}}})
 op_role.append({'$group': {'_id': '$diary.id',
                            'rated': {'$max': '$diary.dRating'},
-                           'uri': {'$first': '$diary.uri'},
+                           'uri': {'$first': '$info.uri'},
                            'rating': {'$first': '$diary.dRating'},
                            'poster': {'$first': '$info.images.poster'},
                            'average': {'$first': '$info.rating.average'}}})
