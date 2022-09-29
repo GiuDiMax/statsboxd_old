@@ -10,6 +10,7 @@ from cleanUsers import cleanUsers
 
 
 def refresh(i):
+    start = time.time()
     datex = datetime.today()
     #datex = datex - timedelta(days=10)
     datex = datex - timedelta(hours=5)
@@ -27,9 +28,9 @@ def refresh(i):
     for x in a:
         uris.append(x['uri'])
     #print(uris)
-    print(len(uris) + i*1000)
+    print('analyizing ' + str(len(uris) + i*1000))
     fillMongodb(uris)
-
+    print('Done in ' + str(time.time() - start))
 
 def refreshata(i):
     try:
