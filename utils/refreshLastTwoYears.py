@@ -10,7 +10,6 @@ from cleanUsers import cleanUsers
 
 
 def refresh(i):
-    start = time.time()
     datex = datetime.today()
     #datex = datex - timedelta(days=10)
     datex = datex - timedelta(hours=5)
@@ -27,16 +26,15 @@ def refresh(i):
     uris = []
     for x in a:
         uris.append(x['uri'])
-    #print(uris)
     print('analyizing ' + str(len(uris) + i*1000))
     fillMongodb(uris)
-    print('Done in ' + str(time.time() - start))
+
 
 def refreshata(i):
     try:
         refresh(i)
     except:
-        time.sleep(100)
+        time.sleep(60)
         refreshata(i)
 
 
@@ -44,7 +42,6 @@ if __name__ == '__main__':
     for i in range(100):
         start = time.time()
         refreshata(i)
-        #refresh()
         print('Done in ' + str(time.time() - start))
     all()
     updateLists()
