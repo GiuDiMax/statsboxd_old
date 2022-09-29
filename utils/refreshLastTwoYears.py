@@ -12,7 +12,7 @@ from cleanUsers import cleanUsers
 def refresh(i):
     datex = datetime.today()
     #datex = datex - timedelta(days=10)
-    datex = datex - timedelta(hours=2)
+    datex = datex - timedelta(hours=5)
     current_year = date.today().year
 
     a = db.Film.aggregate([
@@ -39,7 +39,9 @@ def refreshata(i):
 
 
 if __name__ == '__main__':
-    for i in range(100):
+    #b = db.Film.update_many({}, {'$rename': {'studios': 'studio'}})
+
+    for i in range(70):
         start = time.time()
         refreshata(i)
         print('Done in ' + str(time.time() - start))
