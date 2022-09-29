@@ -75,30 +75,31 @@ def fill_db(url, soup):
     # DETAILS
     try:
         details = soup.find('div', {"id": "tab-details"})
-        details_set = details.find_all('a', class_="text-slug")
+        details_set = details.find_all('div', class_="text-sluglist")
         details_type = details.find_all('span')
         for i in range(len(details_set)):
-            detail = details_set[i]['href']
-            code = detail.split("/")[-2]
             typex = str(details_type[i].text).lower()
+            details2 = details_set[i].find_all('a')
             if typex == 'language':
-                try:
-                    json1['language'].append(code)
-                    json1['spoken_lang'].append(code)
-                except:
-                    json1['language'] = [code]
-                    json1['s_lang'] = [code]
+                for code in details2:
+                    code = code['href'].split("/")[-2]
+                    try:
+                        json1['language'].append(code)
+                        json1['spoken_lang'].append(code)
+                    except:
+                        json1['language'] = [code]
+                        json1['spoken_lang'] = [code]
             else:
                 if typex == 'original language':
-                    type = 'language'
+                    typex = 'language'
                 elif typex == 'spoken languages':
-                    type = 'spoken_lang'
-                else:
-                    type = detail.split("/")[-3]
-                try:
-                    json1[type].append(code)
-                except:
-                    json1[type] = [code]
+                    typex = 'spoken_lang'
+                for code in details2:
+                    code = code['href'].split("/")[-2]
+                    try:
+                        json1[typex].append(code)
+                    except:
+                        json1[typex] = [code]
     except:
         pass
 
