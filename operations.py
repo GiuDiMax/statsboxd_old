@@ -86,6 +86,8 @@ def fill_db(url, soup):
                 typex = 'spoken_lang'
             elif typex == 'countries':
                 typex = 'country'
+            elif typex == 'studios':
+                typex = 'studio'
             for code in details2:
                 code = code['href'].split("/")[-2]
                 try:
@@ -201,5 +203,4 @@ def fillMongodb(urls):
 
 
 if __name__ == '__main__':
-    fillMongodb(['cloud-capped-star'])
-    fillMongodb(['north-korea-off-piste'])
+    fillMongodb(['the-batman'])
