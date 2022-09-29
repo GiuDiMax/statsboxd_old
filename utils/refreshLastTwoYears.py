@@ -12,7 +12,7 @@ from cleanUsers import cleanUsers
 def refresh(i):
     datex = datetime.today()
     #datex = datex - timedelta(days=10)
-    datex = datex - timedelta(hours=5)
+    datex = datex - timedelta(hours=2)
     current_year = date.today().year
 
     a = db.Film.aggregate([

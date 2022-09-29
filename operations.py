@@ -80,26 +80,18 @@ def fill_db(url, soup):
         for i in range(len(details_set)):
             typex = str(details_type[i].text).lower()
             details2 = details_set[i].find_all('a')
-            if typex == 'language':
-                for code in details2:
-                    code = code['href'].split("/")[-2]
-                    try:
-                        json1['language'].append(code)
-                        json1['spoken_lang'].append(code)
-                    except:
-                        json1['language'] = [code]
-                        json1['spoken_lang'] = [code]
-            else:
-                if typex == 'original language':
-                    typex = 'language'
-                elif typex == 'spoken languages':
-                    typex = 'spoken_lang'
-                for code in details2:
-                    code = code['href'].split("/")[-2]
-                    try:
-                        json1[typex].append(code)
-                    except:
-                        json1[typex] = [code]
+            if typex == 'original language':
+                typex = 'language'
+            elif typex == 'spoken languages':
+                typex = 'spoken_lang'
+            elif typex == 'countries':
+                typex = 'country'
+            for code in details2:
+                code = code['href'].split("/")[-2]
+                try:
+                    json1[typex].append(code)
+                except:
+                    json1[typex] = [code]
     except:
         pass
 
@@ -209,4 +201,5 @@ def fillMongodb(urls):
 
 
 if __name__ == '__main__':
-    fillMongodb(['the-pills-sempre-meglio-che-lavorare'])
+    fillMongodb(['cloud-capped-star'])
+    fillMongodb(['north-korea-off-piste'])
