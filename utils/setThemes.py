@@ -14,9 +14,9 @@ def fill_db(url, i, type, code, stat, soup, pag):
     for movie in movies:
        list.append(int(movie['data-film-id']))
     if pag == 1:
-         num = int(soup.text.split("are ", 1)[1].split("\xa0", 1)[0])
-         name = soup.find('span', {"class": "highlight capitalize"}).text
-         db.Themes.update_one({'_id': code + i}, {'$set': {'uri': url, 'num': num, 'name': name, 'type': type, 'stat': stat}, '$push': {'list': {'$each': list}}}, True)
+        num = int(soup.text.split("are ", 1)[1].split("\xa0", 1)[0])
+        name = soup.find('span', {"class": "capitalize"}).text
+        db.Themes.update_one({'_id': code + i}, {'$set': {'uri': url, 'num': num, 'name': name, 'type': type, 'stat': stat}, '$push': {'list': {'$each': list}}}, True)
     else:
         db.Themes.update_one({'_id': code + i}, {'$push': {'list': {'$each': list}}}, True)
     db.Film.update_many({"_id": {"$in": list}}, {'$push': {'genres.' + type: code + i}})
