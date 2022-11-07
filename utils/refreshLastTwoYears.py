@@ -45,7 +45,7 @@ if __name__ == '__main__':
         start = time.time()
         refreshata(i)
         print('Done in ' + str(time.time() - start))
-    all()
+    #all()
     updateLists()
     mainSetNames()
     mainSetCollection2()
