@@ -110,7 +110,7 @@ def fill_db(url, soup):
                     title = ""
                 #if 'uncredited' not in actor['title'] and 'voice' not in actor['title']:
                 #if code not in exclude_people and 'uncredited' not in title:
-                if ('uncredited' not in title) and ('archive footage' not in title):
+                if ('uncredited' not in title) and ('archive footage' not in title) and ('Additional Voices' not in title):
                     json1['actors'].append(code)
             except:
                 pass
