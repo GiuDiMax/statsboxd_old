@@ -189,7 +189,7 @@ def utility_processor9():
                     array2.append({'_id': i, 'sum': 0})
             except:
                 array2.append({'_id': i, 'sum': 0})
-        print(array2)
+        #print(array2)
         return array2
     return dict(fill_array=fill_array)
 
