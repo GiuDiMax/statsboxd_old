@@ -1005,7 +1005,7 @@
                     yAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
                     tooltip: {
                         formatter: function(){
-                            return '<div class="ttYear"><span class="ttPie">' + (this.y * 100).toFixed(1).toString() +'% <span class="gray">('+ (this.y * {{ user['stats'+year].total[0].movies }}).toString() + ' of {{ user['stats'+year].total[0].movies }})</span></span></div>'
+                            return '<div class="ttYear"><span class="ttPie">' + (this.y * 100).toFixed(1).toString() +'% <span class="gray">('+ parseInt(this.y * {{ user['stats'+year].total[0].movies }}).toString() + ' of {{ user['stats'+year].total[0].movies }})</span></span></div>'
                         },
                         //positioner: function () {return { x: 80, y: 50 };},
                         shared: true, useHTML: true, shape: 'square', borderWidth:0, shadow: false, backgroundColor: null,

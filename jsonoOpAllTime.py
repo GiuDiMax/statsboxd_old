@@ -241,8 +241,8 @@ def test():
                     {'$project': {'_id': '$info.uri', 'language': '$info.language'}}]
 
     ob3 = db.Users.aggregate(json_op2)
-    for x in ob3:
-        print(x)
+    #for x in ob3:
+    #    print(x)
 
 
 if __name__ == '__main__':
