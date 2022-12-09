@@ -18,8 +18,7 @@ listsSelection = [
     ['jake_ziegler/list/academy-award-winners-for-best-picture', 'Oscar Best Picture Winners', 2],
     ['dave/list/imdb-top-250', 'IMDb Top 250', 3],
     ['matthew/list/box-office-mojo-all-time-worldwide', 'Box Office Mojo All Time 100', 4],
-    #['liveandrew/list/bfi-2012-critics-top-250-films', 'Sight & Sound Top 250', 5],
-    ['bfi/list/sight-and-sounds-greatest-films-of-all-time/', 'Sight & Sound Top 100', 5],
+    ['bfi/list/sight-and-sounds-greatest-films-of-all-time', 'Sight & Sound Top 100', 5],
     ['moseschan/list/afi-100-years-100-movies', 'AFI 100 Years 100 Movies', 6],
     ['crew/list/edgar-wrights-1000-favorite-movies', 'Edgar Wright’s 1,000 Favorites', 7],
     ['gubarenko/list/1001-movies-you-must-see-before-you-die-2021', '1,001 To See Before You Die', 8],
@@ -28,6 +27,8 @@ listsSelection = [
     ['jack/list/women-directors-the-official-top-100-narrative', 'Top 100 Women-Directed', 11],
     ['lifeasfiction/list/letterboxd-100-animation', 'Top 100 Animation', 12]
 ]
+
+# ['liveandrew/list/bfi-2012-critics-top-250-films', 'Sight & Sound Top 250', 5],
 
 crew_html = [
      ['crew_producer', 'producer', 'Producers'],  ['crew_writer', 'writer', 'Writers'], ['crew_editor', 'editor', 'Editors'],

@@ -45,7 +45,7 @@ def updateLists():
         uris = []
         get_list_urls("https://letterboxd.com/" + list[0])
         try:
-            db.Lists.insert_one({'_id': list[0], 'name': list[1], 'uris': uris, 'isStats': True})
+            db.Lists.insert_one({'_id': list[0], 'name': list[1], 'uris': uris, 'isStats': True, 'order': list[2], 'num': len(uris)})
         except:
             db.Lists.update_one({'_id': list[0]}, {'$set': {'name': list[1], 'num': len(uris), 'uris': uris, 'isStats': True, 'order': list[2]}})
         db.Film.update_many({"uri": {"$in": uris}}, {'$push': {'statsLists': list[0]}})
