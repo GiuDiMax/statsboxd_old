@@ -16,7 +16,11 @@ for field in field2 + field3:
                                    'sum': {'$sum': 1}}})
     if field == 'actors':
         op_role.append({'$match': {"_id": {'$nin': exclude_people}}})
-    if field != 'studio':
+    elif field == 'language':
+        op_role.append({'$match': {"sum": {'$gt': 1}}})
+        op_role.append({'$sort': {'sum': -1, 'avg': -1}})
+        op_role.append({'$limit': 20})
+    elif field != 'studio':
         op_role.append({'$match': {"sum": {'$gt': 2}}})
         op_role.append({'$sort': {'sum': -1, 'avg': -1}})
         op_role.append({'$limit': 20})
@@ -228,7 +232,7 @@ def test():
     json_operations2 = {}
     op_role = []
 
-    json_op2 = [{'$match': {"_id": 'giudimax'}},
+    json_op2 = [{'$match': {"_id": 'twivea'}},
                     {'$unwind': '$watched'},
                     {'$lookup': {
                         'from': 'Film',
@@ -238,11 +242,13 @@ def test():
                     {'$unwind': '$info'},
                     {'$unwind': '$info.language'},
                     #{'$match': {'info.language': 'english'}},
-                    {'$project': {'_id': '$info.uri', 'language': '$info.language'}}]
+                    #{'$project': {'_id': '$info.uri', 'language': '$info.language'}}
+                    {'$group': {'_id': '$info.language', 'sum': {'$sum': 1}, 'avg': {'$avg': '$watched.rating'}}}
+                    ]
 
     ob3 = db.Users.aggregate(json_op2)
-    #for x in ob3:
-    #    print(x)
+    for x in ob3:
+        print(x)
 
 
 if __name__ == '__main__':

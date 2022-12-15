@@ -23,7 +23,9 @@ def getStats(username):
     for x in ob3:
         y = x
     if __name__ == '__main__':
-        print(y['test'])
+        pass
+        #print(y)
+        #print(y['test'])
         #print(y['mostWatchedlanguage'])
 
     if y != None:
@@ -45,4 +47,4 @@ def getStats(username):
 
 
 if __name__ == '__main__':
-    getStats('giudimax')
+    getStats('twivea')
