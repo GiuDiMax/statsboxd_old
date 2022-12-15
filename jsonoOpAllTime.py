@@ -17,7 +17,7 @@ for field in field2 + field3:
     if field == 'actors':
         op_role.append({'$match': {"_id": {'$nin': exclude_people}}})
     elif field == 'language':
-        op_role.append({'$match': {"sum": {'$gt': 1}}})
+        op_role.append({'$match': {"sum": {'$gt': 0}}})
         op_role.append({'$sort': {'sum': -1, 'avg': -1}})
         op_role.append({'$limit': 20})
     elif field != 'studio':

@@ -16,7 +16,6 @@ def getStats(username):
                     'as': 'info'}},
                 {'$unwind': '$info'},
                 {'$facet': json_operations}]
-
     ob3 = db.Users.aggregate(json_op1)
 
     y = None
