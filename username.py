@@ -40,6 +40,13 @@ def diary_function(sup):
     diary_list.append(diaryx)
 
 
+def diary_function_threading(url):
+    ret = requests.request("GET", url)
+    soup = BeautifulSoup(ret.text, 'lxml', parse_only=SoupStrainer(['tr'])).find_all('tr')
+    for sup in soup[1:]:
+        diary_function(sup)
+
+
 async def get_watched3(url, session, diary):
     global watched_list, diary_list
     async with session.get(url=url) as response:
@@ -107,6 +114,7 @@ def get_watched(username, diary, fastUpdate):
 
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
     asyncio.get_event_loop().run_until_complete(get_watched2(urls, diary))
+
 
 
 def threadgeneral(username, fastUpdate=False):
@@ -217,4 +225,5 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    fullUpdate('giudimax', False)
+    #fullUpdate('giudimax', False)
+    threadxdiary('giudimax', fastUpdate=False)
