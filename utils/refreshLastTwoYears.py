@@ -39,9 +39,11 @@ def refreshata(i):
 
 
 if __name__ == '__main__':
+    cleanUsers()
+    exit()
     #b = db.Film.update_many({}, {'$rename': {'studios': 'studio'}})
 
-    for i in range(70):
+    for i in range(75):
         start = time.time()
         refreshata(i)
         print('Done in ' + str(time.time() - start))
@@ -51,3 +53,4 @@ if __name__ == '__main__':
     mainSetCollection2()
     cleanUsers()
     print("FINE")
+
