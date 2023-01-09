@@ -35,7 +35,7 @@ def collage(username):
         {'$project': {'_id': 0, 'diary': 1}},
         {'$unwind': '$diary'},
         {'$match': {"diary.date": {'$gte': datetime(year2, month2, 1, 0, 0)}}},
-        {'$match': {"diary.date": {'$lt': datetime(date.today().year, month, 1, 0, 0)}}},
+        {'$match': {"diary.date": {'$lt': datetime(year, month, 1, 0, 0)}}},
         {'$lookup': {
             'from': 'Film', 'localField': 'diary.id',
             'foreignField': '_id', 'as': 'info'}},
@@ -45,11 +45,15 @@ def collage(username):
     films = []
     for x in a:
         films.append(x)
+        print(films)
     number = len(films)
 
     #img = Image.open(requests.get('https://wallpaperaccess.com/full/1554870.jpg', stream=True).raw).convert("RGBA")
     #img = img.resize((1080, 1920))
-    img = Image.open("./utils/sfondo.jpg").convert("RGBA").resize((1080, 1920))
+    if __name__ == '__main__':
+        img = Image.open("sfondo.jpg").convert("RGBA").resize((1080, 1920))
+    else:
+        img = Image.open("./utils/sfondo.jpg").convert("RGBA").resize((1080, 1920))
     combined = img
     bordistandard = 25
 
@@ -115,7 +119,10 @@ def collage(username):
 
         if film['like'] or film['rewatch']:
             out = Image.new("RGBA", (length, int(bordivert * 0.5)), (255, 0, 0, 0))
-            fnt = ImageFont.truetype("./utils/DejaVuSans-Bold.ttf", int(150 / j))
+            if __name__ == '__main__':
+                fnt = ImageFont.truetype("DejaVuSans-Bold.ttf", int(150 / j))
+            else:
+                fnt = ImageFont.truetype("./utils/DejaVuSans-Bold.ttf", int(150 / j))
             try:
                 msg = u"\u2605" * int(int(film['rating']) / 2) + u"\u00BD" * int(int(film['rating']) % 2) + \
                       " " + u"\u2665" * film['like'] + u"\u27F3" * film['rewatch']
@@ -123,7 +130,10 @@ def collage(username):
                 msg = ""
         else:
             out = Image.new("RGBA", (length, int(bordivert*0.5)), (255, 0, 0, 0))
-            fnt = ImageFont.truetype("./utils/DejaVuSans-Bold.ttf", int(170/j))
+            if __name__ == '__main__':
+                fnt = ImageFont.truetype("DejaVuSans-Bold.ttf", int(170/j))
+            else:
+                fnt = ImageFont.truetype("./utils/DejaVuSans-Bold.ttf", int(170 / j))
             try:
                 msg = u"\u2605" * int(int(film['rating'])/2) + u"\u00BD" * int(int(film['rating']) % 2)
             except:
@@ -137,19 +147,25 @@ def collage(username):
         x = x + 1
 
     out = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
-
-    fnt = ImageFont.truetype("./utils/Moonrising.ttf", int(bordoalto*0.5))
+    if __name__ == '__main__':
+        fnt = ImageFont.truetype("Moonrising.ttf", int(bordoalto * 0.5))
+    else:
+        fnt = ImageFont.truetype("./utils/Moonrising.ttf", int(bordoalto*0.5))
     dictmonth = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',
                  7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'}
-    msg = dictmonth[int(month-1)] + " " + str(year)
+    msg = dictmonth[int(month2)] + " " + str(year2)
     w, h = fnt.getsize(msg)
     d = ImageDraw.Draw(out)
     d.text((int(1080-bordiestremi-w), int(bordoalto*0.2+bordisupplemento/2)), msg, font=fnt, fill=(173, 255, 47, 255))
     combined = Image.alpha_composite(combined, out)
     #combined.show()
     rgb_im = combined.convert('RGB')
-    rgb_im.save('./utils/tmp.jpg')
-    files = {'image': open('./utils/tmp.jpg', 'rb')}
+    if __name__ == '__main__':
+        rgb_im.save('tmp.jpg')
+        files = {'image': open('tmp.jpg', 'rb')}
+    else:
+        rgb_im.save('./utils/tmp.jpg')
+        files = {'image': open('./utils/tmp.jpg', 'rb')}
     urlreq = 'https://api.imgbb.com/1/upload?expiration=864000&key=d75924aaec91be8dcb79c3c5ec3547cc'
     r = requests.post(urlreq, files=files)
     jsonx = json.loads(r.text)
