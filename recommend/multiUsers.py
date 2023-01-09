@@ -76,7 +76,7 @@ def createAlgo(populate=False, algo=False):
 
 def predictUser(username, algo, watched_list=None):
     print("predicting " + username)
-    num = 24
+    num = 60
     if watched_list is None:
         obj = db.Users.aggregate([
             {'$match': {'_id': username}},

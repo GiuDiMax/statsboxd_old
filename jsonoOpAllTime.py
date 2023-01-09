@@ -222,7 +222,7 @@ op_role.append({'$lookup': {
 op_role.append({'$unwind': '$info'})
 op_role.append({'$sort': {'avg': -1, 'info.rating.average': -1}})
 op_role.append({'$project': {'_id': 1, 'uri': '$info.uri', 'poster': '$info.images.poster', 'perc': {'$toInt': {'$multiply': ['$avg', 10]}}}})
-op_role.append({'$limit': 24})
+op_role.append({'$limit': 60})
 json_operations['sug2'] = op_role
 
 # ZONA TEST
