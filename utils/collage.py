@@ -23,12 +23,19 @@ def add_corners(im, rad):
 def collage(username):
     month = datetime.now().month
     year = datetime.now().year
+    if month > 1:
+        year2 = date.today().year
+        month2 = month - 1
+    else:
+        year2 = date.today().year - 1
+        month2 = 12
+
     a = db.Users.aggregate([
         {'$match': {"_id": username}},
         {'$project': {'_id': 0, 'diary': 1}},
         {'$unwind': '$diary'},
-        {'$match': {"diary.date": {'$gte': datetime(2022, month-1, 1, 0, 0)}}},
-        {'$match': {"diary.date": {'$lt': datetime(2022, month, 1, 0, 0)}}},
+        {'$match': {"diary.date": {'$gte': datetime(year2, month2, 1, 0, 0)}}},
+        {'$match': {"diary.date": {'$lt': datetime(date.today().year, month, 1, 0, 0)}}},
         {'$lookup': {
             'from': 'Film', 'localField': 'diary.id',
             'foreignField': '_id', 'as': 'info'}},
