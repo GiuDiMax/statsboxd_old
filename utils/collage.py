@@ -5,6 +5,9 @@ from datetime import date, timedelta, datetime
 import base64
 import json
 from username import get_watched
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
 
 
 def add_corners(im, rad):
@@ -174,6 +177,13 @@ def collage(username):
     else:
         rgb_im.save('./utils/tmp.jpg')
         files = {'image': open('./utils/tmp.jpg', 'rb')}
+
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+
     urlreq = 'https://api.imgbb.com/1/upload?expiration=864000&key=d75924aaec91be8dcb79c3c5ec3547cc'
     r = requests.post(urlreq, files=files)
     jsonx = json.loads(r.text)
