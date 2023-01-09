@@ -38,6 +38,7 @@ def collage(username):
         {'$unwind': '$diary2'},
         #{'$match': {"diary2.date": {'$gte': datetime(year2, month2, 1, 0, 0)}}},
         #{'$match': {"diary2.date": {'$lt': datetime(year, month, 1, 0, 0)}}},
+        {'$sort': {'diary2.date': 1}},
         {'$lookup': {
             'from': 'Film', 'localField': 'diary2.id',
             'foreignField': '_id', 'as': 'info'}},
