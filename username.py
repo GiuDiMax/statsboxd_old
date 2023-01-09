@@ -104,6 +104,9 @@ def get_watched(username, diary, fastUpdate):
             for i in range(pages):
                 if fastUpdate:
                     urls.append('http://letterboxd.com/' + str(username) + '/films/diary/for/' + str(datetime.now().year) + '/page/' + str(i+1) +"/")
+                    if datetime.now().month == 1:
+                        urls.append('http://letterboxd.com/' + str(username) + '/films/diary/for/' + str(
+                            datetime.now().year - 1) + '/page/' + str(i + 1) + "/")
                 else:
                     urls.append('http://letterboxd.com/' + str(username) + '/films/diary/page/' + str(i + 1) + "/")
         else:
@@ -225,5 +228,5 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    #fullUpdate('giudimax', False)
-    threadxdiary('giudimax', fastUpdate=False)
+    fullUpdate('giudimax', True)
+    #threadxdiary('giudimax', fastUpdate=True)

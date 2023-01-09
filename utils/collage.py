@@ -45,7 +45,6 @@ def collage(username):
     films = []
     for x in a:
         films.append(x)
-        print(films)
     number = len(films)
 
     #img = Image.open(requests.get('https://wallpaperaccess.com/full/1554870.jpg', stream=True).raw).convert("RGBA")
