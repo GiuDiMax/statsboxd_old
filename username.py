@@ -128,11 +128,10 @@ def get_watched(username, diary, fastUpdate, lastmonth=False):
                     urls.append('http://letterboxd.com/' + str(username) + '/films/page/' + str(i + 1) + "/")
     except:
         urls = [url]
-
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
     asyncio.get_event_loop().run_until_complete(get_watched2(urls, diary))
-
-
+    if lastmonth:
+        db.Users.update_one({'_id': username}, {'$set': {'diary2': diary_list}}, True)
 
 def threadgeneral(username, fastUpdate=False):
     if not fastUpdate:

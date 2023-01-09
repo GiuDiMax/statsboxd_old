@@ -34,15 +34,15 @@ def collage(username):
 
     a = db.Users.aggregate([
         {'$match': {"_id": username}},
-        {'$project': {'_id': 0, 'diary': 1}},
-        {'$unwind': '$diary'},
-        {'$match': {"diary.date": {'$gte': datetime(year2, month2, 1, 0, 0)}}},
-        {'$match': {"diary.date": {'$lt': datetime(year, month, 1, 0, 0)}}},
+        {'$project': {'_id': 0, 'diary2': 1}},
+        {'$unwind': '$diary2'},
+        #{'$match': {"diary2.date": {'$gte': datetime(year2, month2, 1, 0, 0)}}},
+        #{'$match': {"diary2.date": {'$lt': datetime(year, month, 1, 0, 0)}}},
         {'$lookup': {
-            'from': 'Film', 'localField': 'diary.id',
+            'from': 'Film', 'localField': 'diary2.id',
             'foreignField': '_id', 'as': 'info'}},
-        {'$project': {'id': '$diary.id', 'like': '$diary.dLike', 'rating': '$diary.dRating',
-                      'rewatch': '$diary.rewatch', 'img': {'$first': '$info.images.poster'}}}
+        {'$project': {'id': 'diary2.id', 'like': 'diary2.dLike', 'rating': 'diary2.dRating',
+                      'rewatch': 'diary2.rewatch', 'img': {'$first': '$info.images.poster'}}}
     ])
     films = []
     for x in a:
