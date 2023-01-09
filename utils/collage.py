@@ -141,7 +141,10 @@ def collage(username):
             except:
                 msg = ""
 
-        w, h = fnt.getsize(msg)
+        #w, h = fnt.getsize(msg)
+        a = fnt.getbbox(msg)
+        w = a[2] - a[0]
+        h = a[3] - a[1]
         d = ImageDraw.Draw(out)
         d.text((int((length-w)/2), int(((bordivert*0.5)-h)/2)), msg, font=fnt, fill=(173, 255, 47))
         new.paste(out, (x * (length + bordioriz) + bordiestremi+bordifinali, height + y + bordoalto+int(bordivert*0.1)))
@@ -156,7 +159,10 @@ def collage(username):
     dictmonth = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',
                  7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'}
     msg = dictmonth[int(month2)] + " " + str(year2)
-    w, h = fnt.getsize(msg)
+    #w, h = fnt.getsize(msg)
+    a = fnt.getbbox(msg)
+    w = a[2] - a[0]
+    h = a[3] - a[1]
     d = ImageDraw.Draw(out)
     d.text((int(1080-bordiestremi-w), int(bordoalto*0.2+bordisupplemento/2)), msg, font=fnt, fill=(173, 255, 47, 255))
     combined = Image.alpha_composite(combined, out)
