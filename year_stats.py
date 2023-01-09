@@ -79,6 +79,8 @@ def year_stats(username, fastUpdate):
         k = y
     if fastUpdate:
         singleYear(datetime.now().year, username)
+        #if datetime.now().month == 1:
+        #    singleYear(datetime.now().year - 1, username)
     else:
         db.Users.update_one({'_id': username}, {'$set': {'mostWatched': k['mostWatched']}})
         for x in k['years']:
