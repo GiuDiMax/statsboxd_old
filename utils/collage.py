@@ -5,10 +5,6 @@ from datetime import date, timedelta, datetime
 import base64
 import json
 from username import get_watched
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
-
-
 
 def add_corners(im, rad):
     circle = Image.new('L', (rad * 2, rad * 2), 0)
@@ -177,6 +173,7 @@ def collage(username):
     else:
         rgb_im.save('./utils/tmp.jpg')
         files = {'image': open('./utils/tmp.jpg', 'rb')}
+
     '''
     session = requests.Session()
     retry = Retry(connect=3, backoff_factor=0.5)
