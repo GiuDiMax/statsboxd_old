@@ -4,6 +4,7 @@ from mongodb import db
 from datetime import date, timedelta, datetime
 import base64
 import json
+from username import get_watched
 
 
 def add_corners(im, rad):
@@ -21,6 +22,7 @@ def add_corners(im, rad):
 
 
 def collage(username):
+    get_watched(username, True, True, True)
     month = datetime.now().month
     year = datetime.now().year
     if month > 1:

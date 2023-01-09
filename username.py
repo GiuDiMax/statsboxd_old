@@ -86,10 +86,18 @@ async def get_watched2(urlx, diary):
         await asyncio.gather(*[get_watched3(url, session, diary) for url in urlx])
 
 
-def get_watched(username, diary, fastUpdate):
+def get_watched(username, diary, fastUpdate, lastmonth=False):
     global watched_list, diary_list
     watched_list = []
     diary_list = []
+    '''
+    if lastmonth:
+        if datetime.now().month == 1:
+            url = 'http://letterboxd.com/' + str(username) + '/films/diary/page/1/'
+        else:
+            url = 'http://letterboxd.com/' + str(username) + '/films/diary/page/1/'
+    else:
+    '''
     if diary:
         url = 'http://letterboxd.com/' + str(username) + '/films/diary/page/1/'
     else:
@@ -102,13 +110,19 @@ def get_watched(username, diary, fastUpdate):
         urls = []
         if diary:
             for i in range(pages):
-                if fastUpdate:
-                    urls.append('http://letterboxd.com/' + str(username) + '/films/diary/for/' + str(datetime.now().year) + '/page/' + str(i+1) +"/")
+                if lastmonth:
                     if datetime.now().month == 1:
                         urls.append('http://letterboxd.com/' + str(username) + '/films/diary/for/' + str(
-                            datetime.now().year - 1) + '/page/' + str(i + 1) + "/")
+                            datetime.now().year - 1) + '/12/page/' + str(i + 1) + "/")
+                    else:
+                        urls.append('http://letterboxd.com/' + str(username) + '/films/diary/for/' + str(
+                            datetime.now().year) + '/' + str(datetime.now().month - 1) + '/page/' + str(i + 1) + "/")
                 else:
-                    urls.append('http://letterboxd.com/' + str(username) + '/films/diary/page/' + str(i + 1) + "/")
+                    if fastUpdate:
+                        urls.append('http://letterboxd.com/' + str(username) + '/films/diary/for/' + str(datetime.now().year) + '/page/' + str(i+1) +"/")
+
+                    else:
+                        urls.append('http://letterboxd.com/' + str(username) + '/films/diary/page/' + str(i + 1) + "/")
         else:
             for i in range(pages):
                     urls.append('http://letterboxd.com/' + str(username) + '/films/page/' + str(i + 1) + "/")
