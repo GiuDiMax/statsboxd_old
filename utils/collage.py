@@ -41,8 +41,8 @@ def collage(username):
         {'$lookup': {
             'from': 'Film', 'localField': 'diary2.id',
             'foreignField': '_id', 'as': 'info'}},
-        {'$project': {'id': 'diary2.id', 'like': 'diary2.dLike', 'rating': 'diary2.dRating',
-                      'rewatch': 'diary2.rewatch', 'img': {'$first': '$info.images.poster'}}}
+        {'$project': {'id': '$diary2.id', 'like': '$diary2.dLike', 'rating': '$diary2.dRating',
+                      'rewatch': '$diary2.rewatch', 'img': {'$first': '$info.images.poster'}}}
     ])
     films = []
     for x in a:
@@ -117,7 +117,6 @@ def collage(username):
         img = add_corners(img, 20)
         new.paste(img, (x * (length + bordioriz) + bordiestremi + bordifinali, y + bordoalto))
         combined = Image.alpha_composite(combined, new)
-
         if film['like'] or film['rewatch']:
             out = Image.new("RGBA", (length, int(bordivert * 0.5)), (255, 0, 0, 0))
             if __name__ == '__main__':
