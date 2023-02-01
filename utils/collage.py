@@ -135,7 +135,7 @@ def collage(username):
                 fnt = ImageFont.truetype("./utils/DejaVuSans-Bold.ttf", int(150 / j))
             try:
                 msg = u"\u2605" * int(int(film['rating']) / 2) + u"\u00BD" * int(int(film['rating']) % 2) + \
-                      " " + u"\u2665" * film['like'] + u"\u27F3" * film['rewatch']
+                      u"\u2665" * film['like'] + u"\u27F3" * film['rewatch']
             except:
                 msg = ""
         else:
@@ -191,8 +191,9 @@ def collage(username):
     session.mount('https://', adapter)
     '''
 
-    urlreq = 'https://api.imgbb.com/1/upload?expiration=864000&key=d75924aaec91be8dcb79c3c5ec3547cc'
     return None
+    urlreq = 'https://api.imgbb.com/1/upload?expiration=864000&key=d75924aaec91be8dcb79c3c5ec3547cc'
+
     try:
         r = requests.post(urlreq, files=files)
         print(r.text)
