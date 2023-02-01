@@ -192,6 +192,7 @@ def collage(username):
     '''
 
     urlreq = 'https://api.imgbb.com/1/upload?expiration=864000&key=d75924aaec91be8dcb79c3c5ec3547cc'
+    return None
     try:
         r = requests.post(urlreq, files=files)
         print(r.text)
