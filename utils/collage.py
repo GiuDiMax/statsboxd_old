@@ -78,7 +78,7 @@ def collage(username):
         j, j2 = 8, 8
 
     elif number <= 82:
-        j, j2 = 9, 1
+        j, j2 = 9, 9
 
     else: j, j2 = 10, 10
 
