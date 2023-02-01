@@ -136,6 +136,12 @@ def collage(username):
             try:
                 msg = u"\u2605" * int(int(film['rating']) / 2) + u"\u00BD" * int(int(film['rating']) % 2) + \
                       u"\u2665" * film['like'] + u"\u27F3" * film['rewatch']
+            #    if film['rewatch']:
+            #        msg = u"\u2605" * int(int(film['rating']) / 2) + u"\u00BD" * int(int(film['rating']) % 2) + \
+            #              " " + u"\u27F3" * film['rewatch']
+            #    else:
+            #        msg = u"\u2605" * int(int(film['rating']) / 2) + u"\u00BD" * int(int(film['rating']) % 2) + \
+            #              " " + u"\u2665" * film['like']
             except:
                 msg = ""
         else:
