@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, send_file
 from username import checkUsername, fullUpdate
 from config import *
 from utils.getUsersList import *
@@ -74,7 +74,11 @@ def main_update(username):
 
 @app.route('/<username>/collage/')
 def main_collage(username):
-    return redirect(collage(username), code=302)
+    red = collage(username)
+    if red is not None:
+        return redirect(red, code=302)
+    else:
+        return send_file("utils/tmp.jpg", mimetype='image/jpg')
 
 
 @app.route('/')

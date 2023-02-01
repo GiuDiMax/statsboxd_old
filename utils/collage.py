@@ -182,9 +182,13 @@ def collage(username):
     '''
 
     urlreq = 'https://api.imgbb.com/1/upload?expiration=864000&key=d75924aaec91be8dcb79c3c5ec3547cc'
-    r = requests.post(urlreq, files=files)
-    jsonx = json.loads(r.text)
-    return(jsonx['data']['url'].replace("\/","/"))
+    try:
+        r = requests.post(urlreq, files=files)
+        print(r.text)
+        jsonx = json.loads(r.text)
+        return(jsonx['data']['url'].replace("\/","/"))
+    except:
+        return None
 
 
 if __name__ == '__main__':
