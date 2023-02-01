@@ -6,6 +6,7 @@ import base64
 import json
 from username import get_watched
 
+
 def add_corners(im, rad):
     circle = Image.new('L', (rad * 2, rad * 2), 0)
     draw = ImageDraw.Draw(circle)
@@ -70,7 +71,16 @@ def collage(username):
     elif number <= 36:
         j, j2 = 6, 6
 
-    else: j, j2 = 7, 7
+    elif number <= 49:
+        j, j2 = 7, 7
+
+    elif number <= 64:
+        j, j2 = 8, 8
+
+    elif number <= 82:
+        j, j2 = 9, 1
+
+    else: j, j2 = 10, 10
 
     length = int(((1080-(bordistandard*2))/j)*0.85)
     height = int(length*1.5)
@@ -192,6 +202,6 @@ def collage(username):
 
 
 if __name__ == '__main__':
-    print(collage('giudimax'))
+    print(collage('antonioorrico'))
 
 
