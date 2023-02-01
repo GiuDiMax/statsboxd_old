@@ -21,6 +21,16 @@ def add_corners(im, rad):
     return im
 
 
+def add_element(img, likex, rewatchx, like, rew):
+    if likex:
+        img.paste(like, (160, 265), like)
+        if rewatchx:
+            img.paste(rew, (100, 265), rew)
+    else:
+        img.paste(rew, (160, 265), rew)
+    return img
+
+
 def collage(username):
     get_watched(username, True, True, True)
     month = datetime.now().month
@@ -125,8 +135,19 @@ def collage(username):
         new = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
         img = img.resize((length, height))
         img = add_corners(img, 20)
+        if film['like'] or film['rewatch']:
+            if __name__ == '__main__':
+                like = Image.open("like_icon.png")
+                rew = Image.open("rew_icon.png")
+            else:
+                like = Image.open("./utils/like_icon.png")
+                rew = Image.open("./utils/rew_icon.png")
+            img = add_element(img, film['like'], film['rewatch'], like, rew)
+            del like
+            del rew
         new.paste(img, (x * (length + bordioriz) + bordiestremi + bordifinali, y + bordoalto))
         combined = Image.alpha_composite(combined, new)
+        """
         if film['like'] or film['rewatch']:
             out = Image.new("RGBA", (length, int(bordivert * 0.5)), (255, 0, 0, 0))
             if __name__ == '__main__':
@@ -145,15 +166,16 @@ def collage(username):
             except:
                 msg = ""
         else:
-            out = Image.new("RGBA", (length, int(bordivert*0.5)), (255, 0, 0, 0))
-            if __name__ == '__main__':
-                fnt = ImageFont.truetype("DejaVuSans-Bold.ttf", int(170/j))
-            else:
-                fnt = ImageFont.truetype("./utils/DejaVuSans-Bold.ttf", int(170 / j))
-            try:
-                msg = u"\u2605" * int(int(film['rating'])/2) + u"\u00BD" * int(int(film['rating']) % 2)
-            except:
-                msg = ""
+        """
+        out = Image.new("RGBA", (length, int(bordivert*0.5)), (255, 0, 0, 0))
+        if __name__ == '__main__':
+            fnt = ImageFont.truetype("DejaVuSans-Bold.ttf", int(170/j))
+        else:
+            fnt = ImageFont.truetype("./utils/DejaVuSans-Bold.ttf", int(170 / j))
+        try:
+            msg = u"\u2605" * int(int(film['rating'])/2) + u"\u00BD" * int(int(film['rating']) % 2)
+        except:
+            msg = ""
 
         #w, h = fnt.getsize(msg)
         a = fnt.getbbox(msg)
@@ -210,6 +232,6 @@ def collage(username):
 
 
 if __name__ == '__main__':
-    print(collage('antonioorrico'))
+    print(collage('giudimax'))
 
 
