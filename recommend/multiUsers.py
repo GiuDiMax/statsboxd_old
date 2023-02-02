@@ -6,11 +6,33 @@ from surprise import Dataset, Reader, SVD, BaselineOnly
 import random
 import os
 from threading import Thread
+import numpy as np
 #from setLists import updateLists
 #from setPeople import mainSetNames
 #from setCollections import mainSetCollection2
 #from setThemes import all
 #from cleanUsers import cleanUsers
+
+
+def rimuovimedia(df, movielist):
+    obj = db.Film.aggregate([
+        {'$match': {'_id': {'$in': movielist}}},
+        {'$project': {'_id': 1, 'avg': '$rating.average'}},
+    ])
+    dfx = pd.DataFrame(obj)
+    dfx.rename(columns={'_id': 'movieId'}, inplace=True)
+    df = df.merge(dfx, on='movieId', how='left')
+    df['rating'] = (df['rating'] - df['avg']/3).round(1)
+    #df['rating'] = df['rating'].clip(lower=0)
+    #df['rating'] = df['rating'].replace([np.inf, -np.inf], np.nan)
+    #df = df[df['rating'] >= 0]
+    #df = df[df['rating'] < 1] = 1
+    #df = df[df['rating'] < 1] = 1
+    df['rating'] = df['rating'].mask(df['rating'].lt(1), 1)
+    #df['rating'] = df['rating'].astype("Int16")
+    df = df.drop(['avg'], axis=1)
+    df = df.dropna()
+    return df
 
 
 def createAlgo(populate=False, algo=False):
@@ -32,9 +54,11 @@ def createAlgo(populate=False, algo=False):
         #userslist = dfx.drop_duplicates(subset=['userId'])['userId'].tolist()
         df = pd.read_csv('ratings_clean.csv', low_memory=False)
         df = pd.concat([df, dfx])
+        #df = rimuovimedia(df, movielist)
         filename = 'trainset.csv'
         df.to_csv(filename, index=False)
         reader = Reader(sep=',', skip_lines=1, line_format='user item rating', rating_scale=(1, 10))
+        #reader = Reader(sep=',', skip_lines=1, line_format='user item rating', rating_scale=(0, 100))
         data = Dataset.load_from_file(filename, reader=reader)
         #reader = Reader(rating_scale=(1, 10))
         #data = Dataset.load_from_df(df, reader=reader)
@@ -120,7 +144,12 @@ def predictUser(username, algo, watched_list=None):
             if x['_id'] == int(y[0]):
                 j['uri'] = x['uri']
                 j['poster'] = x['poster']
-                j['perc'] = int(y[1]*10)
+                #j['perc'] = int(y[1]*10)
+                val = int(y[1] * 10)
+                if val > 100:
+                    j['perc'] = 100
+                else:
+                    j['perc'] = val
                 top.append(j)
                 break
     top = sorted(top, key=lambda d: d['perc'], reverse=True)
@@ -129,8 +158,8 @@ def predictUser(username, algo, watched_list=None):
 
 if __name__ == '__main__':
     start = time.time()
+    #createAlgo(True, True)
     createAlgo(True, True)
-    #createAlgo(False, True)
     '''
     updateLists()
     mainSetNames()
