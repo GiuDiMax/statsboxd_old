@@ -35,7 +35,7 @@ def rimuovimedia(df, movielist):
     return df
 
 
-def createAlgo(populate=False, algo=False):
+def createAlgo(populate=False, algo=False, for_tf=False):
     if algo:
         df = pd.read_csv('movies.csv', low_memory=False)
         movielist = df['movieId'].tolist()
@@ -57,6 +57,8 @@ def createAlgo(populate=False, algo=False):
         #df = rimuovimedia(df, movielist)
         filename = 'trainset.csv'
         df.to_csv(filename, index=False)
+        if for_tf:
+            exit()
         reader = Reader(sep=',', skip_lines=1, line_format='user item rating', rating_scale=(1, 10))
         #reader = Reader(sep=',', skip_lines=1, line_format='user item rating', rating_scale=(0, 100))
         data = Dataset.load_from_file(filename, reader=reader)
@@ -159,7 +161,7 @@ def predictUser(username, algo, watched_list=None):
 if __name__ == '__main__':
     start = time.time()
     #createAlgo(True, True)
-    createAlgo(True, True)
+    createAlgo(True, True, True)
     '''
     updateLists()
     mainSetNames()
