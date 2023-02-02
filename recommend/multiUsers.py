@@ -2,7 +2,7 @@ import pandas as pd
 import pickle
 import time
 from mongodb import db
-from surprise import Dataset, Reader, SVD
+from surprise import Dataset, Reader, SVD, BaselineOnly
 import random
 import os
 from threading import Thread
@@ -40,7 +40,8 @@ def createAlgo(populate=False, algo=False):
         #data = Dataset.load_from_df(df, reader=reader)
         trainset = data.build_full_trainset()
         print("trainset ready, fitting...")
-        algo = SVD()
+        #algo = SVD()
+        algo = BaselineOnly()
         algo = algo.fit(trainset)
         print("predicting...")
         with open('algo.pickle', 'wb') as handle:
@@ -129,6 +130,7 @@ def predictUser(username, algo, watched_list=None):
 if __name__ == '__main__':
     start = time.time()
     createAlgo(True, True)
+    #createAlgo(False, True)
     '''
     updateLists()
     mainSetNames()
