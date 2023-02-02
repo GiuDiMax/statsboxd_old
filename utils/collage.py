@@ -111,6 +111,11 @@ def collage(username):
     except:
         bordisupplemento = 0
 
+    if __name__ == '__main__':
+        empty = Image.open("empty.png")
+    else:
+        empty = Image.open("./utils/empty.png")
+
     for i, film in enumerate(films):
         try:
             if i % j == 0:
@@ -126,11 +131,12 @@ def collage(username):
         if number-i <= resto:
             bordifinali = int((j-(number % j))*length*1.15/2)
 
-        try:
-            img = Image.open(requests.get("https://a.ltrbxd.com/resized/"+film['img']+"-0-150-0-225-crop.jpg", stream=True).raw)
-        except:
-            img = Image.open(
-                requests.get("https://s.ltrbxd.com/static/img/empty-poster-230.876e6b8e.png ", stream=True).raw)
+        img = empty
+        if 'img' in film:
+            try:
+                img = Image.open(requests.get("https://a.ltrbxd.com/resized/"+film['img']+"-0-150-0-225-crop.jpg", stream=True).raw)
+            except:
+                img = empty
 
         new = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
         img = img.resize((length, height))
@@ -232,6 +238,6 @@ def collage(username):
 
 
 if __name__ == '__main__':
-    print(collage('giudimax'))
+    print(collage('moviefinger'))
 
 
