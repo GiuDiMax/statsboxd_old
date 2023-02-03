@@ -3,9 +3,12 @@ import asyncio
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
 import lxml
-from threading import Thread
+from threading import Thread,Semaphore
 import csv
 import time
+
+sem = Semaphore()
+sem2 = asyncio.Semaphore()
 
 
 async def get_watched3(url, userId, session):
@@ -18,7 +21,11 @@ async def get_watched3(url, userId, session):
                 rating = sup.p.span['class'][-1]
                 if 'rated' in rating:
                     rating = int(rating.split("-", 1)[1])
+                    sem.acquire()
+                    await sem2.acquire()
                     writer.writerow([userId, movie, rating])
+                    sem.release()
+                    sem2.release()
             except:
                 pass
 
@@ -35,8 +42,8 @@ def threadFunction(user):
     try:
         pages = int(soup.find_all('li', class_="paginate-page")[-1].text)
         urls = []
-        if pages > 20:
-            pages = int(pages*0.8)
+        #if pages > 20:
+        #    pages = int(pages*0.8)
         for i in range(pages):
             urls.append('http://letterboxd.com/' + user[1] + '/films/by/popular/page/' + str(i + 1) + "/")
     except:
@@ -66,7 +73,7 @@ def get_watched(username=None):
             reader = csv.reader(f)
             data = list(reader)[1:]
 
-        rangex = 10
+        rangex = 5
 
         for z in range(int(len(data)/rangex) + 1):
             start = time.time()

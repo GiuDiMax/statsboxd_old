@@ -174,7 +174,6 @@ def fill_db(url, soup):
     json1['updateDate'] = datetime.today()
     json1['modifiedDate'] = datetime.strptime(json_lb['dateModified'], '%Y-%m-%d')
 
-
     if __name__ == '__main__':
         print(json1)
 
@@ -184,16 +183,28 @@ def fill_db(url, soup):
     #OLD#db.Film.update_one({'uri': json1['uri']}, {'$set': json1}, True)
 
 
-async def get(url, session):
-    async with session.get(url='http://letterboxd.com/film/' + url + "/") as response:
-            resp = await response.read()
-            soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div', 'a', 'p', 'h1', 'small', 'script']))
-            fill_db(url, soup)
+def fill_dbMembers(url, soup):
+    members = soup.find('a', {"class": "tooltip"})['title']
+    members = str(members).replace(",", "").replace("people", "")
+    db.Film.update_one({'uri': url}, {'$set': {'members': int(members)}}, True)
 
 
-async def main2(urls):
+async def get(url, session, members):
+    if members:
+        async with session.get(url='http://letterboxd.com/film/' + url + "/members") as response:
+                resp = await response.read()
+                soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div', 'li']))
+                fill_dbMembers(url, soup)
+    else:
+        async with session.get(url='http://letterboxd.com/film/' + url + "/") as response:
+                resp = await response.read()
+                soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div', 'a', 'p', 'h1', 'small', 'script']))
+                fill_db(url, soup)
+
+
+async def main2(urls, members=False):
     async with aiohttp.ClientSession() as session:
-        await asyncio.gather(*[get(url, session) for url in urls])
+        await asyncio.gather(*[get(url, session, members) for url in urls])
 
 
 def fillMongodb(urls):
@@ -202,5 +213,10 @@ def fillMongodb(urls):
     #return asyncio.get_event_loop().run_until_complete(main2(urls))
 
 
+def fillMongodbmembers(urls):
+    asyncio.set_event_loop(asyncio.SelectorEventLoop())
+    asyncio.get_event_loop().run_until_complete(main2(urls, True))
+
+
 if __name__ == '__main__':
-    fillMongodb(['the-batman'])
+    fillMongodbmembers(['the-batman'])

@@ -28,7 +28,7 @@ def get_users(url):
     writer = csv.writer(f)
     writer.writerow(['id', 'username'])
     urls = []
-    for i in range(100):
+    for i in range(167):
         urls.append(url + str(i + 1) + "/")
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
     asyncio.get_event_loop().run_until_complete(get_users2(urls,))

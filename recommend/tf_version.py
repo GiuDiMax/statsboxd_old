@@ -21,12 +21,25 @@ fullpredict = True
 
 def predictuser(model, df, movie_df, movie2movie_encoded, username):
     movies_watched_by_user = df.loc[df['userId'] == username]
+    obj = db.Users.aggregate([
+        {'$match': {'_id': username}},
+        {'$project': {'watched': 1}},
+        {'$unwind': '$watched'},
+        {'$project': {'_id': 0, 'id': '$watched.id'}},
+    ])
+    watched = []
+    for x in obj:
+        watched.append(x['id'])
     movies_not_watched = movie_df[~movie_df["movieId"].isin(movies_watched_by_user.movieId.values)]["movieId"]
     movies_not_watched = list(set(movies_not_watched).intersection(set(movie2movie_encoded.keys())))
     movies_not_watched = [[movie2movie_encoded.get(x)] for x in movies_not_watched]
     user_movie_array = np.hstack(([[0]] * len(movies_not_watched), movies_not_watched))
-    ratings = model.predict(user_movie_array).flatten()
-    top_ratings_indices = ratings.argsort()[-50:][::-1]
+    ratings = model.predict(user_movie_array, verbose=0).flatten()
+    dbx = pd.DataFrame(ratings)
+    dbx = dbx.sort_values(by=[0], ascending=False)
+    dbx = dbx.head(500)
+    rat2 = dbx[dbx.columns[0]].values.tolist()
+    top_ratings_indices = ratings.argsort()[-500:][::-1]
     recommended_movie_ids = [movie_encoded2movie.get(movies_not_watched[x][0]) for x in top_ratings_indices]
     obj = db.Film.aggregate([
         {'$match': {'_id': {'$in': recommended_movie_ids}}},
@@ -36,16 +49,22 @@ def predictuser(model, df, movie_df, movie2movie_encoded, username):
     for x in obj:
         obja.append(x)
     top = []
-    i = 0
-    for y in recommended_movie_ids:
+    z = 0
+    for index, y in enumerate(recommended_movie_ids):
         for x in obja:
-            if int(x['_id']) == int(y):
+            if (int(x['_id']) == int(y)) and (int(x['_id']) not in watched):
                 j = {}
                 j['uri'] = x['uri']
                 j['poster'] = x['poster']
-                j['perc'] = int(99 - i*0.5)
+                #percx = int(rat2[index]*150)
+                #if percx > 99:
+                #    percx = 99
+                j['perc'] = int(rat2[index]*100)
                 top.append(j)
-        i = i+1
+                z = z+1
+        if z > 47:
+            break
+    print("predicted: " + str(username))
     db.Users.update_one({'_id': username}, {'$set': {'sug': top}})
 
 
@@ -83,14 +102,19 @@ class RecommenderNet(keras.Model):
 
 
 df1 = pd.read_csv("trainset.csv", header=0, low_memory=False)
+#df1 = df1.sample(frac=1)
+#df2 = pd.read_csv("ratings_clean.csv", header=0, low_memory=False)
 if test:
-    df = df1.sample(3000)
+    df = df1.sample(10000)
 else:
-    df = df1
+    df = df1.sample(1000000)
+df1 = df
 user_ids = df["userId"].unique().tolist()
+print("utenti: " + str(len(user_ids)))
 user2user_encoded = {x: i for i, x in enumerate(user_ids)}
 userencoded2user = {i: x for i, x in enumerate(user_ids)}
 movie_ids = df["movieId"].unique().tolist()
+print("films: " + str(len(movie_ids)))
 movie2movie_encoded = {x: i for i, x in enumerate(movie_ids)}
 movie_encoded2movie = {i: x for i, x in enumerate(movie_ids)}
 df["user"] = df["userId"].map(user2user_encoded)
@@ -98,13 +122,13 @@ df["movie"] = df["movieId"].map(movie2movie_encoded)
 num_users = len(user2user_encoded)
 num_movies = len(movie_encoded2movie)
 df["rating"] = df["rating"].values.astype(np.float32)
-min_rating = min(df["rating"])
-max_rating = max(df["rating"])
-
+#min_rating = min(df["rating"])
+#max_rating = max(df["rating"])
+#print("min: " + str(min_rating) + ", max: " + str(max_rating))
 
 x = df[["user", "movie"]].values
-y = df["rating"].apply(lambda x: (x - min_rating) / (max_rating - min_rating)).values
-df1['rating'] = df1["rating"].apply(lambda x: (x - min_rating) / (max_rating - min_rating)).values
+y = df["rating"].apply(lambda x: round((x - 1) / (10 - 1), 1)).values
+df1['rating'] = df1["rating"].apply(lambda x: round((x - 1) / (10 - 1), 1)).values
 train_indices = int(0.9 * df.shape[0])
 x_train, x_val, y_train, y_val = (
     x[:train_indices],
@@ -114,64 +138,69 @@ x_train, x_val, y_train, y_val = (
 )
 
 model = RecommenderNet(num_users, num_movies, EMBEDDING_SIZE)
-model.compile(loss=tf.keras.losses.BinaryCrossentropy(), metrics=["accuracy"], optimizer=keras.optimizers.Adam(learning_rate=0.001))
+model.compile(loss=tf.keras.losses.BinaryCrossentropy(), optimizer=keras.optimizers.Adam(learning_rate=0.001), metrics=['accuracy'])
 history = model.fit(
     x=x_train,
     y=y_train,
     batch_size=64,
-    epochs=5,
+    epochs=1,
     verbose=1,
     validation_data=(x_val, y_val),
 )
 model.summary()
 test_loss = model.evaluate(x_val, y_val)
 print('\\nTest Loss: {}'.format(test_loss))
-print("Testing Model with 1 user")
 if predict_sample:
-    movie_df = pd.read_csv("movies.csv")
-    user_id = "new_user"
-    movies_watched_by_user = df.sample(100)
-    movies_not_watched = movie_df[
-        ~movie_df["movieId"].isin(movies_watched_by_user.movieId.values)
-    ]["movieId"]
-    movies_not_watched = list(
-        set(movies_not_watched).intersection(set(movie2movie_encoded.keys()))
-    )
-    movies_not_watched = [[movie2movie_encoded.get(x)] for x in movies_not_watched]
-    user_movie_array = np.hstack(
-        ([[0]] * len(movies_not_watched), movies_not_watched)
-    )
-    ratings = model.predict(user_movie_array).flatten()
-    top_ratings_indices = ratings.argsort()[-10:][::-1]
-    recommended_movie_ids = [
-        movie_encoded2movie.get(movies_not_watched[x][0]) for x in top_ratings_indices
-    ]
-    print("Showing recommendations for user: {}".format(user_id))
     print("====" * 9)
-    print("Movies with high ratings from user")
-    print("----" * 8)
-    top_movies_user = (
-        movies_watched_by_user.sort_values(by="rating", ascending=False)
-        .head(5)
-        .movieId.values
-    )
-    movie_df_rows = movie_df[movie_df["movieId"].isin(top_movies_user)]
-    for row in movie_df_rows.itertuples():
-        print(row.uri)
-    print("----" * 8)
-    print("Top 10 movie recommendations")
-    print("----" * 8)
-    recommended_movies = movie_df[movie_df["movieId"].isin(recommended_movie_ids)]
-    for row in recommended_movies.itertuples():
-        print(row.uri)
-    print("==="* 9)
+    for i in range(2):
+        #print("Testing Model with 1 user")
+        movie_df = pd.read_csv("movies.csv")
+        user_id = "new_user_" + str(i)
+        movies_watched_by_user = df.sample(500)
+        movies_not_watched = movie_df[
+            ~movie_df["movieId"].isin(movies_watched_by_user.movieId.values)
+        ]["movieId"]
+        movies_not_watched = list(
+            set(movies_not_watched).intersection(set(movie2movie_encoded.keys()))
+        )
+        movies_not_watched = [[movie2movie_encoded.get(x)] for x in movies_not_watched]
+        user_movie_array = np.hstack(
+            ([[0]] * len(movies_not_watched), movies_not_watched)
+        )
+        ratings = model.predict(user_movie_array, verbose = 0).flatten()
+        top_ratings_indices = ratings.argsort()[-10:][::-1]
+        recommended_movie_ids = [
+            movie_encoded2movie.get(movies_not_watched[x][0]) for x in top_ratings_indices
+        ]
+        print("Showing recommendations for user: {}".format(user_id))
+        #print("====" * 9)
+        #print("Movies with high ratings from user")
+        print("----" * 8)
+        top_movies_user = (
+            movies_watched_by_user.sort_values(by="rating", ascending=False)
+            .head(5)
+            .movieId.values
+        )
+        movie_df_rows = movie_df[movie_df["movieId"].isin(top_movies_user)]
+        for row in movie_df_rows.itertuples():
+            pass
+            #print(row.uri)
+        #print("----" * 8)
+        #print("Top 10 movie recommendations")
+        #print("----" * 8)
+        recommended_movies = movie_df[movie_df["movieId"].isin(recommended_movie_ids)]
+        for row in recommended_movies.itertuples():
+            print(row.uri)
+        print("==="* 9)
 if fullpredict:
     movie_df = pd.read_csv("movies.csv")
     obj = db.Users.aggregate([{'$project': {'_id': 1}}])
     userslist = []
     for x in obj:
         userslist.append(x['_id'])
-    num = 10
+    num = 5
+    #predictuser(model, df1, movie_df, movie2movie_encoded, "giudimax")
+    #exit()
     for i in range(int(len(userslist) / num)):
         threads = []
         for j in range(num):
