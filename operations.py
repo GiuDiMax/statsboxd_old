@@ -184,9 +184,12 @@ def fill_db(url, soup):
 
 
 def fill_dbMembers(url, soup):
-    members = soup.find('a', {"class": "tooltip"})['title']
-    members = str(members).replace(",", "").replace("people", "")
-    db.Film.update_one({'uri': url}, {'$set': {'members': int(members)}}, True)
+    try:
+        members = soup.find('a', {"class": "tooltip"})['title']
+        members = str(members).replace(",", "").replace("people", "")
+        db.Film.update_one({'uri': url}, {'$set': {'members': int(members)}}, True)
+    except:
+        pass
 
 
 async def get(url, session, members):
@@ -219,4 +222,4 @@ def fillMongodbmembers(urls):
 
 
 if __name__ == '__main__':
-    fillMongodbmembers(['the-batman'])
+    fillMongodbmembers(['attack-on-titan-distress'])

@@ -173,16 +173,22 @@ op_role.append({'$project': {'uri': '$info.uri', 'avg': '$info.rating.average', 
 json_operations['worstMovie'] = op_role
 
 op_role = []
-op_role.append({'$sort': {'info.rating.num': -1}})
+#op_role.append({'$sort': {'info.rating.num': -1}})
+op_role.append({'$match': {"info.members": {"$exists": True}}})
+op_role.append({'$sort': {'info.members': -1}})
 op_role.append({'$limit': 1})
 op_role.append({'$project': {'uri': '$info.uri', 'avg': '$info.rating.average', 'poster': '$info.images.poster'}})
+
 json_operations['mostPopularMovie'] = op_role
 
 op_role = []
-op_role.append({'$match': {"info.rating.average": {"$exists": True}}})
-op_role.append({'$sort': {'info.rating.num': 1}})
+#op_role.append({'$match': {"info.rating.average": {"$exists": True}}})
+#op_role.append({'$sort': {'info.rating.num': 1}})
+op_role.append({'$match': {"info.members": {"$exists": True}}})
+op_role.append({'$sort': {'info.members': 1}})
 op_role.append({'$limit': 1})
 op_role.append({'$project': {'uri': '$info.uri', 'avg': '$info.rating.average', 'poster': '$info.images.poster'}})
+
 json_operations['lessPopularMovie'] = op_role
 
 op_role = []
