@@ -1,6 +1,6 @@
 from mongodb import db
 from datetime import date, timedelta, datetime
-from operations import fillMongodb
+from operations import fillMongodb, fillMongodbmembers
 import time
 from setLists import updateLists
 from setPeople import mainSetNames
@@ -16,7 +16,7 @@ def refresh(i):
     current_year = date.today().year
 
     a = db.Film.aggregate([
-        {'$match': {"year": {'$gt': current_year - 1}}},
+        #{'$match': {"year": {'$gt': current_year - 1}}},
         {'$match': {"updateDate": {'$lt': datex}}},
         {'$sort': {'updateDate': 1}},
         {'$limit': 1000},
@@ -28,6 +28,7 @@ def refresh(i):
         uris.append(x['uri'])
     print('analyizing ' + str(len(uris) + i*1000))
     fillMongodb(uris)
+    fillMongodbmembers(uris)
 
 
 def refreshata(i):
