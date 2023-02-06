@@ -630,7 +630,9 @@
                             {% endif %}
                         </a>
                         <div class="sottofilm">
+                            {% if 'avg' in user['stats'+year][type[0]][0] %}
                             <img src="{{ url_for('static', _external=True, _scheme='https', filename='images/orangestar.jpg') }}" /><span class="sottotitolo stellamedia">{{ '{0:0.1f}'.format(user['stats'+year][type[0]][0].avg) }}</span>
+                            {% endif %}
                         </div>
                     </div>
                     {% endfor %}
