@@ -37,9 +37,9 @@ def predictuser(model, df, movie_df, movie2movie_encoded, username):
     ratings = model.predict(user_movie_array, verbose=0).flatten()
     dbx = pd.DataFrame(ratings)
     dbx = dbx.sort_values(by=[0], ascending=False)
-    dbx = dbx.head(500)
+    dbx = dbx.head(200)
     rat2 = dbx[dbx.columns[0]].values.tolist()
-    top_ratings_indices = ratings.argsort()[-500:][::-1]
+    top_ratings_indices = ratings.argsort()[-200:][::-1]
     recommended_movie_ids = [movie_encoded2movie.get(movies_not_watched[x][0]) for x in top_ratings_indices]
     obj = db.Film.aggregate([
         {'$match': {'_id': {'$in': recommended_movie_ids}}},
@@ -56,9 +56,6 @@ def predictuser(model, df, movie_df, movie2movie_encoded, username):
                 j = {}
                 j['uri'] = x['uri']
                 j['poster'] = x['poster']
-                #percx = int(rat2[index]*150)
-                #if percx > 99:
-                #    percx = 99
                 j['perc'] = int(rat2[index]*100)
                 top.append(j)
                 z = z+1
@@ -101,13 +98,26 @@ class RecommenderNet(keras.Model):
         return tf.nn.sigmoid(x)
 
 
-df1 = pd.read_csv("trainset.csv", header=0, low_memory=False)
+movie = pd.read_csv('movies.csv', low_memory=False)
+movielist = movie['movieId'].tolist()
+obj = db.Users.aggregate([
+    {'$project': {'_id': 1, 'watched': 1}},
+    {'$unwind': '$watched'},
+    {'$match': {'watched.rating': {'$gt': 0}}},
+    {'$match': {'watched.id': {'$in': movielist}}},
+    {'$project': {'_id': 1, 'movieId': '$watched.id', 'rating': '$watched.rating'}},
+])
+dfa = pd.DataFrame(obj)
+dfa.rename(columns={'_id': 'userId'}, inplace=True)
+dfb = pd.read_csv('ratings_clean.csv', low_memory=False)
+df1 = pd.concat([dfa, dfb])
+#df1 = pd.read_csv("trainset.csv", header=0, low_memory=False)
 #df1 = df1.sample(frac=1)
 #df2 = pd.read_csv("ratings_clean.csv", header=0, low_memory=False)
 if test:
     df = df1.sample(10000)
 else:
-    df = df1.sample(1000000)
+    df = df1.sample(1500000)
 df1 = df
 user_ids = df["userId"].unique().tolist()
 print("utenti: " + str(len(user_ids)))
