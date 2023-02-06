@@ -64,6 +64,7 @@ def singleYear(year, username):
     for x in ob3:
         y = x
         break
+    #print(y)
     db.Users.update_one({'_id': username}, {'$set': {'stats_'+str(year): y}})
 
 
@@ -95,5 +96,5 @@ def year_stats(username, fastUpdate):
     #years.sort(reverse=True)
         db.Users.update_one({'_id': username}, {'$set': {'years': years}})
 
-#singleYear(2022, 'cristo_nolan')
+singleYear(2022, 'giudimax')
 #year_stats('giudimax')
