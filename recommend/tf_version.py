@@ -4,6 +4,9 @@ from zipfile import ZipFile
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.models import Model
+from sklearn.model_selection import train_test_split
 from pathlib import Path
 import matplotlib.pyplot as plt
 import os
@@ -17,7 +20,7 @@ test = False
 save = False
 predict_sample = False
 fullpredict = True
-
+new = True
 
 def predictuser(model, df, movie_df, movie2movie_encoded, username):
     movies_watched_by_user = df.loc[df['userId'] == username]
@@ -117,8 +120,9 @@ df1 = pd.concat([dfa, dfb])
 if test:
     df = df1.sample(10000)
 else:
-    df = df1.sample(1500000)
+    df = df1.sample(2000000)
 df1 = df
+
 user_ids = df["userId"].unique().tolist()
 print("utenti: " + str(len(user_ids)))
 user2user_encoded = {x: i for i, x in enumerate(user_ids)}
@@ -132,12 +136,9 @@ df["movie"] = df["movieId"].map(movie2movie_encoded)
 num_users = len(user2user_encoded)
 num_movies = len(movie_encoded2movie)
 df["rating"] = df["rating"].values.astype(np.float32)
-#min_rating = min(df["rating"])
-#max_rating = max(df["rating"])
-#print("min: " + str(min_rating) + ", max: " + str(max_rating))
-
 x = df[["user", "movie"]].values
 y = df["rating"].apply(lambda x: round((x - 1) / (10 - 1), 1)).values
+
 df1['rating'] = df1["rating"].apply(lambda x: round((x - 1) / (10 - 1), 1)).values
 train_indices = int(0.9 * df.shape[0])
 x_train, x_val, y_train, y_val = (
@@ -147,15 +148,18 @@ x_train, x_val, y_train, y_val = (
     y[train_indices:],
 )
 
+#model = Model(num_users, num_movies, EMBEDDING_SIZE)
 model = RecommenderNet(num_users, num_movies, EMBEDDING_SIZE)
+early_stopping = EarlyStopping(monitor='val_loss', patience=2, verbose=1, mode='min')
 model.compile(loss=tf.keras.losses.BinaryCrossentropy(), optimizer=keras.optimizers.Adam(learning_rate=0.001), metrics=['accuracy'])
 history = model.fit(
     x=x_train,
     y=y_train,
-    batch_size=64,
-    epochs=1,
+    batch_size=128,
+    epochs=5,
     verbose=1,
     validation_data=(x_val, y_val),
+    callbacks=[early_stopping]
 )
 model.summary()
 test_loss = model.evaluate(x_val, y_val)
