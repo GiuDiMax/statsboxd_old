@@ -69,7 +69,7 @@ model.compile(loss='mean_squared_error', optimizer='adam')
 early_stopping = EarlyStopping(monitor='val_loss', patience=1, verbose=1, mode='min')
 model.fit([train['user_id'], train['movie_id']], train['rating'],
           validation_data=([test['user_id'], test['movie_id']], test['rating']),
-          epochs=1, verbose=1,
+          epochs=2, verbose=1,
           #callbacks=[early_stopping],
           batch_size=128)
 
@@ -95,10 +95,10 @@ for userx in users:
                                              'score': predictions.flatten()})
         recommendations = recommendations.append(recommendations_user)
     except:
-        print("errore" + userx)
+        pass
 
 recommendations = recommendations.sort_values(by=['user_id', 'score'], ascending=False)
-tops = recommendations.groupby('user_id').head(47)
+tops = recommendations.groupby('user_id').head(48)
 tops['movie_name'] = tops['movie_id'].apply(lambda x: list(movie_id.keys())[list(movie_id.values()).index(x)])
 for userx in users:
     try:
@@ -130,4 +130,4 @@ for userx in users:
         db.Users.update_one({'_id': userx}, {'$set': {'sug': top}})
         print("predicted " + userx)
     except:
-        break
+        pass

@@ -225,7 +225,7 @@ def collage(username):
     session.mount('https://', adapter)
     '''
 
-    return None
+    #return None
     urlreq = 'https://api.imgbb.com/1/upload?expiration=864000&key=d75924aaec91be8dcb79c3c5ec3547cc'
 
     try:
