@@ -20,7 +20,7 @@ dfa = pd.DataFrame(obj)
 dfa.rename(columns={'_id': 'userId'}, inplace=True)
 dfb = pd.read_csv('ratings_clean.csv', low_memory=False)
 df = pd.concat([dfa, dfb])
-#df = df.sample(100000)
+#df = df.sample(1000000)
 #df = dfa
 
 # Normalizzazione
@@ -69,7 +69,7 @@ model.compile(loss='mean_squared_error', optimizer='adam')
 early_stopping = EarlyStopping(monitor='val_loss', patience=1, verbose=1, mode='min')
 model.fit([train['user_id'], train['movie_id']], train['rating'],
           validation_data=([test['user_id'], test['movie_id']], test['rating']),
-          epochs=2, verbose=1,
+          epochs=1, verbose=1,
           #callbacks=[early_stopping],
           batch_size=128)
 
@@ -85,6 +85,7 @@ recommendations = pd.DataFrame()
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 for userx in users:
+#for userx in ['giudimax']:
     try:
         user = df[df['userId'] == userx]['user_id'].values[0]
         watched_movies = df[df['user_id'] == user]['movie_id']
@@ -98,11 +99,21 @@ for userx in users:
         pass
 
 recommendations = recommendations.sort_values(by=['user_id', 'score'], ascending=False)
-tops = recommendations.groupby('user_id').head(48)
+tops = recommendations.groupby('user_id').head(200)
 tops['movie_name'] = tops['movie_id'].apply(lambda x: list(movie_id.keys())[list(movie_id.values()).index(x)])
 for userx in users:
+#for userx in ['giudimax']:
     try:
         user = df[df['userId'] == userx]['user_id'].values[0]
+        obj = db.Users.aggregate([
+            {'$match': {'_id': userx}},
+            {'$project': {'watched': 1}},
+            {'$unwind': '$watched'},
+            {'$project': {'_id': 0, 'id': '$watched.id'}},
+        ])
+        watched = []
+        for x in obj:
+            watched.append(x['id'])
         recs = []
         recommended_movie_ids = []
         user_tops = tops[tops['user_id'] == user]
@@ -118,16 +129,20 @@ for userx in users:
         for x in obj:
             obja.append(x)
         top = []
+        z = 0
         for movie in recs:
             for x in obja:
-                if int(x['_id']) == int(movie[0]):
+                if int(x['_id']) == int(movie[0]) and int(movie[0]) not in watched:
                     j = {}
                     j['uri'] = x['uri']
                     j['poster'] = x['poster']
                     j['perc'] = int(movie[1] * 100)
                     top.append(j)
+                    z = z + 1
                     break
+            if z > 47:
+                break
         db.Users.update_one({'_id': userx}, {'$set': {'sug': top}})
-        print("predicted " + userx)
+        print("predicted: " + str(userx))
     except:
         pass
