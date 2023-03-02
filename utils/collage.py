@@ -23,11 +23,11 @@ def add_corners(im, rad):
 
 def add_element(img, likex, rewatchx, like, rew):
     if likex:
-        img.paste(like, (160, 265), like)
+        img.paste(like, (105, 187), like)
         if rewatchx:
-            img.paste(rew, (100, 265), rew)
+            img.paste(rew, (65, 185), rew)
     else:
-        img.paste(rew, (160, 265), rew)
+        img.paste(rew, (105, 185), rew)
     return img
 
 
@@ -139,18 +139,18 @@ def collage(username):
                 img = empty
 
         new = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
+        if __name__ == '__main__':
+            like = Image.open("like_icon.png")
+            rew = Image.open("rew_icon.png")
+        else:
+            like = Image.open("./utils/like_icon.png")
+            rew = Image.open("./utils/rew_icon.png")
+        if film['like'] or film['rewatch']:
+            img = add_element(img, film['like'], film['rewatch'], like, rew)
         img = img.resize((length, height))
         img = add_corners(img, 20)
-        if film['like'] or film['rewatch']:
-            if __name__ == '__main__':
-                like = Image.open("like_icon.png")
-                rew = Image.open("rew_icon.png")
-            else:
-                like = Image.open("./utils/like_icon.png")
-                rew = Image.open("./utils/rew_icon.png")
-            img = add_element(img, film['like'], film['rewatch'], like, rew)
-            del like
-            del rew
+        del like
+        del rew
         new.paste(img, (x * (length + bordioriz) + bordiestremi + bordifinali, y + bordoalto))
         combined = Image.alpha_composite(combined, new)
         """
@@ -225,7 +225,6 @@ def collage(username):
     session.mount('https://', adapter)
     '''
 
-    #return None
     urlreq = 'https://api.imgbb.com/1/upload?expiration=864000&key=d75924aaec91be8dcb79c3c5ec3547cc'
 
     try:
@@ -238,6 +237,6 @@ def collage(username):
 
 
 if __name__ == '__main__':
-    print(collage('moviefinger'))
+    print(collage('davethedreamer'))
 
 
