@@ -133,6 +133,7 @@ def get_watched(username, diary, fastUpdate, lastmonth=False):
     if lastmonth:
         db.Users.update_one({'_id': username}, {'$set': {'diary2': diary_list}}, True)
 
+
 def threadgeneral(username, fastUpdate=False):
     if not fastUpdate:
         start3 = time.time()
