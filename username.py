@@ -242,5 +242,5 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    fullUpdate('giudimax', True)
+    fullUpdate('giudimax', False)
     #threadxdiary('giudimax', fastUpdate=True)
