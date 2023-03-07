@@ -59,8 +59,12 @@ def base():
 def nanofun():
     db.Themes.delete_many({'type': {'$eq': 'nanogenre'}})
     db.Film.update_many({}, {'$unset': {'genres.nanogenre': 1}})
-    num = 100
+    num = 50
     for x in range(int(len(nano)/num)):
+        set(nano[x * num:(x * num) + num], 'nanogenre', 20000 + x * num, 'N')
+        print(str(x * num + num) + ' nanogenres ok')
+        time.sleep(10)
+        '''
         while True:
             try:
                 set(nano[x*num:(x*num)+num], 'nanogenre', 20000+x*num, 'N')
@@ -70,12 +74,13 @@ def nanofun():
                 print(e)
                 time.sleep(5)
                 pass
+        '''
     set(nano[int(len(nano)/num)*num:], 'nanogenre', 20000 + int(len(nano)/num) * num, 'N')
     print(str(len(nano)) + ' nanogenres ok')
 
 
 def all():
-    base()
+    #base()
     nanofun()
 
 
