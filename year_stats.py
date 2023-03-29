@@ -64,19 +64,36 @@ def singleYear(year, username):
     for x in ob3:
         y = x
         break
+    miles = []
+    z = int(len(y['milestones'])/50)
+    for i in range(z):
+        miles.append(y['milestones'][(i+1)*50])
+    y['milestones'] = miles
     db.Users.update_one({'_id': username}, {'$set': {'stats_'+str(year): y}})
 
 
-def year_stats(username, fastUpdate):
+def year_stats(username, fastUpdate=False):
+    k = {}
+    k['years'] = []
     a = getYears(username)
-    #y = {}
     threads = []
-    #for x in a:
-    #    y = a
-    #    break
     years = []
     for y in a:
         k = y
+    aa = list(k['years'])
+    aa.reverse()
+    bb = []
+    for y in aa:
+        if len(bb) == 0:
+            bb.append(y)
+        else:
+            while True:
+                if y['_id'] == bb[-1]['_id'] + 1:
+                    bb.append(y)
+                    break
+                else:
+                    bb.append({'_id': bb[-1]['_id']+1, 'sum': 0})
+    db.Users.update_one({'_id': username}, {'$set': {'stats.diaryperyear': bb}})
     if fastUpdate:
         singleYear(datetime.now().year, username)
         #if datetime.now().month == 1:
@@ -95,5 +112,5 @@ def year_stats(username, fastUpdate):
     #years.sort(reverse=True)
         db.Users.update_one({'_id': username}, {'$set': {'years': years}})
 
-#singleYear(2022, 'giudimax')
+singleYear(2022, 'giudimax')
 #year_stats('giudimax')

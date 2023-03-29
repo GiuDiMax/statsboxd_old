@@ -112,7 +112,7 @@ op_role.append({'$group': {'_id': '$diary.id',
                            'poster': {'$first': '$info.images.poster'}}})
 op_role.append({'$match': {"sum": {'$gt': 1}}})
 op_role.append({'$sort': {'sum': -1}})
-op_role.append({'$limit': 4})
+op_role.append({'$limit': 5})
 json_operations['mostWatched'] = op_role
 
 op_role = []
@@ -202,17 +202,10 @@ op_role.append({'$project': {'uri': '$info.uri', 'date': '$diary.date', 'poster'
 json_operations['lastMovie'] = op_role
 
 
-for field in ['country']:
-    op_role = []
-    op_role.append({'$unwind': '$info.' + field})
-    op_role.append({'$group': {'_id': '$info.' + field,
-                               'average': {'$avg': '$diary.dRating'},
-                               'sum': {'$sum': 1}}})
-    op_role.append({'$lookup': {
-        'from': 'Countries',
-        'localField': '_id',
-        'foreignField': 'uri',
-        'as': 'info'}})
-    op_role.append({'$sort': {'_id': 1}})
-    op_role.append({'$project': {'_id': {'$first': '$info._id'}, 'uri': '$_id', 'sum': 1}})
-    json_operations['total' + field.rsplit(".", 1)[0]] = op_role
+op_role = []
+op_role.append({'$sort': {'diary.date': 1}})
+op_role.append({'$project': {'_id': '$info.uri', 'date': '$diary.date', 'poster': '$info.images.poster'}})
+#op_role.append({'$project': {'_id': 0, 'a': {'$arrayElemAt': 0}}})
+#op_role.append({'$group:': {'_id': '$_id', 'lista': {'$push': {'a': '_id', 'd': 'date'}}}})
+#op_role.append({'$match': {'$position': 1}})
+json_operations['milestones'] = op_role
