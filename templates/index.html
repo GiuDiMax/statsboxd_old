@@ -8,10 +8,11 @@
             <title>&lrm;{{ user.name }}'s {{ yearnum }} in review &bull; Statsboxd</title>
         {% endif %}
         <script src="//code.jquery.com/jquery-3.6.1.min.js"></script>
-        <!--<link rel="stylesheet" href="/static/css/main.css?q=11.0.0">
-        <link rel="stylesheet" href="/static/css/font.css?q=1.0.0">-->
-        <link rel="stylesheet" href="{{ url_for('static', _external=True, _scheme='https', filename='css/main.css', q='11.0.0') }}">
-        <link rel="stylesheet" href="{{ url_for('static', _external=True, _scheme='https', filename='css/font.css', q='1.0.0') }}" media="print" onload="this.media='all'">
+        <!--<link rel="stylesheet" href="/static/css/main.css?q=11.0.0">-->
+        <!--<link rel="stylesheet" href="/static/css/font.css?q=1.0.0">-->
+        <!--<link rel="stylesheet" href="{{ url_for('static', _external=True, _scheme='https', filename='css/main.css', q='11.0.0') }}">-->
+        <link rel="stylesheet" href="/static/css/main.css?q=11.0">
+        <link rel="stylesheet" href="/static/css/font.css?q=1.1" media="print" onload="this.media='all'">
         <link rel="stylesheet" href="{{ url_for('static', _external=True, _scheme='https', filename='js/jquery-jvectormap-2.0.5.css') }}" media="print" onload="this.media='all'">
         <link rel="shortcut icon" href="/static/favicon.ico">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -126,9 +127,9 @@
                 <div class="sepline">
                     <span>By release year</span>
                     <div class="line"></div>
-                    <span class="clickable active" data-show="releaseYear" data-hide="yearChart">Films</span>
-                    <span class="clickable" data-show="ratingYear" data-hide="yearChart">Ratings</span>
-                    <span class="clickable" data-show="diaryYear" data-hide="yearChart">Diary</span>
+                    <span class="clickable active" data-show="releaseYear" data-show2="years1" data-hide="yearChart" data-hide2="years2">Films</span>
+                    <span class="clickable" data-show="ratingYear" data-show2="years1" data-hide="yearChart" data-hide2="years2">Ratings</span>
+                    <span class="clickable" data-show="diaryYear" data-show2="years2" data-hide="yearChart" data-hide2="years1">Diary</span>
                 </div>
                 <div class="chart-container">
                     <div id="releaseYear" class="yearChart"></div>
@@ -136,8 +137,10 @@
                     <div id="diaryYear" class="yearChart hide"></div>
                 </div>
                 <div class="years">
-                    <span>{{ user['stats'+year].totalyear[0]._id }}</span>
-                    <span>{{ user['stats'+year].totalyear[-1]._id }}</span>
+                    <span class="years1">{{ user['stats'+year].totalyear[0]._id }}</span>
+                    <span class="years1">{{ user['stats'+year].totalyear[-1]._id }}</span>
+                    <span class="years2 hide">{{ user['stats'+year].diaryperyear[0]._id }}</span>
+                    <span class="years2 hide">{{ user['stats'+year].diaryperyear[-1]._id }}</span>
                 </div>
             </section>
             <section class="sectionStats">
@@ -294,6 +297,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% if user['stats'+year].milestones|length > 0 %}
                         <div class="msx msx2">
                             <span>Milestones</span>
                             <div class="filmList mw2">
@@ -309,6 +313,7 @@
                                 {%endfor%}
                             </div>
                         </div>
+                        {% endif %}
                         <div class="msx msx1">
                             <span>Last Film</span>
                             <div class="singleFilm" >
@@ -321,6 +326,7 @@
                             </div>
                         </div>
                     </div>
+                    {% if user['stats'+year].mostWatched|length > 0 %}
                     <div class="msy">
                     <div class="msx msxfull">
                         <span>Most Watched</span>
@@ -338,6 +344,7 @@
                         </div>
                     </div>
                     </div>
+                    {% endif %}
                 </section>
             {% endif %}
             <section class="sectionStats">
@@ -670,6 +677,44 @@
                     {% endfor %}
                 </div>
             </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Rated higher then average</span>
+                    <div class="line"></div>
+                </div>
+                <div class="filmList hideLast">
+                        {%for element in user['stats'+year].topToAverage%}
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                    <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo stelline">{{ numToStars(element.rating) }}</span>
+                                    <span class="sottotitolo">vs {{ element.media }}</span>
+                                </div>
+                            </div>
+                        {%endfor%}
+                </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Rated lower then average</span>
+                    <div class="line"></div>
+                </div>
+                <div class="filmList hideLast">
+                        {%for element in user['stats'+year].flopToAverage%}
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                    <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https',  filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo stelline">{{ numToStars(element.rating) }}</span>
+                                    <span class="sottotitolo">vs {{ element.media }}</span>
+                                </div>
+                            </div>
+                        {%endfor%}
+                </div>
+            </section>
             {% endif %}
 
             <section class="wMap noselect">
@@ -713,6 +758,8 @@
                 $('.clickable').click(function() {
                     $('.'+$(this).attr('data-hide')).addClass('hide');
                     $('#'+$(this).attr('data-show')).removeClass('hide');
+                    $('.'+$(this).attr('data-hide2')).addClass('hide');
+                    $('.'+$(this).attr('data-show2')).removeClass('hide');
                     $('.'+$(this).attr('data-class-show')).removeClass('hide');
                     $(this).addClass('active');
                     $(this).siblings().removeClass('active');
