@@ -103,7 +103,7 @@ def year_stats(username, fastUpdate=False):
     else:
         db.Users.update_one({'_id': username}, {'$set': {'mostWatched': k['mostWatched']}})
         for x in k['years']:
-            if x['sum'] >= 50:
+            if x['sum'] >= 25:
                 years.append(x['_id'])
                 t = Thread(target=singleYear, args=(x['_id'], username))
                 threads.append(t)
