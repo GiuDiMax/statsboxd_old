@@ -69,6 +69,7 @@ def singleYear(year, username):
     for i in range(z):
         miles.append(y['milestones'][(i+1)*50])
     y['milestones'] = miles
+    #print(y['totalcountry'])
     db.Users.update_one({'_id': username}, {'$set': {'stats_'+str(year): y}})
 
 
@@ -93,6 +94,7 @@ def year_stats(username, fastUpdate=False):
                     break
                 else:
                     bb.append({'_id': bb[-1]['_id']+1, 'sum': 0})
+    db.Users.update_one({'_id': username}, {'$set': {'stats.diaryperyear': []}})
     db.Users.update_one({'_id': username}, {'$set': {'stats.diaryperyear': bb}})
     if fastUpdate:
         singleYear(datetime.now().year, username)
@@ -112,5 +114,7 @@ def year_stats(username, fastUpdate=False):
     #years.sort(reverse=True)
         db.Users.update_one({'_id': username}, {'$set': {'years': years}})
 
-singleYear(2022, 'giudimax')
-#year_stats('giudimax')
+
+if __name__ == '__main__':
+    #singleYear(2022, 'giudimax')
+    year_stats('giudimax')
