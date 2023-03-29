@@ -255,27 +255,68 @@ span{
     margin-top:50px;
 }
 
-.numbersStats div{
+.numbersStats div, .numbersStats a{
     display: flex;
     flex-direction: column;
     align-content: center;
+    text-decoration: none !important;
 }
 
 .numbersStats .number{
     color: #d8e0e8;
     font-family: TiemposTextWeb-Semibold,Georgia,serif;
-    font-size: 2.46153846rem;
-    font-weight: 400;
+    font-size: 32px;
+    font-weight: 600;
 }
 
 .numbersStats .text{
     color: #9ab;
     font-family: Graphik-Regular-Web,sans-serif;
-    font-size: 1rem;
+    font-size: 13px;
     font-weight: 400;
     letter-spacing: .075em;
     margin-top: 0.66666667em;
     text-transform: uppercase;
+    text-decoration: none;
+}
+
+.numbersStats a:hover .text{
+    color: #40bcf4;
+}
+
+.numbersStats .pannello {
+    height: 0;
+    width: 0;
+    position: relative;
+    right: 80px;
+    bottom: 18px;
+    text-align: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+}
+
+.numbersStats .pannello .testo{
+    width: 250px;
+    height: 15px !important;
+    position: relative;
+    background-color: #445566;
+    border-radius: 4px;
+    text-align: center;
+
+    text-align: center;
+    padding: 4px 15px;
+    box-shadow: 1px 1px 3px #000;
+
+    font-family: Graphik-Regular-Web,sans-serif!important;
+    font-size: 12px;
+    color: #d8e0e8;
+    font-weight: 600 !important;
+}
+
+.numbersStats .mostrap1:hover .p1{
+    visibility: visible;
+    opacity: 1;
 }
 
 .sepline{
@@ -982,11 +1023,41 @@ span{
     margin-bottom:10px;
 }
 
+.decadeLeft{
+    width: 20%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap:0px;
+}
+
+.decadeLeft div{
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+}
+
+.decadeLeft div img{
+    width: 14px;
+    height: 14px;
+}
+
 .decadeTitle{
     font-family: Graphik-Light-Web,sans-serif;
     font-size: 40px;
-    width: 20%;
-    text-align: left;
+    color: #def;
+    text-decoration: none;
+}
+
+.decadeTitle:hover{
+    color: #40bcf4;
+}
+
+.decadeAverage{
+    font-family: Graphik-Light-Web,sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #678;
 }
 
 .decPosters{
@@ -1167,6 +1238,11 @@ span{
 
 .msx2{
     flex-basis:50%;
+}
+
+.msxfull{
+    margin-top:10px;
+    flex-basis:100%;
 }
 
 .msx{

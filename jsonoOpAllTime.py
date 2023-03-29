@@ -225,28 +225,36 @@ op_role.append({'$project': {'_id': 1, 'uri': '$info.uri', 'poster': '$info.imag
 op_role.append({'$limit': 60})
 json_operations['sug2'] = op_role
 
+json_operations['streak'] = [{'$match': {"_id": 'giudimax'}},
+                {'$unwind': '$diary'},
+                {'$project': {'sett': {'$sum': [{'$week': '$diary.date'}, {'$multiply': [{'$year': '$diary.date'}, 52]}]}}},
+                {'$group': {'_id': '$sett'}},
+                {'$sort': {'_id': 1}}
+                ]
+
+json_operations['2+filmdays'] = [{'$match': {"_id": 'giudimax'}},
+            {'$unwind': '$diary'},
+            {'$group': {'_id': '$diary.date', 'count': {'$count': {}}}},
+            {'$match': {'count': {'$gt': 1}}},
+            {'$group': {'_id': None, 'count': {'$count': {}}}},
+            {'$project': {'_id': 0, 'count': '$count'}}
+            ]
+
 # ZONA TEST
+
 
 def test():
     from mongodb import db
-    json_operations2 = {}
-    op_role = []
 
-    json_op2 = [{'$match': {"_id": 'twivea'}},
-                    {'$unwind': '$watched'},
-                    {'$lookup': {
-                        'from': 'Film',
-                        'localField': 'watched.id',
-                        'foreignField': '_id',
-                        'as': 'info'}},
-                    {'$unwind': '$info'},
-                    {'$unwind': '$info.language'},
-                    #{'$match': {'info.language': 'english'}},
-                    #{'$project': {'_id': '$info.uri', 'language': '$info.language'}}
-                    {'$group': {'_id': '$info.language', 'sum': {'$sum': 1}, 'avg': {'$avg': '$watched.rating'}}}
-                    ]
+    json_op2 = [{'$match': {"_id": 'giudimax'}},
+                {'$unwind': '$diary'},
+                {'$project': {'_id': '$diary.id', 'date': '$diary.date', 'year': {'$year': '$diary.date'}}},
+                {'$match': {'year': 2022}},
+                {'$group': {'_id': None, 'list': {'$push': {'_id': '$_id'}}}}
+                ]
 
     ob3 = db.Users.aggregate(json_op2)
+
     for x in ob3:
         print(x)
 

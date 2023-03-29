@@ -11,6 +11,7 @@ from flask_cdn import CDN
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
 app.config['CDN_DOMAIN'] = 'd2b3jqgdwv2xyj.cloudfront.net'
+#app.config['CDN_DOMAIN'] = 'statsboxd.ml'
 CDN(app)
 Compress(app)
 
@@ -213,6 +214,14 @@ def utility_processor11():
             return 0
         return value
     return dict(zeroIfNone=zeroIfNone)
+
+
+@app.context_processor
+def utility_processor12():
+    def numtomonth(value):
+        mesinum = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
+        return mesinum[value]
+    return dict(numtomonth=numtomonth)
 
 
 @app.after_request

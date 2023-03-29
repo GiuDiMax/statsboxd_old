@@ -11,7 +11,6 @@ import time
 from year_stats import year_stats
 global watched_list, diary_list
 from datetime import datetime
-#from recommend.multiUsers import predictUser
 
 
 def diary_function(sup):
@@ -56,11 +55,6 @@ async def get_watched3(url, session, diary):
         for sup in soup[1:]:
             diary_function(sup)
 
-        #sys.setrecursionlimit(0x100000)
-        #if __name__ == '__main__':
-        #    with Pool(5) as p:
-        #        p.map(diary_function, [soup[1:]])
-
     else:
         soup = BeautifulSoup(ret, 'lxml', parse_only=SoupStrainer(['li'])).find_all('li', class_="poster-container")
         for sup in soup:
@@ -74,10 +68,6 @@ async def get_watched3(url, session, diary):
                     watched['rating'] = rating
             except:
                 pass
-            #if len(sup.p.find_all('span')) > 1:
-            #    watched['liked'] = True
-            #else:
-            #    watched['liked'] = False
             watched_list.append(watched)
 
 
@@ -90,14 +80,6 @@ def get_watched(username, diary, fastUpdate, lastmonth=False):
     global watched_list, diary_list
     watched_list = []
     diary_list = []
-    '''
-    if lastmonth:
-        if datetime.now().month == 1:
-            url = 'http://letterboxd.com/' + str(username) + '/films/diary/page/1/'
-        else:
-            url = 'http://letterboxd.com/' + str(username) + '/films/diary/page/1/'
-    else:
-    '''
     if diary:
         url = 'http://letterboxd.com/' + str(username) + '/films/diary/page/1/'
     else:
@@ -149,12 +131,6 @@ def threadxwatched(username, fastUpdate=False):
     start2 = time.time()
     get_watched(username, False, fastUpdate)
     db.Users.update_one({'_id': username}, {'$set': {'watched': watched_list}}, True)
-    """
-    if not fastUpdate:
-        start2 = time.time()
-        predictUser(username, watched_list)
-        print('Recommendations in : ' + str(time.time() - start2))
-    """
     print('watched in: ' + str(time.time() - start2))
 
 
@@ -163,7 +139,6 @@ def threadxdiary(username, fastUpdate=False):
     start3 = time.time()
     get_watched(username, True, fastUpdate)
     db.Users.update_one({'_id': username}, {'$set': {'diary': diary_list}}, True)
-    #year_stats(username)
     print('diary in: ' + str(time.time() - start3))
 
 
@@ -199,10 +174,6 @@ def fullOperation(username, fastUpdate, watched=None):
         ids.append(movie['id'])
         uris.append(movie['uri'])
 
-    #db.tmpUris.delete_many({})
-    #if len(uris) > 0:
-    #    db.tmpUris.insert_many(watched)
-
     while True:
         obj1 = db.Film.find({"_id": {"$in": ids}})
         uris2 = list(set(uris) - set(obj1.distinct('uri')))
@@ -216,9 +187,6 @@ def fullOperation(username, fastUpdate, watched=None):
         else:
             break
 
-    #y = None
-    #getStats(username)
-    #db.Users.update_one({'_id': username}, {'$set': {'stats': y}})
     start4 = time.time()
     t1 = Thread(target=getStats, args=(username,))
     t2 = Thread(target=year_stats, args=(username, fastUpdate))
