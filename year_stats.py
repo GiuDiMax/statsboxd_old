@@ -94,8 +94,8 @@ def year_stats(username, fastUpdate=False):
                     break
                 else:
                     bb.append({'_id': bb[-1]['_id']+1, 'sum': 0})
-    db.Users.update_one({'_id': username}, {'$set': {'stats.diaryperyear': []}})
-    db.Users.update_one({'_id': username}, {'$set': {'stats.diaryperyear': bb}})
+    #db.Users.update_one({'_id': username}, {'$set': {'stats.diaryperyear': []}})
+    db.Users.update_one({'_id': username}, {'$set': {'diaryperyear': bb}})
     if fastUpdate:
         singleYear(datetime.now().year, username)
         #if datetime.now().month == 1:
@@ -117,4 +117,5 @@ def year_stats(username, fastUpdate=False):
 
 if __name__ == '__main__':
     #singleYear(2022, 'giudimax')
-    year_stats('giudimax')
+    #year_stats('giudimax')
+    pass

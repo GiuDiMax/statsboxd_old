@@ -139,8 +139,8 @@
                 <div class="years">
                     <span class="years1">{{ user['stats'+year].totalyear[0]._id }}</span>
                     <span class="years1">{{ user['stats'+year].totalyear[-1]._id }}</span>
-                    <span class="years2 hide">{{ user['stats'+year].diaryperyear[0]._id }}</span>
-                    <span class="years2 hide">{{ user['stats'+year].diaryperyear[-1]._id }}</span>
+                    <span class="years2 hide">{{ user.diaryperyear[0]._id }}</span>
+                    <span class="years2 hide">{{ user.diaryperyear[-1]._id }}</span>
                 </div>
             </section>
             <section class="sectionStats">
@@ -965,7 +965,7 @@
                     plotOptions: {column: {pointPadding: 0.05, borderWidth: 0, borderRadius: 3, groupPadding: 0,}},
                     series: [{
                             data: [
-                                {%for element in user['stats'+year].diaryperyear%}
+                                {%for element in user.diaryperyear%}
                                     {name: "{{ element['_id'] }}", y: {{ (element['sum']) + 5 }},
                                             {% if (element['sum']) == 0 %}color: "#445566"{% endif %}
                                     },
