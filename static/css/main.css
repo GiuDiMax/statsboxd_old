@@ -288,7 +288,7 @@ span{
     height: 0;
     width: 0;
     position: relative;
-    right: 80px;
+    right: 85px;
     bottom: 18px;
     text-align: center;
     visibility: hidden;
@@ -297,7 +297,7 @@ span{
 }
 
 .numbersStats .pannello .testo{
-    width: 250px;
+    width: 280px;
     height: 15px !important;
     position: relative;
     background-color: #445566;
