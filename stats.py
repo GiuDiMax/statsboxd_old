@@ -44,10 +44,9 @@ def getStats(username):
                 y2.append({'_id': i, 'average': 0, 'sum': 0})
         y['totalyear'] = y2
 
-
         db.Users.update_one({'_id': username}, {'$set': {'stats': y, 'update': datetime.today()}})
         #print(y['mostWatchedgenres_nanogenre'])
 
 
 if __name__ == '__main__':
-    getStats('giudimax')
+    getStats('shrezz336')
