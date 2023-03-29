@@ -740,6 +740,13 @@ span{
     font-size: 15px;
 }
 
+.sottotitolo_milestones {
+    font-family: Graphik-Regular-Web,sans-serif;
+    text-decoration: none;
+    color: #678;
+    font-size: 15px;
+}
+
 .recommend div{
     display: flex;
     flex-direction: row !important;
@@ -1391,6 +1398,7 @@ span{
     width: 90%;
     margin-left: auto;
     margin-right: auto;
+    align-items: flex-start;
 }
 
 .highLow .singleFilm{
@@ -1418,6 +1426,7 @@ span{
     font-family: Graphik-Light-Web,sans-serif;
     font-size: 24px;
 }
+
 
 .recSec .cuoricino{
     color: #fff;
@@ -1667,6 +1676,7 @@ span{
         align-items: flex-start;
         flex-wrap: wrap;
         padding-top: 30px;
+        padding-bottom: 25px;
     }
 
     .sepline span{
@@ -1907,8 +1917,14 @@ span{
         row-gap:15px;
     }
 
-    .numbersStats div{
+    .numbersStats div, .numbersStats a{
         flex-basis: 40%;
+    }
+
+    .numbersStats .pannello{display:none;}
+
+    .msxfull {
+        margin-top: 0px !important;
     }
 
     .secHRF{
@@ -1971,6 +1987,10 @@ span{
     .msy .msx2{
         order: 3;
         flex-basis: 100%;
+    }
+
+    .msy .sottotitolo{
+        margin-top:5px !important;
     }
 
     .msx1{
