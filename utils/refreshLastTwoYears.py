@@ -16,7 +16,7 @@ def refresh(i):
     current_year = date.today().year
 
     a = db.Film.aggregate([
-        #{'$match': {"year": {'$gt': current_year - 2}}},
+        {'$match': {"year": {'$gt': current_year - 2}}},
         {'$match': {"updateDate": {'$lt': datex}}},
         {'$sort': {'updateDate': 1}},
         {'$limit': 1000},
@@ -28,32 +28,55 @@ def refresh(i):
         uris.append(x['uri'])
     print('analyizing ' + str(len(uris) + i*1000))
     fillMongodb(uris)
-    fillMongodbmembers(uris)
 
 
 def refreshata(i):
     try:
         refresh(i)
     except:
-        time.sleep(60)
+        time.sleep(10)
         refreshata(i)
 
 
+def addMembers(i):
+    datex = datetime.today()
+    #datex = datex - timedelta(days=10)
+    datex = datex - timedelta(hours=24)
+    current_year = date.today().year
+
+    a = db.Film.aggregate([
+        {'$match': {"members": {'$exists': 0}}},
+        {'$sort': {'updateDate': 1}},
+        {'$limit': 1000},
+        {'$project': {'uri': 1}}
+    ])
+
+    uris = []
+    for x in a:
+        uris.append(x['uri'])
+    print('analyizing ' + str(len(uris) + i*1000))
+    fillMongodbmembers(uris)
+
+
+def refreshata2(i):
+    try:
+        addMembers(i)
+    except:
+        time.sleep(10)
+        refreshata2(i)
+
+
 if __name__ == '__main__':
-
-    mainSetNames()
-    mainSetCollection2()
-    cleanUsers()
-    exit()
-
-    #cleanUsers()
-    #exit()
-    #b = db.Film.update_many({}, {'$rename': {'studios': 'studio'}})
-
     for i in range(78):
         start = time.time()
         refreshata(i)
         print('Done in ' + str(time.time() - start))
+
+    for i in range(50):
+        start = time.time()
+        refreshata2(i)
+        print('Done in ' + str(time.time() - start))
+
     all()
     updateLists()
     mainSetNames()

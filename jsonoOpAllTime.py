@@ -225,36 +225,62 @@ op_role.append({'$project': {'_id': 1, 'uri': '$info.uri', 'poster': '$info.imag
 op_role.append({'$limit': 60})
 json_operations['sug2'] = op_role
 
-json_operations['streak'] = [{'$match': {"_id": 'giudimax'}},
-                {'$unwind': '$diary'},
-                {'$project': {'sett': {'$sum': [{'$week': '$diary.date'}, {'$multiply': [{'$year': '$diary.date'}, 52]}]}}},
-                {'$group': {'_id': '$sett'}},
-                {'$sort': {'_id': 1}}
-                ]
-
-json_operations['2+filmdays'] = [{'$match': {"_id": 'giudimax'}},
-            {'$unwind': '$diary'},
-            {'$group': {'_id': '$diary.date', 'count': {'$count': {}}}},
-            {'$match': {'count': {'$gt': 1}}},
-            {'$group': {'_id': None, 'count': {'$count': {}}}},
-            {'$project': {'_id': 0, 'count': '$count'}}
-            ]
-
 # ZONA TEST
 
 
 def test():
     from mongodb import db
 
-    json_op2 = [{'$match': {"_id": 'giudimax'}},
-                {'$unwind': '$diary'},
-                {'$project': {'_id': '$diary.id', 'date': '$diary.date', 'year': {'$year': '$diary.date'}}},
-                {'$match': {'year': 2022}},
-                {'$group': {'_id': None, 'list': {'$push': {'_id': '$_id'}}}}
-                ]
+    op_role = []
+    op_role.append({'$match': {"_id": 'giudimax'}})
+    op_role.append({'$unwind': '$sug'})
+    op_role.append({'$project': {'_id': 0, 'uri': '$sug.uri', 'perc': '$sug.perc'}})
+    op_role.append({'$lookup': {
+        'from': 'Film',
+        'localField': 'uri',
+        'foreignField': 'uri',
+        'as': 'info'}})
+    op_role.append({'$unwind': '$info'})
+    op_role.append({'$unwind': '$info.related'})
+    op_role.append({'$project': {'_id': '$info.related', 'perc': ''}})
+    #op_role.append({'$sort': {'avg': -1, 'info.rating.average': -1}})
+    #op_role.append({'$project': {'_id': 1, 'uri': '$info.uri', 'poster': '$info.images.poster',
+    #                             'perc': {'$toInt': {'$multiply': ['$avg', 10]}}}})
+    op_role.append({'$limit': 1})
+    """
+    op_role.append({'$project': {'user': '$_id', 'id': '$info.related', 'rating': '$watched.rating'}})
+    op_role.append({'$unwind': '$id'})
+    op_role.append({'$group': {'_id': {'$toInt': '$id'},
+                               'user': {'$first': '$user'},
+                               'avg': {'$avg': '$rating'},
+                               'sum': {'$sum': 1}}})
+    op_role.append({'$match': {'sum': {'$gt': 1}}})
+    op_role.append({'$sort': {'avg': -1}})
+    op_role.append({'$lookup': {
+        'from': 'Users',
+        'localField': 'user',
+        'foreignField': '_id',
+        'let': {'movie_id': "$_id"},
+        'pipeline': [{'$unwind': '$watched'},
+                     {'$group': {'_id': '$id', 'lista': {'$push': '$watched.id'}}},
+                     {'$project': {'_id': 1, 'watched': {'$in': ['$$movie_id', '$lista']}}},
+                     {'$match': {'watched': False}},
+                     ],
+        'as': 'info2'}})
+    op_role.append({'$match': {'info2': {'$ne': []}}})
+    op_role.append({'$lookup': {
+        'from': 'Film',
+        'localField': '_id',
+        'foreignField': '_id',
+        'as': 'info'}})
+    op_role.append({'$unwind': '$info'})
+    op_role.append({'$sort': {'avg': -1, 'info.rating.average': -1}})
+    op_role.append({'$project': {'_id': 1, 'uri': '$info.uri', 'poster': '$info.images.poster',
+                                 'perc': {'$toInt': {'$multiply': ['$avg', 10]}}}})
+    op_role.append({'$limit': 60})
+    """
 
-    ob3 = db.Users.aggregate(json_op2)
-
+    ob3 = db.Users.aggregate(op_role)
     for x in ob3:
         print(x)
 

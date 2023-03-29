@@ -101,13 +101,13 @@
                         <span class="number">{{ format_comma(user['stats'+year].totalCountry[0].count) }}</span>
                         <span class="text">Countries</span>
                     </div>
-                    <a href="//letterboxd.com/{{user._id}}/films/diary/for/{{ user['stats'+year]['streak'].year }}/{{ user['stats'+year]['streak'].month }}/" class="mostrap1">
-                        <div class="pannello p1"><div class="testo">At least one film per week, starting {{ numtomonth(user['stats'+year]['streak'].month) }} {{ user['stats'+year]['streak'].year }}</div></div>
-                        <span class="number">{{ user['stats'+year]['streak'].max }}w</span>
+                    <a href="//letterboxd.com/{{user._id}}/films/diary/for/{{ user.extra_stats['streak'].year }}/{{ user.extra_stats['streak'].month }}/" class="mostrap1">
+                        <div class="pannello p1"><div class="testo">At least one film per week, starting {{ numtomonth(user.extra_stats['streak'].month) }} {{ user.extra_stats['streak'].year }}</div></div>
+                        <span class="number">{{ user.extra_stats['streak'].max }}w</span>
                         <span class="text" >Longest Streak</span>
                     </a>
                     <div>
-                        <span class="number">{{ user['stats'+year]['2+filmdays'][0].count }}</span>
+                        <span class="number">{{ user['stats'+year]['2+filmdays'].count }}</span>
                         <span class="text">2+ Film Days</span>
                     </div>
                     {% else %}
@@ -139,8 +139,8 @@
                 <div class="years">
                     <span class="years1">{{ user['stats'+year].totalyear[0]._id }}</span>
                     <span class="years1">{{ user['stats'+year].totalyear[-1]._id }}</span>
-                    <span class="years2 hide">{{ user.diaryperyear[0]._id }}</span>
-                    <span class="years2 hide">{{ user.diaryperyear[-1]._id }}</span>
+                    <span class="years2 hide">{{ user.extra_stats.diaryperyear[0]._id }}</span>
+                    <span class="years2 hide">{{ user.extra_stats.diaryperyear[-1]._id }}</span>
                 </div>
             </section>
             <section class="sectionStats">
@@ -159,10 +159,6 @@
                                     <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
                                         <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https',  filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
                                     </a>
-                                    <!--<div>
-                                        <span class="sottotitolo cuoricino">❤</span>
-                                        <span class="sottotitolo bigsotto">{{ element.perc }}%</span>
-                                    </div>-->
                                     <div class="sottofilm">
                                         <img src="{{ url_for('static', _external=True, _scheme='https',  filename='images/orangeheart.jpg') }}" /><span class="sottotitolo cuoricino">{{ element.perc }}%</span>
                                     </div>
@@ -170,7 +166,7 @@
                             {% endfor %}
                     </div>
                     <div class="filmList hideLastfour hide" id="{{ type[1] }}more">
-                            {% for element in type[0][10:] %}
+                            {% for element in type[0][10:48] %}
                                 <div class="singleFilm recommend" >
                                     <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
                                         <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https',  filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
@@ -965,7 +961,7 @@
                     plotOptions: {column: {pointPadding: 0.05, borderWidth: 0, borderRadius: 3, groupPadding: 0,}},
                     series: [{
                             data: [
-                                {%for element in user.diaryperyear%}
+                                {%for element in user.extra_stats.diaryperyear%}
                                     {name: "{{ element['_id'] }}", y: {{ (element['sum']) + 5 }},
                                             {% if (element['sum']) == 0 %}color: "#445566"{% endif %}
                                     },
