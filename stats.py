@@ -6,7 +6,6 @@ from datetime import datetime
 
 def getStats(username):
     # db.Users.update_one({'username': username}, {'$set': {'a': 'b'}})
-
     json_op1 = [{'$match': {"_id": username}},
                 {'$unwind': '$watched'},
                 {'$lookup': {
@@ -45,22 +44,6 @@ def getStats(username):
                 y2.append({'_id': i, 'average': 0, 'sum': 0})
         y['totalyear'] = y2
 
-        max = 0
-        currentd = 0
-        current = 0
-        maxdatmin = 0
-        for x in y['streak']:
-            if x['_id'] == currentd + 1:
-                current = current + 1
-            else:
-                if current > max:
-                    max = current
-                maxdatmin = x['_id']
-                current = 0
-            currentd = x['_id']
-        year = (int(maxdatmin / 52))
-        month = int((abs(maxdatmin) % 52) / 7) + 1
-        y['streak'] = {'max': max, 'year': year, 'month': month}
 
         db.Users.update_one({'_id': username}, {'$set': {'stats': y, 'update': datetime.today()}})
         #print(y['mostWatchedgenres_nanogenre'])

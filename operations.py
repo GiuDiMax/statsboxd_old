@@ -10,6 +10,7 @@ from datetime import datetime
 
 json0 = []
 
+
 def fill_db(url, soup):
     json1 = {}
 
@@ -189,7 +190,7 @@ def fill_dbMembers(url, soup):
         members = str(members).replace(",", "").replace("people", "")
         db.Film.update_one({'uri': url}, {'$set': {'members': int(members)}}, True)
     except:
-        pass
+        db.Film.update_one({'uri': url}, {'$set': {'members': 0}}, True)
 
 
 async def get(url, session, members):
@@ -222,4 +223,4 @@ def fillMongodbmembers(urls):
 
 
 if __name__ == '__main__':
-    fillMongodbmembers(['attack-on-titan-distress'])
+    fillMongodbmembers(['calcutta-tutti-in-piedi'])

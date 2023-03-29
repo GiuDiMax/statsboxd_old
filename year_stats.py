@@ -31,6 +31,21 @@ op_role.append({'$sort': {'_id': -1}})
 json_operations4['years'] = op_role
 
 
+json_operations_extra = {}
+json_operations_extra['streak'] = [
+                {'$project': {'sett': {'$sum': [{'$week': '$diary.date'}, {'$multiply': [{'$year': '$diary.date'}, 52]}]}}},
+                {'$group': {'_id': '$sett'}},
+                {'$sort': {'_id': 1}}
+                ]
+
+json_operations_extra['2+filmdays'] = [
+            {'$group': {'_id': '$diary.date', 'count': {'$count': {}}}},
+            {'$match': {'count': {'$gt': 1}}},
+            {'$group': {'_id': None, 'count': {'$count': {}}}},
+            {'$project': {'_id': 0, 'count': '$count'}}
+            ]
+
+
 def getYears(username):
     global json_operations4
     ob3 = db.Users.aggregate([
@@ -95,7 +110,7 @@ def year_stats(username, fastUpdate=False):
                 else:
                     bb.append({'_id': bb[-1]['_id']+1, 'sum': 0})
     #db.Users.update_one({'_id': username}, {'$set': {'stats.diaryperyear': []}})
-    db.Users.update_one({'_id': username}, {'$set': {'diaryperyear': bb}})
+    db.Users.update_one({'_id': username}, {'$set': {'extra_stats.diaryperyear': bb}})
     if fastUpdate:
         singleYear(datetime.now().year, username)
         #if datetime.now().month == 1:
@@ -111,11 +126,38 @@ def year_stats(username, fastUpdate=False):
             x.start()
         for x in threads:
             x.join()
+
+        json_op1 = [{'$match': {"_id": username}},
+                    {'$unwind': '$diary'},
+                    {'$facet': json_operations_extra}]
+        ob3 = db.Users.aggregate(json_op1)
+        for x in ob3:
+            y = x
+
+        max = 0
+        currentd = 0
+        current = 0
+        maxdatmin = 0
+        for x in y['streak']:
+            if x['_id'] == currentd + 1:
+                current = current + 1
+            else:
+                if current > max:
+                    max = current
+                maxdatmin = x['_id']
+                current = 0
+            currentd = x['_id']
+        year = (int(maxdatmin / 52))
+        month = int((abs(maxdatmin) % 52) / 7) + 1
+        y['streak'] = {'max': max, 'year': year, 'month': month}
+        db.Users.update_one({'_id': username}, {'$set': {'extra_stats.streak': y['streak'], 'extra_stats.2+filmdays': y['2+filmdays'][0]}})
+        #db.Users.update_one({'_id': username}, {'$set': {'extra_stats.2+filmdays': y['2+filmdays'][0]}})
+
     #years.sort(reverse=True)
         db.Users.update_one({'_id': username}, {'$set': {'years': years}})
 
 
 if __name__ == '__main__':
     #singleYear(2022, 'giudimax')
-    #year_stats('giudimax')
+    year_stats('giudimax')
     pass
