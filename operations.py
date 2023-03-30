@@ -186,19 +186,35 @@ def fill_db(url, soup):
 
 def fill_dbMembers(url, soup):
     try:
-        members = soup.find('a', {"class": "tooltip"})['title']
-        members = str(members).replace(",", "").replace("people", "")
+        members = soup.find('a', {"class": "icon-watched"})['title']
+        members = members.split('Watched by ', 1)[1].split("members", 1)[0].replace(",", "")
         db.Film.update_one({'uri': url}, {'$set': {'members': int(members)}}, True)
     except:
         db.Film.update_one({'uri': url}, {'$set': {'members': 0}}, True)
 
 
-async def get(url, session, members):
+def fill_dbRatings(url, soup):
+    try:
+        rating = {}
+        rr = soup.find('a', {"class": "display-rating"})['title']
+        rating['average'] = float(rr.split("of ", 1)[1].split(" based", 1)[0])
+        rating['num'] = int(rr.split("based on ", 1)[1].split("ratings", 1)[0].replace(",", ""))
+        db.Film.update_one({'uri': url}, {'$set': {'rating': rating}}, True)
+    except:
+        pass
+
+
+async def get(url, session, members, ratings):
     if members:
-        async with session.get(url='http://letterboxd.com/film/' + url + "/members") as response:
+        async with session.get(url='https://letterboxd.com/esi/film/' + url + "/stats/") as response:
                 resp = await response.read()
-                soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div', 'li']))
+                soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['li']))
                 fill_dbMembers(url, soup)
+    elif ratings:
+        async with session.get(url='https://letterboxd.com/csi/film/' + url + "/rating-histogram/") as response:
+                resp = await response.read()
+                soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['span']))
+                fill_dbRatings(url, soup)
     else:
         async with session.get(url='http://letterboxd.com/film/' + url + "/") as response:
                 resp = await response.read()
@@ -206,9 +222,9 @@ async def get(url, session, members):
                 fill_db(url, soup)
 
 
-async def main2(urls, members=False):
+async def main2(urls, members=False, ratings=False):
     async with aiohttp.ClientSession() as session:
-        await asyncio.gather(*[get(url, session, members) for url in urls])
+        await asyncio.gather(*[get(url, session, members, ratings) for url in urls])
 
 
 def fillMongodb(urls):
@@ -219,8 +235,14 @@ def fillMongodb(urls):
 
 def fillMongodbmembers(urls):
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
-    asyncio.get_event_loop().run_until_complete(main2(urls, True))
+    asyncio.get_event_loop().run_until_complete(main2(urls, True, False))
+
+
+def fillMongodbratings(urls):
+    asyncio.set_event_loop(asyncio.SelectorEventLoop())
+    asyncio.get_event_loop().run_until_complete(main2(urls, False, True))
 
 
 if __name__ == '__main__':
-    fillMongodbmembers(['calcutta-tutti-in-piedi'])
+    fillMongodbratings(['calcutta-tutti-in-piedi'])
+    fillMongodbratings(['parasite-2019'])
