@@ -6,6 +6,7 @@ import logging
 
 logger = logging.getLogger("analyzer")
 
+
 def updatefromtmdb(onlytoday, dayoff=1):
     nowx = datetime.now() - timedelta(days=dayoff)
     past = (nowx - timedelta(days=14)).isoformat()
