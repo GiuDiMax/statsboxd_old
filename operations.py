@@ -244,5 +244,5 @@ def fillMongodbratings(urls):
 
 
 if __name__ == '__main__':
-    fillMongodbratings(['parasite-2019'])
-    fillMongodbmembers(['parasite-2019'])
+    fillMongodbratings(['modern-man-2023'])
+    fillMongodbmembers(['modern-man-2023'])

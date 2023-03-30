@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup, SoupStrainer
 from mongodb import db
 from datetime import datetime
 from stats import getStats, sug2stats
-from operations import fillMongodb
+from operations import fillMongodb, fillMongodbmembers, fillMongodbratings
 from threading import Thread
 import time
 from year_stats import year_stats
@@ -180,6 +180,8 @@ def fullOperation(username, fastUpdate, watched=None):
         if len(uris2) > 0:
             try:
                 fillMongodb(uris2)
+                fillMongodbratings(uris2)
+                fillMongodbmembers(uris2)
             except:
                 pass
         else:
