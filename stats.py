@@ -3,13 +3,14 @@ from mongodb import db
 from jsonoOpAllTime import json_operations
 from datetime import datetime
 from time import time
+from sug2Stats import op_role
 
 
-def getStats(username, fastUpdate=False):
+def getStats(username):
     # db.Users.update_one({'username': username}, {'$set': {'a': 'b'}})
     jop = json_operations
-    if fastUpdate:
-        del jop['sug2']
+    #if fastUpdate:
+    #    del jop['sug2']
     json_op1 = [{'$match': {"_id": username}},
                 {'$unwind': '$watched'},
                 {'$lookup': {
@@ -50,6 +51,23 @@ def getStats(username, fastUpdate=False):
 
         db.Users.update_one({'_id': username}, {'$set': {'stats': y, 'update': datetime.today()}})
         #print(y['mostWatchedgenres_nanogenre'])
+
+
+def sug2stats(username):
+    json_op1 = [{'$match': {"_id": username}},
+                {'$unwind': '$watched'},
+                {'$lookup': {
+                    'from': 'Film',
+                    'localField': 'watched.id',
+                    'foreignField': '_id',
+                    'as': 'info'}},
+                {'$unwind': '$info'}]
+    jop = json_op1 + op_role
+    ob3 = db.Users.aggregate(jop)
+    y = None
+    for x in ob3:
+        y = x
+    db.Users.update_one({'_id': username}, {'$set': {'sug2': y}})
 
 
 if __name__ == '__main__':

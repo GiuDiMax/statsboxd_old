@@ -192,6 +192,7 @@ op_role.append({'$addFields': {"perc": {'$divide': ['$watched', '$num']}}}),
 op_role.append({'$sort': {'order': 1}})
 json_operations['statsLists'] = op_role
 
+"""
 op_role = []
 
 op_role.append({'$project': {'user': '$_id', 'id': '$info.related', 'rating': '$watched.rating'}})
@@ -224,10 +225,9 @@ op_role.append({'$sort': {'avg': -1, 'info.rating.average': -1}})
 op_role.append({'$project': {'_id': 1, 'uri': '$info.uri', 'poster': '$info.images.poster', 'perc': {'$toInt': {'$multiply': ['$avg', 10]}}}})
 op_role.append({'$limit': 60})
 json_operations['sug2'] = op_role
+"""
 
 # ZONA TEST
-
-
 def test():
     from mongodb import db
 

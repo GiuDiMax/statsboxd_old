@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup, SoupStrainer
 from mongodb import db
 from datetime import datetime
-from stats import getStats
+from stats import getStats, sug2stats
 from operations import fillMongodb
 from threading import Thread
 import time
@@ -58,14 +58,11 @@ async def get_watched3(url, session, diary):
     else:
         soup = BeautifulSoup(ret, 'lxml', parse_only=SoupStrainer(['li'])).find_all('li', class_="poster-container")
         for sup in soup:
-            watched = {}
-            watched['id'] = int(sup.div['data-film-id'])
-            watched['uri'] = sup.div['data-film-slug'].split("/")[-2]
+            watched = {'id': int(sup.div['data-film-id']), 'uri': sup.div['data-film-slug'].split("/")[-2]}
             try:
                 rating = sup.p.span['class'][-1]
                 if 'rated' in rating:
-                    rating = int(rating.split("-", 1)[1])
-                    watched['rating'] = rating
+                    watched['rating'] = int(rating.split("-", 1)[1])
             except:
                 pass
             watched_list.append(watched)
@@ -147,7 +144,6 @@ def threadxdiary(username, fastUpdate=False):
 def fullUpdate(username, fastUpdate):
     global watched_list, diary_list
     start = time.time()
-    print('analysis username')
     t1 = Thread(target=threadxwatched, args=(username, fastUpdate)) #WATCHED
     t2 = Thread(target=threadxdiary, args=(username, fastUpdate)) #DIARY
     t3 = Thread(target=threadgeneral, args=(username, fastUpdate)) #GENERAL
@@ -189,13 +185,17 @@ def fullOperation(username, fastUpdate, watched=None):
         else:
             break
 
+
     start4 = time.time()
-    t1 = Thread(target=getStats, args=(username, fastUpdate))
-    t2 = Thread(target=year_stats, args=(username, fastUpdate))
-    t1.start()
-    t2.start()
-    t1.join()
-    t2.join()
+    tt = []
+    tt.append(Thread(target=getStats, args=(username, )))
+    tt.append(Thread(target=year_stats, args=(username, fastUpdate)))
+    if not fastUpdate:
+        tt.append(Thread(target=sug2stats, args=(username, )))
+    for t in tt:
+        t.start()
+    for t in tt:
+        t.join()
     print('stats in: ' + str(time.time() - start4))
 
 
