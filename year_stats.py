@@ -108,7 +108,8 @@ def year_stats(username, fastUpdate=False):
 
     db.Users.update_one({'_id': username}, {'$set': {'extra_stats.diaryperyear': bb}})
     if fastUpdate:
-        singleYear(datetime.now().year, username)
+        pass
+        #singleYear(datetime.now().year, username)
     else:
         db.Users.update_one({'_id': username}, {'$set': {'mostWatched': k['mostWatched']}})
         for x in k['years']:
