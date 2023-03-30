@@ -2,7 +2,9 @@ import requests
 from datetime import datetime, timedelta
 from operations import fillMongodb, fillMongodbmembers, fillMongodbratings
 from mongodb import db
+import logging
 
+logger = logging.getLogger("analyzer")
 
 def updatefromtmdb(onlytoday, dayoff=1):
     nowx = datetime.now() - timedelta(days=dayoff)
@@ -29,6 +31,7 @@ def updatefromtmdb(onlytoday, dayoff=1):
         for x in a:
             uris.append(x['uri'])
         print("aggiorno: " + str(len(uris)))
+        logger.info("aggiorno: " + str(len(uris)))
         fillMongodb(uris)
         fillMongodbmembers(uris)
         fillMongodbratings(uris)
