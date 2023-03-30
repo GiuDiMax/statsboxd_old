@@ -9,14 +9,13 @@ from setThemes import all
 from cleanUsers import cleanUsers
 
 
-def refresh(i):
+def refresh(i, nn):
     datex = datetime.today()
-    #datex = datex - timedelta(days=10)
     datex = datex - timedelta(hours=24)
     current_year = date.today().year
 
     a = db.Film.aggregate([
-        {'$match': {"year": {'$gt': current_year - 2}}},
+        {'$match': {"year": {'$gt': current_year - nn}}},
         {'$match': {"updateDate": {'$lt': datex}}},
         {'$sort': {'updateDate': 1}},
         {'$limit': 1000},
@@ -30,8 +29,14 @@ def refresh(i):
     fillMongodb(uris)
 
 
-def addMembers(i):
+def addMembers(i, nn):
+    datex = datetime.today()
+    datex = datex - timedelta(hours=24)
+    current_year = date.today().year
+
     a = db.Film.aggregate([
+        {'$match': {"year": {'$gt': current_year - nn}}},
+        {'$match': {'$or': [{"updateMembers": {'$lt': datex}}, {'updateMembers': {'$exists': False}}]}},
         {'$sort': {'updateMembers': 1}},
         {'$limit': 1000},
         {'$project': {'uri': 1}}
@@ -44,8 +49,14 @@ def addMembers(i):
     fillMongodbmembers(uris)
 
 
-def addRatings(i):
+def addRatings(i, nn):
+    datex = datetime.today()
+    datex = datex - timedelta(hours=24)
+    current_year = date.today().year
+
     a = db.Film.aggregate([
+        {'$match': {"year": {'$gt': current_year - nn}}},
+        {'$match': {'$or': [{"updateRating": {'$lt': datex}}, {'updateRating': {'$exists': False}}]}},
         {'$sort': {'updateRating': 1}},
         {'$limit': 1000},
         {'$project': {'uri': 1}}
@@ -58,24 +69,26 @@ def addRatings(i):
     fillMongodbratings(uris)
 
 
-def refreshata(i, k):
+def refreshata(i, k, nn):
     try:
         if k == 0:
-            refresh(i)
+            refresh(i, nn)
         elif k == 1:
-            addMembers(i)
+            addMembers(i, nn)
         elif k == 2:
-            addRatings(i)
+            addRatings(i, nn)
     except:
-        time.sleep(10)
-        refreshata(i, k)
+        time.sleep(20)
+        refreshata(i, k, nn)
 
 
 if __name__ == '__main__':
+    nn = 99 #last x years
+    cn = True #checknull
     for k in range(1, 3):
-        for i in range(78):
+        for i in range(80):
             start = time.time()
-            refreshata(i, k)
+            refreshata(i, k, nn)
             print('Done in ' + str(time.time() - start))
 
     exit()
