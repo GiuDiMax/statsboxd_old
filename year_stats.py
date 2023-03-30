@@ -6,8 +6,8 @@ import time
 from jsonOpYear import json_operations
 
 global json_operations4
-
 json_operations4 = {}
+
 op_role = []
 op_role.append({'$group': {'_id': '$diary.id', 'num': {'$sum': 1}}})
 op_role.append({'$match': {"num": {'$gt': 1}}})
@@ -50,12 +50,8 @@ def getYears(username):
     global json_operations4
     ob3 = db.Users.aggregate([
         {'$match': {"_id": username}},
-        #{'$project': {'_id': None, 'diary': '$diary'}},
         {'$unwind': '$diary'},
-        #{'$unwind': '$info'},
         {'$project': {'diary': '$diary', 'year': {'$year': '$diary.date'}}},
-        #{'$unwind': '$list.diary.info.actors'},
-        #{'$group': {'_id': '$list.info.actors', 'sum': {'$sum': 1}}},
         {'$facet': json_operations4},
     ])
     return ob3
@@ -109,12 +105,10 @@ def year_stats(username, fastUpdate=False):
                     break
                 else:
                     bb.append({'_id': bb[-1]['_id']+1, 'sum': 0})
-    #db.Users.update_one({'_id': username}, {'$set': {'stats.diaryperyear': []}})
+
     db.Users.update_one({'_id': username}, {'$set': {'extra_stats.diaryperyear': bb}})
     if fastUpdate:
         singleYear(datetime.now().year, username)
-        #if datetime.now().month == 1:
-        #    singleYear(datetime.now().year - 1, username)
     else:
         db.Users.update_one({'_id': username}, {'$set': {'mostWatched': k['mostWatched']}})
         for x in k['years']:
@@ -127,38 +121,35 @@ def year_stats(username, fastUpdate=False):
         for x in threads:
             x.join()
 
-        json_op1 = [{'$match': {"_id": username}},
-                    {'$unwind': '$diary'},
-                    {'$facet': json_operations_extra}]
-        ob3 = db.Users.aggregate(json_op1)
-        for x in ob3:
-            y = x
-
-        max = 0
-        currentd = 0
-        current = 0
-        maxdatmin = 0
-        mmdm = 0
-        for x in y['streak']:
-            print(x)
-            if x['_id'] == currentd + 1:
-                current = current + 1
-            else:
-                if current > max:
-                    max = current
-                    mmdm = maxdatmin
-                maxdatmin = x['_id']
-                current = 0
-            currentd = x['_id']
-        year = (int(mmdm / 52))
-        month = int((abs(mmdm) % 52) / 7) + 1
-        y['streak'] = {'max': max, 'year': year, 'month': month}
-        #print(y['streak'])
-        db.Users.update_one({'_id': username}, {'$set': {'extra_stats.streak': y['streak'], 'extra_stats.2+filmdays': y['2+filmdays'][0]}})
-        #db.Users.update_one({'_id': username}, {'$set': {'extra_stats.2+filmdays': y['2+filmdays'][0]}})
-
-    #years.sort(reverse=True)
         db.Users.update_one({'_id': username}, {'$set': {'years': years}})
+
+    #STREAK E 2PERDAYS
+    json_op1 = [{'$match': {"_id": username}},
+                {'$unwind': '$diary'},
+                {'$facet': json_operations_extra}]
+    ob3 = db.Users.aggregate(json_op1)
+    for x in ob3:
+        y = x
+
+    max = 0
+    currentd = 0
+    current = 0
+    maxdatmin = 0
+    mmdm = 0
+    for x in y['streak']:
+        if x['_id'] == currentd + 1:
+            current = current + 1
+        else:
+            if current > max:
+                max = current
+                mmdm = maxdatmin
+            maxdatmin = x['_id']
+            current = 0
+        currentd = x['_id']
+    year = (int(mmdm / 52))
+    month = int((abs(mmdm) % 52) / 7) + 1
+    y['streak'] = {'max': max, 'year': year, 'month': month}
+    db.Users.update_one({'_id': username}, {'$set': {'extra_stats.streak': y['streak'], 'extra_stats.2+filmdays': y['2+filmdays'][0]}})
 
 
 if __name__ == '__main__':
