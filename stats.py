@@ -7,10 +7,6 @@ from sug2Stats import op_role
 
 
 def getStats(username):
-    # db.Users.update_one({'username': username}, {'$set': {'a': 'b'}})
-    jop = json_operations
-    #if fastUpdate:
-    #    del jop['sug2']
     json_op1 = [{'$match': {"_id": username}},
                 {'$unwind': '$watched'},
                 {'$lookup': {
@@ -25,13 +21,6 @@ def getStats(username):
     y = None
     for x in ob3:
         y = x
-    if __name__ == '__main__':
-        pass
-        #print(y)
-        #print(y['test'])
-        #print(y['mostWatchedlanguage'])
-
-    #y['2+filmdays'] = y['2+filmdays'][0]
 
     if y != None:
         min = y['totalyear'][0]['_id']
@@ -50,7 +39,6 @@ def getStats(username):
         y['totalyear'] = y2
 
         db.Users.update_one({'_id': username}, {'$set': {'stats': y, 'update': datetime.today()}})
-        #print(y['mostWatchedgenres_nanogenre'])
 
 
 def sug2stats(username):
@@ -72,5 +60,5 @@ def sug2stats(username):
 
 if __name__ == '__main__':
     start = time()
-    getStats('giudimax', True)
+    sug2stats('giudimax')
     print(time()-start)
