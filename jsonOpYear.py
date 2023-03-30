@@ -236,9 +236,6 @@ json_operations['flopToAverage'] = op_role
 op_role = []
 op_role.append({'$sort': {'diary.date': 1}})
 op_role.append({'$project': {'_id': '$info.uri', 'date': '$diary.date', 'poster': '$info.images.poster'}})
-#op_role.append({'$project': {'_id': 0, 'a': {'$arrayElemAt': 0}}})
-#op_role.append({'$group:': {'_id': '$_id', 'lista': {'$push': {'a': '_id', 'd': 'date'}}}})
-#op_role.append({'$match': {'$position': 1}})
 json_operations['milestones'] = op_role
 
 
