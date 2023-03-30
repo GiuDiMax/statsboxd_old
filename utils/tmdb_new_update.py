@@ -4,8 +4,7 @@ from operations import fillMongodb, fillMongodbmembers, fillMongodbratings
 from mongodb import db
 
 
-def updatefromtmdb(onlytoday):
-    dayoff = 1
+def updatefromtmdb(onlytoday, dayoff=1):
     nowx = datetime.now() - timedelta(days=dayoff)
     past = (nowx - timedelta(days=14)).isoformat()
     if onlytoday:
@@ -36,4 +35,4 @@ def updatefromtmdb(onlytoday):
 
 
 if __name__ == '__main__':
-    updatefromtmdb(True)
+    updatefromtmdb(False)
