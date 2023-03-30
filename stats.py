@@ -2,10 +2,14 @@ from mongodb import db
 #from config import *
 from jsonoOpAllTime import json_operations
 from datetime import datetime
+from time import time
 
 
-def getStats(username):
+def getStats(username, fastUpdate=False):
     # db.Users.update_one({'username': username}, {'$set': {'a': 'b'}})
+    jop = json_operations
+    if fastUpdate:
+        del jop['sug2']
     json_op1 = [{'$match': {"_id": username}},
                 {'$unwind': '$watched'},
                 {'$lookup': {
@@ -49,4 +53,6 @@ def getStats(username):
 
 
 if __name__ == '__main__':
-    getStats('shrezz336')
+    start = time()
+    getStats('giudimax', True)
+    print(time()-start)

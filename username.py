@@ -190,7 +190,7 @@ def fullOperation(username, fastUpdate, watched=None):
             break
 
     start4 = time.time()
-    t1 = Thread(target=getStats, args=(username,))
+    t1 = Thread(target=getStats, args=(username, fastUpdate))
     t2 = Thread(target=year_stats, args=(username, fastUpdate))
     t1.start()
     t2.start()
@@ -212,5 +212,5 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
+    fullUpdate('giudimax', True)
     pass
-    #fullUpdate('giudimax', True)
