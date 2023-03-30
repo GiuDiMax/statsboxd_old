@@ -7,6 +7,8 @@ import sys
 from utils.collage import collage
 from flask_compress import Compress
 from flask_cdn import CDN
+from utils.tmdb_new_update import updatefromtmdb
+from threading import Thread
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
@@ -48,6 +50,15 @@ def handle_data():
 @app.route('/success')
 def success():
     return render_template('success.html')
+
+
+@app.route('/updatetmdb')
+def updatetmdb2():
+    def do_work():
+        updatefromtmdb(True)
+    thread = Thread(target=do_work)
+    thread.start()
+    return 'started'
 
 
 @app.route('/<username>/<year>')
