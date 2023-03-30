@@ -52,9 +52,9 @@ def sug2stats(username):
                 {'$unwind': '$info'}]
     jop = json_op1 + op_role
     ob3 = db.Users.aggregate(jop)
-    y = None
+    y = []
     for x in ob3:
-        y = x
+        y.append(x)
     db.Users.update_one({'_id': username}, {'$set': {'sug2': y}})
 
 
