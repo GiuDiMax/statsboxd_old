@@ -187,7 +187,7 @@ def fill_db(url, soup):
 def fill_dbMembers(url, soup):
     try:
         members = soup.find('a', {"class": "icon-watched"})['title']
-        members = members.split('Watched by ', 1)[1].split("members", 1)[0].replace(",", "")
+        members = members.split('Watched by ', 1)[1].split("member", 1)[0].replace(",", "")
         db.Film.update_one({'uri': url}, {'$set': {'members': int(members), 'updateMembers': datetime.today()}}, True)
     except:
         db.Film.update_one({'uri': url}, {'$set': {'updateMembers': datetime.today()}}, True)
@@ -244,5 +244,5 @@ def fillMongodbratings(urls):
 
 
 if __name__ == '__main__':
-    fillMongodbratings(['modern-man-2023'])
-    fillMongodbmembers(['modern-man-2023'])
+    fillMongodbratings(['lava-lucka'])
+    fillMongodbmembers(['lava-lucka'])
