@@ -190,7 +190,7 @@ def fill_dbMembers(url, soup):
         members = members.split('Watched by ', 1)[1].split("members", 1)[0].replace(",", "")
         db.Film.update_one({'uri': url}, {'$set': {'members': int(members), 'updateMembers': datetime.today()}}, True)
     except:
-        db.Film.update_one({'uri': url}, {'$set': {'members': 0}}, True)
+        db.Film.update_one({'uri': url}, {'$set': {'updateMembers': datetime.today()}}, True)
 
 
 def fill_dbRatings(url, soup):
@@ -201,7 +201,7 @@ def fill_dbRatings(url, soup):
         rating['num'] = int(rr.split("based on ", 1)[1].split("ratings", 1)[0].replace(",", ""))
         db.Film.update_one({'uri': url}, {'$set': {'rating': rating, 'updateRating': datetime.today()}}, True)
     except:
-        pass
+        db.Film.update_one({'uri': url}, {'$set': {'updateRating': datetime.today()}}, True)
 
 
 async def get(url, session, members, ratings):
