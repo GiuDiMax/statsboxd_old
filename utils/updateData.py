@@ -8,6 +8,8 @@ from setCollections import mainSetCollection2
 from setThemes import all
 from cleanUsers import cleanUsers
 
+limitx = 100
+
 
 def refresh(i, nn):
     datex = datetime.today()
@@ -18,14 +20,14 @@ def refresh(i, nn):
         {'$match': {"year": {'$gt': current_year - nn}}},
         {'$match': {"updateDate": {'$lt': datex}}},
         {'$sort': {'updateDate': 1}},
-        {'$limit': 1000},
+        {'$limit': limitx},
         {'$project': {'uri': 1}}
     ])
 
     uris = []
     for x in a:
         uris.append(x['uri'])
-    print('analyizing data' + str(len(uris) + i*1000))
+    print('analyizing data' + str(len(uris) + i*limitx))
     fillMongodb(uris)
 
 
@@ -38,14 +40,14 @@ def addMembers(i, nn):
         {'$match': {"year": {'$gt': current_year - nn}}},
         {'$match': {'$or': [{"updateMembers": {'$lt': datex}}, {'updateMembers': {'$exists': False}}]}},
         {'$sort': {'updateMembers': 1}},
-        {'$limit': 1000},
+        {'$limit': limitx},
         {'$project': {'uri': 1}}
     ])
 
     uris = []
     for x in a:
         uris.append(x['uri'])
-    print('analyzing members ' + str(len(uris) + i*1000))
+    print('analyzing members ' + str(len(uris) + i*limitx))
     fillMongodbmembers(uris)
 
 
@@ -58,14 +60,14 @@ def addRatings(i, nn):
         {'$match': {"year": {'$gt': current_year - nn}}},
         {'$match': {'$or': [{"updateRating": {'$lt': datex}}, {'updateRating': {'$exists': False}}]}},
         {'$sort': {'updateRating': 1}},
-        {'$limit': 1000},
+        {'$limit': limitx},
         {'$project': {'uri': 1}}
     ])
 
     uris = []
     for x in a:
         uris.append(x['uri'])
-    print('analyizing ratings ' + str(len(uris) + i*1000))
+    print('analyizing ratings ' + str(len(uris) + i*limitx))
     fillMongodbratings(uris)
 
 
@@ -78,18 +80,17 @@ def refreshata(i, k, nn):
         elif k == 2:
             addRatings(i, nn)
     except:
-        time.sleep(20)
+        time.sleep(15)
         refreshata(i, k, nn)
 
 
 if __name__ == '__main__':
     nn = 99 #last x years
-    cn = True #checknull
     for k in range(1, 3):
-        for i in range(80):
-            start = time.time()
+        for i in range(int(80000/limitx)+1):
+            #start = time.time()
             refreshata(i, k, nn)
-            print('Done in ' + str(time.time() - start))
+            #print('Done in ' + str(time.time() - start))
 
     exit()
     all()
