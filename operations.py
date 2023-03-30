@@ -188,7 +188,7 @@ def fill_dbMembers(url, soup):
     try:
         members = soup.find('a', {"class": "icon-watched"})['title']
         members = members.split('Watched by ', 1)[1].split("members", 1)[0].replace(",", "")
-        db.Film.update_one({'uri': url}, {'$set': {'members': int(members)}}, True)
+        db.Film.update_one({'uri': url}, {'$set': {'members': int(members), 'updateMembers': datetime.today()}}, True)
     except:
         db.Film.update_one({'uri': url}, {'$set': {'members': 0}}, True)
 
@@ -199,7 +199,7 @@ def fill_dbRatings(url, soup):
         rr = soup.find('a', {"class": "display-rating"})['title']
         rating['average'] = float(rr.split("of ", 1)[1].split(" based", 1)[0])
         rating['num'] = int(rr.split("based on ", 1)[1].split("ratings", 1)[0].replace(",", ""))
-        db.Film.update_one({'uri': url}, {'$set': {'rating': rating}}, True)
+        db.Film.update_one({'uri': url}, {'$set': {'rating': rating, 'updateRating': datetime.today()}}, True)
     except:
         pass
 
@@ -244,5 +244,5 @@ def fillMongodbratings(urls):
 
 
 if __name__ == '__main__':
-    fillMongodbratings(['calcutta-tutti-in-piedi'])
     fillMongodbratings(['parasite-2019'])
+    fillMongodbmembers(['parasite-2019'])
