@@ -9,7 +9,7 @@ from setThemes import all
 from cleanUsers import cleanUsers
 
 limitx = 100
-
+hx = 24 #ore
 
 def refresh(i, nn):
     b = False
