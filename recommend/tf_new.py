@@ -129,20 +129,24 @@ for userx in users:
         for x in obj:
             obja.append(x)
         top = []
+        top2 = []
         z = 0
         for movie in recs:
             for x in obja:
                 if int(x['_id']) == int(movie[0]) and int(movie[0]) not in watched:
-                    j = {}
-                    j['uri'] = x['uri']
-                    j['poster'] = x['poster']
-                    j['perc'] = int(movie[1] * 100)
-                    top.append(j)
+                    if z < 48:
+                        j = {}
+                        j['uri'] = x['uri']
+                        j['poster'] = x['poster']
+                        j['perc'] = int(movie[1] * 100)
+                        top.append(j)
+                    top2.append({'_id': x['_id'], 'perc': int(movie[1] * 100)})
                     z = z + 1
                     break
-            if z > 47:
+            if z > 500:
                 break
         db.Users.update_one({'_id': userx}, {'$set': {'sug': top}})
+        db.Users.update_one({'_id': userx}, {'$set': {'sug_list': top2}})
         print("predicted: " + str(userx))
     except:
         pass

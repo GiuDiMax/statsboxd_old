@@ -3,7 +3,6 @@ from time import time
 
 
 def sug2statsx(username):
-    start = time()
     visti = []
     obj = db.Users.aggregate([
         {'$match': {'_id': username}},
