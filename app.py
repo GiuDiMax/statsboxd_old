@@ -63,17 +63,16 @@ def updatetmdb2():
 
 @app.route('/<username>/<year>')
 def main_year(username, year):
-    try:
-        if '.ico' not in username:
-            #if beta_test and username.lower() not in beta_users:
-            #    return render_template('username.html')
-            user = checkUsername(username.lower())
-            if user is not None:
-                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year='_'+year, yearnum=year)
-            return render_template('loading.html', redirect=(username.lower()))
-        return render_template('username.html')
-    except:
-        return redirect("/" + username)
+    if '.ico' not in username:
+        #if beta_test and username.lower() not in beta_users:
+        #    return render_template('username.html')
+        user = checkUsername(username.lower())
+        if user is not None:
+            if 'stats_'+str(year) not in user:
+                return redirect("/"+username)
+            return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year='_'+year, yearnum=year)
+        return render_template('loading.html', redirect=(username.lower()))
+    return render_template('username.html')
 
 
 @app.route('/<username>/update/')
