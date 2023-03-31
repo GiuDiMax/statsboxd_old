@@ -229,7 +229,7 @@ def collage(username):
 
     try:
         r = requests.post(urlreq, files=files)
-        print(r.text)
+        #print(r.text)
         jsonx = json.loads(r.text)
         return(jsonx['data']['url'].replace("\/","/"))
     except:
