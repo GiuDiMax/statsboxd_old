@@ -63,10 +63,12 @@ def sug2statsx(username):
         {'$group': {'_id': '$similar', 'avg': {'$avg': '$rate'}, 'count': {'$sum': 1}, 'user': {'$first': '$user'}}},
         {'$facet': json_operations},
     ])
+    a = None
     for x in obj:
         a = x
         break
-    db.Users.update_one({'_id': username}, {'$set': {'sug2': a['sug2']}})
+    if a is not None:
+        db.Users.update_one({'_id': username}, {'$set': {'sug2': a['sug2']}})
 
 
 if __name__ == '__main__':
