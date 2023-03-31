@@ -5,6 +5,86 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.layers import Input, Embedding, Flatten, Dot, Add, Activation
 from mongodb import db
+import warnings
+from threading import Thread, Semaphore
+
+global recommendations
+global df
+global tops
+samplex = 1000000
+sem = Semaphore()
+
+def creaDf(usery):
+    global recommendations
+    global df
+    global sem
+    try:
+        user = df[df['userId'] == usery]['user_id'].values[0]
+        watched_movies = df[df['user_id'] == user]['movie_id']
+        not_watched_movies = np.delete(np.arange(num_movies), watched_movies)
+        predictions = model.predict([np.array([user] * len(not_watched_movies)), not_watched_movies], verbose=0)
+        recommendations_user = pd.DataFrame({'user_id': [user] * len(not_watched_movies),
+                                             'movie_id': not_watched_movies,
+                                             'score': predictions.flatten()})
+        #recommendations.append(recommendations_user)
+        sem.acquire()
+        recommendations = pd.concat([recommendations, recommendations_user])
+        sem.release()
+    except:
+        pass
+
+
+def creaPrediction(usery):
+    global df
+    global tops
+    try:
+        user = df[df['userId'] == usery]['user_id'].values[0]
+        obj = db.Users.aggregate([
+            {'$match': {'_id': usery}},
+            {'$project': {'watched': 1}},
+            {'$unwind': '$watched'},
+            {'$project': {'_id': 0, 'id': '$watched.id'}},
+        ])
+        watched = []
+        for x in obj:
+            watched.append(x['id'])
+        recs = []
+        recommended_movie_ids = []
+        user_tops = tops[tops['user_id'] == user]
+        for index, row in user_tops.iterrows():
+            recs.append([row['movie_name'], row['score']])
+            recommended_movie_ids.append(row['movie_name'])
+            # print(f"{row['movie_name']} - {row['score'] * 100:.2f}% preferenza")
+        obj = db.Film.aggregate([
+            {'$match': {'_id': {'$in': recommended_movie_ids}}},
+            {'$project': {'_id': 1, 'uri': 1, 'poster': '$images.poster'}},
+        ])
+        obja = []
+        for x in obj:
+            obja.append(x)
+        top = []
+        top2 = []
+        z = 0
+        for movie in recs:
+            for x in obja:
+                if int(x['_id']) == int(movie[0]) and int(movie[0]) not in watched:
+                    if z < 48:
+                        j = {}
+                        j['uri'] = x['uri']
+                        j['poster'] = x['poster']
+                        j['perc'] = int(movie[1] * 100)
+                        top.append(j)
+                    top2.append({'_id': x['_id'], 'perc': int(movie[1] * 100)})
+                    z = z + 1
+                    break
+            if z > 500:
+                break
+        db.Users.update_one({'_id': usery}, {'$set': {'sug': top}})
+        db.Users.update_one({'_id': usery}, {'$set': {'sug_list': top2}})
+        print("predicted: " + str(usery))
+    except:
+        print("errore: " + str(usery))
+
 
 movie = pd.read_csv('movies.csv', low_memory=False)
 movielist = movie['movieId'].tolist()
@@ -20,8 +100,8 @@ dfa = pd.DataFrame(obj)
 dfa.rename(columns={'_id': 'userId'}, inplace=True)
 dfb = pd.read_csv('ratings_clean.csv', low_memory=False)
 df = pd.concat([dfa, dfb])
-#df = df.sample(1000000)
-#df = dfa
+if samplex is not None:
+    df = df.sample(samplex)
 
 # Normalizzazione
 df['rating'] = df['rating'] / 10.0
@@ -82,71 +162,26 @@ for x in obj:
     users.append(x['_id'])
 
 recommendations = pd.DataFrame()
-import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
+print("creo dataframe")
+tth = []
+#for userx in users:
 for userx in users:
-#for userx in ['giudimax']:
-    try:
-        user = df[df['userId'] == userx]['user_id'].values[0]
-        watched_movies = df[df['user_id'] == user]['movie_id']
-        not_watched_movies = np.delete(np.arange(num_movies), watched_movies)
-        predictions = model.predict([np.array([user] * len(not_watched_movies)), not_watched_movies], verbose=0)
-        recommendations_user = pd.DataFrame({'user_id': [user] * len(not_watched_movies),
-                                             'movie_id': not_watched_movies,
-                                             'score': predictions.flatten()})
-        recommendations = recommendations.append(recommendations_user)
-    except:
-        pass
-
+    tth.append(Thread(target=creaDf, args=(userx,)))
+for t in tth:
+    t.start()
+for t in tth:
+    t.join()
+print("creo reccomendations")
 recommendations = recommendations.sort_values(by=['user_id', 'score'], ascending=False)
-tops = recommendations.groupby('user_id').head(200)
+tops = recommendations.groupby('user_id').head(1000)
 tops['movie_name'] = tops['movie_id'].apply(lambda x: list(movie_id.keys())[list(movie_id.values()).index(x)])
+tops.to_csv('recc.csv', index=False)
+tth = []
+#for userx in users:
 for userx in users:
-#for userx in ['giudimax']:
-    try:
-        user = df[df['userId'] == userx]['user_id'].values[0]
-        obj = db.Users.aggregate([
-            {'$match': {'_id': userx}},
-            {'$project': {'watched': 1}},
-            {'$unwind': '$watched'},
-            {'$project': {'_id': 0, 'id': '$watched.id'}},
-        ])
-        watched = []
-        for x in obj:
-            watched.append(x['id'])
-        recs = []
-        recommended_movie_ids = []
-        user_tops = tops[tops['user_id'] == user]
-        for index, row in user_tops.iterrows():
-            recs.append([row['movie_name'], row['score']])
-            recommended_movie_ids.append(row['movie_name'])
-            # print(f"{row['movie_name']} - {row['score'] * 100:.2f}% preferenza")
-        obj = db.Film.aggregate([
-            {'$match': {'_id': {'$in': recommended_movie_ids}}},
-            {'$project': {'_id': 1, 'uri': 1, 'poster': '$images.poster'}},
-        ])
-        obja = []
-        for x in obj:
-            obja.append(x)
-        top = []
-        top2 = []
-        z = 0
-        for movie in recs:
-            for x in obja:
-                if int(x['_id']) == int(movie[0]) and int(movie[0]) not in watched:
-                    if z < 48:
-                        j = {}
-                        j['uri'] = x['uri']
-                        j['poster'] = x['poster']
-                        j['perc'] = int(movie[1] * 100)
-                        top.append(j)
-                    top2.append({'_id': x['_id'], 'perc': int(movie[1] * 100)})
-                    z = z + 1
-                    break
-            if z > 500:
-                break
-        db.Users.update_one({'_id': userx}, {'$set': {'sug': top}})
-        db.Users.update_one({'_id': userx}, {'$set': {'sug_list': top2}})
-        print("predicted: " + str(userx))
-    except:
-        pass
+    tth.append(Thread(target=creaPrediction, args=(userx,)))
+for t in tth:
+    t.start()
+for t in tth:
+    t.join()

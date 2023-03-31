@@ -149,9 +149,9 @@
                     <div class="line"></div>
                     <span class="clickable active" data-show="sug" data-hide="recSec">Collaborative Filter</span>
                     <span class="clickable" data-show="sug2" data-hide="recSec">Item-Based</span>
-                    <span class="clickable" data-show="sug3" data-hide="recSec">Mixed</span>
+                    <!--<span class="clickable" data-show="sug3" data-hide="recSec">Mixed</span>-->
                 </div>
-                {% for type in [[user['sug'],'sug',''], [user['sug2'],'sug2','hide'], [user['sug3'],'sug3','hide']] %}
+                {% for type in [[user['sug'],'sug',''], [user['sug2'],'sug2','hide']] %}
                 <section id="{{ type[1] }}" class="recSec {{type[2]}}">
                     {% if type[0]|length > 0 %}
                     <div class="filmList hideLast">
