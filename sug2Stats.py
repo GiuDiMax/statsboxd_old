@@ -1,30 +1,55 @@
-op_role = []
-op_role.append({'$project': {'user': '$_id', 'id': '$info.related', 'rating': '$watched.rating'}})
-op_role.append({'$unwind': '$id'})
-op_role.append({'$group': {'_id': {'$toInt': '$id'},
-                           'user': {'$first': '$user'},
-                           'avg': {'$avg': '$rating'},
-                           'sum': {'$sum': 1}}})
-op_role.append({'$match': {'sum': {'$gt': 1}}})
-op_role.append({'$sort': {'avg': -1}})
-op_role.append({'$lookup': {
-    'from': 'Users',
-    'localField': 'user',
-    'foreignField': '_id',
-    'let': {'movie_id': "$_id"},
-    'pipeline': [{'$unwind': '$watched'},
-                 {'$group': {'_id': '$id', 'lista': {'$push': '$watched.id'}}},
-                 {'$project': {'_id': 1, 'watched': {'$in': ['$$movie_id', '$lista']}}},
-                 {'$match': {'watched': False}},
-                 ],
-    'as': 'info2'}})
-op_role.append({'$match': {'info2': {'$ne': []}}})
-op_role.append({'$lookup': {
-    'from': 'Film',
-    'localField': '_id',
-    'foreignField': '_id',
-    'as': 'info'}})
-op_role.append({'$unwind': '$info'})
-op_role.append({'$sort': {'avg': -1, 'info.rating.average': -1}})
-op_role.append({'$project': {'_id': 1, 'uri': '$info.uri', 'poster': '$info.images.poster', 'perc': {'$toInt': {'$multiply': ['$avg', 10]}}}})
-op_role.append({'$limit': 60})
+from mongodb import db
+from time import time
+
+
+def sug2statsx(username):
+    start = time()
+    visti = []
+    obj = db.Users.aggregate([
+        {'$match': {'_id': username}},
+        {'$unwind': '$watched'},
+        {'$match': {'watched.rating': {'$gt': 0}}},
+        {'$project': {'_id': '$watched.id'}},
+        {'$group': {'_id': None, 'visti': {'$push': '$_id'}}}
+    ])
+    for x in obj:
+        visti = x['visti']
+        break
+    if len(visti) == 0:
+        return
+    obj = db.Users.aggregate([
+        {'$match': {'_id': 'giudimax'}},
+        {'$unwind': '$watched'},
+        {'$match': {'watched.rating': {'$gt': 0}}},
+        {'$project': {'_id': '$watched.id', 'rate': '$watched.rating'}},
+        {'$lookup': {
+            'from': 'Film',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'info'}
+        },
+        {'$project': {'_id': 1, 'rate': 1, 'similar': '$info.related'}},
+        {'$unwind': '$similar'},
+        {'$unwind': '$similar'},
+        {'$match': {'similar': {'$nin': visti}}},
+        {'$group': {'_id': '$similar', 'avg': {'$avg': '$rate'}, 'count': {'$sum': 1}}},
+        {'$match': {'count': {'$gt': 1}}},
+        {'$sort': {'avg': -1}},
+        {'$limit': 50},
+        {'$lookup': {
+            'from': 'Film',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'info'}
+        },
+        {'$unwind': '$info'},
+        {'$project': {'_id': 1, 'perc': {'$toInt': {'$multiply': ['$avg', 10]}}, 'uri': '$info.uri', 'poster': '$info.images.poster'}}
+    ])
+    y = []
+    for x in obj:
+        y.append(x)
+    db.Users.update_one({'_id': username}, {'$set': {'sug2': y}})
+
+
+if __name__ == '__main__':
+    sug2statsx('giudimax')
