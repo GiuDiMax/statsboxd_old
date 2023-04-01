@@ -762,6 +762,19 @@
 
             })
 
+            function lazyLoad2(){
+                var script = document.createElement('script');
+                script.onload = function () {
+                    lazyLoadFunc();
+                };
+                script.src = "//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js";
+                document.head.appendChild(script);
+            }
+
+            function lazyLoadFunc(){
+                $('.lazy').Lazy();
+            }
+
              function worldMap2(){
                 var script = document.createElement('script');
                 script.onload = function () {
@@ -842,8 +855,7 @@
                           }
                     }
          }
-        </script>
-        <script>
+
             function chartFunc() {
 
                 {% if year == '' %}
@@ -1223,21 +1235,6 @@
                 $(".bubbleImg").on("error", function(){
                     $(this).attr('src', '/static/images/studios/studio.png');
                 });
-            }
-        </script>
-        <script>
-
-            function lazyLoad2(){
-                var script = document.createElement('script');
-                script.onload = function () {
-                    lazyLoadFunc();
-                };
-                script.src = "//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js";
-                document.head.appendChild(script);
-            }
-
-            function lazyLoadFunc(){
-                $('.lazy').Lazy();
             }
         </script>
     </footer>
