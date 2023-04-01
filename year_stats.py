@@ -147,6 +147,9 @@ def year_stats(username, fastUpdate=False):
             maxdatmin = x['_id']
             current = 0
         currentd = x['_id']
+    if current > max:
+        max = current
+        mmdm = maxdatmin
     year = (int(mmdm / 52))
     month = int((abs(mmdm) % 52) / 7) + 1
     y['streak'] = {'max': max, 'year': year, 'month': month}
@@ -156,5 +159,5 @@ def year_stats(username, fastUpdate=False):
 if __name__ == '__main__':
     #singleYear(2022, 'giudimax')
     #year_stats('shrezz336', False)
-    year_stats('giudimax', False)
+    year_stats('alunyacolico', False)
     pass
