@@ -68,19 +68,20 @@ def creaPrediction(usery):
         for movie in recs:
             for x in obja:
                 if int(x['_id']) == int(movie[0]) and int(movie[0]) not in watched:
-                    if z < 48:
-                        j = {}
-                        j['uri'] = x['uri']
-                        j['poster'] = x['poster']
-                        j['perc'] = int(movie[1] * 100)
-                        top.append(j)
-                    top2.append({'_id': x['_id'], 'perc': int(movie[1] * 100)})
+                    #if z < 48:
+                    j = {}
+                    j['uri'] = x['uri']
+                    j['poster'] = x['poster']
+                    j['perc'] = int(movie[1] * 100)
+                    top.append(j)
+                    #top2.append({'_id': x['_id'], 'perc': int(movie[1] * 100)})
                     z = z + 1
                     break
-            if z > 500:
+            #if z > 500:
+            if z > 47:
                 break
         db.Users.update_one({'_id': usery}, {'$set': {'sug': top}})
-        db.Users.update_one({'_id': usery}, {'$set': {'sug_list': top2}})
+        #db.Users.update_one({'_id': usery}, {'$set': {'sug_list': top2}})
         print("predicted: " + str(usery))
     except:
         print("errore: " + str(usery))
