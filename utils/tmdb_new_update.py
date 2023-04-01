@@ -46,6 +46,7 @@ def updatefromtmdb(onlytoday, dayoff=1):
         for x in a:
             uris.append(x['uri'])
         if len(uris) == 0:
+            print("nessuna modifica da fare")
             break
         else:
             print(len(uris))
