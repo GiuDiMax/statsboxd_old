@@ -175,8 +175,8 @@ def fill_db(url, soup):
     json1['updateDate'] = datetime.today()
     json1['modifiedDate'] = datetime.strptime(json_lb['dateModified'], '%Y-%m-%d')
 
-    if __name__ == '__main__':
-        print(json1)
+    #if __name__ == '__main__':
+    #    print(json1)
 
     db.Film.delete_one({'uri': json1['uri']})
     db.Film.update_one({'_id': json1['_id']}, {'$set': json1}, True)
@@ -244,5 +244,7 @@ def fillMongodbratings(urls):
 
 
 if __name__ == '__main__':
-    fillMongodbratings(['lava-lucka'])
-    fillMongodbmembers(['lava-lucka'])
+    uris = ['john-wick-chapter-4']
+    fillMongodb(uris)
+    fillMongodbratings(uris)
+    fillMongodbmembers(uris)
