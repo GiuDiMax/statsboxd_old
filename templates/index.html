@@ -719,15 +719,13 @@
         </div>
     </body>
     <footer>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/highcharts/10.2.1/highcharts.min.js" async onload="chartFunc()"></script>
+        <!--<script src="//cdnjs.cloudflare.com/ajax/libs/highcharts/10.2.1/highcharts.min.js" async onload="chartFunc()"></script>
         <script src="{{ url_for('static', _external=True, _scheme='https', filename='js/jquery-jvectormap-2.0.5.min.js') }}" async onload="worldMap2()"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js" async onload="lazyLoad2()"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js" async onload="lazyLoad2()"></script>-->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highcharts/10.2.1/highcharts.min.js"></script>
+        <script src="{{ url_for('static', _external=True, _scheme='https', filename='js/jquery-jvectormap-2.0.5.min.js') }}"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
         <script>
-             $(window).on('load', function(){
-                //worldMapx();
-                //chartFunc();
-            })
-
             $(document).ready(function () {
                 //$(".loader").hide(100);
                 //$('.content').show(100);
@@ -760,6 +758,10 @@
                     $(this).siblings().removeClass('active');
                 })
 
+                lazyLoad2();
+                chartFunc();
+                worldMap2();
+
             })
 
             function lazyLoad2(){
@@ -775,14 +777,14 @@
                 $('.lazy').Lazy();
             }
 
-             function worldMap2(){
+            function worldMap2(){
                 var script = document.createElement('script');
                 script.onload = function () {
                     worldMapx();
                 };
-                script.src = "{{ url_for('static', _external=True, _scheme='https', filename='js/jquery-jvectormap-world-mill.js') }}";
+                script.src = "/static/js/jquery-jvectormap-world-mill.js";
                 document.head.appendChild(script); //or something of the likes
-             }
+            }
 
             function worldMapx() {
                 var isMobile = false;
@@ -854,7 +856,7 @@
                               {% endif %}
                           }
                     }
-         }
+            }
 
             function chartFunc() {
 
