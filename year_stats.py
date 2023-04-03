@@ -78,7 +78,7 @@ def singleYear(year, username):
     miles = []
     z = int(len(y['milestones'])/50)
     for i in range(z):
-        miles.append(y['milestones'][(i+1)*50])
+        miles.append(y['milestones'][((i+1)*50)-1])
     y['milestones'] = miles
     #print(y['totalcountry'])
     db.Users.update_one({'_id': username}, {'$set': {'stats_'+str(year): y}})
@@ -157,7 +157,7 @@ def year_stats(username, fastUpdate=False):
 
 
 if __name__ == '__main__':
-    #singleYear(2022, 'giudimax')
+    singleYear(2022, 'hamzaa')
     #year_stats('shrezz336', False)
-    year_stats('alunyacolico', False)
+    #year_stats('hamzaa', False)
     pass
