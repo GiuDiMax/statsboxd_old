@@ -793,69 +793,69 @@
                 }
 
                 //WORLDMAP
-                    var worldData = {
-                        {%for element in user['stats'+year].totalcountry%}
-                            '{{ element['_id'] }}': {{ element['sum'] }},
-                        {%endfor%}
-                    };
+                var worldData = {
+                    {%for element in user['stats'+year].totalcountry%}
+                        '{{ element['_id'] }}': {{ element['sum'] }},
+                    {%endfor%}
+                };
 
-                    var worldDataUri = {
-                        {%for element in user['stats'+year].totalcountry%}
-                            '{{ element['_id'] }}': '{{ element['uri'] }}',
-                        {%endfor%}
-                    };
+                var worldDataUri = {
+                    {%for element in user['stats'+year].totalcountry%}
+                        '{{ element['_id'] }}': '{{ element['uri'] }}',
+                    {%endfor%}
+                };
 
-                    $('#world-map').vectorMap({
-                      map: 'world_mill',
-                      backgroundColor: "",
-                      series: {
-                        regions: [{
-                          values: worldData,
-                          scale: ['#007834', '#00e054'],
-                        }]
-                      },
-                      tooltip: {
-                          enabled: false,
-                      },
-                      regionStyle: {
-                        initial: {
-                            fill: '#303c44'
-                        },
-                        hover:{
-                            fill: '#40bcf4'
-                        }
-                      },
-                      onRegionTipShow: function(e, el, code) {
-                          var text = "0"
-                          if (typeof worldDataUri[code] !== 'undefined') {
-                              text = worldData[code]
-                          }
-                          el.html($("<span/>", {'class': 'ttTitle', 'html': el.html()}));
-                          el.append($("<br/>"));
-                          el.append($("<span/>", {'class': 'ttSubtitle', 'html': "Films watched: " + text}));
-                          el.html($("<div/>", {'class': 'maptt', 'html': el.html()}));
-                          el.append($("<div/>", {'class': 'ttPointer'}));
-                          el.html($("<a/>", {'class': 'maptt2', 'onClick':'alert(0);', 'href': 'www.google.com', 'html': el.html()}));
-                      },
-                      onRegionClick: function(e, el, code){
-                          if (!isMobile) {
-                            clickMap(el);
-                          }
-                      },
-                      onMarkerClick: function(e, code){
-                          alert(code);
-                      },
-                    });
-
-                    function clickMap(el){
-                          if (typeof worldDataUri[el] !== 'undefined') {
-                              {% if year == '' %}
-                                  location.href = '{{ lbdurl }}{{ user._id }}/films/country/' + worldDataUri[el] + '/';
-                              {% else %}
-                                  location.href = '{{ lbdurl }}{{ user._id }}/films/diary/for/{{ yearnum }}/country/' + worldDataUri[el] + '/by/rating';
-                              {% endif %}
-                          }
+                $('#world-map').vectorMap({
+                  map: 'world_mill',
+                  backgroundColor: "",
+                  series: {
+                    regions: [{
+                      values: worldData,
+                      scale: ['#007834', '#00e054'],
+                    }]
+                  },
+                  tooltip: {
+                      enabled: false,
+                  },
+                  regionStyle: {
+                    initial: {
+                        fill: '#303c44'
+                    },
+                    hover:{
+                        fill: '#40bcf4'
                     }
+                  },
+                  onRegionTipShow: function(e, el, code) {
+                      var text = "0"
+                      if (typeof worldDataUri[code] !== 'undefined') {
+                          text = worldData[code]
+                      }
+                      el.html($("<span/>", {'class': 'ttTitle', 'html': el.html()}));
+                      el.append($("<br/>"));
+                      el.append($("<span/>", {'class': 'ttSubtitle', 'html': "Films watched: " + text}));
+                      el.html($("<div/>", {'class': 'maptt', 'html': el.html()}));
+                      el.append($("<div/>", {'class': 'ttPointer'}));
+                      el.html($("<a/>", {'class': 'maptt2', 'onClick':'alert(0);', 'href': 'www.google.com', 'html': el.html()}));
+                  },
+                  onRegionClick: function(e, el, code){
+                      if (!isMobile) {
+                        clickMap(el);
+                      }
+                  },
+                  onMarkerClick: function(e, code){
+                      alert(code);
+                  },
+                });
+
+                function clickMap(el){
+                      if (typeof worldDataUri[el] !== 'undefined') {
+                          {% if year == '' %}
+                              location.href = '{{ lbdurl }}{{ user._id }}/films/country/' + worldDataUri[el] + '/';
+                          {% else %}
+                              location.href = '{{ lbdurl }}{{ user._id }}/films/diary/for/{{ yearnum }}/country/' + worldDataUri[el] + '/by/rating';
+                          {% endif %}
+                      }
+                }
             }
 
             function chartFunc() {
