@@ -215,5 +215,5 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    fullUpdate('giudimax', False)
+    fullUpdate('hamzaa', False)
     pass
