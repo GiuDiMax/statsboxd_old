@@ -1,6 +1,7 @@
 /recommend/algo.pickle
 /recommend/trainset.csv
 /recommend/ratings_clean.csv
+/recommend/recc.csv
 /garbage/
 /.idea/
 /utils/backup/
