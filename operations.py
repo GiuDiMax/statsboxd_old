@@ -175,6 +175,19 @@ def fill_db(url, soup):
     json1['updateDate'] = datetime.today()
     json1['modifiedDate'] = datetime.strptime(json_lb['dateModified'], '%Y-%m-%d')
 
+
+    obj = db.Film.find_one({'uri': json1['uri']})
+    if 'genres' in obj:
+        if 'theme' in obj['genres']:
+            json1['genres']['theme'] = obj['genres']['theme']
+        if 'mini-theme' in obj['genres']:
+            json1['genres']['mini-theme'] = obj['genres']['mini-theme']
+        if 'nanogenre' in obj['genres']:
+            json1['genres']['nanogenre'] = obj['genres']['nanogenre']
+
+    if 'statsLists' in obj:
+        json1['statsLists'] = obj['statsLists']
+
     #if __name__ == '__main__':
     #    print(json1)
 
@@ -244,7 +257,7 @@ def fillMongodbratings(urls):
 
 
 if __name__ == '__main__':
-    uris = ['john-wick-chapter-4']
+    uris = ['the-big-city']
     fillMongodb(uris)
-    fillMongodbratings(uris)
-    fillMongodbmembers(uris)
+    #fillMongodbratings(uris)
+    #fillMongodbmembers(uris)
