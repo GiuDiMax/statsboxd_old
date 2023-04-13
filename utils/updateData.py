@@ -11,6 +11,7 @@ from cleanUsers import cleanUsers
 limitx = 100
 hx = 24 #ore
 
+
 def refresh(i, nn):
     b = False
     datex = datetime.today()
@@ -30,7 +31,7 @@ def refresh(i, nn):
         uris.append(x['uri'])
     if len(uris)<limitx:
         b = True
-    print('analyizing data' + str(len(uris) + i*limitx))
+    print('analyizing data ' + str(len(uris) + i*limitx))
     fillMongodb(uris)
     return b
 
@@ -101,15 +102,15 @@ def refreshata(i, k, nn):
 
 
 if __name__ == '__main__':
-    nn = 99 #last x years
-    for k in range(1, 3):
+    nn = 1 #last x years
+    for k in range(3):
         for i in range(int(80000/limitx)+1):
             #start = time.time()
             b = refreshata(i, k, nn)
             if b: break
             #print('Done in ' + str(time.time() - start))
 
-    exit()
+    #exit()
     all()
     updateLists()
     mainSetNames()
