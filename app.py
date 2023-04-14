@@ -93,7 +93,7 @@ def main_collage(username):
         return send_file("utils/tmp.jpg", mimetype='image/jpg')
 
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def main_std():
     return render_template('username.html')
 
