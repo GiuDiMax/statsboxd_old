@@ -47,10 +47,6 @@ def handle_data():
     return redirect(url_for('success'))
 
 
-@app.route('/success')
-def success():
-    return render_template('success.html')
-
 
 @app.route('/updatetmdb')
 def updatetmdb2():
