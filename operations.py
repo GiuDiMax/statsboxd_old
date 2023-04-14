@@ -177,16 +177,17 @@ def fill_db(url, soup):
 
 
     obj = db.Film.find_one({'uri': json1['uri']})
-    if 'genres' in obj:
-        if 'theme' in obj['genres']:
-            json1['genres']['theme'] = obj['genres']['theme']
-        if 'mini-theme' in obj['genres']:
-            json1['genres']['mini-theme'] = obj['genres']['mini-theme']
-        if 'nanogenre' in obj['genres']:
-            json1['genres']['nanogenre'] = obj['genres']['nanogenre']
+    if obj is not None:
+        if 'genres' in obj:
+            if 'theme' in obj['genres']:
+                json1['genres']['theme'] = obj['genres']['theme']
+            if 'mini-theme' in obj['genres']:
+                json1['genres']['mini-theme'] = obj['genres']['mini-theme']
+            if 'nanogenre' in obj['genres']:
+                json1['genres']['nanogenre'] = obj['genres']['nanogenre']
 
-    if 'statsLists' in obj:
-        json1['statsLists'] = obj['statsLists']
+        if 'statsLists' in obj:
+            json1['statsLists'] = obj['statsLists']
 
     #if __name__ == '__main__':
     #    print(json1)
