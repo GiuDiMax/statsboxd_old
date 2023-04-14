@@ -173,7 +173,7 @@ def fullOperation(username, fastUpdate, watched=None):
         ids.append(movie['id'])
         uris.append(movie['uri'])
 
-    while True:
+    for i in range(3):
         obj1 = db.Film.find({"_id": {"$in": ids}})
         uris2 = list(set(uris) - set(obj1.distinct('uri')))
         print('check new in: ' + str(time.time() - start3))
