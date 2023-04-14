@@ -13,12 +13,12 @@ from threading import Thread
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
 app.config['CDN_DOMAIN'] = 'd2b3jqgdwv2xyj.cloudfront.net'
-#app.config['CDN_DOMAIN'] = 'statsboxd.ml'
+# app.config['CDN_DOMAIN'] = 'statsboxd.ml'
 CDN(app)
 Compress(app)
 
 
-@app.route('/<username>/')
+@app.route('/<username>/', methods=['POST', 'GET'])
 def main(username):
     if '.ico' not in username and 'success' not in username:
         if username.lower() == 'reset':
@@ -32,7 +32,8 @@ def main(username):
             return render_template('noallowed.html')
         user = checkUsername(username.lower())
         if (user is not None) and ('diary' in user):
-            return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
+            return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="",
+                                   yearnum=0)
         if fullUpdate(username.lower(), False):
             return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/',
                                    roles=crew_html, year="", yearnum=0)
@@ -47,42 +48,43 @@ def handle_data():
     return redirect(url_for('success'))
 
 
-
-@app.route('/updatetmdb')
+@app.route('/updatetmdb', methods=['POST', 'GET'])
 def updatetmdb2():
     def do_work():
         updatefromtmdb(True)
+
     thread = Thread(target=do_work)
     thread.start()
     return 'started'
 
 
-@app.route('/<username>/<year>')
+@app.route('/<username>/<year>', methods=['POST', 'GET'])
 def main_year(username, year):
     if '.ico' not in username:
-        #if beta_test and username.lower() not in beta_users:
+        # if beta_test and username.lower() not in beta_users:
         #    return render_template('username.html')
         user = checkUsername(username.lower())
         if user is not None:
-            if 'stats_'+str(year) not in user:
-                return redirect("/"+username)
-            return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year='_'+year, yearnum=year)
+            if 'stats_' + str(year) not in user:
+                return redirect("/" + username)
+            return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html,
+                                   year='_' + year, yearnum=year)
         return render_template('loading.html', redirect=(username.lower()))
     return render_template('username.html')
 
 
-@app.route('/<username>/update/')
+@app.route('/<username>/update/', methods=['POST', 'GET'])
 def main_update(username):
-    #if beta_test and username.lower() not in beta_users:
+    # if beta_test and username.lower() not in beta_users:
     #    return render_template('username.html')
     if fullUpdate(username.lower(), True):
-        #return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
-        return redirect("/"+username)
+        # return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
+        return redirect("/" + username)
     else:
         return render_template('error.html')
 
 
-@app.route('/<username>/collage/')
+@app.route('/<username>/collage/', methods=['POST', 'GET'])
 def main_collage(username):
     red = collage(username)
     if red is not None:
@@ -100,6 +102,7 @@ def main_std():
 def utility_processor():
     def format_comma(number):
         return f'{int(number):,}'
+
     return dict(format_comma=format_comma)
 
 
@@ -109,7 +112,8 @@ def utility_processor3():
         if val is None:
             return 0
         else:
-            return val/2
+            return val / 2
+
     return dict(ifNull0_divide2=ifNull0_divide2)
 
 
@@ -119,6 +123,7 @@ def utility_processor4():
         if len(string) < 4:
             return string.replace('-', ' ').title().upper()
         return string.replace('-', ' ').title().replace('And', 'and').replace('Or', 'or')
+
     return dict(firstUpper=firstUpper)
 
 
@@ -140,20 +145,23 @@ def utility_processor8():
                     string2 = string2 + stri.title() + " "
             string2 = string2[:-1]
         return string2
+
     return dict(firstUpperBis=firstUpperBis)
 
 
 @app.context_processor
 def utility_processor5():
     def perctodeg(val):
-        return 360*val
+        return 360 * val
+
     return dict(perctodeg=perctodeg)
 
 
 @app.context_processor
 def utility_processor6():
     def valtoperc(val):
-        return int(val*100)
+        return int(val * 100)
+
     return dict(valtoperc=valtoperc)
 
 
@@ -162,11 +170,12 @@ def utility_processor7():
     def numToStars(num, half=True):
         if num is not None:
             if half:
-                num = num/2
+                num = num / 2
             result = int(num) * "★"
             if num > int(num):
                 result = result + "½"
             return result
+
     return dict(numToStars=numToStars)
 
 
@@ -186,6 +195,7 @@ def utility_processor8():
                 except:
                     print(src)
                     return ""
+
     return dict(replaceSize=replaceSize)
 
 
@@ -194,17 +204,18 @@ def utility_processor9():
     def fill_array(array, min, max):
         array2 = []
         z = 0
-        for i in range(min, max+1):
+        for i in range(min, max + 1):
             try:
                 if array[z]['_id'] == i:
                     array2.append(array[z])
-                    z = z+1
+                    z = z + 1
                 else:
                     array2.append({'_id': i, 'sum': 0})
             except:
                 array2.append({'_id': i, 'sum': 0})
-        #print(array2)
+        # print(array2)
         return array2
+
     return dict(fill_array=fill_array)
 
 
@@ -213,6 +224,7 @@ def utility_processor10():
     def date_toshort(date):
         date2 = date.strftime("%b %e")
         return date2
+
     return dict(date_toshort=date_toshort)
 
 
@@ -222,14 +234,17 @@ def utility_processor11():
         if value is None:
             return 0
         return value
+
     return dict(zeroIfNone=zeroIfNone)
 
 
 @app.context_processor
 def utility_processor12():
     def numtomonth(value):
-        mesinum = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
+        mesinum = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct',
+                   11: 'Nov', 12: 'Dec'}
         return mesinum[value]
+
     return dict(numtomonth=numtomonth)
 
 
