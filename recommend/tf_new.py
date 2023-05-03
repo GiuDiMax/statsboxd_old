@@ -11,7 +11,7 @@ from threading import Thread, Semaphore
 global recommendations
 global df
 global tops
-samplex = 2000000
+samplex = 1000000
 sem = Semaphore()
 
 def creaDf(usery):
@@ -150,9 +150,9 @@ model.compile(loss='mean_squared_error', optimizer='adam')
 early_stopping = EarlyStopping(monitor='val_loss', patience=1, verbose=1, mode='min')
 model.fit([train['user_id'], train['movie_id']], train['rating'],
           validation_data=([test['user_id'], test['movie_id']], test['rating']),
-          epochs=1, verbose=1,
+          epochs=2, verbose=1,
           #callbacks=[early_stopping],
-          batch_size=128)
+          batch_size=64)
 
 obj = db.Users.aggregate([
     {'$match': {'watched.1': {'$exists': True}}},
@@ -173,7 +173,7 @@ for t in tth:
     t.start()
 for t in tth:
     t.join()
-print("creo reccomendations")
+print("build reccomendations")
 recommendations = recommendations.sort_values(by=['user_id', 'score'], ascending=False)
 tops = recommendations.groupby('user_id').head(1000)
 tops['movie_name'] = tops['movie_id'].apply(lambda x: list(movie_id.keys())[list(movie_id.values()).index(x)])
