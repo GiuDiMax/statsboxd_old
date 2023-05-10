@@ -14,6 +14,7 @@ global tops
 samplex = 1000000
 sem = Semaphore()
 
+
 def creaDf(usery):
     global recommendations
     global df
@@ -82,7 +83,7 @@ def creaPrediction(usery):
                 break
         db.Users.update_one({'_id': usery}, {'$set': {'sug': top}})
         #db.Users.update_one({'_id': usery}, {'$set': {'sug_list': top2}})
-        print("predicted: " + str(usery))
+        print("username: " + str(usery) + "\n")
     except:
         print("errore: " + str(usery))
 
@@ -100,9 +101,9 @@ obj = db.Users.aggregate([
 dfa = pd.DataFrame(obj)
 dfa.rename(columns={'_id': 'userId'}, inplace=True)
 dfb = pd.read_csv('ratings_clean.csv', low_memory=False)
-df = pd.concat([dfa, dfb])
 if samplex is not None:
-    df = df.sample(samplex)
+    dfb = dfb.sample(samplex)
+df = pd.concat([dfa, dfb])
 
 # Normalizzazione
 df['rating'] = df['rating'] / 10.0
@@ -150,9 +151,9 @@ model.compile(loss='mean_squared_error', optimizer='adam')
 early_stopping = EarlyStopping(monitor='val_loss', patience=1, verbose=1, mode='min')
 model.fit([train['user_id'], train['movie_id']], train['rating'],
           validation_data=([test['user_id'], test['movie_id']], test['rating']),
-          epochs=2, verbose=1,
-          #callbacks=[early_stopping],
-          batch_size=64)
+          epochs=3, verbose=1,
+          callbacks=[early_stopping],
+          batch_size=128)
 
 obj = db.Users.aggregate([
     {'$match': {'watched.1': {'$exists': True}}},
@@ -173,7 +174,7 @@ for t in tth:
     t.start()
 for t in tth:
     t.join()
-print("build reccomendations")
+print("creo raccomandazioni")
 recommendations = recommendations.sort_values(by=['user_id', 'score'], ascending=False)
 tops = recommendations.groupby('user_id').head(1000)
 tops['movie_name'] = tops['movie_id'].apply(lambda x: list(movie_id.keys())[list(movie_id.values()).index(x)])
