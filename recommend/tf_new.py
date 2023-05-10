@@ -141,19 +141,19 @@ movie_bias = Flatten()(movie_bias)
 prod = Add()([prod, user_bias, movie_bias])
 
 # Output activation function
-output = Activation('sigmoid')(prod)
+output = Activation('relu')(prod)
 
 # Modello finale
 model = Model(inputs=[user_input, movie_input], outputs=output)
 model.compile(loss='mean_squared_error', optimizer='adam')
 
 # Addestramento del modello
-early_stopping = EarlyStopping(monitor='val_loss', patience=1, verbose=1, mode='min')
+#early_stopping = EarlyStopping(monitor='val_loss', patience=1, verbose=1, mode='min')
 model.fit([train['user_id'], train['movie_id']], train['rating'],
           validation_data=([test['user_id'], test['movie_id']], test['rating']),
-          epochs=3, verbose=1,
-          callbacks=[early_stopping],
-          batch_size=128)
+          epochs=2, verbose=1,
+          #callbacks=[early_stopping],
+          batch_size=64)
 
 obj = db.Users.aggregate([
     {'$match': {'watched.1': {'$exists': True}}},
