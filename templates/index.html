@@ -79,7 +79,7 @@
                 </div>
                 {% if year == '' %}
                     <div class="buttonstart">
-                        <a class="clickable seeallbutton updatebutton" href="/{{ user._id }}/update"><span class="material-symbols-rounded icon">sync</span>Update</a>
+                        <a class="clickable seeallbutton updatebutton" href="/{{ user._id }}/update{% if 'fullUpdate' in user %}?last={{ user.fullUpdate.strftime('%Y-%m-%d') }}{% endif %}"><span class="material-symbols-rounded icon">sync</span>Update</a>
                         <a class="clickable seeallbutton updatebutton collagebutton" href="/{{ user._id }}/collage"><span class="fa-brands fa-instagram icon icon2"></span>Generate last month collage</a>
                     </div>
                 {% endif %}
