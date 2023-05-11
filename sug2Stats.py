@@ -105,7 +105,7 @@ def rev_rew(username):
             rat = int(x['rat'][0]['count'])
         except:
             rat = 0
-        db.Users.update_one({'_id': username}, {'$set': {'stats.rew': rew, 'stats.rev': rev, 'stats.rat': rat}})
+        db.Users.update_one({'_id': username}, {'$set': {'stats2.rew': rew, 'stats2.rev': rev, 'stats2.rat': rat}})
         break
 
 
