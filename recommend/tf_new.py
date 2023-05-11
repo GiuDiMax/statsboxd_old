@@ -11,7 +11,7 @@ from threading import Thread, Semaphore
 global recommendations
 global df
 global tops
-samplex = 1000000
+samplex = 1500000
 sem = Semaphore()
 
 
@@ -73,7 +73,7 @@ def creaPrediction(usery):
                     j = {}
                     j['uri'] = x['uri']
                     j['poster'] = x['poster']
-                    j['perc'] = int(movie[1] * 100)
+                    j['perc'] = int(movie[1] * 95)
                     top.append(j)
                     #top2.append({'_id': x['_id'], 'perc': int(movie[1] * 100)})
                     z = z + 1
@@ -104,6 +104,7 @@ dfb = pd.read_csv('ratings_clean.csv', low_memory=False)
 if samplex is not None:
     dfb = dfb.sample(samplex)
 df = pd.concat([dfa, dfb])
+print("Total size: " + str(len(df)))
 
 # Normalizzazione
 df['rating'] = df['rating'] / 10.0
@@ -153,7 +154,7 @@ model.fit([train['user_id'], train['movie_id']], train['rating'],
           validation_data=([test['user_id'], test['movie_id']], test['rating']),
           epochs=2, verbose=1,
           #callbacks=[early_stopping],
-          batch_size=64)
+          batch_size=32)
 
 obj = db.Users.aggregate([
     {'$match': {'watched.1': {'$exists': True}}},
