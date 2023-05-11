@@ -31,6 +31,7 @@ json_operations['sug3'] = [
 ]
 """
 
+
 def sug2statsx(username):
     visti = []
     obj = db.Users.aggregate([
@@ -46,7 +47,7 @@ def sug2statsx(username):
     if len(visti) == 0:
         return
     obj = db.Users.aggregate([
-        {'$match': {'_id': 'giudimax'}},
+        {'$match': {'_id': username}},
         {'$unwind': '$watched'},
         {'$match': {'watched.rating': {'$gt': 0}}},
         {'$project': {'_id': '$watched.id', 'rate': '$watched.rating', 'user': '$_id'}},
@@ -71,5 +72,42 @@ def sug2statsx(username):
         db.Users.update_one({'_id': username}, {'$set': {'sug2': a['sug2']}})
 
 
+def rev_rew(username):
+    obj = db.Users.aggregate([
+        {'$match': {'_id': username}},
+        {'$unwind': '$diary'},
+        {'$project': {'_id': '$diary.id', 'rewatch': '$diary.rewatch', 'review': '$diary.review', 'rat': '$diary.dRating'}},
+        {'$facet': {
+            'rewatch': [
+                {'$group': {"_id": "$rewatch", "count": {"$sum": 1}}},
+                {'$match': {"_id": True}}
+            ],
+            'review': [
+                {'$group': {"_id": "$review", "count": {"$sum": 1}}},
+                {'$match': {"_id": True}}
+            ],
+            'rat': [
+                {'$group': {"_id": "id", "count": {"$sum": 1}}},
+            ],
+        }}
+    ])
+    for a in obj:
+        x = a
+        try:
+            rew = int(x['rewatch'][0]['count'])
+        except:
+            rew = 0
+        try:
+            rev = int(x['review'][0]['count'])
+        except:
+            rev = 0
+        try:
+            rat = int(x['rat'][0]['count'])
+        except:
+            rat = 0
+        db.Users.update_one({'_id': username}, {'$set': {'stats.rew': rew, 'stats.rev': rev, 'stats.rat': rat}})
+        break
+
+
 if __name__ == '__main__':
-    sug2statsx('giudimax')
+    rev_rew('giudimax')

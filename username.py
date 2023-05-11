@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup, SoupStrainer
 from mongodb import db
 from datetime import datetime
 from stats import getStats
-from sug2Stats import sug2statsx
+from sug2Stats import sug2statsx, rev_rew
 from operations import fillMongodb, fillMongodbmembers, fillMongodbratings
 from threading import Thread
 import time
@@ -195,6 +195,7 @@ def fullOperation(username, fastUpdate, watched=None):
     tt.append(Thread(target=year_stats, args=(username, fastUpdate)))
     if not fastUpdate:
         tt.append(Thread(target=sug2statsx, args=(username, )))
+        tt.append(Thread(target=rev_rew, args=(username,)))
     for t in tt:
         t.start()
     for t in tt:
@@ -215,5 +216,5 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    fullUpdate('nncfc', True)
+    fullUpdate('giudimax', False)
     pass
