@@ -5,6 +5,7 @@ import asyncio
 import json
 from bs4 import BeautifulSoup, SoupStrainer
 import time
+from utils.cleanUsers import cleanUsers
 
 url = 'http://letterboxd.com/films/ajax/theme/relationship-comedy'
 
@@ -80,9 +81,10 @@ def nanofun():
 
 
 def all():
-    #base()
+    base()
     nanofun()
 
 
 if __name__ == '__main__':
-    all()
+    base()
+    cleanUsers()
