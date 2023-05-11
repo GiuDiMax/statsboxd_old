@@ -3,7 +3,6 @@ import asyncio
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
 from mongodb import db
-from datetime import datetime
 from stats import getStats
 from sug2Stats import sug2statsx, rev_rew
 from operations import fillMongodb, fillMongodbmembers, fillMongodbratings
@@ -194,6 +193,7 @@ def fullOperation(username, fastUpdate, watched=None):
     tt.append(Thread(target=getStats, args=(username, )))
     tt.append(Thread(target=year_stats, args=(username, fastUpdate)))
     if not fastUpdate:
+        db.Users.update_one({'_id': username}, {'$set': {'fullUpdate': datetime.today()}})
         tt.append(Thread(target=sug2statsx, args=(username, )))
         tt.append(Thread(target=rev_rew, args=(username,)))
     for t in tt:

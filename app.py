@@ -9,6 +9,8 @@ from flask_compress import Compress
 from flask_cdn import CDN
 from utils.tmdb_new_update import updatefromtmdb
 from threading import Thread
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
@@ -77,6 +79,15 @@ def main_year(username, year):
 def main_update(username):
     # if beta_test and username.lower() not in beta_users:
     #    return render_template('username.html')
+    if 'last' in request.args:
+        last = datetime.strptime(request.args['last'], '%Y-%m-%d')
+        last = last + relativedelta(months=3)
+        if datetime.today() > last:
+            print("Full Update")
+            if fullUpdate(username.lower(), False):
+                return redirect("/" + username)
+            else:
+                return render_template('error.html')
     if fullUpdate(username.lower(), True):
         # return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/', roles=crew_html, year="", yearnum=0)
         return redirect("/" + username)
