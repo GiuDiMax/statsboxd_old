@@ -127,20 +127,20 @@
                 </div>
             </section>
             {% if year == '' %}
-            {% if ('rat' in user.stats or 'rev' in user.stats or 'rew' in user.stats) and ((user.stats.rew > 0) or (user.stats.rev > 0) or (user.stats.rat > 0)) %}
+            {% if ('rat' in user.stats2 or 'rev' in user.stats2 or 'rew' in user.stats2) and ((user.stats2.rew > 0) or (user.stats2.rev > 0) or (user.stats2.rat > 0)) %}
             <section class="sectionStats">
                 <div class="sepline"><div class="line"></div></div>
                 <div class="numbersStats" style="margin-top:0 !important;">
                     <a href="//letterboxd.com/{{user._id}}/films/diary/by/diary-count/">
-                        <span class="number">{{ user.stats.rew }}</span>
+                        <span class="number">{{ user.stats2.rew }}</span>
                         <span class="text">Total diary rewatches</span>
                     </a>
                     <a href="//letterboxd.com/{{user._id}}/films/reviews/">
-                        <span class="number">{{ user.stats.rev }}</span>
+                        <span class="number">{{ user.stats2.rev }}</span>
                         <span class="text">Total diary reviews</span>
                     </a>
                     <a href="//letterboxd.com/{{user._id}}/films/films/by/entry-rating/">
-                        <span class="number">{{ user.stats.rat }}</span>
+                        <span class="number">{{ user.stats2.rat }}</span>
                         <span class="text">Total diary ratings</span>
                     </a>
                 </div>
