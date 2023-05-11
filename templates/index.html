@@ -127,7 +127,7 @@
                 </div>
             </section>
             {% if year == '' %}
-            {% if ('rat' in user.stats) and ((user.stats.rew > 0) or (user.stats.rev > 0) or (user.stats.rat > 0)) %}
+            {% if ('rat' in user.stats or 'rev' in user.stats or 'rew' in user.stats) and ((user.stats.rew > 0) or (user.stats.rev > 0) or (user.stats.rat > 0)) %}
             <section class="sectionStats">
                 <div class="sepline"><div class="line"></div></div>
                 <div class="numbersStats" style="margin-top:0 !important;">
