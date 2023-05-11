@@ -73,7 +73,7 @@ def creaPrediction(usery):
                     j = {}
                     j['uri'] = x['uri']
                     j['poster'] = x['poster']
-                    j['perc'] = int(movie[1] * 95)
+                    j['perc'] = int(movie[1] * 90)
                     top.append(j)
                     #top2.append({'_id': x['_id'], 'perc': int(movie[1] * 100)})
                     z = z + 1
