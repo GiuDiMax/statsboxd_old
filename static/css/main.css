@@ -2063,4 +2063,19 @@ span{
         width:85%;
     }
 
+    .decadeLeft{
+        display: flex;
+        flex-direction: row;
+        flex-basis: 100%;
+        width: 95%;
+        align-items: flex-end;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+    .decadeLeft a{
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+
 }
