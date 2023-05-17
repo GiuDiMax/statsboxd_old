@@ -152,9 +152,9 @@ model.compile(loss='mean_squared_error', optimizer='adam')
 #early_stopping = EarlyStopping(monitor='val_loss', patience=1, verbose=1, mode='min')
 model.fit([train['user_id'], train['movie_id']], train['rating'],
           validation_data=([test['user_id'], test['movie_id']], test['rating']),
-          epochs=2, verbose=1,
+          epochs=1, verbose=1,
           #callbacks=[early_stopping],
-          batch_size=32)
+          batch_size=64)
 
 obj = db.Users.aggregate([
     {'$match': {'watched.1': {'$exists': True}}},
