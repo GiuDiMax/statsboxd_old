@@ -99,7 +99,10 @@ def main_collage(username):
     if red is not None:
         return redirect(red, code=302)
     else:
-        return send_file("utils/tmp.jpg", mimetype='image/jpg')
+        try:
+            return send_file("utils/tmp.jpg", mimetype='image/jpg')
+        except:
+            return send_file("/tmp/tmp.jpg", mimetype='image/jpg')
 
 
 @app.route('/', methods=['POST', 'GET'])
