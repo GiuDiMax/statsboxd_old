@@ -101,7 +101,7 @@ class RecommenderNet(keras.Model):
         return tf.nn.sigmoid(x)
 
 
-movie = pd.read_csv('movies.csv', low_memory=False)
+movie = pd.read_csv('../movies.csv', low_memory=False)
 movielist = movie['movieId'].tolist()
 obj = db.Users.aggregate([
     {'$project': {'_id': 1, 'watched': 1}},
@@ -112,7 +112,7 @@ obj = db.Users.aggregate([
 ])
 dfa = pd.DataFrame(obj)
 dfa.rename(columns={'_id': 'userId'}, inplace=True)
-dfb = pd.read_csv('ratings_clean.csv', low_memory=False)
+dfb = pd.read_csv('../ratings_clean.csv', low_memory=False)
 df1 = pd.concat([dfa, dfb])
 #df1 = pd.read_csv("trainset.csv", header=0, low_memory=False)
 #df1 = df1.sample(frac=1)
@@ -168,7 +168,7 @@ if predict_sample:
     print("====" * 9)
     for i in range(2):
         #print("Testing Model with 1 user")
-        movie_df = pd.read_csv("movies.csv")
+        movie_df = pd.read_csv("../movies.csv")
         user_id = "new_user_" + str(i)
         movies_watched_by_user = df.sample(500)
         movies_not_watched = movie_df[
@@ -207,7 +207,7 @@ if predict_sample:
             print(row.uri)
         print("==="* 9)
 if fullpredict:
-    movie_df = pd.read_csv("movies.csv")
+    movie_df = pd.read_csv("../movies.csv")
     obj = db.Users.aggregate([{'$project': {'_id': 1}}])
     userslist = []
     for x in obj:
