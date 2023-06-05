@@ -37,7 +37,7 @@ def rimuovimedia(df, movielist):
 
 def createAlgo(populate=False, algo=False, for_tf=False):
     if algo:
-        df = pd.read_csv('movies.csv', low_memory=False)
+        df = pd.read_csv('../movies.csv', low_memory=False)
         movielist = df['movieId'].tolist()
         obj = db.Users.aggregate([
             {'$project': {'_id': 1, 'watched': 1}},
@@ -52,7 +52,7 @@ def createAlgo(populate=False, algo=False, for_tf=False):
         dfx.rename(columns={'_id': 'userId'}, inplace=True)
         #dfx = dfx.drop(columns=['uri', 'average']).dropna().sort_values(by=['userId'])
         #userslist = dfx.drop_duplicates(subset=['userId'])['userId'].tolist()
-        df = pd.read_csv('ratings_clean.csv', low_memory=False)
+        df = pd.read_csv('../ratings_clean.csv', low_memory=False)
         df = pd.concat([df, dfx])
         #df = rimuovimedia(df, movielist)
         filename = 'trainset.csv'
@@ -124,7 +124,7 @@ def predictUser(username, algo, watched_list=None):
                 return
         watched = pd.DataFrame(watched_list)
         watched = watched.rename(columns={'id': 'movieId'})
-    movies = pd.read_csv('movies.csv', low_memory=False)
+    movies = pd.read_csv('../movies.csv', low_memory=False)
     unwatched = pd.merge(movies, watched, on='movieId', how="outer", indicator=True).query('_merge=="left_only"')
     unwatched = unwatched['movieId'].tolist()
     prediction_set = [(username, str(x), '0') for x in unwatched]
