@@ -1,25 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Error - Statsboxd</title>
-        <link rel="stylesheet" href="/static/css/main.css?q=11.0.0">
-        <link rel="stylesheet" href="/static/css/font.css?q=1.1">
-        <link rel="shortcut icon" href="/static/favicon.ico">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div id="isMobile"></div>
-        <div class="headerbar">
-            <a href="/">
-                <img src="/static/images/logo.webp" alt="statsboxdlogo" class="logoup"/>
-            </a>
-        </div>
-        <div class="shortTitle">
-            <h2>Error - wrong username</h2>
-            <h3>Please check your username.</h3>
-        </div>
-    </body>
-    <footer>
-    </footer>
-</html>
+{% extends "template1.html" %}
+
+{% block head %}
+<title>Wrong username- Statsboxd</title>
+{% endblock %}
+
+{% block content %}
+<div class="shortTitle">
+    <h2>Error - wrong username</h2>
+    <h3>Please check your username.</h3>
+</div>
+{% endblock %}

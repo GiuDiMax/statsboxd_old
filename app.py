@@ -27,8 +27,6 @@ def main(username):
             sys.exit()
         if username.lower() == 'faq':
             return render_template('faq.html')
-        if username.lower() == 'contact':
-            return render_template('contact.html')
         print("requested: " + username.lower())
         if username.lower() not in users_list:
             return render_template('noallowed.html')

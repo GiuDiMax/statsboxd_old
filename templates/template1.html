@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/static/css/main.css?q=11.0.1">
+        <link rel="stylesheet" href="/static/css/font.css?q=1.2">
+        <link rel="shortcut icon" href="/static/favicon.ico">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,200,0,0">
+        <!--<script async src="https://www.googletagmanager.com/gtag/js?id=G-BMKEGDRHD5"></script>-->
+        {% block head %}
+        {% endblock %}
+    </head>
+
+    <body>
+        <div id="isMobile"></div>
+        <div class="headerbar">
+            <a href="/">
+                <img src="/static/images/logo.webp" alt="statsboxdlogo" class="logoup"/>
+            </a>
+            {% block headerbar %}
+            {% endblock %}
+        </div>
+        <div class="loader hide"></div>
+
+        {% block content %}
+        {% endblock %}
+
+        <footer>
+            <script>
+                document.addEventListener('DOMContentLoaded', () => load_layout());
+                function load_layout(){
+                }
+            </script>
+            {% block script %}
+            {% endblock %}
+        </footer>
+
+    </body>
+</html>

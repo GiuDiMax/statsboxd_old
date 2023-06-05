@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        {% if year == '' %}
+            <title>&lrm;{{ user.name }}’s all-time stats &bull; Statsboxd</title>
+        {% else %}
+            <title>&lrm;{{ user.name }}'s {{ yearnum }} in review &bull; Statsboxd</title>
+        {% endif %}
+        <script src="//code.jquery.com/jquery-3.6.1.min.js"></script>
+        <!--<link rel="stylesheet" href="/static/css/font.css?q=1.0.0">-->
+        <!--<link rel="stylesheet" href="{{ url_for('static', _external=True, _scheme='https', filename='css/main.css', q='11.0.0') }}">-->
+        <!--<link rel="stylesheet" href="{{ url_for('static', _external=True, _scheme='https', filename='css/main.css', q='1.5.0') }}">-->
+        <link rel="stylesheet" href="/static/css/main.css?q=11.0.1">
+        <link rel="stylesheet" href="/static/css/font.css?q=1.2">
+        <link rel="shortcut icon" href="/static/favicon.ico">
+        <link rel="stylesheet" href="/static/js/jquery-jvectormap-2.0.5.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,200,0,0">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/brands.min.css">
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMKEGDRHD5"></script>
+        <!--<script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-BMKEGDRHD5');
+        </script>-->
+    </head>
+
+    <body>
+        <div id="isMobile"></div>
+        <div class="headerbar">
+            <a href="/">
+                <img src="{{ url_for('static', _external=True, _scheme='https',  filename='images/logo.webp') }}" alt="statsboxdlogo" class="logoup"/>
+            </a>
+            <div class="navbar">
+                <a href="//letterboxd.com/giudimax/">Project made by GiuDiMax</a>
+                <a href="/faq">FAQ</a>
+                <!--<a href="/contact">Contact Me</a>-->
+                <a href="https://t.me/giudimax">Contact Me</a>
+                <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="giudimax" data-color="#5F7FFF" data-emoji="🚀"  data-font="Lato" data-text="Support my projects" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script>
+            </div>
+        </div>
+        <div class="loader hide"></div>
+        <div id="content" class="content" >
+            <div class="sfondo"></div>
+            <section class="mainTitlesec">
+                <div class="mainT">
+                    {% if year == '' %}
+                        <h1 class="mainTitle">A Life in Film</h1><div class="popupdiv ppalltime">
+                    {% else %}
+                        <h1 class="mainTitle yearTitle">{{ yearnum }}</h1><div class="popupdiv ppyear">
+                    {% endif %}
+                        <a href="#" class="popupButton" data-show="popupYear"><div class="arrow-down"></div></a>
+                        <div id="popupYear" class="popupYear hide">
+                            <div class="arrow-up"></div>
+                            <div class="listaAnni">
+                                <div>
+                                        <a href="/{{ user._id }}">All time</a>
+                                    {% for y in user.years %}
+                                        <a href="/{{ user._id }}/{{ y }}">{{ y }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 {% if year == '' %}
+                  <h3 class="arrowcheck">Added new stats! Do you have any new ones to suggest? Contact me.</h3>
+                 {% endif %}
+                <div class="mainSubtitle">
+                    <a href="{{ lbdurl }}/{{ user._id }}"><img class="avatar" src="{{ user.image }}" alt="{{ user._id }}"/></a>
+                    <span><a href="{{ lbdurl }}/{{ user._id }}" class="clickable">{{ user.name }}</a>'s
+                        {% if year == '' %}
+                            all-time stats
+                        {% else %}
+                            year in review
+                        {% endif %}
+                    </span>
+                </div>
+                {% if year == '' %}
+                    <div class="buttonstart">
+                        <a class="clickable seeallbutton updatebutton" href="/{{ user._id }}/update{% if 'fullUpdate' in user %}?last={{ user.fullUpdate.strftime('%Y-%m-%d') }}{% endif %}"><span class="material-symbols-rounded icon">sync</span>Update</a>
+                        <a class="clickable seeallbutton updatebutton collagebutton" href="/{{ user._id }}/collage"><span class="fa-brands fa-instagram icon icon2"></span>Generate last month collage</a>
+                    </div>
+                {% endif %}
+                <div class="numbersStats">
+                    <a href="//letterboxd.com/{{user._id}}/films">
+                        <span class="number">{{ format_comma(user['stats'+year].total[0].movies) }}</span>
+                        <span class="text" >Films</span>
+                    </a>
+                    <div>
+                        <span class="number">{{ format_comma(user['stats'+year].total[0].runtime/60) }}</span>
+                        <span class="text">Hours</span>
+                    </div>
+                    {% if year == '' %}
+                    <div>
+                        <span class="number">{{ format_comma(user['stats'+year].totalDirectors[0].count) }}</span>
+                        <span class="text">Directors</span>
+                    </div>
+                    <div>
+                        <span class="number">{{ format_comma(user['stats'+year].totalCountry[0].count) }}</span>
+                        <span class="text">Countries</span>
+                    </div>
+                    {% if 'streak' in user.extra_stats %}
+                    <a href="//letterboxd.com/{{user._id}}/films/diary/for/{{ user.extra_stats['streak'].year }}/{{ user.extra_stats['streak'].month }}/" class="mostrap1">
+                        <div class="pannello p1"><div class="testo">At least one film per week, starting {{ numtomonth(user.extra_stats['streak'].month) }} {{ user.extra_stats['streak'].year }}</div></div>
+                        <span class="number">{{ user.extra_stats['streak'].max }}w</span>
+                        <span class="text" >Longest Streak</span>
+                    </a>
+                    {% endif %}
+                    {% if '2+filmdays' in user.extra_stats %}
+                    <div>
+                        <span class="number">{{ user.extra_stats['2+filmdays'].count }}</span>
+                        <span class="text">2+ Film Days</span>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                        <div>
+                            <span class="number">{{ format_comma(user['stats'+year].liked[0].sum) }}</span>
+                            <span class="text">Films liked</span>
+                        </div>
+                        <div>
+                            <span class="number">{{ format_comma(user['stats'+year].review[0].sum) }}</span>
+                            <span class="text">Reviews</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </section>
+            {% if year == '' %}
+            {% if ('rat' in user.stats2 or 'rev' in user.stats2 or 'rew' in user.stats2) and ((user.stats2.rew > 0) or (user.stats2.rev > 0) or (user.stats2.rat > 0)) %}
+            <section class="sectionStats">
+                <div class="sepline"><div class="line"></div></div>
+                <div class="numbersStats" style="margin-top:0 !important;">
+                    <a href="//letterboxd.com/{{user._id}}/films/diary/by/diary-count/">
+                        <span class="number">{{ user.stats2.rew }}</span>
+                        <span class="text">Total diary rewatches</span>
+                    </a>
+                    <a href="//letterboxd.com/{{user._id}}/films/reviews/">
+                        <span class="number">{{ user.stats2.rev }}</span>
+                        <span class="text">Total diary reviews</span>
+                    </a>
+                    <a href="//letterboxd.com/{{user._id}}/films/films/by/entry-rating/">
+                        <span class="number">{{ user.stats2.rat }}</span>
+                        <span class="text">Total diary ratings</span>
+                    </a>
+                </div>
+            </section>
+            {% endif %}
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>By release year</span>
+                    <div class="line"></div>
+                    <span class="clickable active" data-show="releaseYear" data-show2="years1" data-hide="yearChart" data-hide2="years2">Films</span>
+                    <span class="clickable" data-show="ratingYear" data-show2="years1" data-hide="yearChart" data-hide2="years2">Ratings</span>
+                    {% if user.extra_stats.diaryperyear|length > 0 %}
+                    <span class="clickable" data-show="diaryYear" data-show2="years2" data-hide="yearChart" data-hide2="years1">Diary</span>
+                    {% endif %}
+                </div>
+                <div class="chart-container">
+                    <div id="releaseYear" class="yearChart"></div>
+                    <div id="ratingYear" class="yearChart hide"></div>
+                    <div id="diaryYear" class="yearChart hide"></div>
+                </div>
+                <div class="years">
+                    <span class="years1">{{ user['stats'+year].totalyear[0]._id }}</span>
+                    <span class="years1">{{ user['stats'+year].totalyear[-1]._id }}</span>
+                    {% if user.extra_stats.diaryperyear|length > 0 %}
+                    <span class="years2 hide">{{ user.extra_stats.diaryperyear[0]._id }}</span>
+                    <span class="years2 hide">{{ user.extra_stats.diaryperyear[-1]._id }}</span>
+                    {% endif %}
+                </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Recommended Films</span>
+                    <div class="line"></div>
+                    <span class="clickable active" data-show="sug" data-hide="recSec">Collaborative Filter</span>
+                    <span class="clickable" data-show="sug2" data-hide="recSec">Item-Based</span>
+                    <!--<span class="clickable" data-show="sug3" data-hide="recSec">Mixed</span>-->
+                </div>
+                {% for type in [[user['sug'],'sug',''], [user['sug2'],'sug2','hide']] %}
+                <section id="{{ type[1] }}" class="recSec {{type[2]}}">
+                    {% if type[0]|length > 0 %}
+                    <div class="filmList hideLast">
+                            {% for element in type[0][:12] %}
+                                <div class="singleFilm recommend" >
+                                    <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                        <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https',  filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                    </a>
+                                    <div class="sottofilm">
+                                        <img src="{{ url_for('static', _external=True, _scheme='https',  filename='images/orangeheart.jpg') }}" /><span class="sottotitolo cuoricino">{{ element.perc }}%</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                    </div>
+                    <div class="filmList hideLastfour hide" id="{{ type[1] }}more">
+                            {% for element in type[0][10:48] %}
+                                <div class="singleFilm recommend" >
+                                    <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                        <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https',  filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                    </a>
+                                    <div class="sottofilm">
+                                        <img src="{{ url_for('static', _external=True, _scheme='https', filename='images/orangeheart.jpg') }}" /><span class="sottotitolo cuoricino">{{ element.perc }}%</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                    </div>
+                    <div class="noflex">
+                        <a class="clickable seeallbutton {{ type[1] }}btn" data-show="{{ type[1] }}more" data-hide="{{ type[1] }}btn">see more</a>
+                    </div>
+                    {% else %}
+                        <span class="norecctext">As you are a new user, ML recommendations are not yet available, but they will be soon.</span>
+                    {% endif %}
+                </section>
+                {% endfor %}
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Highest rated decades</span>
+                    <div class="line"></div>
+                </div>
+                {% for element in user['stats'+year].topDecade %}
+                    <div class="decade">
+                        <div class="decadeLeft">
+                            <a href="//letterboxd.com/{{ user._id }}/films/rated/.5-5/decade/{{ element._id }}0s/by/entry-rating/" class="decadeTitle">{{ element._id }}0s</a>
+                            <div><img src="/static/images/graystar.webp" /><span class="decadeAverage">Average {{ "%.2f"|format(element.average/2|float) }}</span></div>
+                        </div>
+                        <div class="decPosters">
+                        {%for element2 in element.posters%}
+                            <a class="poster decPosterImg" href="{{ lbdurl }}film/{{ element2.uri }}">
+                                <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element2.img, 70, 105) }}" alt="{{ element.uri }}" />
+                            </a>
+                        {%endfor%}
+                        </div>
+                    </div>
+                {%endfor%}
+            </section>
+            {% else %}
+                <section class="sectionStats">
+                    <div class="sepline">
+                        <span>Highest rated films</span>
+                        <div class="line"></div>
+                        <span class="clickable active" data-show="currentYearHRF" data-hide="secHRF">{{ yearnum }}</span>
+                        <span class="clickable" data-show="pastYearHRF" data-hide="secHRF">Older</span>
+                    </div>
+                    <div class="">
+                        <div id="currentYearHRF" class="secHRF filmList">
+                            {%for element in user['stats'+year].topRatedCurrentYear %}
+                                <div class="singleFilm" >
+                                    <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ element.uri }}">
+                                        <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                    </a>
+                                    <div>
+                                        <span class="sottotitolo stellineBig">{{ numToStars(element.rating) }}</span>
+                                    </div>
+                                </div>
+                            {%endfor%}
+                        </div>
+                        <div id="pastYearHRF" class="secHRF filmList hide">
+                             {%for element in user['stats'+year].topRatedOtherYears %}
+                                <div class="singleFilm" >
+                                    <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ element.uri }}">
+                                        <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                    </a>
+                                    <div>
+                                        <span class="sottotitolo stellineBig">{{ numToStars(element.rating) }}</span>
+                                    </div>
+                                </div>
+                            {%endfor%}
+                        </div>
+                    </div>
+                </section>
+                <section class="sectionStats">
+                    <div class="sepline">
+                        <span>Films by week</span>
+                        <div class="line"></div>
+                    </div>
+                    <div class="chart-container weekChartcontainer">
+                        <div id="watchedWeek" class="weekChart"></div>
+                    </div>
+                    <div class="years">
+                        <span>Jan</span>
+                        <span>Dec</span>
+                    </div>
+                    <div class="watchedDivided">
+                        <div class="wd1">
+                            <div class="wd1x">
+                                <span class="big">{{ user['stats'+year].total[0].movies }}</span>
+                                <span class="small">Films watched</span>
+                            </div>
+                            <img src="{{ url_for('static', _external=True, _scheme='https', filename='images/arrow.jpg') }}" alt="arrow"/>
+                            <div class="wd1x">
+                                <span class="big">{{ '{0:0.1f}'.format((user['stats'+year].total[0].movies)/12) }}</span>
+                                <span class="small">Average per month</span>
+                            </div>
+                            <img src="{{ url_for('static', _external=True, _scheme='https', filename='images/arrow.jpg') }}" alt="arrow"/>
+                            <div class="wd1x">
+                                <span class="big">{{ '{0:0.1f}'.format((user['stats'+year].total[0].movies)/53) }}</span>
+                                <span class="small">Average per week</span>
+                            </div>
+                        </div>
+                        <div class="wd2"><div id="watchedDayWeek" class="weekDayChart"></div></div>
+                    </div>
+                </section>
+                <section class="sectionStats">
+                    <div class="sepline">
+                        <span>Milestones</span>
+                        <div class="line"></div>
+                    </div>
+                    <div class="msy">
+                        <div class="msx msx1">
+                            <span>First Film</span>
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ user['stats'+year].firstMovie[0].uri }}">
+                                    <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year].firstMovie[0].poster, 110, 165) }}" alt="{{ user['stats'+year].firstMovie[0].uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo bigsotto">{{ date_toshort(user['stats'+year].firstMovie[0].date) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% if user['stats'+year].milestones|length > 0 %}
+                        <div class="msx msx2">
+                            <span>Diary Milestones</span>
+                            <div class="filmList mw2">
+                                {%for element in user['stats'+year].milestones %}
+                                    <div class="singleFilm" >
+                                        <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ element._id }}/activity">
+                                            <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element._id }}" />
+                                        </a>
+                                        <div>
+                                            <span class="sottotitolo bigsotto">{{ (loop.index)*50 }}th <span class="sottotitolo_milestones hideMobile">· {{ date_toshort(element.date) }}</span></span>
+                                        </div>
+                                    </div>
+                                {%endfor%}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="msx msx1">
+                            <span>Last Film</span>
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ user['stats'+year].lastMovie[0].uri }}">
+                                    <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year].lastMovie[0].poster, 110, 165) }}" alt="{{ user['stats'+year].lastMovie[0].uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo bigsotto">{{ date_toshort(user['stats'+year].lastMovie[0].date) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if user['stats'+year].mostWatched|length > 0 %}
+                    <div class="msy">
+                    <div class="msx msxfull">
+                        <span>Most Watched</span>
+                        <div class="filmList mw2">
+                            {%for element in user['stats'+year].mostWatched %}
+                                <div class="singleFilm" >
+                                    <a class="poster" href="{{ lbdurl }}{{ user._id }}/film/{{ element.uri }}/activity">
+                                        <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                    </a>
+                                    <div>
+                                        <span class="sottotitolo bigsotto">{{ element.sum }} times</span>
+                                    </div>
+                                </div>
+                            {%endfor%}
+                        </div>
+                    </div>
+                    </div>
+                    {% endif %}
+                </section>
+            {% endif %}
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Genres, Countries & Languages</span>
+                    <div class="line"></div>
+                </div>
+                <div class="attributes-chart threeColumns">
+                    {% for type in [['genres_main', 'genre', 'rgb(0, 224, 84)'], ['country','country', 'rgb(64, 188, 244)'], ['language','language', 'rgb(255, 128, 0)']] %}
+                    <div class="labels2">
+                        {% set num = 10 %}
+                        {% if  user['stats'+year]['mostWatched'+type[0]]|length < 10 %}
+                            {% set num =  user['stats'+year]['mostWatched'+type[0]]|length %}
+                        {% endif %}
+                        {% for i in range(num) %}
+                            <div>
+                                <a class="clickable label1" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}{{ type[1] }}/{{ user['stats'+year]['mostWatched'+type[0]][i]['_id'] }}">
+                                    {{ firstUpper(user['stats'+year]['mostWatched'+type[0]][i]['_id']) }}
+                                </a>
+                                <div>
+                                    <div class="genresFilms" style="width: {{ user['stats'+year]['mostWatched'+type[0]][i]['sum']*100/user['stats'+year]['mostWatched'+type[0]][0]['sum'] }}%;"><span>{{ user['stats'+year]['mostWatched'+type[0]][i]['sum'] }} films</span></div>
+                                    <div class="progressBarWithVal" style="width:{{ user['stats'+year]['mostWatched'+type[0]][i]['sum']*100/user['stats'+year]['mostWatched'+type[0]][0]['sum'] }}%; background-color:{{ type[2] }};"></div>
+                                </div>
+                            </div>
+                        {%endfor%}
+                    </div>
+                    {%endfor%}
+                </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Themes & Nanogenres®</span>
+                    <div class="line"></div>
+                </div>
+                <div class="attributes-chart twocolumn">
+                    {% for type in ['theme', 'nanogenre'] %}
+                    <div class="labels">
+                        {% set num = 10 %}
+                        {% if  user['stats'+year]['mostWatchedgenres_' + type]|length < 10 %}
+                            {% set num =  user['stats'+year]['mostWatchedgenres_' + type]|length %}
+                        {% endif %}
+                        {% for i in range(num) %}
+                                <a class="clickable label2" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}{{ user['stats'+year]['mostWatchedgenres_' + type][i]['type'] }}/{{ user['stats'+year]['mostWatchedgenres_' + type][i]['uri'] }}">
+                                    <span class="leftText">
+                                        {{ firstUpper(user['stats'+year]['mostWatchedgenres_' + type][i]['name']) }}
+                                    </span>
+                                    <span class="bold right">
+                                        {{ user['stats'+year]['mostWatchedgenres_' + type][i]['sum'] }} films
+                                    </span>
+                                    <div class="labcontainer" style="width:{{ user.stats['mostWatchedgenres_' + type][i]['sum'] * 100 /user.stats['mostWatchedgenres_' + type][0]['sum'] }}%;"></div>
+                                </a>
+                        {%endfor%}
+                    </div>
+                     {%endfor%}
+                </div>
+            </section>
+            {% if year == '' %}
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>List progress</span>
+                    <div class="line"></div>
+                </div>
+                <div class="pielists">
+                    {%for element in user['stats'+year].statsLists%}
+                        <div class="donut"
+                             style="background:
+                                     conic-gradient(#40bcf4 0deg {{ perctodeg(element.perc) }}deg,
+                                                    #303c44 {{ perctodeg(element.perc) }}deg 360deg);">
+                            <a class="hole" href="{{  lbdurl }}/{{ element._id }}">
+                                    <span class="listtitle">{{ element.name }}</span>
+                                    <span class="listperc">{{ valtoperc(element.perc) }}%</span>
+                                    <span class="listnum">{{ element.watched }} of {{ element.num }}</span>
+                            </a>
+                        </div>
+                    {%endfor%}
+                </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Collections</span>
+                    <div class="line"></div>
+                    <!--<span class="clickable active" data-show="mostPopularCollection" data-hide="collectionsx">Most Popular</span>-->
+                    <span class="clickable active" data-show="completeCollection" data-hide="collectionsx">Complete</span>
+                    <span class="clickable" data-show="almostCollection" data-hide="collectionsx">Almost Complete</span>
+                </div>
+                <div class="collections">
+                {% for elementx in user['stats'].collections %}
+                    <div id="{{ elementx['_id'] }}Collection" class="collectionsx {% if elementx['_id'] != 'complete' %}hide{% endif %}">
+                            {%for element in elementx.collections%}
+                                <div class="singleCollection" >
+                                    <a class="threeposters" href="{{ lbdurl }}films/in/{{ element['_id'] }}/by/release-earliest/size/large/">
+                                        {% for poster in element.posters %}
+                                            <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster_70.jpg') }}" data-src="{{ replaceSize(poster, 70, 105) }}" alt="" />
+                                        {% endfor %}
+                                    </a>
+                                    <span>
+                                        <a class="name" href="{{ lbdurl }}films/in/{{ element['_id'] }}/by/release-earliest/size/large/">
+                                            {{ element['name'] }}
+                                        </a>
+                                        {{ element['num'] }} watched
+                                    </span>
+                                </div>
+                            {%endfor%}
+                    </div>
+                {% endfor %}
+                </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Most Watched</span>
+                    <div class="line"></div>
+                </div>
+                <div class="filmList hideLast2">
+                        {% for element in user['mostWatched'] %}
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                    <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo bigsotto">{{ element.sum }} times</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                </div>
+                <div class="noflex">
+                    <a class="clickable seeallbutton" href="{{ lbdurl}}{{ user._id }}/films/diary/by/diary-count/">see in diary</a>
+                </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Rated higher then average</span>
+                    <div class="line"></div>
+                </div>
+                <div class="filmList hideLast">
+                        {%for element in user['stats'+year].topToAverage%}
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                    <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo stelline">{{ numToStars(element.rating) }}</span>
+                                    <span class="sottotitolo">vs {{ element.media }}</span>
+                                </div>
+                            </div>
+                        {%endfor%}
+                </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Rated lower then average</span>
+                    <div class="line"></div>
+                </div>
+                <div class="filmList hideLast">
+                        {%for element in user['stats'+year].flopToAverage%}
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                    <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https',  filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo stelline">{{ numToStars(element.rating) }}</span>
+                                    <span class="sottotitolo">vs {{ element.media }}</span>
+                                </div>
+                            </div>
+                        {%endfor%}
+                </div>
+            </section>
+            {% else %}
+                <section class="sectionStats">
+                <div class="sepline">
+                    <span>Breakdown</span>
+                    <div class="line"></div>
+                </div>
+                    <div class="breakdown">
+                        <div class="piecharts">
+                            <div class="piechart">
+                                <div class="legend">
+                                    <span class="green">{{ yearnum }} Releases</span>
+                                    <span class="">Older</span>
+                                </div>
+                                <div id="currentYearpie" class="piech2"></div>
+                            </div>
+                            <div class="piechart">
+                                <div class="legend">
+                                    <span class="green">Watches</span>
+                                    <span class="">Re-watches</span>
+                                </div>
+                                <div id="rewatchpie" class="piech2"></div>
+                            </div>
+                            <div class="piechart">
+                                <div class="legend">
+                                    <span class="green">Reviewed</span>
+                                    <span class="">Not Reviewed</span>
+                                </div>
+                                <div id="reviewpie" class="piech2"></div>
+                            </div>
+                        </div>
+                        <div class="ratingSpreadsection">
+                            <img src="{{ url_for('static', _external=True, _scheme='https', filename = 'images/1stars.png') }}" alt="1star"/>
+                            <div id="ratingSpread" class="ratingSpread"></div>
+                            <img src="{{ url_for('static', _external=True, _scheme='https', filename = 'images/5stars.png') }}" alt="5stars"/>
+                        </div>
+                        <span class="linetitle">Rating Spread</span>
+                    </div>
+                </section>
+            {% endif %}
+            {%for role in [['actor', 'Stars', 'a', 'actors'], ['director', 'Directors', 'd', 'crew_director']]%}
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>{{ role[1] }}</span>
+                    <div class="line"></div>
+                    <span class="clickable active" data-show="{{ role[0] }}sWatch" data-hide="{{ role[0] }}sbis">Most Watched</span>
+                    <span class="clickable" data-show="{{ role[0] }}sRat" data-hide="{{ role[0] }}sbis">Highest Rated</span>
+                </div>
+                <div class="{{ role[0] }}s2">
+                    {%for type in [['Watch', 'mostWatched', 'w', ''], ['Rat', 'topRated', 'r', 'hide']] %}
+                    <section id="{{ role[0] }}s{{ type[0] }}" class="{{ role[0] }}sbis {{ type[3] }}">
+                        {%for num in [['1', ''], ['2', 'hide']]%}
+                        <div id="{{ role[0] }}s{{ type[0] }}{{ num[0] }}" class="{{ role[0] }}s people {{ num[1] }}">
+                            {% if num[0] == '1' %}
+                                {% set list = user['stats'+year][type[1]+ role[3]][:10] %}
+                            {% else %}
+                                {% set list = user['stats'+year][type[1]+ role[3]][10:] %}
+                            {% endif %}
+                            {%for element in list%}
+                                <div class="container_people">
+                                    <a href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">
+                                        <img class="holeperson lazy" src="{{ url_for('static', _external=True, _scheme='https', filename = 'images/'+role[0]+'.jpg') }}"
+                                            {% if 'img' in element %}
+                                                 data-src="//image.tmdb.org/t/p/w185/{{ element.img }}"
+                                            {% endif %}
+                                        alt="{{ element._id }}"/>
+                                    </a>
+                                        {% if 'name' in element %}
+                                            <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.name }}</a>
+                                        {% else %}
+                                            <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ firstUpperBis(element._id) }}</a>
+                                        {% endif %}
+                                    {% if type[2]=='w' %}
+                                        <a class="sottotitolo" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.sum }} films</a>
+                                    {% else %}
+                                        <span class="sottotitolo">★ {{ "%.1f"|format(ifNull0_divide2(element.avg)) }}</span>
+                                    {% endif %}
+                                </div>
+                            {%endfor%}
+                        </div>
+                        {%endfor%}
+                        <div class="noflex">
+                            <a class="clickable {{ role[2] }}{{ type[2] }}2 seeallbutton" data-show="{{ role[0] }}s{{ type[0] }}2" data-hide="{{ role[2] }}{{ type[2] }}2">see more</a>
+                        </div>
+                    </section>
+                    {%endfor%}
+                </div>
+            </section>
+            {%endfor%}
+            {% if year == '' %}
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Studios</span>
+                    <div class="line"></div>
+                    <!--<span class="clickable active" data-show="mostWatchedStudios" data-hide="studiosStats">Most Watched</span>
+                    <span class="clickable" data-show="topRatedStudios" data-hide="studiosStats">Highest Rated</span>-->
+                </div>
+                <section class="studiosStats" id="mostWatchedStudios"><div id="studiosBubble" class="studiosBubble"></div></section>
+
+            </section>
+            {% endif %}
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Crew & Studios</span>
+                    <div class="line"></div>
+                    <span class="clickable active" data-show="crewmostWatched" data-hide="crewbis">Most Watched</span>
+                    <span class="clickable" data-show="crewtopRated" data-hide="crewbis">Highest Rated</span>
+                </div>
+                {%for type in ['mostWatched', 'topRated'] %}
+                <section id="crew{{ type }}" class="crewbis {% if type == 'topRated' %} hide{% endif %}">
+                    {%for role in roles %}
+                        <div class="role">
+                            <span class="titlerole">{{ role[2] }}</span>
+                            {%for element in user['stats'+year][type+role[0]]%}
+                                <div class="{{ type }}limit {% if loop.index > 5 %}hide{% endif %}">
+                                    <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}/with/{{ role[1] }}/{{ element._id }}">
+                                         {% if 'name' in element %}
+                                            {{ element.name }}
+                                        {% else %}
+                                            {{ firstUpperBis(element._id) }}
+                                        {% endif %}
+                                    </a>
+                                    <span class="sottotitolo">
+                                        {% if type == 'mostWatched' %}
+                                            {{ element.sum }}
+                                        {% else %}
+                                            {{ '%0.1f'| format(zeroIfNone(element.avg)/2) }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            {%endfor%}
+                        </div>
+                    {%endfor%}
+                <div class="noflex">
+                    <a class="clickable {{ type }}btn seeallbutton" data-class-show="{{ type }}limit" data-hide="{{ type }}btn">see more</a>
+                </div>
+                </section>
+                {%endfor%}
+            </section>
+
+            {% if year != '' %}
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Highs and Lows</span>
+                    <div class="line"></div>
+                </div>
+                <div class="highLow">
+                    {% for type in [['bestMovie', 'Highest Average'],['worstMovie', 'Lowest Average'],
+                                    ['mostPopularMovie', 'Most Popular'],['lessPopularMovie', 'Most Obscure']] %}
+                    <div class="singleFilm" >
+                        <span class="suptitle">{{ type[1] }}</span>
+                        <a class="poster" href="{{ lbdurl }}film/{{ user['stats'+year][type[0]][0].uri }}">
+                            {% if 'poster' in user['stats'+year][type[0]][0] %}
+                                <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https',  filename='images/poster.jpg') }}" data-src="{{ replaceSize(user['stats'+year][type[0]][0].poster, 110, 165) }}" alt="{{ user['stats'+year][type[0]][0].uri }}" />
+                            {% else %}
+                                <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" alt="{{ user['stats'+year][type[0]][0].uri }}" />
+                            {% endif %}
+                        </a>
+                        <div class="sottofilm">
+                            {% if 'avg' in user['stats'+year][type[0]][0] %}
+                            <img src="{{ url_for('static', _external=True, _scheme='https', filename='images/orangestar.jpg') }}" /><span class="sottotitolo stellamedia">{{ '{0:0.1f}'.format(user['stats'+year][type[0]][0].avg) }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Rated higher then average</span>
+                    <div class="line"></div>
+                </div>
+                <div class="filmList hideLast">
+                        {%for element in user['stats'+year].topToAverage%}
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                    <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https', filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo stelline">{{ numToStars(element.rating) }}</span>
+                                    <span class="sottotitolo">vs {{ element.media }}</span>
+                                </div>
+                            </div>
+                        {%endfor%}
+                </div>
+            </section>
+            <section class="sectionStats">
+                <div class="sepline">
+                    <span>Rated lower then average</span>
+                    <div class="line"></div>
+                </div>
+                <div class="filmList hideLast">
+                        {%for element in user['stats'+year].flopToAverage%}
+                            <div class="singleFilm" >
+                                <a class="poster" href="{{ lbdurl }}film/{{ element.uri }}">
+                                    <img class="lazy" src="{{ url_for('static', _external=True, _scheme='https',  filename='images/poster.jpg') }}" data-src="{{ replaceSize(element.poster, 110, 165) }}" alt="{{ element.uri }}" />
+                                </a>
+                                <div>
+                                    <span class="sottotitolo stelline">{{ numToStars(element.rating) }}</span>
+                                    <span class="sottotitolo">vs {{ element.media }}</span>
+                                </div>
+                            </div>
+                        {%endfor%}
+                </div>
+            </section>
+            {% endif %}
+
+            <section class="wMap noselect">
+                <span class="wmTitle">World Map</span>
+                <div class="worldmap noselect" id="world-map"></div>
+            </section>
+        </div>
+    </body>
+    <footer>
+        <!--<script src="//cdnjs.cloudflare.com/ajax/libs/highcharts/10.2.1/highcharts.min.js" async onload="chartFunc()"></script>
+        <script src="{{ url_for('static', _external=True, _scheme='https', filename='js/jquery-jvectormap-2.0.5.min.js') }}" async onload="worldMap2()"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js" async onload="lazyLoad2()"></script>-->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highcharts/10.2.1/highcharts.min.js"></script>
+        <script src="{{ url_for('static', _external=True, _scheme='https', filename='js/jquery-jvectormap-2.0.5.min.js') }}"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                //$(".loader").hide(100);
+                //$('.content').show(100);
+
+                var popupOpen = false;
+
+                $('.updatebutton').click(function(){
+                    $('.loader').removeClass('hide');
+                    $('#content').hide();
+                })
+
+                $('.popupButton').click(function(){
+                    if (popupOpen){
+                        $('#popupYear').addClass('hide');
+                        popupOpen = false;
+                    }
+                    else{
+                        $('#popupYear').removeClass('hide');
+                        popupOpen = true;
+                    }
+                })
+
+                $('.clickable').click(function() {
+                    $('.'+$(this).attr('data-hide')).addClass('hide');
+                    $('#'+$(this).attr('data-show')).removeClass('hide');
+                    $('.'+$(this).attr('data-hide2')).addClass('hide');
+                    $('.'+$(this).attr('data-show2')).removeClass('hide');
+                    $('.'+$(this).attr('data-class-show')).removeClass('hide');
+                    $(this).addClass('active');
+                    $(this).siblings().removeClass('active');
+                })
+
+                lazyLoad2();
+                chartFunc();
+                worldMap2();
+
+            })
+
+            function lazyLoad2(){
+                var script = document.createElement('script');
+                script.onload = function () {
+                    lazyLoadFunc();
+                };
+                script.src = "//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js";
+                document.head.appendChild(script);
+            }
+
+            function lazyLoadFunc(){
+                $('.lazy').Lazy();
+            }
+
+            function worldMap2(){
+                var script = document.createElement('script');
+                script.onload = function () {
+                    worldMapx();
+                };
+                script.src = "/static/js/jquery-jvectormap-world-mill.js";
+                document.head.appendChild(script); //or something of the likes
+            }
+
+            function worldMapx() {
+                var isMobile = false;
+                if($('#isMobile').is(':visible')) {
+                    isMobile = true;
+                }
+
+                //WORLDMAP
+                var worldData = {
+                    {%for element in user['stats'+year].totalcountry%}
+                        '{{ element['_id'] }}': {{ element['sum'] }},
+                    {%endfor%}
+                };
+
+                var worldDataUri = {
+                    {%for element in user['stats'+year].totalcountry%}
+                        '{{ element['_id'] }}': '{{ element['uri'] }}',
+                    {%endfor%}
+                };
+
+                $('#world-map').vectorMap({
+                  map: 'world_mill',
+                  backgroundColor: "",
+                  series: {
+                    regions: [{
+                      values: worldData,
+                      scale: ['#007834', '#00e054'],
+                    }]
+                  },
+                  tooltip: {
+                      enabled: false,
+                  },
+                  regionStyle: {
+                    initial: {
+                        fill: '#303c44'
+                    },
+                    hover:{
+                        fill: '#40bcf4'
+                    }
+                  },
+                  onRegionTipShow: function(e, el, code) {
+                      var text = "0"
+                      if (typeof worldDataUri[code] !== 'undefined') {
+                          text = worldData[code]
+                      }
+                      el.html($("<span/>", {'class': 'ttTitle', 'html': el.html()}));
+                      el.append($("<br/>"));
+                      el.append($("<span/>", {'class': 'ttSubtitle', 'html': "Films watched: " + text}));
+                      el.html($("<div/>", {'class': 'maptt', 'html': el.html()}));
+                      el.append($("<div/>", {'class': 'ttPointer'}));
+                      el.html($("<a/>", {'class': 'maptt2', 'onClick':'alert(0);', 'href': 'www.google.com', 'html': el.html()}));
+                  },
+                  onRegionClick: function(e, el, code){
+                      if (!isMobile) {
+                        clickMap(el);
+                      }
+                  },
+                  onMarkerClick: function(e, code){
+                      alert(code);
+                  },
+                });
+
+                function clickMap(el){
+                      if (typeof worldDataUri[el] !== 'undefined') {
+                          {% if year == '' %}
+                              location.href = '{{ lbdurl }}{{ user._id }}/films/country/' + worldDataUri[el] + '/';
+                          {% else %}
+                              location.href = '{{ lbdurl }}{{ user._id }}/films/diary/for/{{ yearnum }}/country/' + worldDataUri[el] + '/by/rating';
+                          {% endif %}
+                      }
+                }
+            }
+
+            function chartFunc() {
+
+                {% if year == '' %}
+
+                //BYYEARCHART
+                Highcharts.chart('releaseYear', {
+                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0},
+                    xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    yAxis: {min: -1, labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    legend:{enabled:false},
+                    title: {text:null},
+                    tooltip: {
+                        //headerFormat: '<div class="ttYear"><span class="ttTitle">{ return parseInt(point.y) } films</span>',
+                        //pointFormat: '<span class="ttSubtitle">Year {point.name}</span>',
+                        //footerFormat: '</div>',
+                        formatter: function(){
+                            return '<div class="ttYear"><span class="ttTitle">' + (parseInt(this.y) - 1).toString() +' films</span>' +
+                                '<span class="ttSubtitle">Year '+ this.points[0].key + '</span></div>'
+                        },
+                        shared: true,
+                        useHTML: true,
+                        shape: 'square',
+                        borderWidth:0,
+                        shadow: false,
+                        backgroundColor: null,
+                    },
+                    plotOptions: {column: {pointPadding: 0.2, borderWidth: 0, borderRadius: 3, groupPadding: 0,}},
+                    series: [{
+                            data: [
+                                {%for element in user['stats'+year].totalyear%}
+                                    {name: "{{ element['_id'] }}", y: {{ (element['sum']) + 1 }},
+                                            {% if (element['sum']) == 0 %}color: "#445566"{% endif %}
+                                    },
+                                {%endfor%}
+                            ],
+                            label: {enabled: false},
+                            color: {
+                                linearGradient: [0, 0, $('.chart-container').width(), 0],
+                                stops: [[0.00, '#00e054'], [1.00, '#3fbcf2']]
+                            },
+                            point: {
+                                events: {
+                                    click: function () {
+                                        location.href = '{{ lbdurl }}{{ user._id }}/films/year/' + this.options.name + "/";
+                                    }
+                                }
+                            }
+                        }],
+                });
+
+                Highcharts.chart('ratingYear', {
+                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0},
+                    xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    yAxis: {min: -1, labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    legend:{enabled:false},
+                    title: {text:null},
+                    tooltip: {
+                        formatter: function(){
+                            return '<div class="ttYear"><span class="ttTitle">Average ' + parseFloat(this.y - 0.1).toFixed(2).toString() +'</span>' +
+                                '<span class="ttSubtitle">Year '+ this.points[0].key + '</span></div>'
+                        },
+                        shared: true,
+                        useHTML: true,
+                        shape: 'square',
+                        borderWidth:0,
+                        shadow: false,
+                        backgroundColor: null,
+                    },
+                    plotOptions: {column: {pointPadding: 0.1, borderWidth: 0, borderRadius: 3, groupPadding: 0.1,}},
+                    series: [{
+                            data: [
+                                {%for element in user['stats'+year].totalyear%}
+                                    {name: "{{ element['_id'] }}", y: {{ ifNull0_divide2(element['average']) + 0.1 }},
+                                            {% if ifNull0_divide2(element['average']) == 0 %}color: "#445566"{% endif %}
+                                    },
+                                {%endfor%}
+                            ],
+                            label: {enabled: false},
+                            color: {
+                                linearGradient: [0, 0, $('.chart-container').width(), 0],
+                                stops: [[0.00, '#ffb860'], [1.00, '#ffe870']]
+                            },
+                            point: {
+                                events: {
+                                    click: function () {
+                                        location.href = '{{ lbdurl }}{{ user._id }}/films/year/' + this.options.name + "/";
+                                    }
+                                }
+                            }
+                        }],
+                });
+
+                Highcharts.chart('diaryYear', {
+                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0},
+                    xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    yAxis: {min: -1, labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    legend:{enabled:false},
+                    title: {text:null},
+                    tooltip: {
+                        //headerFormat: '<div class="ttYear"><span class="ttTitle">{ return parseInt(point.y) } films</span>',
+                        //pointFormat: '<span class="ttSubtitle">Year {point.name}</span>',
+                        //footerFormat: '</div>',
+                        formatter: function(){
+                            return '<div class="ttYear"><span class="ttTitle">' + (parseInt(this.y) - 5).toString() +' films</span>' +
+                                '<span class="ttSubtitle">Year '+ this.points[0].key + '</span></div>'
+                        },
+                        shared: true,
+                        useHTML: true,
+                        shape: 'square',
+                        borderWidth:0,
+                        shadow: false,
+                        backgroundColor: null,
+                    },
+                    plotOptions: {column: {pointPadding: 0.05, borderWidth: 0, borderRadius: 3, groupPadding: 0,}},
+                    series: [{
+                            data: [
+                                {%for element in user.extra_stats.diaryperyear%}
+                                    {name: "{{ element['_id'] }}", y: {{ (element['sum']) + 5 }},
+                                            {% if (element['sum']) == 0 %}color: "#445566"{% endif %}
+                                    },
+                                {%endfor%}
+                            ],
+                            label: {enabled: false},
+                            color: {
+                                linearGradient: [0, 0, $('.chart-container').width(), 0],
+                                stops: [[0.00, '#48FF84'], [1.00, '#06E358']]
+                            },
+                            point: {
+                                events: {
+                                    click: function () {
+                                        location.href = '{{ lbdurl }}{{ user._id }}/films/diary/for/' + this.options.name + "/";
+                                    }
+                                }
+                            }
+                        }],
+                });
+
+                {% else %}
+
+                Highcharts.chart('watchedWeek', {
+                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0},
+                    xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    yAxis: {min: -1, labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    legend:{enabled:false},
+                    title: {text:null},
+                    tooltip: {
+                        //headerFormat: '<div class="ttYear"><span class="ttTitle">{ return parseInt(point.y) } films</span>',
+                        //pointFormat: '<span class="ttSubtitle">Year {point.name}</span>',
+                        //footerFormat: '</div>',
+                        formatter: function(){
+                            return '<div class="ttYear"><span class="ttTitle">' + (parseInt(this.y)).toString() +' films</span>' +
+                                '<span class="ttSubtitle">Week '+ this.points[0].key + '</span></div>'
+                        },
+                        shared: true,
+                        useHTML: true,
+                        shape: 'square',
+                        borderWidth:0,
+                        shadow: false,
+                        backgroundColor: null,
+                    },
+                    plotOptions: {column: {pointPadding: 0.1, borderWidth: 0, borderRadius: 2, groupPadding: 0.1,}},
+                    series: [{
+                            data: [
+                                {%for element in fill_array(user['stats'+year].week, 1, 53) %}
+                                    {name: "{{ element._id }}", y: {{ element.sum }} + 0.1,
+                                            {% if element.sum == 0 %}color: "#445566"{% endif %}
+                                    },
+                                {%endfor%}
+                            ],
+                            label: {enabled: false},
+                            color: {
+                                linearGradient: [0, 0, $('#watchedWeek').width(), 0],
+                                stops: [[0.00, '#00e054'], [1.00, '#3fbcf2']]
+                            },
+                            point: {
+                                events: {
+                                    click: function () {
+                                        location.href = '{{ lbdurl }}{{ user._id }}/films/diary/for/{{ yearnum }}/week/' + this.options.name + "/";
+                                    }
+                                }
+                            }
+                        }],
+                });
+
+                Highcharts.chart('watchedDayWeek', {
+                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0},
+                    xAxis: {
+
+                        categories: ['M','T','W','T','F','S','S'],
+                        labels: {
+                            enabled: true,
+                            y: -55, x: 0,
+                            style: {color: 'white', fontSize: '12px', fontFamily: 'Graphik-Regular-Web'},
+                        },
+                        tickPosition:'inside',
+                        lineColor: 'transparent',
+                    },
+                    legend:{enabled:false},
+                    title: {text:null},
+                    yAxis: {min: -1, labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    tooltip: {
+                        formatter: function(){
+                            return '<div class="ttYear"><span class="ttTitle">' + (parseInt(this.y)).toString() +' films</span></div>'
+                        },
+                        shared: true,
+                        useHTML: true,
+                        shape: 'square',
+                        borderWidth:0,
+                        shadow: false,
+                        backgroundColor: null,
+                    },
+                    plotOptions: {column: {pointPadding: 0.05, borderWidth: 0, borderRadius: 2, groupPadding: 0.05,}},
+                    series: [{
+                            data: [
+                                {%for element in fill_array(user['stats'+year].dayOfWeek, 1, 7) %}
+                                    {name: "{{ element._id }}", y: {{ element.sum }} + 0.1
+                                    },
+                                {%endfor%}
+                            ],
+                            states: {
+                                hover: {
+                                    color: '#00e054',
+                                }
+                            },
+                            color: '#445566',
+                        }],
+                });
+
+                Highcharts.chart('ratingSpread', {
+                    chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0, height: 150},
+                    xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    legend:{enabled:false},
+                    title: {text:null},
+                    yAxis: {min: -1, labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    tooltip: {
+                        formatter: function(){
+                            var stringa = new String("");
+                            for (let i = 1; i < (this.x+1)/2; i++) {stringa += "★";}
+                            if ((this.x+1)/2 > parseInt((this.x+1)/2)) {stringa += "½";} else {stringa += "★";}
+                            return '<div class="ttYear"><span class="ttStars">'+ stringa +'</span><span class="ttStarsSub">' + (parseInt(this.y)).toString() +' films</span></div>'
+                        },
+                        shared: true,
+                        useHTML: true,
+                        shape: 'square',
+                        borderWidth:0,
+                        shadow: false,
+                        backgroundColor: null,
+                    },
+                    plotOptions: {column: {pointPadding: 0, borderWidth: 0, borderRadius: 2, groupPadding: 0.1,}},
+                    series: [{
+                            data: [
+                                {%for element in fill_array(user['stats'+year].rating[1:], 1, 10) %}
+                                    {name: "{{ element._id }}", y: {{ element.sum }} + 0.1
+                                    },
+                                {%endfor%}
+                            ],
+                            states: {
+                                hover: {
+                                    color: '#00e054',
+                                }
+                            },
+                            color: '#445566',
+                            point: {
+                                events: {
+                                    click: function () {
+                                        location.href = '{{ lbdurl }}{{ user._id }}/films/diary/for/{{ yearnum }}/rated/' + String(parseInt(this.options.name)/2) + "/";
+                                    }
+                                }
+                            }
+                        }],
+                });
+
+                {% for type in ['currentYear', 'rewatch', 'review'] %}
+
+                Highcharts.chart('{{ type }}pie', {
+                    chart: {type: 'pie', backgroundColor: 'transparent', margin:0, border:0},
+                    xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    legend:{enabled:false},
+                    title: {text:null},
+                    yAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                    tooltip: {
+                        formatter: function(){
+                            return '<div class="ttYear"><span class="ttPie">' + (this.y * 100).toFixed(1).toString() +'% <span class="gray">('+ parseInt(this.y * {{ user['stats'+year].total[0].movies }}).toString() + ' of {{ user['stats'+year].total[0].movies }})</span></span></div>'
+                        },
+                        //positioner: function () {return { x: 80, y: 50 };},
+                        shared: true, useHTML: true, shape: 'square', borderWidth:0, shadow: false, backgroundColor: null,
+                    },
+                    label: {enabled: false},
+                    plotOptions: {pie: { size: 150, borderWidth: 0, dataLabels: {connectorWidth: 0}}},
+                    series: [{
+                            data: [
+                                {name: '', y: {{ user['stats'+year][type][0].sum/user['stats'+year].total[0].movies }}, color: '#00e054'},
+                                {% if user['stats'+year][type]|length > 1 %}
+                                    {name: '', y: {{ user['stats'+year][type][1].sum/user['stats'+year].total[0].movies  }}, color: '#456'}
+                                {% else %}
+                                    {name: '', y: 0, color: '#456'}
+                                {% endif %}
+                            ,],
+                            states: {hover: {halo: {size:0}, animation: {duration:0}}, inactive: {enabled:false, opacity:1},},
+                        }],
+                    });
+
+                {% endfor %}
+
+                {% endif %}
+
+                var script = document.createElement('script');
+                script.onload = function () {
+                    studioFunc();
+                };
+                script.src = "//cdnjs.cloudflare.com/ajax/libs/highcharts/10.2.1/highcharts-more.min.js";
+                document.head.appendChild(script); //or something of the likes
+
+
+                }
+            function studioFunc(){
+                Highcharts.chart('studiosBubble', {
+                  chart: {type: 'packedbubble', backgroundColor: 'transparent', margin:0, border:0, height: '500px'},
+                  xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                  legend:{enabled:false},
+                  title: {text:null},
+                  yAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
+                  tooltip: {
+                        formatter: function(){
+                            return '<div class="ttYear"><span class="ttTitle">' + this.key +'</span>' +
+                                   '<span class="ttSubtitle">Films watched: '+ (this.y).toString() + '</span></div>'
+                        },
+                      shared: true,
+                      useHTML: true,
+                      shape: 'square',
+                      borderWidth:0,
+                      shadow: false,
+                      backgroundColor: null,
+                  },
+                  plotOptions: {
+                    packedbubble: {
+                        useSimulation: false,
+                        layoutAlgorithm: {bubblePadding:5},
+                      minSize: '10%',
+                      dataLabels: {
+                        enabled: true,
+                        useHTML: true,
+                        formatter: function () {
+                            let image = this.point.extra;
+                            return '<img width="'+this.point.graphic.width*0.7+'" class="bubbleImg"' +
+                                'style="top:-'+((this.point.graphic.height/6)+(Math.pow(this.point.graphic.height,2)*0.001))+'px !important"' +
+                                'src="'+image+'"/>'
+                        }
+                      }
+                    }
+                  },
+                  series: [{data:[
+                          {% for element in user['stats'+year]['mostWatchedstudio'] %}
+                              {name:
+                                {% if 'name' in element %}
+                                    '{{ element.name }}'
+                                {% else %}
+                                    '{{ firstUpperBis(element._id) }}'
+                                {% endif %}
+                              , value: {{ element.sum }},
+                              extrabis: '{{ element._id }}',
+                              {% if element.img %} extra:'{{ url_for('static', _external=True, _scheme='https', filename='images/studios/' + element.img) }}'
+                              {% else %} extra:'{{ url_for('static', _external=True, _scheme='https', filename='images/studios/studio.png') }}'
+                              {% endif %}, color: '#456'},
+                          {% endfor %}
+
+                  ], states: {hover: {halo: {size:0}, animation: {duration:0}}, inactive: {enabled:false, opacity:0.8},},
+                  point: {
+                        events: {
+                            click: function () {
+                                location.href = '{{ lbdurl }}{{ user._id }}/films/with/studio/' + this.extrabis + "/";
+                            }
+                        }
+                    }
+                  }]
+                });
+                $(".bubbleImg").on("error", function(){
+                    $(this).attr('src', '/static/images/studios/studio.png');
+                });
+            }
+        </script>
+    </footer>
+</html>

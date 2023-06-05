@@ -39,6 +39,12 @@ span{
     flex-wrap: nowrap;
     justify-content: space-between;
     gap:40px;
+    align-items: center;
+}
+
+.navbar .bmc-btn{
+    height: auto;
+    padding: 10px;
 }
 
 .navbar a{
@@ -1510,6 +1516,25 @@ span{
     margin-top:10px;
 }
 
+.support_text{
+    font-weight: normal;
+    font-size: 18px;
+    font-family: Graphik-Regular-Web, sans-serif !important;
+}
+
+.support_div{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.support_div .bmc-btn-container {
+    margin-top: 30px;
+}
+
+.support_div .bmc-btn-text{
+    text-align: left !important;
+}
+
 @media only screen and (min-width: 1200px) {
     #isMobile {
         display: none;
@@ -1609,6 +1634,14 @@ span{
         margin-top:10px;
         margin-bottom:5px;
         gap: 15px;
+        flex-basis: 100%;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .navbar .bmc-btn{
+        flex-basis: 100%;
+        font-family: Graphik-Regular-Web, sans-serif;
     }
 
     .navbar a{
@@ -2077,5 +2110,7 @@ span{
         padding-bottom: 0;
         margin-bottom: 0;
     }
+
+
 
 }
