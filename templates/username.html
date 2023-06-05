@@ -1,18 +1,12 @@
-{% extends "template1.html" %}
+{% extends "template_support.html" %}
 
 {% block head %}
 <title>Statsboxd</title>
 {% endblock %}
 
-{% block content %}
-    <div class="shortTitle">
-        <h2>Insert your username after "/" in url</h2>
-        <h3>You can find your username in url of your Letterboxd profile page.</h3>
-        <h3>Example: https://statsboxd.ml/NicolasCage</h3>
-        <h3 style="color:#40bcf4; padding-top:20px;">If you are a new user: please contact the dev, specifying your letterboxd username and this site, via <a href="https://t.me/giudimax" style="font-weight: 600; color:#40bcf4">Telegram</a>. Be kind and wait</h3>
-        <div class="support_div">
-            <span class="support_text">The server where the data is saved and processed has a cost that I support, please consider supporting me.</span>
-            <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="giudimax" data-color="#5F7FFF" data-emoji="🚀"  data-font="Lato" data-text="Support my projects" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script>
-        </div>
-    </div>
+{% block content3 %}
+    <h2>Insert your username after "/" in url</h2>
+    <h3>You can find your username in url of your Letterboxd profile page.</h3>
+    <h3>Example: https://statsboxd.ml/NicolasCage</h3>
+    <h3 style="color:#40bcf4; padding-top:20px;">If you are a new user: please contact the dev, specifying your letterboxd username and this site, via <a href="https://t.me/giudimax" style="font-weight: 600; color:#40bcf4">Telegram</a>. Be kind and wait</h3>
 {% endblock %}
