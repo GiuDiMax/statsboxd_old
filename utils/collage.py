@@ -214,8 +214,12 @@ def collage(username):
         rgb_im.save('tmp.jpg')
         files = {'image': open('tmp.jpg', 'rb')}
     else:
-        rgb_im.save('./utils/tmp.jpg')
-        files = {'image': open('./utils/tmp.jpg', 'rb')}
+        try:
+            rgb_im.save('./utils/tmp.jpg')
+            files = {'image': open('./utils/tmp.jpg', 'rb')}
+        except: #per vercel
+            rgb_im.save('/tmp/tmp.jpg')
+            files = {'image': open('/tmp/tmp.jpg', 'rb')}
 
     '''
     session = requests.Session()
