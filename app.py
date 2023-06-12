@@ -9,7 +9,7 @@ from flask_compress import Compress
 from flask_cdn import CDN
 from utils.tmdb_new_update import updatefromtmdb
 from threading import Thread
-from datetime import datetime
+from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
 app = Flask(__name__)
@@ -23,6 +23,9 @@ Compress(app)
 @app.route('/<username>/', methods=['POST', 'GET'])
 def main(username):
     if '.ico' not in username and 'success' not in username:
+        current_year = date.today().year
+        current_month = date.today().month
+        current_week = 53
         if username.lower() == 'reset':
             sys.exit()
         if username.lower() == 'faq':
@@ -33,10 +36,12 @@ def main(username):
         user = checkUsername(username.lower())
         if (user is not None) and ('diary' in user):
             return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="",
-                                   yearnum=0)
+                                   yearnum=0, current_year=current_year, current_month=current_month,
+                                   current_week=current_week)
         if fullUpdate(username.lower(), False):
             return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/',
-                                   roles=crew_html, year="", yearnum=0)
+                                   roles=crew_html, year="", yearnum=0, current_year=current_year,
+                                   current_month=current_month, current_week=current_week)
         else:
             return render_template('error.html')
     return render_template('username.html')
@@ -63,12 +68,19 @@ def main_year(username, year):
     if '.ico' not in username:
         # if beta_test and username.lower() not in beta_users:
         #    return render_template('username.html')
+        current_year = date.today().year
+        current_month = 12
+        current_week = 53
+        if int(year) == int(current_year):
+            current_month = date.today().month
+            current_week = date.today().isocalendar().week
         user = checkUsername(username.lower())
         if user is not None:
             if 'stats_' + str(year) not in user:
                 return redirect("/" + username)
             return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html,
-                                   year='_' + year, yearnum=year)
+                                   year='_' + year, yearnum=year, current_year=current_year, current_month=current_month,
+                                   current_week=current_week)
         return render_template('loading.html', redirect=(username.lower()))
     return render_template('username.html')
 
