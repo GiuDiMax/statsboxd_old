@@ -27,7 +27,7 @@
                         <div>
                                 <a href="/{{ user._id }}">All time</a>
                             {% for y in user.years %}
-                                <a href="/{{ user._id }}/{{ y }}">{{ y }}</a>
+                                <a href="/{{ user._id }}/{{ y }}">{{ y }}{% if y == current_year %}...{% endif %}</a>
                             {% endfor %}
                         </div>
                     </div>
@@ -260,12 +260,12 @@
                     </div>
                     <img src="{{ url_for('static', _external=True, _scheme='https', filename='images/arrow.jpg') }}" alt="arrow"/>
                     <div class="wd1x">
-                        <span class="big">{{ '{0:0.1f}'.format((user['stats'+year].total[0].movies)/12) }}</span>
+                        <span class="big">{{ '{0:0.1f}'.format((user['stats'+year].total[0].movies)/current_month) }}</span>
                         <span class="small">Average per month</span>
                     </div>
                     <img src="{{ url_for('static', _external=True, _scheme='https', filename='images/arrow.jpg') }}" alt="arrow"/>
                     <div class="wd1x">
-                        <span class="big">{{ '{0:0.1f}'.format((user['stats'+year].total[0].movies)/53) }}</span>
+                        <span class="big">{{ '{0:0.1f}'.format((user['stats'+year].total[0].movies)/current_week) }}</span>
                         <span class="small">Average per week</span>
                     </div>
                 </div>
