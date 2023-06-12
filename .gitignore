@@ -2,8 +2,8 @@
 /recommend/trainset.csv
 /recommend/ratings_clean.csv
 /recommend/recc.csv
-/garbage/
+/recommend/movies.csv
+/recommend/other/ratings.csv
+/recommend/other/users.csv
 /.idea/
-/utils/backup/
-/utils/backup.zip
 /venv/
