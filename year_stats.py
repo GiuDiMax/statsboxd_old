@@ -137,9 +137,6 @@ def year_stats(username, fastUpdate=False):
     maxdatmin = 0
     mmdm = 0
     for x in y['streak']:
-        print(int(x['_id']/52))
-        print(x['_id']%52)
-    for x in y['streak']:
         if x['_id'] == currentd + 1:
             current = current + 1
         else:
