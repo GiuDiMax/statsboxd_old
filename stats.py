@@ -39,7 +39,6 @@ def getStats(username):
         db.Users.update_one({'_id': username}, {'$set': {'stats': y, 'update': datetime.today()}})
 
 
-
 if __name__ == '__main__':
     start = time()
     print(time()-start)
