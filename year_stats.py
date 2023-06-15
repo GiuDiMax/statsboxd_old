@@ -137,6 +137,9 @@ def year_stats(username, fastUpdate=False):
     maxdatmin = 0
     mmdm = 0
     for x in y['streak']:
+        print(int(x['_id']/52))
+        print(x['_id']%52)
+    for x in y['streak']:
         if x['_id'] == currentd + 1:
             current = current + 1
         else:
@@ -150,13 +153,11 @@ def year_stats(username, fastUpdate=False):
         max = current
         mmdm = maxdatmin
     year = (int(mmdm / 52))
-    month = int((abs(mmdm) % 52) / 7) + 1
+    month = int((abs(mmdm) % 52) / 4)
     y['streak'] = {'max': max, 'year': year, 'month': month}
     db.Users.update_one({'_id': username}, {'$set': {'extra_stats.streak': y['streak'], 'extra_stats.2+filmdays': y['2+filmdays'][0]}})
 
 
 if __name__ == '__main__':
-    singleYear(2023, 'hamzaa')
-    #year_stats('shrezz336', False)
-    #year_stats('hamzaa', False)
+    year_stats('giudimax', False)
     pass
