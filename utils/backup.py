@@ -1,4 +1,3 @@
-from os.path import join
 from bson.json_util import dumps
 from mongodb import db
 import shutil
