@@ -79,7 +79,7 @@ def main_year(username, year):
         current_week = 53
         if int(year) == int(current_year):
             current_month = date.today().month
-            current_week = date.today().isocalendar().week
+            current_week = date.today().isocalendar()[1]
         user = checkUsername(username.lower())
         if user is not None:
             if 'stats_' + str(year) not in user:
