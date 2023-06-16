@@ -155,11 +155,14 @@ def year_stats(username, fastUpdate=False):
         month = int(month) + 1
     else:
         month = int(month)
+    if month > 12:
+        month = 1
+        year = year + 1
     y['streak'] = {'max': max, 'year': year, 'month': month}
     #print(y['streak'])
     db.Users.update_one({'_id': username}, {'$set': {'extra_stats.streak': y['streak'], 'extra_stats.2+filmdays': y['2+filmdays'][0]}})
 
 
 if __name__ == '__main__':
-    year_stats('ale_ich', False)
+    year_stats('rayen_habchi1', False)
     pass
