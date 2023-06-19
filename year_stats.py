@@ -164,5 +164,5 @@ def year_stats(username, fastUpdate=False):
 
 
 if __name__ == '__main__':
-    year_stats('rayen_habchi1', False)
+    year_stats('giudimax', False)
     pass
