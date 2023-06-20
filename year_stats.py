@@ -33,8 +33,11 @@ json_operations4['years'] = op_role
 
 json_operations_extra = {}
 json_operations_extra['streak'] = [
-                {'$project': {'sett': {'$sum': [{'$week': '$diary.date'}, {'$multiply': [{'$year': '$diary.date'}, 52]}]}}},
+                {'$project': {'sett': {'$sum': [{'$week': '$diary.date'}, {'$multiply': [{'$year': '$diary.date'}, 53]}]}}},
                 {'$group': {'_id': '$sett'}},
+                #{'$project': {'s': {'$week': '$diary.date'}, 'y': {'$year': '$diary.date'}}},
+                #{'$group': {'sett': '$sett', 'year': '$year'}},
+                #{'$sort': {'y': 1, 's': 1}}
                 {'$sort': {'_id': 1}}
                 ]
 
@@ -130,13 +133,18 @@ def year_stats(username, fastUpdate=False):
     ob3 = db.Users.aggregate(json_op1)
     for x in ob3:
         y = x
-
     max = 0
     currentd = 0
     current = 0
     maxdatmin = 0
     mmdm = 0
     for x in y['streak']:
+        #print(x['_id'])
+        year = (int(x['_id'] / 53))
+        month = (x['_id'] % 53) / 4
+        #print(year)
+        #print(month)
+        #print("-------")
         if x['_id'] == currentd + 1:
             current = current + 1
         else:
@@ -149,17 +157,18 @@ def year_stats(username, fastUpdate=False):
     if current > max:
         max = current
         mmdm = maxdatmin
-    year = (int(mmdm / 52))
-    month = (mmdm % 52) / 4
+    #print(mmdm)
+    year = (int(mmdm / 53))
+    month = (mmdm % 53) / 4
+    #print(year)
+    #print(month)
     if month % 1 > 0:
-        month = int(month) + 1
-    else:
         month = int(month)
-    if month > 12:
+    else:
+        month = int(month) - 1
+    if month > 13:
         month = 1
         year = year + 1
-    if month == 0:
-        month = 1
     y['streak'] = {'max': max, 'year': year, 'month': month}
     #print(y['streak'])
     db.Users.update_one({'_id': username}, {'$set': {'extra_stats.streak': y['streak'], 'extra_stats.2+filmdays': y['2+filmdays'][0]}})
