@@ -33,13 +33,14 @@ def main(username):
         if username.lower() not in users_list:
             return render_template('noallowed.html')
         user = checkUsername(username.lower())
-        if user['update'] <= datetime.today() - timedelta(days=90):
-            if fullUpdate(username.lower(), False):
-                return redirect("/" + username)
-            else:
-                return render_template('error.html')
-        if user['update'] <= datetime.today() - timedelta(days=30):
-            return redirect(url_for('/' + username + '/update'))
+        if 'update' in user:
+            if user['update'] <= datetime.today() - timedelta(days=90):
+                if fullUpdate(username.lower(), False):
+                    return redirect("/" + username)
+                else:
+                    return render_template('error.html')
+            if user['update'] <= datetime.today() - timedelta(days=30):
+                return redirect(url_for('/' + username + '/update'))
         if (user is not None) and ('diary' in user):
             return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="",
                                    yearnum=0, current_year=current_year, current_month=current_month,
@@ -271,9 +272,12 @@ def utility_processor11():
 @app.context_processor
 def utility_processor12():
     def numtomonth(value):
-        mesinum = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct',
-                   11: 'Nov', 12: 'Dec'}
-        return mesinum[value]
+        if value > 0:
+            mesinum = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct',
+                       11: 'Nov', 12: 'Dec'}
+            return mesinum[value]
+        else:
+            return ''
 
     return dict(numtomonth=numtomonth)
 
