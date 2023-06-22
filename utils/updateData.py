@@ -109,8 +109,8 @@ if __name__ == '__main__':
             b = refreshata(i, k, nn)
             if b: break
             #print('Done in ' + str(time.time() - start))
-
     #exit()
+    db.Film.delete_many({'modifiedDate': {'$exists': False}})
     all()
     updateLists()
     mainSetNames()
