@@ -11,7 +11,7 @@ from threading import Thread, Semaphore
 global recommendations
 global df
 global tops
-samplex = 1500000
+samplex = 2000000
 sem = Semaphore()
 
 
@@ -152,7 +152,7 @@ model.compile(loss='mean_squared_error', optimizer='adam')
 #early_stopping = EarlyStopping(monitor='val_loss', patience=1, verbose=1, mode='min')
 model.fit([train['user_id'], train['movie_id']], train['rating'],
           validation_data=([test['user_id'], test['movie_id']], test['rating']),
-          epochs=1, verbose=1,
+          epochs=3, verbose=1,
           #callbacks=[early_stopping],
           batch_size=64)
 
