@@ -33,18 +33,19 @@ def main(username):
         if username.lower() not in users_list:
             return render_template('noallowed.html')
         user = checkUsername(username.lower())
-        if 'update' in user:
-            if user['update'] <= datetime.today() - timedelta(days=90):
-                if fullUpdate(username.lower(), False):
-                    return redirect("/" + username)
-                else:
-                    return render_template('error.html')
-            if user['update'] <= datetime.today() - timedelta(days=30):
-                return redirect(url_for('/' + username + '/update'))
-        if (user is not None) and ('diary' in user):
-            return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="",
-                                   yearnum=0, current_year=current_year, current_month=current_month,
-                                   current_week=current_week)
+        if user is not None:
+            if 'update' in user:
+                if user['update'] <= datetime.today() - timedelta(days=90):
+                    if fullUpdate(username.lower(), False):
+                        return redirect("/" + username)
+                    else:
+                        return render_template('error.html')
+                if user['update'] <= datetime.today() - timedelta(days=30):
+                    return redirect(url_for('/' + username + '/update'))
+            if 'diary' in user:
+                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="",
+                                       yearnum=0, current_year=current_year, current_month=current_month,
+                                       current_week=current_week)
         if fullUpdate(username.lower(), False):
             return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/',
                                    roles=crew_html, year="", yearnum=0, current_year=current_year,
