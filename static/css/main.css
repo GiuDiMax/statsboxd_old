@@ -1182,7 +1182,7 @@ span{
     }
 
     .weekDayChart{
-        height: 150px;
+        /*height: 150px;*/
         width: 100%;
     }
 
@@ -1193,8 +1193,8 @@ span{
         top:-20px !important;
     }
 
-    .weekDayChart .highcharts-xaxis-labels{
-
+    .weekDayChart .highcharts-xaxis-labels text{
+        /*transform: translate(0px, 5%);*/
     }
 
 .watchedDivided{
@@ -1535,6 +1535,7 @@ span{
 .support_div .bmc-btn-text{
     text-align: left !important;
 }
+
 
 @media only screen and (min-width: 1200px) {
     #isMobile {
