@@ -290,6 +290,11 @@ def add_header(response):
     return response
 
 
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('error_Flask.html', errore="Errore del server"), 500
+
+
 if __name__ == '__main__':
     app.run()
     app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='static/favicon.ico'))
