@@ -5,5 +5,6 @@
 /recommend/movies.csv
 /recommend/other/ratings.csv
 /recommend/other/users.csv
+/utils/backup.zip
 /.idea/
 /venv/
