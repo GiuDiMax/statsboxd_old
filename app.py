@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, send_file
+from flask import Flask, render_template, url_for, request, redirect, send_file, send_from_directory
 from username import checkUsername, fullUpdate
 from config import *
 from utils.getUsersList import *
@@ -9,9 +9,11 @@ from utils.tmdb_new_update import updatefromtmdb
 from threading import Thread
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
+import os
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
+
 
 @app.route('/<username>/', methods=['POST', 'GET'])
 def main(username):
@@ -288,7 +290,11 @@ def add_header(response):
 def page_not_found(e):
     return render_template('error_Flask.html', errore="Errore del server"), 500
 
+@app.route('/favicon.ico')
+
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 
 if __name__ == '__main__':
     app.run()
-    app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='static/favicon.ico'))
