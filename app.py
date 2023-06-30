@@ -5,8 +5,6 @@ from utils.getUsersList import *
 from mongodb import db
 import sys
 from utils.collage import collage
-#from flask_compress import Compress
-#from flask_cdn import CDN
 from utils.tmdb_new_update import updatefromtmdb
 from threading import Thread
 from datetime import datetime, date, timedelta
@@ -14,10 +12,6 @@ from dateutil.relativedelta import relativedelta
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
-#app.config['CDN_DOMAIN'] = 'd2b3jqgdwv2xyj.cloudfront.net'
-#CDN(app)
-#Compress(app)
-
 
 @app.route('/<username>/', methods=['POST', 'GET'])
 def main(username):
