@@ -8,6 +8,16 @@ def allowed(username):
     return False
 
 
+def getLista():
+    obj = list(db.Allowed.find({'_id': 1}))[0]['allowed']
+    obj.sort()
+    with open('lista.txt', 'w') as f:
+        for line in obj:
+            f.write(line)
+            f.write('\n')
+            print(line)
+
+
 def addAllowed(username):
     obj = list(db.Allowed.find({'_id': 1}))[0]['allowed']
     if username not in obj:
@@ -24,4 +34,4 @@ def addLista():
 
 
 if __name__ == '__main__':
-    addAllowed("ilustrecefalopo")
+    getLista()
