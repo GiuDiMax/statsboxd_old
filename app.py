@@ -1,7 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect, send_file, send_from_directory
 from username import checkUsername, fullUpdate
 from config import *
-from utils.getUsersList import *
 from mongodb import db
 import sys
 from utils.collage import collage
