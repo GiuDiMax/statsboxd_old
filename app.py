@@ -10,6 +10,7 @@ from threading import Thread
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 import os
+from utils.allowed import allowed
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
@@ -26,10 +27,11 @@ def main(username):
         if username.lower() == 'faq':
             return render_template('faq.html')
         print("requested: " + username.lower())
-        if username.lower() not in users_list:
-            return render_template('noallowed.html')
         user = checkUsername(username.lower())
-        if user is not None:
+        if user is None:
+            if not allowed(username.lower()):
+                return render_template('noallowed.html')
+        else:
             if 'update' in user:
                 if user['update'] <= datetime.today() - timedelta(days=90):
                     if fullUpdate(username.lower(), False):
@@ -96,6 +98,8 @@ def main_year(username, year):
 def main_update(username):
     # if beta_test and username.lower() not in beta_users:
     #    return render_template('username.html')
+    if not allowed(username.lower()):
+        return render_template('noallowed.html')
     if 'last' in request.args:
         last = datetime.strptime(request.args['last'], '%Y-%m-%d')
         last = last + relativedelta(months=3)
