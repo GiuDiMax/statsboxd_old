@@ -39,8 +39,8 @@ def main(username):
                 if user['update'] <= datetime.today() - timedelta(days=30):
                     return redirect(url_for('/' + username + '/update'))
             if 'diary' in user:
-                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html, year="",
-                                       yearnum=0, current_year=current_year, current_month=current_month,
+                return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html,
+                                       year="", yearnum=0, current_year=current_year, current_month=current_month,
                                        current_week=current_week)
         if fullUpdate(username.lower(), False):
             return render_template('index.html', user=checkUsername(username.lower()), lbdurl='https://letterboxd.com/',
