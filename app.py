@@ -15,13 +15,10 @@ app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
 
 
-@app.route('/ping', methods=['POST', 'GET'])
-def ping():
-    return 'ok'
-
-
 @app.route('/<username>/', methods=['POST', 'GET'])
 def main(username):
+    if username == 'ping':
+        return 'ok'
     if '.ico' not in username and 'success' not in username:
         current_year = date.today().year
         current_month = date.today().month
