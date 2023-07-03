@@ -15,6 +15,11 @@ app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
 
 
+@app.route('/ping', methods=['POST', 'GET'])
+def ping():
+    return 'ok'
+
+
 @app.route('/<username>/', methods=['POST', 'GET'])
 def main(username):
     if '.ico' not in username and 'success' not in username:
@@ -70,10 +75,6 @@ def updatetmdb2():
     thread.start()
     return 'started'
 
-
-@app.route('/ping', methods=['POST', 'GET'])
-def ping():
-    return 'ok'
 
 
 @app.route('/<username>/<year>', methods=['POST', 'GET'])
