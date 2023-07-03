@@ -21,7 +21,7 @@ def getLista():
 def addAllowed(username):
     obj = list(db.Allowed.find({'_id': 1}))[0]['allowed']
     if username not in obj:
-        db.Allowed.updateOne({'_id': 1}, {'$push': {'allowed': username}})
+        db.Allowed.update_one({'_id': 1}, {'$push': {'allowed': username}})
 
 
 def addLista():
@@ -34,4 +34,4 @@ def addLista():
 
 
 if __name__ == '__main__':
-    getLista()
+    addAllowed('giudimax')

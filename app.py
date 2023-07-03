@@ -87,7 +87,8 @@ def main_year(username, year):
             if 'stats_' + str(year) not in user:
                 return redirect("/" + username)
             return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html,
-                                   year='_' + year, yearnum=year, current_year=current_year, current_month=current_month,
+                                   year='_' + year, yearnum=year, current_year=current_year,
+                                   current_month=current_month,
                                    current_week=current_week)
         return render_template('loading.html', redirect=(username.lower()))
     return render_template('username.html')
@@ -276,7 +277,8 @@ def utility_processor11():
 def utility_processor12():
     def numtomonth(value):
         if value > 0:
-            mesinum = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct',
+            mesinum = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep',
+                       10: 'Oct',
                        11: 'Nov', 12: 'Dec'}
             return mesinum[value]
         else:
@@ -296,10 +298,11 @@ def add_header(response):
 def page_not_found(e):
     return render_template('error_Flask.html', errore="Errore del server"), 500
 
-@app.route('/favicon.ico')
 
+@app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico',
+                               mimetype='image/vnd.microsoft.icon')
 
 
 if __name__ == '__main__':
