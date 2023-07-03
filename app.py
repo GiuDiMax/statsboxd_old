@@ -71,6 +71,11 @@ def updatetmdb2():
     return 'started'
 
 
+@app.route('/ping', methods=['POST', 'GET'])
+def ping():
+    return 'ok'
+
+
 @app.route('/<username>/<year>', methods=['POST', 'GET'])
 def main_year(username, year):
     if '.ico' not in username:
