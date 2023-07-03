@@ -135,9 +135,11 @@ def threadxdiary(username, fastUpdate=False):
     global diary_list
     start3 = time.time()
     get_watched(username, True, fastUpdate)
-    db.Users.update_one({'_id': username}, {'$pull': {'diary': {'date':  {'$gte': datetime(datetime.now().year, 1, 1)}}}})
-    db.Users.update_one({'_id': username}, {'$push': {'diary': {'$each': diary_list}}}, True)
-    #db.Users.update_one({'_id': username}, {'$set': {'diary': diary_list}}, True)
+    if fastUpdate:
+        db.Users.update_one({'_id': username}, {'$pull': {'diary': {'date':  {'$gte': datetime(datetime.now().year, 1, 1)}}}})
+        db.Users.update_one({'_id': username}, {'$push': {'diary': {'$each': diary_list}}}, True)
+    else:
+        db.Users.update_one({'_id': username}, {'$set': {'diary': diary_list}}, True)
     print('diary in: ' + str(time.time() - start3))
 
 

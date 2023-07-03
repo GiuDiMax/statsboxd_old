@@ -93,20 +93,20 @@ def rev_rew(username):
     ])
     for a in obj:
         x = a
-        try:
-            rew = int(x['rewatch'][0]['count'])
-        except:
-            rew = 0
-        try:
-            rev = int(x['review'][0]['count'])
-        except:
-            rev = 0
-        try:
-            rat = int(x['rat'][0]['count'])
-        except:
-            rat = 0
-        db.Users.update_one({'_id': username}, {'$set': {'stats2.rew': rew, 'stats2.rev': rev, 'stats2.rat': rat}})
         break
+    try:
+        rew = int(x['rewatch'][0]['count'])
+    except:
+        rew = 0
+    try:
+        rev = int(x['review'][0]['count'])
+    except:
+        rev = 0
+    try:
+        rat = int(x['rat'][0]['count'])
+    except:
+        rat = 0
+    db.Users.update_one({'_id': username}, {'$set': {'stats2.rew': rew, 'stats2.rev': rev, 'stats2.rat': rat}})
 
 
 if __name__ == '__main__':
