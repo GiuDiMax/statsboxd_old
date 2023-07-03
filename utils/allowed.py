@@ -34,4 +34,4 @@ def addLista():
 
 
 if __name__ == '__main__':
-    addAllowed('giudimax')
+    getLista()

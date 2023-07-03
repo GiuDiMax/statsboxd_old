@@ -9,7 +9,7 @@ from threading import Thread
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 import os
-from utils.allowed import allowed
+from utils.allowed import allowed, addAllowed
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
@@ -126,6 +126,14 @@ def main_collage(username):
             return send_file("utils/tmp.jpg", mimetype='image/jpg')
         except:
             return send_file("/tmp/tmp.jpg", mimetype='image/jpg')
+
+
+@app.route('/<username>/add', methods=['POST', 'GET'])
+def add_allowed(username):
+    if request.args['psw'] == 'amicizia':
+        addAllowed(username)
+        return redirect('/'+username)
+    return redirect('/')
 
 
 @app.route('/', methods=['POST', 'GET'])
