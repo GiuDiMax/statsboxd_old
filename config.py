@@ -1,9 +1,11 @@
 client_string = 'mongodb+srv://GiuDiMax:iiZBB9JYW07nqQcp@lbdcluster.bqbva.mongodb.net/Letterboxd?retryWrites=true&w=majority'
 
-field2 = ['actors', 'crew.director', 'crew.producer', 'crew.writer', 'crew.editor',
-          'crew.cinematography', 'crew.production-design', 'crew.art-direction',
-          'crew.set-decoration', 'crew.visual-effects', 'crew.composer', 'crew.sound',
-          'crew.costumes', 'crew.make-up']
+field2 = ['actors', 'crew.director', 'crew.co-director', 'crew.additional-directing', 'crew.producer',
+          'crew.executive-producer', 'crew.writer', 'crew.original-writer', 'crew.casting', 'crew.editor',
+          'crew.cinematography', 'crew.additional-photography', 'crew.production-design', 'crew.art-direction',
+          'crew.set-decoration', 'crew.special-effects', 'crew.visual-effects', 'crew.stunts', 'crew.choreography',
+          'crew.composer', 'crew.songs', 'crew.sound', 'crew.costume-design', 'crew.makeup', 'crew.hairstyling',
+          'crew.studio']
 
 field3 = ['country', 'studio', 'language', 'genres.main', 'genres.theme', 'genres.nanogenre'] #, 'genres.mini-themes']
 
@@ -31,12 +33,22 @@ listsSelection = [
 # ['liveandrew/list/bfi-2012-critics-top-250-films', 'Sight & Sound Top 250', 5],
 
 crew_html = [
-     ['crew_producer', 'producer', 'Producers'],  ['crew_writer', 'writer', 'Writers'], ['crew_editor', 'editor', 'Editors'],
-     ['crew_cinematography', 'cinematography', 'Cinematography'],  ['crew_production-design', 'production-design', 'Production Design'],
-     ['crew_art-direction', 'art-direction', 'Art Direction'],  ['crew_set-decoration', 'set-decoration', 'Set Decoration'],
-     ['crew_visual-effects', 'visual-effects', 'Visual Effects'],  ['crew_composer', 'composer', 'Composers'],
-     ['crew_sound', 'sound', 'Sound'],  ['crew_costumes', 'costumes', 'Costumes'], ['crew_make-up', 'make-up', 'Make-Up'],
-     ['studio', 'studio', 'Studio']
+    ['crew_co-director', 'co-director', 'co-director'],
+    ['crew_additional-directing', 'additional-directing', 'additional-directing'],
+    ['crew_producer', 'producer', 'producer'], ['crew_executive-producer', 'executive-producer', 'executive-producer'],
+    ['crew_writer', 'writer', 'writer'], ['crew_original-writer', 'original-writer', 'original-writer'],
+    ['crew_casting', 'casting', 'casting'], ['crew_editor', 'editor', 'editor'],
+    ['crew_cinematography', 'cinematography', 'cinematography'],
+    ['crew_additional-photography', 'additional-photography', 'additional-photography'],
+    ['crew_production-design', 'production-design', 'production-design'],
+    ['crew_art-direction', 'art-direction', 'art-direction'],
+    ['crew_set-decoration', 'set-decoration', 'set-decoration'],
+    ['crew_special-effects', 'special-effects', 'special-effects'],
+    ['crew_visual-effects', 'visual-effects', 'visual-effects'], ['crew_stunts', 'stunts', 'stunts'],
+    ['crew_choreography', 'choreography', 'choreography'], ['crew_composer', 'composer', 'composer'],
+    ['crew_songs', 'songs', 'songs'], ['crew_sound', 'sound', 'sound'],
+    ['crew_costume-design', 'costume-design', 'costume-design'], ['crew_makeup', 'makeup', 'makeup'],
+    ['crew_hairstyling', 'hairstyling', 'hairstyling'], ['studio', 'studio', 'studio']
 ]
 
 exclude_people = ['mickie-mcgowan', 'stan-lee', 'jack-angel', 'sherry-lynn', 'fred-tatasciore', 'jim-cummings',
@@ -46,3 +58,15 @@ exclude_people = ['mickie-mcgowan', 'stan-lee', 'jack-angel', 'sherry-lynn', 'fr
                   'debi-derryberry', 'kari-wahlgren', 'john-cygan', 'jackie-gonneau']
 
 users_list_url = 'https://gist.githubusercontent.com/GiuDiMax/84c8ba608c932d4671d5fe83d5f5e9c4/raw/users_lbd'
+
+"""
+for f in field2:
+    if "." in f:
+        print("['")
+        print(f.replace(".", "_"))
+        print("', '")
+        print(f.split(".", 1)[1])
+        print("', '")
+        print(f.split(".", 1)[1])
+        print("'], ")
+"""

@@ -945,6 +945,9 @@ span{
     flex-direction: column;
     flex-basis: 22%;
     padding-bottom: 20px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 22%;
 }
 
 .role div{
@@ -958,12 +961,17 @@ span{
     font-familY: Graphik-Regular-Web, sans-serif;
     color: #ddeeff;
     line-height: 25px;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 80%;
 }
 
 .role div .sottotitolo{
     font-size: 12px;
     padding-left:5px;
-
+    text-align: left;
 }
 
 .worldmap{
