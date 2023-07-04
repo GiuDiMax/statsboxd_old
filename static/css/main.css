@@ -1613,3 +1613,10 @@ span{
         z-index: -1;
     }
 }
+
+
+@media only screen and (min-width: 1200px) {
+    .onlyMobile{
+        display: none !important;
+    }
+}

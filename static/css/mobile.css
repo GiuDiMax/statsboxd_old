@@ -44,7 +44,7 @@
     }
 
     .hideMobile{
-        display:none;
+        display:none !important;
     }
 
     .mainTitle{
