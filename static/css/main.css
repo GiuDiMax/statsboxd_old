@@ -60,6 +60,10 @@ span{
     text-decoration: none;
 }
 
+.navbar a:hover{
+    color: #40bcf4;
+}
+
 .headerbar{
     background-color: #14181c;
     height:72px;
@@ -1611,5 +1615,12 @@ span{
         width: 99vw;
         height: 150vh;
         z-index: -1;
+    }
+}
+
+
+@media only screen and (min-width: 1200px) {
+    .onlyMobile{
+        display: none !important;
     }
 }
