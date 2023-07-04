@@ -1,43 +1,23 @@
 from mongodb import db
 from time import time
 
+
 def test():
     start = time()
-    visti = []
-    obj = db.Users.aggregate([
+    obj = list(db.Users.aggregate([
         {'$match': {'_id': 'giudimax'}},
         {'$unwind': '$watched'},
-        {'$match': {'watched.rating': {'$gt': 0}}},
-        {'$project': {'_id': '$watched.id'}},
-        {'$group': {'_id': None, 'visti': {'$push': '$_id'}}}
-    ])
-    for x in obj:
-        visti = x['visti']
-        break
-    if len(visti) == 0:
-        return
-    obj = db.Users.aggregate([
-        {'$match': {'_id': 'giudimax'}},
-        {'$unwind': '$watched'},
-        {'$match': {'watched.rating': {'$gt': 0}}},
-        {'$project': {'_id': '$watched.id', 'rate': '$watched.rating'}},
-        {'$lookup': {
-            'from': 'Film',
-            'localField': '_id',
-            'foreignField': '_id',
-            'as': 'info'}
-        },
-        {'$project': {'_id': 1, 'rate': 1, 'similar': '$info.related'}},
-        {'$unwind': '$similar'},
-        {'$unwind': '$similar'},
-        {'$match': {'similar': {'$nin': visti}}},
-        {'$group': {'_id': '$similar', 'avg': {'$avg': '$rate'}, 'count': {'$sum': 1}}},
-        {'$match': {'count': {'$gt': 1}}},
-        {'$sort': {'avg': -1}},
-        {'$limit': 47}
-    ])
-    for x in obj:
-        print(x)
+        {'$group': {'_id': '$watched.id'}},
+        {'$lookup': {'from': 'Film', 'localField': '_id', 'foreignField': '_id', 'as': 'info'}},
+        {'$project': {'_id': 0, 'uri': '$info.uri', 'ad': '$info.crew.additional-directing'}},
+        {'$unwind': '$uri'},
+        {'$unwind': '$ad'},
+        {'$unwind': '$ad'},
+        {'$group': {'_id': '$ad', 'sum': {'$sum': 1}, 'list': {'$push': '$uri'}}},
+        {'$sort': {'sum': -1}},
+        {'$limit': 10}
+    ]))
+    print(obj)
     print(time()-start)
 
 
