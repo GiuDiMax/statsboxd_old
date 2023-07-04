@@ -30,8 +30,6 @@ listsSelection = [
     ['lifeasfiction/list/letterboxd-100-animation', 'Top 100 Animation', 12]
 ]
 
-# ['liveandrew/list/bfi-2012-critics-top-250-films', 'Sight & Sound Top 250', 5],
-
 crew_html = [
     ['crew_co-director', 'co-director', 'Co-Directors'],
     ['crew_additional-directing', 'additional-directing', 'Add. Directing'],
@@ -58,15 +56,3 @@ exclude_people = ['mickie-mcgowan', 'stan-lee', 'jack-angel', 'sherry-lynn', 'fr
                   'debi-derryberry', 'kari-wahlgren', 'john-cygan', 'jackie-gonneau']
 
 users_list_url = 'https://gist.githubusercontent.com/GiuDiMax/84c8ba608c932d4671d5fe83d5f5e9c4/raw/users_lbd'
-
-"""
-for f in field2:
-    if "." in f:
-        print("['")
-        print(f.replace(".", "_"))
-        print("', '")
-        print(f.split(".", 1)[1])
-        print("', '")
-        print(f.split(".", 1)[1])
-        print("'], ")
-"""
