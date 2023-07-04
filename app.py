@@ -143,6 +143,23 @@ def main_std():
     return render_template('username.html')
 
 
+@app.after_request
+def add_header(response):
+    if 'Cache-Control' not in response.headers:
+        response.headers['Cache-Control'] = 'no-store'
+    return response
+
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('error_Flask.html', errore="Errore del server"), 500
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico',
+                               mimetype='image/vnd.microsoft.icon')
+
 @app.context_processor
 def utility_processor():
     def format_comma(number):
@@ -288,31 +305,11 @@ def utility_processor12():
     def numtomonth(value):
         if value > 0:
             mesinum = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep',
-                       10: 'Oct',
-                       11: 'Nov', 12: 'Dec'}
+                       10: 'Oct', 11: 'Nov', 12: 'Dec'}
             return mesinum[value]
         else:
             return ''
-
     return dict(numtomonth=numtomonth)
-
-
-@app.after_request
-def add_header(response):
-    if 'Cache-Control' not in response.headers:
-        response.headers['Cache-Control'] = 'no-store'
-    return response
-
-
-@app.errorhandler(500)
-def page_not_found(e):
-    return render_template('error_Flask.html', errore="Errore del server"), 500
-
-
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico',
-                               mimetype='image/vnd.microsoft.icon')
 
 
 if __name__ == '__main__':
