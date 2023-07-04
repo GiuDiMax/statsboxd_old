@@ -9,7 +9,7 @@ def test():
         {'$unwind': '$watched'},
         {'$group': {'_id': '$watched.id'}},
         {'$lookup': {'from': 'Film', 'localField': '_id', 'foreignField': '_id', 'as': 'info'}},
-        {'$project': {'_id': 0, 'uri': '$info.uri', 'ad': '$info.crew.additional-directing'}},
+        {'$project': {'_id': 0, 'uri': '$info.uri', 'ad': '$info.actors'}},
         {'$unwind': '$uri'},
         {'$unwind': '$ad'},
         {'$unwind': '$ad'},
