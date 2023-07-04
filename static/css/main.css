@@ -60,6 +60,10 @@ span{
     text-decoration: none;
 }
 
+.navbar a:hover{
+    color: #40bcf4;
+}
+
 .headerbar{
     background-color: #14181c;
     height:72px;
