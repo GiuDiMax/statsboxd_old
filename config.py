@@ -33,22 +33,22 @@ listsSelection = [
 # ['liveandrew/list/bfi-2012-critics-top-250-films', 'Sight & Sound Top 250', 5],
 
 crew_html = [
-    ['crew_co-director', 'co-director', 'co-director'],
-    ['crew_additional-directing', 'additional-directing', 'additional-directing'],
-    ['crew_producer', 'producer', 'producer'], ['crew_executive-producer', 'executive-producer', 'executive-producer'],
-    ['crew_writer', 'writer', 'writer'], ['crew_original-writer', 'original-writer', 'original-writer'],
-    ['crew_casting', 'casting', 'casting'], ['crew_editor', 'editor', 'editor'],
+    ['crew_co-director', 'co-director', 'Co-Directors'],
+    ['crew_additional-directing', 'additional-directing', 'Add. Directing'],
+    ['crew_producer', 'producer', 'Producers'], ['crew_executive-producer', 'executive-producer', 'Exec. Producer'],
+    ['crew_writer', 'writer', 'Writers'], ['crew_original-writer', 'original-writer', 'Original Writers'],
+    ['crew_casting', 'casting', 'Casting'], ['crew_editor', 'editor', 'Editors'],
     ['crew_cinematography', 'cinematography', 'cinematography'],
-    ['crew_additional-photography', 'additional-photography', 'additional-photography'],
-    ['crew_production-design', 'production-design', 'production-design'],
-    ['crew_art-direction', 'art-direction', 'art-direction'],
-    ['crew_set-decoration', 'set-decoration', 'set-decoration'],
-    ['crew_special-effects', 'special-effects', 'special-effects'],
-    ['crew_visual-effects', 'visual-effects', 'visual-effects'], ['crew_stunts', 'stunts', 'stunts'],
-    ['crew_choreography', 'choreography', 'choreography'], ['crew_composer', 'composer', 'composer'],
-    ['crew_songs', 'songs', 'songs'], ['crew_sound', 'sound', 'sound'],
-    ['crew_costume-design', 'costume-design', 'costume-design'], ['crew_makeup', 'makeup', 'makeup'],
-    ['crew_hairstyling', 'hairstyling', 'hairstyling'], ['studio', 'studio', 'studio']
+    ['crew_additional-photography', 'additional-photography', 'Add. Photography'],
+    ['crew_production-design', 'production-design', 'Production Design'],
+    ['crew_art-direction', 'art-direction', 'Art Direction'],
+    ['crew_set-decoration', 'set-decoration', 'Set Decoration'],
+    ['crew_special-effects', 'special-effects', 'Special Effects'],
+    ['crew_visual-effects', 'visual-effects', 'Visual Effects'], ['crew_stunts', 'stunts', 'Stunts'],
+    ['crew_choreography', 'choreography', 'Choreography'], ['crew_composer', 'composer', 'Composers'],
+    ['crew_songs', 'songs', 'Songs'], ['crew_sound', 'sound', 'Sound'],
+    ['crew_costume-design', 'costume-design', 'Costume Design'], ['crew_makeup', 'makeup', 'Makeup'],
+    ['crew_hairstyling', 'hairstyling', 'Hairstyling'], ['studio', 'studio', 'Studios']
 ]
 
 exclude_people = ['mickie-mcgowan', 'stan-lee', 'jack-angel', 'sherry-lynn', 'fred-tatasciore', 'jim-cummings',
