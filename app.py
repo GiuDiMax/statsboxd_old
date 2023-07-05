@@ -120,6 +120,8 @@ def main_update(username):
 
 @app.route('/<username>/collage/', methods=['POST', 'GET'])
 def main_collage(username):
+    if not allowed(username.lower()):
+        return render_template('noallowed.html')
     red = collage(username)
     if red is not None:
         return redirect(red, code=302)
