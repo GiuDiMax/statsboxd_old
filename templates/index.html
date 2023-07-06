@@ -111,7 +111,7 @@
             </a>
             <a href="//letterboxd.com/{{user._id}}/films/diary/by/entry-rating/">
                 <span class="number">{{ user.stats2.rat }}</span>
-                <span class="text">Total diary ratings</span>
+                <span class="text">Total diary logs</span>
             </a>
         </div>
     </section>
@@ -121,7 +121,9 @@
             <span>By release year</span>
             <div class="line"></div>
             <span class="clickable active" data-show="releaseYear" data-show2="years1" data-hide="yearChart" data-hide2="years2">Films</span>
+            {% if user.ru %}
             <span class="clickable" data-show="ratingYear" data-show2="years1" data-hide="yearChart" data-hide2="years2">Ratings</span>
+            {% endif %}
             {% if user.extra_stats.diaryperyear|length > 0 %}
             <span class="clickable" data-show="diaryYear" data-show2="years2" data-hide="yearChart" data-hide2="years1">Diary</span>
             {% endif %}
@@ -140,6 +142,7 @@
             {% endif %}
         </div>
     </section>
+    {% if user.ru %}
     <section class="sectionStats">
         <div class="sepline">
             <span>Recommended Films</span>
@@ -205,7 +208,9 @@
             </div>
         {%endfor%}
     </section>
+    {% endif %}
     {% else %}
+        {% if user.ru %}
         <section class="sectionStats">
             <div class="sepline">
                 <span>Highest rated films</span>
@@ -240,6 +245,7 @@
                 </div>
             </div>
         </section>
+        {% endif %}
         <section class="sectionStats">
             <div class="sepline">
                 <span>Films by week</span>
@@ -465,6 +471,7 @@
             <a class="clickable seeallbutton" href="{{ lbdurl}}{{ user._id }}/films/diary/by/diary-count/">see in diary</a>
         </div>
     </section>
+    {% if user.ru %}
     <section class="sectionStats">
         <div class="sepline">
             <span>Rated higher then average</span>
@@ -503,6 +510,7 @@
                 {%endfor%}
         </div>
     </section>
+    {% endif %}
     {% else %}
         <section class="sectionStats">
         <div class="sepline">
@@ -533,12 +541,14 @@
                         <div id="reviewpie" class="piech2"></div>
                     </div>
                 </div>
+                {% if user.ru %}
                 <div class="ratingSpreadsection">
                     <img src="{{ url_for('static', filename = 'images/1stars.png') }}" alt="1star"/>
                     <div id="ratingSpread" class="ratingSpread"></div>
                     <img src="{{ url_for('static', filename = 'images/5stars.png') }}" alt="5stars"/>
                 </div>
                 <span class="linetitle">Rating Spread</span>
+                {% endif %}
             </div>
         </section>
     {% endif %}
@@ -548,7 +558,7 @@
             <span>{{ role[1] }}</span>
             <div class="line"></div>
             <span class="clickable active" data-show="{{ role[0] }}sWatch" data-hide="{{ role[0] }}sbis">Most Watched</span>
-            <span class="clickable" data-show="{{ role[0] }}sRat" data-hide="{{ role[0] }}sbis">Highest Rated</span>
+            {% if user.ru %}<span class="clickable" data-show="{{ role[0] }}sRat" data-hide="{{ role[0] }}sbis">Highest Rated</span>{% endif %}
         </div>
         <div class="{{ role[0] }}s2">
             {%for type in [['Watch', 'mostWatched', 'w', ''], ['Rat', 'topRated', 'r', 'hide']] %}
@@ -608,7 +618,7 @@
             <span>Crew & Studios</span>
             <div class="line"></div>
             <span class="clickable active" data-show="crewmostWatched" data-hide="crewbis">Most Watched</span>
-            <span class="clickable" data-show="crewtopRated" data-hide="crewbis">Highest Rated</span>
+            {% if user.ru %}<span class="clickable" data-show="crewtopRated" data-hide="crewbis">Highest Rated</span>{% endif %}
         </div>
         {%for type in ['mostWatched', 'topRated'] %}
         <section id="crew{{ type }}" class="crewbis {% if type == 'topRated' %} hide{% endif %}">
@@ -669,6 +679,7 @@
             {% endfor %}
         </div>
     </section>
+    {% if user.ru %}
     <section class="sectionStats">
         <div class="sepline">
             <span>Rated higher then average</span>
@@ -707,6 +718,7 @@
                 {%endfor%}
         </div>
     </section>
+    {% endif %}
     {% endif %}
 
     <section class="wMap noselect">
@@ -1089,7 +1101,7 @@
                     //}
                 }],
         });
-
+        {% if user.ru %}
         Highcharts.chart('ratingSpread', {
             chart: {type: 'column', backgroundColor: 'transparent', margin:0, border:0, height: 150},
             xAxis: {labels: {enabled:false}, title:false, lineColor: 'transparent', visible:false},
@@ -1133,6 +1145,7 @@
                     }
                 }],
         });
+        {% endif %}
 
         {% for type in ['currentYear', 'rewatch', 'review'] %}
 

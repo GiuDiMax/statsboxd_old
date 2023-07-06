@@ -9,13 +9,13 @@ from setThemes import all
 from cleanUsers import cleanUsers
 
 limitx = 100
-hx = 24 #ore
+hx = 2000 #ore
 
 
 def refresh(i, nn):
     b = False
     datex = datetime.today()
-    datex = datex - timedelta(hours=24)
+    datex = datex - timedelta(hours=hx)
     current_year = date.today().year
 
     a = db.Film.aggregate([
@@ -28,6 +28,7 @@ def refresh(i, nn):
 
     uris = []
     for x in a:
+        #print(x)
         uris.append(x['uri'])
     if len(uris)<limitx:
         b = True
@@ -39,7 +40,7 @@ def refresh(i, nn):
 def addMembers(i, nn):
     b = False
     datex = datetime.today()
-    datex = datex - timedelta(hours=24)
+    datex = datex - timedelta(hours=hx)
     current_year = date.today().year
 
     a = db.Film.aggregate([
@@ -54,6 +55,7 @@ def addMembers(i, nn):
     uris = []
     for x in a:
         uris.append(x['uri'])
+    #print(len(uris))
     if len(uris)<limitx:
         b = True
     print('analyzing members ' + str(len(uris) + i*limitx))
@@ -64,7 +66,7 @@ def addMembers(i, nn):
 def addRatings(i, nn):
     b = False
     datex = datetime.today()
-    datex = datex - timedelta(hours=24)
+    datex = datex - timedelta(hours=hx)
     current_year = date.today().year
 
     a = db.Film.aggregate([
@@ -79,6 +81,7 @@ def addRatings(i, nn):
     uris = []
     for x in a:
         uris.append(x['uri'])
+    #print(len(uris))
     if len(uris)<limitx:
         b = True
     print('analyizing ratings ' + str(len(uris) + i*limitx))
@@ -110,8 +113,8 @@ if __name__ == '__main__':
             if b: break
             #print('Done in ' + str(time.time() - start))
     #exit()
-    db.Film.delete_many({'modifiedDate': {'$exists': False}})
-    all()
+    #db.Film.delete_many({'modifiedDate': {'$exists': False}})
+    #all()
     updateLists()
     mainSetNames()
     mainSetCollection2()
