@@ -9,16 +9,18 @@ from operations import fillMongodb, fillMongodbmembers, fillMongodbratings
 from threading import Thread
 import time
 from year_stats import year_stats
-global watched_list, diary_list
+global watched_list, diary_list, rat_user
 from datetime import datetime
 
 
 def diary_function(sup):
+    global rat_user
     diaryx = {}
     diaryx['id'] = int(sup.find("div", class_="film-poster")['data-film-id'])
     dRating = int(sup.find("td", class_="td-rating rating-green").input['value'])
     if dRating > 0:
         diaryx['dRating'] = dRating
+        rat_user = rat_user + 1
     test = sup.find("td", class_="td-like center diary-like")
     if "icon-liked" in str(test):
         diaryx['dLike'] = True
@@ -124,10 +126,11 @@ def threadgeneral(username, fastUpdate=False):
 
 
 def threadxwatched(username, fastUpdate=False):
-    global watched_list
+    global watched_list, rat_user
+    rat_user = 0
     start2 = time.time()
     get_watched(username, False, fastUpdate)
-    db.Users.update_one({'_id': username}, {'$set': {'watched': watched_list}}, True)
+    db.Users.update_one({'_id': username}, {'$set': {'watched': watched_list, 'ru': rat_user >= 50}}, True)
     print('watched in: ' + str(time.time() - start2))
 
 
@@ -218,5 +221,5 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    fullUpdate('giudimax', False)
+    fullUpdate('ayanami', True)
     pass

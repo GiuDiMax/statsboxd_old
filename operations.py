@@ -13,12 +13,16 @@ json0 = []
 
 def fill_db(url, soup):
     json1 = {}
-
     try:
-        json_lb = json.loads(soup.find("script", {"type": "application/ld+json"}).text.split('*/', 1)[1].split('/*', 1)[0])
+        #json_lb = json.loads(soup.find("script", {"type": "application/ld+json"}).text.split('*/', 1)[1].split('/*', 1)[0])
+        json_lb = json.loads(
+            soup.find("script", {"type": "application/ld+json"}).text.split('/* <![CDATA[ */', 1)[1].split('/* ]]> */', 1)[0])
     except:
         print("elimino " + url)
         db.Film.delete_one({'uri': url})
+        return
+
+    if int(json_lb['dateModified'].split("-", 1)[0]) < datetime.now().year:
         return
 
     #ID
@@ -258,7 +262,7 @@ def fillMongodbratings(urls):
 
 
 if __name__ == '__main__':
-    uris = ['ready-player-one']
+    uris = ['gujjubhai-ni-golmaal']
     fillMongodb(uris)
     fillMongodbratings(uris)
     fillMongodbmembers(uris)
