@@ -109,8 +109,16 @@ def get_watched(username, diary, fastUpdate, lastmonth=False):
                     urls.append('http://letterboxd.com/' + str(username) + '/films/page/' + str(i + 1) + "/")
     except:
         urls = [url]
-    asyncio.set_event_loop(asyncio.SelectorEventLoop())
-    asyncio.get_event_loop().run_until_complete(get_watched2(urls, diary))
+    ll = 50
+    if len(urls) >= ll:
+        for xx in range(int(len(urls)/ll) + 1):
+            uu = urls[xx*ll:(xx+1)*ll]
+            asyncio.set_event_loop(asyncio.SelectorEventLoop())
+            asyncio.get_event_loop().run_until_complete(get_watched2(uu, diary))
+            time.sleep(0.1)
+    else:
+        asyncio.set_event_loop(asyncio.SelectorEventLoop())
+        asyncio.get_event_loop().run_until_complete(get_watched2(urls, diary))
     if lastmonth:
         db.Users.update_one({'_id': username}, {'$set': {'diary2': diary_list}}, True)
 
@@ -221,5 +229,5 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    fullUpdate('ayanami', True)
+    fullUpdate('ayanami', False)
     pass
