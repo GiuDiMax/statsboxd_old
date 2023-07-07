@@ -450,6 +450,7 @@
         {% endfor %}
         </div>
     </section>
+    {% if user.mostWatched|length > 0 %}
     <section class="sectionStats">
         <div class="sepline">
             <span>Most Watched</span>
@@ -471,6 +472,7 @@
             <a class="clickable seeallbutton" href="{{ lbdurl}}{{ user._id }}/films/diary/by/diary-count/">see in diary</a>
         </div>
     </section>
+    {% endif %}
     {% if user.ru %}
     <section class="sectionStats">
         <div class="sepline">
