@@ -49,7 +49,7 @@ def diary_function_threading(url):
 
 
 async def get_watched3(url, session, diary):
-    global watched_list, diary_list
+    global watched_list, diary_list, rat_user
     async with session.get(url=url) as response:
         ret = await response.read()
     if diary:
@@ -65,6 +65,7 @@ async def get_watched3(url, session, diary):
                 rating = sup.p.span['class'][-1]
                 if 'rated' in rating:
                     watched['rating'] = int(rating.split("-", 1)[1])
+                    rat_user = rat_user + 1
             except:
                 pass
             watched_list.append(watched)
@@ -229,5 +230,5 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    fullUpdate('ayanami', False)
+    fullUpdate('denzyl2007', False)
     pass
