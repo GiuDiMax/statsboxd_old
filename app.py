@@ -132,12 +132,12 @@ def main_collage(username):
             return send_file("/tmp/tmp.jpg", mimetype='image/jpg')
 
 
-@app.route('/<username>/add', methods=['POST', 'GET'])
+@app.route('/<username>/admin/add', methods=['POST', 'GET'])
 def add_allowed(username):
-    if request.args['psw'] == 'amicizia':
-        addAllowed(username)
-        return redirect('/'+username)
-    return redirect('/')
+    #if request.args['psw'] == 'amicizia':
+    addAllowed(username.lower())
+    return redirect('/'+username.lower())
+    #return redirect('/')
 
 
 @app.route('/', methods=['POST', 'GET'])
