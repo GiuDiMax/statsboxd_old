@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, send_file, send_from_directory
+from flask import Flask, render_template, url_for, request, redirect, send_file, send_from_directory, make_response
 from username import checkUsername, fullUpdate
 from config import *
 from mongodb import db
@@ -14,6 +14,8 @@ from utils.allowed import allowed, addAllowed
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
 
+def logged():
+    return request.cookies.get('psw') == adminpsw
 
 @app.route('/<username>/', methods=['POST', 'GET'])
 def main(username):
@@ -71,6 +73,17 @@ def updatetmdb2():
     thread = Thread(target=do_work)
     thread.start()
     return 'started'
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def loginf():
+    if request.args['psw'] == adminpsw:
+        resp = make_response("loggato!")
+        expire_date = datetime.now()
+        expire_date = expire_date + timedelta(days=180)
+        resp.set_cookie("psw", value=request.args['psw'], expires=expire_date)
+        return resp
+    return redirect("/")
 
 
 @app.route('/<username>/<year>', methods=['POST', 'GET'])
@@ -132,12 +145,12 @@ def main_collage(username):
             return send_file("/tmp/tmp.jpg", mimetype='image/jpg')
 
 
-@app.route('/<username>/admin/add', methods=['POST', 'GET'])
+@app.route('/<username>/add', methods=['POST', 'GET'])
 def add_allowed(username):
-    #if request.args['psw'] == 'amicizia':
-    addAllowed(username.lower())
-    return redirect('/'+username.lower())
-    #return redirect('/')
+    if logged():
+        addAllowed(username.lower())
+        return redirect('/'+username.lower())
+    return redirect('/')
 
 
 @app.route('/', methods=['POST', 'GET'])
