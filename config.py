@@ -1,4 +1,5 @@
 client_string = 'mongodb+srv://GiuDiMax:iiZBB9JYW07nqQcp@lbdcluster.bqbva.mongodb.net/Letterboxd?retryWrites=true&w=majority'
+adminpsw = 'amicizia123'
 
 field2 = ['actors', 'crew.director', 'crew.co-director', 'crew.additional-directing', 'crew.producer',
           'crew.executive-producer', 'crew.writer', 'crew.original-writer', 'crew.casting', 'crew.editor',
