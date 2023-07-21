@@ -519,6 +519,26 @@
         margin-bottom: 0;
     }
 
+    .shortTitle {
+        line-height: 1.7em;
+        text-align: justify;
+        text-justify: inter-word;
+        -webkit-hyphens: auto;
+        -ms-hyphens: auto;
+        hyphens: auto;
+    }
 
+    .support_div .support_text{
+        line-height: 0;
+    }
+
+    .bmc-btn {
+        font-size: 18px !important;
+
+    }
+
+    .bmc-btn-container{
+        text-align: center !important;
+    }
 
 }
