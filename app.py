@@ -14,8 +14,15 @@ from utils.allowed import allowed, addAllowed
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
 
+import logging
+log = logging.getLogger('werkzeug')
+log.disabled = True
+#print("Running on http://127.0.0.1:5000")
+
+
 def logged():
     return request.cookies.get('psw') == adminpsw
+
 
 @app.route('/<username>/', methods=['POST', 'GET'])
 def main(username):
