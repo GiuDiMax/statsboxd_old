@@ -5,10 +5,10 @@ from time import time
 def test():
     start = time()
     obj = list(db.Film.aggregate([
-        {'$match': {'year': 2022}},
-        {'$project': {'_id': 1}}
+        {'$match': {'runtime': {'$exists': False}}},
+        {'$project': {'_id': '$uri'}}
     ]))
-    print(len(obj))
+    print(obj)
     print(time() - start)
 
 
