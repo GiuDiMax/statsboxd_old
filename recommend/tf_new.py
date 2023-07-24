@@ -12,6 +12,7 @@ global recommendations
 global df
 global tops
 samplex = 2000000
+samplex = None
 sem = Semaphore()
 
 
@@ -91,6 +92,7 @@ def creaPrediction(usery):
 movie = pd.read_csv('movies.csv', low_memory=False)
 movielist = movie['movieId'].tolist()
 obj = db.Users.aggregate([
+    {'$match': {'ru': True}},
     {'$project': {'_id': 1, 'watched': 1}},
     {'$unwind': '$watched'},
     {'$match': {'watched.rating': {'$gt': 0}}},
