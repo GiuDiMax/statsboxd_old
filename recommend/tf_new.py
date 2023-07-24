@@ -11,7 +11,8 @@ from threading import Thread, Semaphore
 global recommendations
 global df
 global tops
-samplex = 2000000
+#samplex = 2000000
+samplex = None
 sem = Semaphore()
 
 
@@ -64,7 +65,7 @@ def creaPrediction(usery):
         for x in obj:
             obja.append(x)
         top = []
-        top2 = []
+        #top2 = []
         z = 0
         for movie in recs:
             for x in obja:
@@ -73,7 +74,7 @@ def creaPrediction(usery):
                     j = {}
                     j['uri'] = x['uri']
                     j['poster'] = x['poster']
-                    j['perc'] = int(movie[1] * 90)
+                    j['perc'] = int(movie[1] * 100)
                     top.append(j)
                     #top2.append({'_id': x['_id'], 'perc': int(movie[1] * 100)})
                     z = z + 1
@@ -91,6 +92,7 @@ def creaPrediction(usery):
 movie = pd.read_csv('movies.csv', low_memory=False)
 movielist = movie['movieId'].tolist()
 obj = db.Users.aggregate([
+    {'$match': {'ru': True}},
     {'$project': {'_id': 1, 'watched': 1}},
     {'$unwind': '$watched'},
     {'$match': {'watched.rating': {'$gt': 0}}},
@@ -142,7 +144,7 @@ movie_bias = Flatten()(movie_bias)
 prod = Add()([prod, user_bias, movie_bias])
 
 # Output activation function
-output = Activation('relu')(prod)
+output = Activation('sigmoid')(prod)
 
 # Modello finale
 model = Model(inputs=[user_input, movie_input], outputs=output)
@@ -177,7 +179,7 @@ for t in tth:
     t.join()
 print("creo raccomandazioni")
 recommendations = recommendations.sort_values(by=['user_id', 'score'], ascending=False)
-tops = recommendations.groupby('user_id').head(1000)
+tops = recommendations.groupby('user_id').head(500)
 tops['movie_name'] = tops['movie_id'].apply(lambda x: list(movie_id.keys())[list(movie_id.values()).index(x)])
 tops.to_csv('recc.csv', index=False)
 tth = []

@@ -42,7 +42,7 @@
           </h3>
          {% endif %}
         <div class="mainSubtitle">
-            <a href="{{ lbdurl }}/{{ user._id }}"><img class="avatar" src="{{ user.image }}" alt="{{ user._id }}"/></a>
+            <a href="{{ lbdurl }}/{{ user._id }}"><img class="avatar lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ user.image }}" alt="{{ user._id }}"/></a>
             <span><a href="{{ lbdurl }}/{{ user._id }}" class="clickable">{{ user.name }}</a>'s
                 {% if year == '' %}
                     all-time stats
@@ -186,7 +186,7 @@
                 <a class="clickable seeallbutton {{ type[1] }}btn" data-show="{{ type[1] }}more" data-hide="{{ type[1] }}btn">see more</a>
             </div>
             {% else %}
-                <span class="norecctext">As you are a new user, ML recommendations are not yet available, but they will be soon.</span>
+                <span class="norecctext">ML recommendations are not yet available, but they will be soon. You can look at item-based recommendations anyway.</span>
             {% endif %}
         </section>
         {% endfor %}

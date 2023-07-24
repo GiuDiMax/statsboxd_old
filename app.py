@@ -17,7 +17,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
 import logging
 log = logging.getLogger('werkzeug')
 log.disabled = True
-#print("Running on http://127.0.0.1:5000")
+print("Running on http://127.0.0.1:5000")
 
 
 def logged():
