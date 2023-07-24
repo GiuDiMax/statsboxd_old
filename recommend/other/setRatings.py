@@ -42,8 +42,8 @@ def threadFunction(user):
     try:
         pages = int(soup.find_all('li', class_="paginate-page")[-1].text)
         urls = []
-        #if pages > 20:
-        #    pages = int(pages*0.8)
+        if pages > 20:
+            pages = int(pages*0.8)
         for i in range(pages):
             urls.append('http://letterboxd.com/' + user[1] + '/films/by/popular/page/' + str(i + 1) + "/")
     except:
@@ -92,7 +92,7 @@ def get_watched(username=None):
                         threadFunction(data[z * rangex + k])
                     except:
                         pass
-            print(str(rangex * z) + " in " + str(time.time()-start))
+            print(str(rangex * (z+1)) + " in " + str(time.time()-start))
 
 
 if __name__ == '__main__':
