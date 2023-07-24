@@ -9,7 +9,7 @@ from setThemes import all
 from cleanUsers import cleanUsers
 
 limitx = 100
-hx = 2000 #ore
+hx = 24 #ore
 
 
 def refresh(i, nn):
@@ -105,16 +105,16 @@ def refreshata(i, k, nn):
 
 
 if __name__ == '__main__':
-    nn = 999 #last x years
+    nn = 2 #last x years
     for k in range(3):
         for i in range(int(80000/limitx)+1):
             #start = time.time()
             b = refreshata(i, k, nn)
             if b: break
             #print('Done in ' + str(time.time() - start))
-    #exit()
-    #db.Film.delete_many({'modifiedDate': {'$exists': False}})
-    #all()
+    db.Film.delete_many({'modifiedDate': {'$exists': False}})
+    exit()
+    all()
     updateLists()
     mainSetNames()
     mainSetCollection2()
