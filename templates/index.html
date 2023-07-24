@@ -42,7 +42,7 @@
           </h3>
          {% endif %}
         <div class="mainSubtitle">
-            <a href="{{ lbdurl }}/{{ user._id }}"><img class="avatar" src="{{ user.image }}" alt="{{ user._id }}"/></a>
+            <a href="{{ lbdurl }}/{{ user._id }}"><img class="avatar lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ user.image }}" alt="{{ user._id }}"/></a>
             <span><a href="{{ lbdurl }}/{{ user._id }}" class="clickable">{{ user.name }}</a>'s
                 {% if year == '' %}
                     all-time stats
