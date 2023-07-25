@@ -4,9 +4,9 @@ from time import time
 
 def test():
     start = time()
-    obj = list(db.Film.aggregate([
-        {'$match': {'runtime': {'$exists': False}}},
-        {'$project': {'_id': '$uri'}}
+    obj = list(db.Users.aggregate([
+        {'$project': {'_id': 1, 'update': 1, 'fullUpdate': 1}},
+        {'$sort': {'update': -1}}
     ]))
     print(obj)
     print(time() - start)

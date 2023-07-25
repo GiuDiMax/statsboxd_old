@@ -86,7 +86,7 @@ def creaPrediction(usery):
         #db.Users.update_one({'_id': usery}, {'$set': {'sug_list': top2}})
         print("username: " + str(usery) + "\n")
     except:
-        print("errore: " + str(usery))
+        print("errore: " + str(usery) + "\n")
 
 
 movie = pd.read_csv('movies.csv', low_memory=False)
@@ -154,11 +154,12 @@ model.compile(loss='mean_squared_error', optimizer='adam')
 #early_stopping = EarlyStopping(monitor='val_loss', patience=1, verbose=1, mode='min')
 model.fit([train['user_id'], train['movie_id']], train['rating'],
           validation_data=([test['user_id'], test['movie_id']], test['rating']),
-          epochs=1, verbose=1,
+          epochs=2, verbose=1,
           #callbacks=[early_stopping],
           batch_size=64)
 
 obj = db.Users.aggregate([
+    {'$match': {'ru': True}},
     {'$match': {'watched.1': {'$exists': True}}},
     {'$project': {'_id': 1}}
 ])
