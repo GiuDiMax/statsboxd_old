@@ -77,7 +77,8 @@ async def get_watched2(urlx, diary):
 
 
 def get_watched(username, diary, fastUpdate, lastmonth=False):
-    global watched_list, diary_list
+    global watched_list, diary_list, rat_user
+    rat_user = 0
     watched_list = []
     diary_list = []
     if diary:
@@ -135,8 +136,7 @@ def threadgeneral(username, fastUpdate=False):
 
 
 def threadxwatched(username, fastUpdate=False):
-    global watched_list, rat_user
-    rat_user = 0
+    global watched_list
     start2 = time.time()
     get_watched(username, False, fastUpdate)
     db.Users.update_one({'_id': username}, {'$set': {'watched': watched_list, 'ru': rat_user >= 50}}, True)
