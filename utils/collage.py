@@ -34,7 +34,7 @@ def add_element(img, likex, rewatchx, like, rew):
 def collage(username):
     get_watched(username, True, True, True)
     month = datetime.now().month
-    year = datetime.now().year
+    #year = datetime.now().year
     if month > 1:
         year2 = date.today().year
         month2 = month - 1

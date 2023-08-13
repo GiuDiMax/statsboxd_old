@@ -27,4 +27,5 @@ def cleanUsers():
 
 
 if __name__ == '__main__':
+    #db.Users.delete_one({'_id': 'giudimax'})
     cleanUsers()
