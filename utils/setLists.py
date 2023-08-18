@@ -15,7 +15,7 @@ async def get_watched3(url, session):
         ret = await response.read()
         soup = BeautifulSoup(ret, 'lxml').find_all('li', class_="poster-container")
         for sup in soup:
-            movie = sup.div['data-film-slug'].split("/")[2]
+            movie = sup.div['data-film-slug']
             uris.append(movie)
 
 

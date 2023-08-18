@@ -106,7 +106,7 @@ def refreshata(i, k, nn):
 
 if __name__ == '__main__':
     nn = 999 #last x years
-    for k in range(2, 3):
+    for k in range(0, 3):
         for i in range(int(80000/limitx)+1):
             #start = time.time()
             b = refreshata(i, k, nn)
