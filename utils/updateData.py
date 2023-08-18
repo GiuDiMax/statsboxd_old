@@ -106,12 +106,10 @@ def refreshata(i, k, nn):
 
 if __name__ == '__main__':
     nn = 999 #last x years
-    for k in range(0, 3):
-        for i in range(int(80000/limitx)+1):
-            #start = time.time()
-            b = refreshata(i, k, nn)
-            if b: break
-            #print('Done in ' + str(time.time() - start))
+    #for k in range(0, 3):
+    #    for i in range(int(80000/limitx)+1):
+    #        b = refreshata(i, k, nn)
+    #        if b: break
     x = db.Film.delete_many({'modifiedDate': {'$exists': False}})
     print("deleted: " + str(x.deleted_count))
     #all()

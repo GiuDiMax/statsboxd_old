@@ -17,6 +17,7 @@ def fill_db3(url, resp, image, studio):
     json1 = {}
     json1['_id'] = url[1]
     json1['name'] = url[2]
+    json1['update'] = datetime.today()
     try:
         try:
             json1['tmdbImg'] = str(resp).rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
@@ -24,10 +25,11 @@ def fill_db3(url, resp, image, studio):
             json1['imgNone'] = True
     except:
         print('error tmdb for ' + url[1])
-    try:
-        db.People.insert_one(json1)
-    except:
-        db.People.update_one({'_id': json1['_id']}, {'$set': json1})
+    db.People.update_one({'_id': json1['_id']}, {'$set': json1}, True)
+    #try:
+    #    db.People.insert_one(json1)
+    #except:
+    #    db.People.update_one({'_id': json1['_id']}, {'$set': json1})
 
 
 async def get3(url, session, image, studio):
@@ -51,6 +53,7 @@ def fill_db(url, soup, image, studio):
     global images_tmdb
     json1 = {}
     json1['_id'] = url
+    json1['update'] = datetime.today()
     passare_oltre = False
     try:
         name = (str(soup.find("h1", {"class": "title-1"})).split("</span>", 1)[1].split("</h1>", 1)[0]).strip()
@@ -71,10 +74,12 @@ def fill_db(url, soup, image, studio):
             except:
                 print('error tmdb for ' + url)
         if not passare_oltre:
-            try:
-                db.People.insert_one(json1)
-            except:
-                db.People.update_one({'_id': json1['_id']}, {'$set': json1})
+            #print(json1)
+            db.People.update_one({'_id': json1['_id']}, {'$set': json1}, True)
+            #try:
+            #    db.People.insert_one(json1)
+            #except:
+            #    db.People.update_one({'_id': json1['_id']}, {'$set': json1}, True)
     except:
         pass
 
