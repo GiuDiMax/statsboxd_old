@@ -60,7 +60,8 @@ async def get_watched3(url, session, diary):
     else:
         soup = BeautifulSoup(ret, 'lxml', parse_only=SoupStrainer(['li'])).find_all('li', class_="poster-container")
         for sup in soup:
-            watched = {'id': int(sup.div['data-film-id']), 'uri': sup.div['data-film-slug'].split("/")[-2]}
+            #watched = {'id': int(sup.div['data-film-id']), 'uri': sup.div['data-film-slug'].split("/")[-2]}
+            watched = {'id': int(sup.div['data-film-id']), 'uri': sup.div['data-film-slug']}
             try:
                 rating = sup.p.span['class'][-1]
                 if 'rated' in rating:

@@ -262,7 +262,7 @@ def fillMongodbratings(urls):
 
 
 if __name__ == '__main__':
-    uris = ['shazam']
+    uris = ['batman-bad-blood']
     fillMongodb(uris)
     fillMongodbratings(uris)
     fillMongodbmembers(uris)
