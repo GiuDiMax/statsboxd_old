@@ -867,6 +867,7 @@ span{
     border: 1px solid hsla(0,0%,100%,.25);
     border-radius: 50%;
     object-fit: cover;
+    object-position: 0px -20px;
 }
 
 .studiohole{
