@@ -859,7 +859,6 @@ span{
     font-size: 15px;
 }
 
-
 .holeperson{
     position: relative;
     width: 150px;
@@ -867,7 +866,10 @@ span{
     border: 1px solid hsla(0,0%,100%,.25);
     border-radius: 50%;
     object-fit: cover;
-    object-position: 0px -20px;
+}
+
+.afterll{
+    object-position: 0 -20px;
 }
 
 .studiohole{

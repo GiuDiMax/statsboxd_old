@@ -608,7 +608,7 @@
     </section>
     {%endfor%}
     {% if year == '' %}
-    <section class="sectionStats">
+    <section class="sectionStats hideMobile">
         <div class="sepline">
             <span>Studios</span>
             <div class="line"></div>
@@ -616,7 +616,6 @@
             <span class="clickable" data-show="topRatedStudios" data-hide="studiosStats">Highest Rated</span>-->
         </div>
         <section class="studiosStats" id="mostWatchedStudios"><div id="studiosBubble" class="studiosBubble"></div></section>
-
     </section>
     {% endif %}
     <section class="sectionStats">
@@ -788,6 +787,11 @@
 
     function lazyLoadFunc(){
         $('.lazy').Lazy();
+        $('img.lazy').on('load',function(){
+          if($(this).hasClass('holeperson')){
+              $(this).addClass('afterll');
+          }
+        });
     }
 
     function worldMap2(){
