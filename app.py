@@ -44,7 +44,7 @@ def main(username):
                     else:
                         return render_template('error.html')
                 if user['update'] <= datetime.today() - timedelta(days=30):
-                    return redirect(url_for('/' + username + '/update'))
+                    return redirect('/' + username + '/update')
             if 'diary' and 'stats' in user:
                 try:
                     return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html,
