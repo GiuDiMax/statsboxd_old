@@ -579,7 +579,7 @@
                     {%for element in list%}
                         <div class="container_people">
                             <a href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">
-                                <img class="holeperson lazy" src="{{ url_for('static', filename = 'images/'+role[0]+'.jpg') }}"
+                                <img class="holeperson lazy {% if 'img' in element %}hp_down{% endif %}" src="{{ url_for('static', filename = 'images/'+role[0]+'.jpg') }}"
                                     {% if 'img' in element %}
                                          data-src="//image.tmdb.org/t/p/w185/{{ element.img }}"
                                     {% endif %}
