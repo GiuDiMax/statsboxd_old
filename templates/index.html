@@ -579,7 +579,7 @@
                     {%for element in list%}
                         <div class="container_people">
                             <a href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">
-                                <img class="holeperson lazy {% if 'img' in element %}hp_down{% endif %}" src="{{ url_for('static', filename = 'images/'+role[0]+'.jpg') }}"
+                                <img class="holeperson lazy" src="{{ url_for('static', filename = 'images/'+role[0]+'.jpg') }}"
                                     {% if 'img' in element %}
                                          data-src="//image.tmdb.org/t/p/w185/{{ element.img }}"
                                     {% endif %}
@@ -608,7 +608,7 @@
     </section>
     {%endfor%}
     {% if year == '' %}
-    <section class="sectionStats">
+    <section class="sectionStats hideMobile">
         <div class="sepline">
             <span>Studios</span>
             <div class="line"></div>
@@ -616,7 +616,6 @@
             <span class="clickable" data-show="topRatedStudios" data-hide="studiosStats">Highest Rated</span>-->
         </div>
         <section class="studiosStats" id="mostWatchedStudios"><div id="studiosBubble" class="studiosBubble"></div></section>
-
     </section>
     {% endif %}
     <section class="sectionStats">
@@ -788,6 +787,11 @@
 
     function lazyLoadFunc(){
         $('.lazy').Lazy();
+        $('img.lazy').on('load',function(){
+          if($(this).hasClass('holeperson')){
+              $(this).addClass('afterll');
+          }
+        });
     }
 
     function worldMap2(){

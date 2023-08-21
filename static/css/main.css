@@ -859,7 +859,6 @@ span{
     font-size: 15px;
 }
 
-
 .holeperson{
     position: relative;
     width: 150px;
@@ -869,7 +868,7 @@ span{
     object-fit: cover;
 }
 
-.hp_down{
+.afterll{
     object-position: 0 -20px;
 }
 
