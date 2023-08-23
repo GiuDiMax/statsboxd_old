@@ -11,8 +11,8 @@ from threading import Thread, Semaphore
 global recommendations
 global df
 global tops
-#samplex = 2000000
-samplex = None
+samplex = 1000000
+#samplex = None
 sem = Semaphore()
 
 

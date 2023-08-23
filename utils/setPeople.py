@@ -18,6 +18,7 @@ def fill_db3(url, resp, image, studio):
     json1['_id'] = url[1]
     json1['name'] = url[2]
     json1['update'] = datetime.today()
+    json1['uri'] = url[3]
     try:
         try:
             json1['tmdbImg'] = str(resp).rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
@@ -34,9 +35,9 @@ def fill_db3(url, resp, image, studio):
 
 async def get3(url, session, image, studio):
     async with session.get(url="https://api.themoviedb.org/3/person/" + str(url[0]) + "?api_key=" + api_tmdb + "&language=en-US") as response:
-            resp = await response.read()
-            #soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div']))
-            fill_db3(url, resp, image, studio)
+        resp = await response.read()
+        #soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div']))
+        fill_db3(url, resp, image, studio)
 
 
 async def main3(urls, image, studio):
@@ -49,11 +50,13 @@ def fillMongodb3(urls, image, studio):
     asyncio.get_event_loop().run_until_complete(main3(urls, image, studio))
 
 
-def fill_db(url, soup, image, studio):
+def fill_db(url, soup, image, studio, uri):
+    uri = str(uri).rsplit('/', 2)[1]
     global images_tmdb
     json1 = {}
     json1['_id'] = url
     json1['update'] = datetime.today()
+    json1['uri'] = uri
     passare_oltre = False
     try:
         name = (str(soup.find("h1", {"class": "title-1"})).split("</span>", 1)[1].split("</h1>", 1)[0]).strip()
@@ -63,7 +66,7 @@ def fill_db(url, soup, image, studio):
                 tmdb = int(soup.find("div", {"class": "js-tmdb-person-bio"})['data-tmdb-id'])
                 json1['tmdb'] = tmdb
                 if image:
-                    images_tmdb.append([tmdb, url, name])
+                    images_tmdb.append([tmdb, url, name, uri])
                     #req = "https://api.themoviedb.org/3/person/" + str(tmdb) + "?api_key=" + api_tmdb + "&language=en-US"
                     #x = requests.get(req)
                     #try:
@@ -81,14 +84,15 @@ def fill_db(url, soup, image, studio):
             #except:
             #    db.People.update_one({'_id': json1['_id']}, {'$set': json1}, True)
     except:
+        print("Errore: " + str(url))
         pass
 
 
 async def get(url, session, image, studio):
-    async with session.get(url='http://letterboxd.com/writer/' + url + "/") as response:
-            resp = await response.read()
-            soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div']))
-            fill_db(url, soup, image, studio)
+    async with session.get(url='http://letterboxd.com/writer/contributor:' + str(url) + "/") as response:
+        resp = await response.read()
+        soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div']))
+        fill_db(url, soup, image, studio, response.url)
 
 
 async def main2(urls, image, studio):
@@ -204,4 +208,5 @@ def mainSetNames2():
 
 
 if __name__ == '__main__':
-    mainSetNames()
+    fillMongodb([28035], True)
+    #mainSetNames()

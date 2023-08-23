@@ -108,7 +108,7 @@ def fill_db(url, soup):
         json1['actors'] = []
         for actor in actors:
             try:
-                code = actor['href'].split('/actor/')[-1][:-1]
+                code = int(actor['href'].split('/actor/contributor:')[-1][:-1])
                 try:
                     title = actor['title']
                 except:
@@ -129,7 +129,7 @@ def fill_db(url, soup):
         for crew in crews:
             crew = crew['href']
             role = crew.split("/")[-3]
-            code = crew.split("/")[-2]
+            code = int(crew.split("/")[-2].replace("contributor:", ""))
             try:
                 json1['crew'][role].append(code)
             except:
@@ -262,7 +262,7 @@ def fillMongodbratings(urls):
 
 
 if __name__ == '__main__':
-    uris = ['batman-bad-blood']
+    uris = ['barbie']
     fillMongodb(uris)
     fillMongodbratings(uris)
     fillMongodbmembers(uris)
