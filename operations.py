@@ -94,7 +94,10 @@ def fill_db(url, soup):
             elif typex == 'studios':
                 typex = 'studio'
             for code in details2:
-                code = code['href'].split("/")[-2]
+                if typex == 'studio':
+                    code = int(code['href'].split("/contributor:", 1)[1].replace("/", ""))
+                else:
+                    code = code['href'].split("/")[-2]
                 try:
                     json1[typex].append(code)
                 except:
