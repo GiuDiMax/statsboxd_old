@@ -158,7 +158,6 @@ if __name__ == '__main__':
     #db.People.update_one({'_id': json1['_id']}, {'$set': json1}, True)
     #db.People.update_many({}, {'$unset': {'link': 1}}, True)
     #test()
-    fixContributor()
     prePeople()
     upPeople()
     mainSetNames()

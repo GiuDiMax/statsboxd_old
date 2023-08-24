@@ -30,6 +30,8 @@ def refresh(i, nn):
     for x in a:
         #print(x)
         uris.append(x['uri'])
+    #print(len(uris))
+    #exit()
     if len(uris)<limitx:
         b = True
     print('analyizing data ' + str(len(uris) + i*limitx))
@@ -77,11 +79,11 @@ def addRatings(i, nn):
         {'$limit': limitx},
         {'$project': {'uri': 1}}
     ])
-
     uris = []
     for x in a:
         uris.append(x['uri'])
     #print(len(uris))
+    #exit()
     if len(uris)<limitx:
         b = True
     print('analyizing ratings ' + str(len(uris) + i*limitx))
@@ -107,7 +109,7 @@ def refreshata(i, k, nn):
 if __name__ == '__main__':
     nn = 999 #last x years
     for k in range(0, 1):
-        for i in range(int(90500/limitx)+1):
+        for i in range(int(100000/limitx)+1):
             b = refreshata(i, k, nn)
             if b: break
     x = db.Film.delete_many({'modifiedDate': {'$exists': False}})

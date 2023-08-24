@@ -588,7 +588,7 @@
                                 {% if 'name' in element %}
                                     <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.name }}</a>
                                 {% else %}
-                                    <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ firstUpperBis(element._id) }}</a>
+                                    <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element._id }}</a>
                                 {% endif %}
                             {% if type[2]=='w' %}
                                 <a class="sottotitolo" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.sum }} films</a>
@@ -636,7 +636,7 @@
                                  {% if 'name' in element %}
                                     {{ element.name }}
                                 {% else %}
-                                    {{ firstUpperBis(element._id) }}
+                                    {{ element._id }}
                                 {% endif %}
                             </a>
                             <span class="sottotitolo">
@@ -1242,7 +1242,7 @@
                         {% if 'name' in element %}
                             '{{ element.name }}'
                         {% else %}
-                            '{{ firstUpperBis(element._id) }}'
+                            '{{ element._id }}'
                         {% endif %}
                       , value: {{ element.sum }},
                       extrabis: '{{ element._id }}',

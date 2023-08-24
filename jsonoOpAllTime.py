@@ -35,11 +35,10 @@ for field in field2 + field3:
             'foreignField': '_id',
             'as': 'info'}})
         if field == "studio":
-            op_role.append({'$project': {'_id': 1, 'sum': 1, 'name': {'$first': '$info.name'},
-                                         'img': {'$first': '$info.img'}}})
+            op_role.append({'$project': {'_id': 1, 'sum': 1, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.img'}}})
         else:
-            #op_role.append({'$project': {'_id': 1, 'sum': 1, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
-            op_role.append({'$project': {'_id': {'$ifNull': [{'$first': '$info.link'}, {'$first': '$info._id'}]}, 'sum': 1, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
+            op_role.append({'$project': {'_id': 1, 'sum': 1, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
+            #op_role.append({'$project': {'_id': {'$ifNull': [{'$first': '$info.uri'}, {'$first': '$info._id'}]}, 'sum': 1, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
     elif field in ['genres.theme', 'genres.nanogenre']:
         op_role.append({'$lookup': {
             'from': 'Themes',
