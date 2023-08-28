@@ -20,6 +20,7 @@ def fill_db3(url, resp, image, studio):
     json1['name'] = url[2]
     json1['update'] = datetime.today()
     json1['uri'] = url[3]
+    json1['tmdb'] = url[0]
     try:
         try:
             json1['tmdbImg'] = str(resp).rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
@@ -91,6 +92,7 @@ def fill_db(url, soup, image, studio, uri):
             #    db.People.update_one({'_id': json1['_id']}, {'$set': json1}, True)
     except:
         print("Errore: " + str(url))
+        db.People.delete_one({'_id': url})
         pass
 
 
@@ -217,5 +219,5 @@ def mainSetNames2():
 
 
 if __name__ == '__main__':
-    #fillMongodb([28035], True)
+    #fillMongodb([71480], True)
     mainSetNames2()
