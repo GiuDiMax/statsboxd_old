@@ -5,8 +5,8 @@ field2 = ['actors', 'crew.director', 'crew.co-director', 'crew.additional-direct
           'crew.executive-producer', 'crew.writer', 'crew.original-writer', 'crew.casting', 'crew.editor',
           'crew.cinematography', 'crew.additional-photography', 'crew.production-design', 'crew.art-direction',
           'crew.set-decoration', 'crew.special-effects', 'crew.visual-effects', 'crew.stunts', 'crew.choreography',
-          'crew.composer', 'crew.songs', 'crew.sound', 'crew.costume-design', 'crew.makeup', 'crew.hairstyling',
-          'crew.studio']
+          'crew.composer', 'crew.songs', 'crew.sound', 'crew.costume-design', 'crew.makeup', 'crew.hairstyling']
+          #'crew.studio']
 
 field3 = ['country', 'studio', 'language', 'genres.main', 'genres.theme', 'genres.nanogenre'] #, 'genres.mini-themes']
 
