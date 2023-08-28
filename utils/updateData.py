@@ -109,14 +109,14 @@ def refreshata(i, k, nn):
 
 
 if __name__ == '__main__':
-    nn = 2 #last x years
+    nn = 1 #last x years
     for k in range(0, 3):
         for i in range(int(90000/limitx)+1):
             b = refreshata(i, k, nn)
             if b: break
     x = db.Film.delete_many({'modifiedDate': {'$exists': False}})
     print("deleted: " + str(x.deleted_count))
-    all()
+    #all()
     updateLists()
     mainSetNames2()
     mainSetNamesExt()
