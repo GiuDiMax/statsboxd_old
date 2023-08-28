@@ -92,7 +92,7 @@ def fill_db(url, soup, image, studio, uri):
             #    db.People.update_one({'_id': json1['_id']}, {'$set': json1}, True)
     except:
         print("Errore: " + str(url))
-        db.People.delete_one({'_id': url})
+        #db.People.delete_one({'_id': url})
         pass
 
 
@@ -211,14 +211,55 @@ def mainSetNames():
         fillMongodb(uris3, False, True)
 
 
+def mainSetNamesExt():
+    listt = []
+    studioss = []
+    json_operations = {}
+    for field in field2 + ['studio']:
+        for set in ['mostWatched', 'topRated']:
+            op_role = []
+            op_role.append({'$project': {'_id': '$stats.'+set+field.replace(".", "_")+'._id'}})
+            op_role.append({'$unwind': '$_id'})
+            op_role.append({'$match': {'_id': {'$type': 16}}})
+            json_operations[set+field.replace(".", "_")] = op_role
+    ob3 = list(db.Users.aggregate([
+        {'$facet': json_operations},
+    ]))[0]
+
+    for y in ob3:
+        studio = 'studio' in y
+        for z in ob3[y]:
+            if studio:
+                if z['_id'] not in studioss:
+                    studioss.append(z['_id'])
+            else:
+                if z['_id'] not in listt:
+                    listt.append(z['_id'])
+
+    print('da aggiungere no immagini ' + str(len(listt)))
+    fillMongodb(listt, False)
+    print('da aggiungere studios ' + str(len(studioss)))
+    fillMongodb(studioss, False, True)
+
+
 def mainSetNames2():
     try:
         mainSetNames()
     except:
-        time.sleep(1)
+        time.sleep(5)
         mainSetNames2()
+
+
+def testNames():
+    obj = list(db.Users.aggregate([
+        {'$match': {'_id': 'ale_ich'}},
+        {'$project': {'_id': 1, 's': '$stats.topRatedcrew_director'}}
+    ]))
+    print(obj)
 
 
 if __name__ == '__main__':
     #fillMongodb([71480], True)
-    mainSetNames2()
+    mainSetNamesExt()
+    #mainSetNames2()
+    #testNames()

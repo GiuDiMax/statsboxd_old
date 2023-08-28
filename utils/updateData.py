@@ -3,7 +3,7 @@ from datetime import date, timedelta, datetime
 from operations import fillMongodb, fillMongodbmembers, fillMongodbratings
 import time
 from setLists import updateLists
-from setPeople import mainSetNames, mainSetNames2
+from setPeople import mainSetNames, mainSetNames2, mainSetNamesExt
 from setCollections import mainSetCollection2
 from setThemes import all
 from cleanUsers import cleanUsers
@@ -119,6 +119,7 @@ if __name__ == '__main__':
     all()
     updateLists()
     mainSetNames2()
+    mainSetNamesExt()
     mainSetCollection2()
     cleanUsers()
     print("FINE")
