@@ -586,7 +586,7 @@
                                 alt="{{ element._id }}"/>
                             </a>
                                 {% if 'name' in element %}
-                                    <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{ element.name }}</a>
+                                    <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.name }}</a>
                                 {% else %}
                                     <a class="clickable" href="{{ lbdurl }}{{ role[0] }}/contributor:{{ element._id }}">ID: {{ element._id }}</a>
                                 {% endif %}
