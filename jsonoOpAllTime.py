@@ -28,17 +28,27 @@ for field in field2 + field3:
         op_role.append({'$sort': {'sum': -1, 'avg': -1}})
         op_role.append({'$limit': 50})
     #op_role.append({'$limit': 20})
-    if (field in field2) or (field == 'studio'):
+    if (field in field2):
         op_role.append({'$lookup': {
             'from': 'People',
             'localField': '_id',
             'foreignField': '_id',
             'as': 'info'}})
-        if field == "studio":
-            op_role.append({'$project': {'_id': 1, 'sum': 1, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.img'}}})
-        else:
-            op_role.append({'$project': {'_id': 1, 'sum': 1, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
-            #op_role.append({'$project': {'_id': {'$ifNull': [{'$first': '$info.uri'}, {'$first': '$info._id'}]}, 'sum': 1, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
+        op_role.append({'$project': {'_id': {'$ifNull': [{'$first': '$info.uri'}, '$_id']}, 'sum': 1,
+                                     'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
+        #if field == "studio":
+        #    op_role.append({'$project': {'_id': {'$ifNull': [{'$first': '$info.uri'}, '$_id']}, 'sum': 1, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.img'}}})
+        #else:
+        #    op_role.append({'$project': {'_id': {'$ifNull': [{'$first': '$info.uri'}, '$_id']}, 'sum': 1, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
+        #    op_role.append({'$project': {'_id': {'$ifNull': [{'$first': '$info.uri'}, {'$first': '$info._id'}]}, 'sum': 1, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
+    elif field == 'studio':
+        op_role.append({'$lookup': {
+            'from': 'Studios',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'info'}})
+        op_role.append({'$project': {'_id': {'$ifNull': [{'$first': '$info.uri'}, '$_id']}, 'sum': 1,
+                                     'name': {'$first': '$info.name'}}})
     elif field in ['genres.theme', 'genres.nanogenre']:
         op_role.append({'$lookup': {
             'from': 'Themes',
@@ -62,13 +72,23 @@ for field in field2 + field3:
             op_role.append({'$match': {"sum": {'$gt': 1}}})
         op_role.append({'$sort': {'avg': -1, 'sum': -1, 'info.rating.average': -1}})
         op_role.append({'$limit': 20})
-        op_role.append({'$lookup': {
-            'from': 'People',
-            'localField': '_id',
-            'foreignField': '_id',
-            'as': 'info'}})
-        op_role.append(
-            {'$project': {'_id': 1, 'avg': {'$round': ['$avg', 2]}, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
+        if field == 'studio':
+            op_role.append({'$lookup': {
+                'from': 'Studios',
+                'localField': '_id',
+                'foreignField': '_id',
+                'as': 'info'}})
+            op_role.append(
+                {'$project': {'_id': {'$ifNull': [{'$first': '$info.uri'}, '$_id']}, 'avg': {'$round': ['$avg', 2]},
+                              'name': {'$first': '$info.name'}}})
+        else:
+            op_role.append({'$lookup': {
+                'from': 'People',
+                'localField': '_id',
+                'foreignField': '_id',
+                'as': 'info'}})
+            op_role.append(
+                {'$project': {'_id': {'$ifNull': [{'$first': '$info.uri'}, '$_id']}, 'avg': {'$round': ['$avg', 2]}, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
         json_operations['topRated' + field.replace('.', '_')] = op_role
 
 for field in field4:

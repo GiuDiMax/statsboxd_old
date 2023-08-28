@@ -3,13 +3,14 @@ from datetime import date, timedelta, datetime
 from operations import fillMongodb, fillMongodbmembers, fillMongodbratings
 import time
 from setLists import updateLists
-from setPeople import mainSetNames
+from setPeople import mainSetNames, mainSetNames2
 from setCollections import mainSetCollection2
 from setThemes import all
 from cleanUsers import cleanUsers
+import random
 
 limitx = 100
-hx = 24 #ore
+hx = 5 #ore
 
 
 def refresh(i, nn):
@@ -19,7 +20,7 @@ def refresh(i, nn):
     current_year = date.today().year
 
     a = db.Film.aggregate([
-        {'$match': {"year": {'$gt': current_year - nn}}},
+        {'$match': {'$or':[{"year": {'$gt': current_year - nn}}, {'year': {'$exists': False}}]}},
         {'$match': {"updateDate": {'$lt': datex}}},
         {'$sort': {'updateDate': 1}},
         {'$limit': limitx},
@@ -30,6 +31,7 @@ def refresh(i, nn):
     for x in a:
         #print(x)
         uris.append(x['uri'])
+    random.shuffle(uris)
     #print(len(uris))
     #exit()
     if len(uris)<limitx:
@@ -108,15 +110,15 @@ def refreshata(i, k, nn):
 
 if __name__ == '__main__':
     nn = 999 #last x years
-    for k in range(0, 1):
-        for i in range(int(100000/limitx)+1):
+    for k in range(0, 3):
+        for i in range(int(90000/limitx)+1):
             b = refreshata(i, k, nn)
             if b: break
     x = db.Film.delete_many({'modifiedDate': {'$exists': False}})
     print("deleted: " + str(x.deleted_count))
-    #all()
+    all()
     updateLists()
-    mainSetNames()
+    mainSetNames2()
     mainSetCollection2()
     cleanUsers()
     print("FINE")

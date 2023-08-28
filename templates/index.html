@@ -586,9 +586,9 @@
                                 alt="{{ element._id }}"/>
                             </a>
                                 {% if 'name' in element %}
-                                    <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.name }}</a>
+                                    <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{ element.name }}</a>
                                 {% else %}
-                                    <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element._id }}</a>
+                                    <a class="clickable" href="{{ lbdurl }}{{ role[0] }}/contributor:{{ element._id }}">ID: {{ element._id }}</a>
                                 {% endif %}
                             {% if type[2]=='w' %}
                                 <a class="sottotitolo" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.sum }} films</a>
@@ -608,15 +608,13 @@
     </section>
     {%endfor%}
     {% if year == '' %}
-    <section class="sectionStats hideMobile">
+    <!--<section class="sectionStats hideMobile">
         <div class="sepline">
             <span>Studios</span>
             <div class="line"></div>
-            <!--<span class="clickable active" data-show="mostWatchedStudios" data-hide="studiosStats">Most Watched</span>
-            <span class="clickable" data-show="topRatedStudios" data-hide="studiosStats">Highest Rated</span>-->
         </div>
         <section class="studiosStats" id="mostWatchedStudios"><div id="studiosBubble" class="studiosBubble"></div></section>
-    </section>
+    </section>-->
     {% endif %}
     <section class="sectionStats">
         <div class="sepline">
@@ -632,11 +630,12 @@
                     <span class="titlerole">{{ role[2] }}</span>
                     {%for element in user['stats'+year][type+role[0]][:20]%}
                         <div class="{{ type }}limit {% if loop.index > 5 %}hide{% endif %}">
-                            <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}/with/{{ role[1] }}/{{ element._id }}">
                                  {% if 'name' in element %}
+                                     <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}/with/{{ role[1] }}/{{ element._id }}">
                                     {{ element.name }}
                                 {% else %}
-                                    {{ element._id }}
+                                     <a class="clickable" href="{{ lbdurl }}{{ role[1] }}/contributor:{{ element._id }}">
+                                    ID: {{ element._id }}
                                 {% endif %}
                             </a>
                             <span class="sottotitolo">
@@ -1191,12 +1190,10 @@
 
         {% endif %}
 
-        var script = document.createElement('script');
-        script.onload = function () {
-            studioFunc();
-        };
-        script.src = "//cdnjs.cloudflare.com/ajax/libs/highcharts/10.2.1/highcharts-more.min.js";
-        document.head.appendChild(script); //or something of the likes
+        //var script = document.createElement('script');
+        //script.onload = function () {studioFunc();};
+        //script.src = "//cdnjs.cloudflare.com/ajax/libs/highcharts/10.2.1/highcharts-more.min.js";
+        //document.head.appendChild(script);
 
 
         }
