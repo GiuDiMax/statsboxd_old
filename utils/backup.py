@@ -14,6 +14,8 @@ def backup_db(db, backup_db_dir):
     os.mkdir(backup_db_dir)
     for i, collection_name in enumerate(collections):
         collection = db[collection_name]
+        if collection == 'Users':
+            continue
         with open(backup_db_dir+'\\'+collection_name+'.json', 'w') as file:
             cursor = collection.find()
             file.write(dumps(cursor))
