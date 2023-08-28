@@ -14,9 +14,10 @@ def backup_db(db, backup_db_dir):
     os.mkdir(backup_db_dir)
     for i, collection_name in enumerate(collections):
         collection = db[collection_name]
-        with open(backup_db_dir+'\\'+collection_name+'.json', 'w') as file:
-            cursor = collection.find()
-            file.write(dumps(cursor))
+        if collection_name != 'Users':
+            with open(backup_db_dir+'\\'+collection_name+'.json', 'w') as file:
+                cursor = collection.find()
+                file.write(dumps(cursor))
     shutil.make_archive('backup', 'zip', backup_db_dir)
     shutil.rmtree(backup_db_dir)
 

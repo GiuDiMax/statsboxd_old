@@ -10,7 +10,7 @@ from cleanUsers import cleanUsers
 import random
 
 limitx = 100
-hx = 5 #ore
+hx = 48 #ore
 
 
 def refresh(i, nn):
@@ -109,7 +109,7 @@ def refreshata(i, k, nn):
 
 
 if __name__ == '__main__':
-    nn = 999 #last x years
+    nn = 2 #last x years
     for k in range(0, 3):
         for i in range(int(90000/limitx)+1):
             b = refreshata(i, k, nn)

@@ -215,13 +215,14 @@ def mainSetNamesExt():
     listt = []
     studioss = []
     json_operations = {}
-    for field in field2 + ['studio']:
-        for set in ['mostWatched', 'topRated']:
-            op_role = []
-            op_role.append({'$project': {'_id': '$stats.'+set+field.replace(".", "_")+'._id'}})
-            op_role.append({'$unwind': '$_id'})
-            op_role.append({'$match': {'_id': {'$type': 16}}})
-            json_operations[set+field.replace(".", "_")] = op_role
+    for year in ['', '_2015', '_2016', '_2017', '_2018', '_2019', '_2020', '_2021', '_2022', '_2023', '_2024']:
+        for field in field2 + ['studio']:
+            for set in ['mostWatched', 'topRated']:
+                op_role = []
+                op_role.append({'$project': {'_id': '$stats' + year + '.' + set+field.replace(".", "_")+'._id'}})
+                op_role.append({'$unwind': '$_id'})
+                op_role.append({'$match': {'_id': {'$type': 16}}})
+                json_operations[year+set+field.replace(".", "_")] = op_role
     ob3 = list(db.Users.aggregate([
         {'$facet': json_operations},
     ]))[0]
