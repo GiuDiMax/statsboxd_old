@@ -9,6 +9,7 @@ from mongodb import db
 from datetime import datetime, timedelta
 from config import *
 from threading import Thread
+import time
 
 global images_tmdb
 
@@ -26,7 +27,10 @@ def fill_db3(url, resp, image, studio):
             json1['imgNone'] = True
     except:
         print('error tmdb for ' + url[1])
-    db.People.update_one({'_id': json1['_id']}, {'$set': json1}, True)
+    if studio:
+        db.Studios.update_one({'_id': json1['_id']}, {'$set': json1}, True)
+    else:
+        db.People.update_one({'_id': json1['_id']}, {'$set': json1}, True)
     #try:
     #    db.People.insert_one(json1)
     #except:
@@ -77,8 +81,10 @@ def fill_db(url, soup, image, studio, uri):
             except:
                 print('error tmdb for ' + url)
         if not passare_oltre:
-            #print(json1)
-            db.People.update_one({'_id': json1['_id']}, {'$set': json1}, True)
+            if studio:
+                db.Studios.update_one({'_id': json1['_id']}, {'$set': json1}, True)
+            else:
+                db.People.update_one({'_id': json1['_id']}, {'$set': json1}, True)
             #try:
             #    db.People.insert_one(json1)
             #except:
@@ -103,7 +109,6 @@ async def main2(urls, image, studio):
 def fillMongodb2(urls, image, studio):
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
     asyncio.get_event_loop().run_until_complete(main2(urls, image, studio))
-    #return asyncio.get_event_loop().run_until_complete(main2(urls))
 
 
 def fillMongodb(urls, image, studio=False):
@@ -132,14 +137,21 @@ def mainSetNames():
         op_role.append({'$group': {'_id': '$'+field,
                                    'sum': {'$sum': 1},
                                    'pop': {'$avg': '$rating.num'}}})
-        op_role.append({'$match': {'$or': [{"sum": {'$gt': 3}}, {"pop": {'$gt': 100000}}]}})
+        op_role.append({'$match': {'$or': [{"sum": {'$gt': 4}}, {"pop": {'$gt': 100000}}]}})
         #if field in ['actors', 'crew.director']:
         #    op_role.append({'$match': {"sum": {'$lt': 10}}})
-        op_role.append({'$lookup': {
-                            'from': 'People',
-                            'localField': '_id',
-                            'foreignField': '_id',
-                            'as': 'info'}})
+        if field == 'studio':
+            op_role.append({'$lookup': {
+                                'from': 'Studios',
+                                'localField': '_id',
+                                'foreignField': '_id',
+                                'as': 'info'}})
+        else:
+            op_role.append({'$lookup': {
+                                'from': 'People',
+                                'localField': '_id',
+                                'foreignField': '_id',
+                                'as': 'info'}})
         op_role.append({'$match': {"info": {'$eq': []}}})
         json_operations[field.replace(".", "_")] = op_role
 
@@ -150,18 +162,13 @@ def mainSetNames():
                                    'sum': {'$sum': 1},
                                    'pop': {'$avg': '$rating.num'}}})
         op_role.append({'$match': {"pop": {'$gt': 0}}})
-        #if 'director' in field:
-        #    op_role.append({'$match': {"sum": {'$gt': 4}}})
-        #else:
-        #    op_role.append({'$match': {"sum": {'$gt': 9}}})
-        op_role.append({'$match': {'$or': [{"sum": {'$gt': 4}}, {"pop": {'$gt': 100000}}]}})
+        op_role.append({'$match': {'$or': [{"sum": {'$gt': 9}}, {"pop": {'$gt': 100000}}]}})
         op_role.append({'$sort': {"sum": -1, 'pop': -1}})
         op_role.append({'$lookup': {
                             'from': 'People',
                             'localField': '_id',
                             'foreignField': '_id',
                             'as': 'info'}})
-        #op_role.append({'$match': {"info": {'$eq': []}}})
         op_role.append({'$match': {"info.tmdbImg": {'$exists': False}}})
         op_role.append({'$match': {"info.imgNone": {'$exists': False}}})
 
@@ -185,7 +192,8 @@ def mainSetNames():
                     uris3.append(z['_id'])
             else:
                 for z in x[y]:
-                    uris2.append(z['_id'])
+                    if z not in uris:
+                        uris2.append(z['_id'])
 
     if len(uris) > 0:
         print('da aggiungere con immagini ' + str(len(uris)))
@@ -204,9 +212,10 @@ def mainSetNames2():
     try:
         mainSetNames()
     except:
+        time.sleep(1)
         mainSetNames2()
 
 
 if __name__ == '__main__':
-    fillMongodb([28035], True)
-    #mainSetNames()
+    #fillMongodb([28035], True)
+    mainSetNames2()
