@@ -64,7 +64,7 @@ def updatePeople(onlytoday, dayoff=1, past=14):
         a = db.People.aggregate([
             {'$match': {"tmdb": {'$in': idp}}},
             {'$match': {'tmdbImg': {'$exists': True}}},
-            {'$match': {"updateDate": {'$lt': nowx - timedelta(days=1)}}},
+            {'$match': {"updateDate": {'$lt': nowx - timedelta(hours=10)}}},
             {'$project': {'_id': '$tmdb'}},
             {'$limit': limitx}
         ])
@@ -110,7 +110,7 @@ def updatefromtmdb(onlytoday, dayoff=1, past=14):
         uris = []
         a = db.Film.aggregate([
             {'$match': {"tmdb": {'$in': ids}}},
-            {'$match': {"updateDate": {'$lt': nowx - timedelta(days=1)}}},
+            {'$match': {"updateDate": {'$lt': nowx - timedelta(hours=10)}}},
             {'$project': {'_id': 0, 'uri': 1}},
             {'$limit': limitx}
         ])
