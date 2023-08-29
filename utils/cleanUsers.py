@@ -9,9 +9,10 @@ def clean2():
                                  'stats_2016': 1, 'stats_2015': 1, 'stats_2014': 1,
                                  'years': 1, 'mostWatched': 1, 'image': 1, 'sug2': 1,
                                  'diaryperyear': 1, 'extra_stats': 1, 'diary2': 1, 'sug3': 1,
-                                 'stats2': 1, 'update': 1, 'ru': 1, 'fullUpdate': 1,
+                                 'stats2': 1, 'ru': 1, 'fullUpdate': 1,
                                  }})
     print("updated: " + str(x.modified_count))
+
 
 def cleanUsers():
     #db.Users.delete_many({})

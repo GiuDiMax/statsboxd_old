@@ -172,8 +172,9 @@ def mainSetNames():
                             'localField': '_id',
                             'foreignField': '_id',
                             'as': 'info'}})
-        op_role.append({'$match': {"info.tmdbImg": {'$exists': False}}})
+        #op_role.append({'$match': {"info.tmdbImg": {'$exists': False}}})
         op_role.append({'$match': {"info.imgNone": {'$exists': False}}})
+        op_role.append({'$match': {"info.tmdb": {'$exists': False}}})
 
         json_operations[field.replace(".", "_")+'_img'] = op_role
 
@@ -262,5 +263,5 @@ def testNames():
 if __name__ == '__main__':
     #fillMongodb([71480], True)
     mainSetNamesExt()
-    #mainSetNames2()
+    mainSetNames2()
     #testNames()
