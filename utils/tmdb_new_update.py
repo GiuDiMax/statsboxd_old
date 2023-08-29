@@ -127,5 +127,5 @@ def updatefromtmdb(onlytoday, dayoff=1, past=14):
 
 
 if __name__ == '__main__':
-    updatefromtmdb(True)
-    updatePeople(True)
+    #updatefromtmdb(True)
+    updatePeople(True, 1, 15)
