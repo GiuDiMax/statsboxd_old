@@ -4,7 +4,7 @@ from config import *
 from mongodb import db
 import sys
 from utils.collage import collage
-from utils.tmdb_new_update import updatefromtmdb, updatePeople
+from utils.tmdb_new_update import updatefromtmdb, updatePeople, updatePeople2
 from threading import Thread
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
@@ -71,7 +71,8 @@ def handle_data():
 def updatetmdb2():
     def do_work():
         updatefromtmdb(True)
-        updatePeople(True)
+        #updatePeople(True)
+        updatePeople2()
 
     thread = Thread(target=do_work)
     thread.start()

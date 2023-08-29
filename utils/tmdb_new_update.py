@@ -59,6 +59,7 @@ def updatePeople(onlytoday, dayoff=1, past=14):
         t.start()
     for t in th:
         t.join()
+    #print(idp)
     while True:
         uris = []
         a = db.People.aggregate([
@@ -66,6 +67,33 @@ def updatePeople(onlytoday, dayoff=1, past=14):
             {'$match': {'tmdbImg': {'$exists': True}}},
             {'$match': {"updateDate": {'$lt': nowx - timedelta(hours=10)}}},
             {'$project': {'_id': '$tmdb'}},
+            {'$limit': limitx}
+        ])
+        for x in a:
+            uris.append(x['_id'])
+        if len(uris) == 0:
+            print("nessuna modifica da fare")
+            break
+        else:
+            print(len(uris))
+            th = []
+            for u in uris:
+                th.append(Thread(target=updatePhoto, args=(u, )))
+            for t in th:
+                t.start()
+            for t in th:
+                t.join()
+
+
+def updatePeople2():
+    nowx = datetime.now() - timedelta(days=60)
+    while True:
+        uris = []
+        a = db.People.aggregate([
+            {'$match': {'tmdbImg': {'$exists': True}}},
+            {'$match': {"updateDate": {'$lt': nowx}}},
+            {'$project': {'_id': '$tmdb'}},
+            {'$sort': {'updateDate': 1}},
             {'$limit': limitx}
         ])
         for x in a:
@@ -121,11 +149,14 @@ def updatefromtmdb(onlytoday, dayoff=1, past=14):
             break
         else:
             print(len(uris))
+            #exit()
             fillMongodb(uris)
             fillMongodbmembers(uris)
             fillMongodbratings(uris)
 
 
 if __name__ == '__main__':
-    #updatefromtmdb(True)
-    updatePeople(True, 1, 15)
+    #max 14 giorni
+    updatePeople2()
+    updatefromtmdb(True)
+    #updatePeople(False, 0, 10)
