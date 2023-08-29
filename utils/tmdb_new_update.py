@@ -38,12 +38,12 @@ def getidp(url, pag, start, end):
         getidp(url, pag, start, end)
 
 
-def updatePeople(onlytoday, dayoff=1):
+def updatePeople(onlytoday, dayoff=1, past=14):
     global idp
     idp = []
 
     nowx = datetime.now() - timedelta(days=dayoff)
-    past = (nowx - timedelta(days=14)).isoformat()
+    past = (nowx - timedelta(days=past)).isoformat()
     if onlytoday:
         past = (nowx - timedelta(hours=25)).isoformat()
     now = nowx.isoformat()
@@ -51,6 +51,7 @@ def updatePeople(onlytoday, dayoff=1):
     urlx = url.format(page=1, start=past, end=now)
     r = requests.get(urlx).json()
     pages = int(r['total_pages'])
+    print(pages * 100)
     th = []
     for j in range(pages+1):
         th.append(Thread(target=getidp, args=(url, j+1, past, now,)))
@@ -63,7 +64,7 @@ def updatePeople(onlytoday, dayoff=1):
         a = db.People.aggregate([
             {'$match': {"tmdb": {'$in': idp}}},
             {'$match': {'tmdbImg': {'$exists': True}}},
-            {'$match': {"updateDate": {'$lt': nowx}}},
+            {'$match': {"updateDate": {'$lt': nowx - timedelta(hours=10)}}},
             {'$project': {'_id': '$tmdb'}},
             {'$limit': limitx}
         ])
@@ -83,12 +84,12 @@ def updatePeople(onlytoday, dayoff=1):
                 t.join()
 
 
-def updatefromtmdb(onlytoday, dayoff=1):
+def updatefromtmdb(onlytoday, dayoff=1, past=14):
     global ids
     ids = []
 
     nowx = datetime.now() - timedelta(days=dayoff)
-    past = (nowx - timedelta(days=14)).isoformat()
+    past = (nowx - timedelta(days=past)).isoformat()
     if onlytoday:
         past = (nowx - timedelta(hours=25)).isoformat()
     now = nowx.isoformat()
@@ -96,6 +97,7 @@ def updatefromtmdb(onlytoday, dayoff=1):
     urlx = url.format(page=1, start=past, end=now)
     r = requests.get(urlx).json()
     pages = int(r['total_pages'])
+    print(pages*100)
     th = []
     for j in range(pages+1):
         th.append(Thread(target=getids, args=(url, j+1, past, now,)))
@@ -108,7 +110,7 @@ def updatefromtmdb(onlytoday, dayoff=1):
         uris = []
         a = db.Film.aggregate([
             {'$match': {"tmdb": {'$in': ids}}},
-            {'$match': {"updateDate": {'$lt': nowx}}},
+            {'$match': {"updateDate": {'$lt': nowx - timedelta(hours=10)}}},
             {'$project': {'_id': 0, 'uri': 1}},
             {'$limit': limitx}
         ])
@@ -125,5 +127,5 @@ def updatefromtmdb(onlytoday, dayoff=1):
 
 
 if __name__ == '__main__':
-    updatefromtmdb(False, 0)
-    updatePeople(False, 0)
+    #updatefromtmdb(True)
+    updatePeople(True, 1, 15)

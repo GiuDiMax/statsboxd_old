@@ -16,21 +16,22 @@ for field in field2 + field3:
     else:
         op_role.append({'$unwind': '$info.' + field})
         op_role.append({'$group': {'_id': '$info.' + field,
-                                   'avg': {'$avg': '$rat'},
+                                   #'avg': {'$avg': '$rat'},
+                                   'run': {'$sum': '$info.runtime'},
                                    'sum': {'$sum': 1}}})
     if field == 'actors':
         op_role.append({'$match': {"_id": {'$nin': exclude_people}}})
     if field == 'language' or field == 'country' or field == 'country':
         op_role.append({'$match': {"sum": {'$gt': 0}}})
-        op_role.append({'$sort': {'sum': -1, 'avg': -1}})
+        op_role.append({'$sort': {'sum': -1, 'run': -1}})
         op_role.append({'$limit': 20})
     elif field != 'studio':
         op_role.append({'$match': {"sum": {'$gt': 1}}})
-        op_role.append({'$sort': {'sum': -1, 'avg': -1}})
+        op_role.append({'$sort': {'sum': -1, 'run': -1}})
         op_role.append({'$limit': 20})
     else:
         op_role.append({'$match': {"sum": {'$gt': 2}}})
-        op_role.append({'$sort': {'sum': -1, 'avg': -1}})
+        op_role.append({'$sort': {'sum': -1, 'run': -1}})
         op_role.append({'$limit': 50})
     if (field in field2):
         op_role.append({'$lookup': {
