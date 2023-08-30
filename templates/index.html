@@ -584,7 +584,7 @@
                                 <a href="{{ lbdurl }}/{{ role[0] }}/contributor:{{ element._id }}">
                             {% endif %}
                                 <img class="holeperson lazy" src="{{ url_for('static', filename = 'images/'+role[0]+'.jpg') }}"
-                                    {% if 'img' in element %}
+                                    {% if 'img' in element and element.img != ''%}
                                          data-src="//image.tmdb.org/t/p/w185/{{ element.img }}"
                                     {% endif %}
                                 alt="{{ element._id }}"/>
