@@ -25,7 +25,7 @@ def fill_db3(url, resp, image, studio):
         try:
             json1['tmdbImg'] = str(resp).rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
         except:
-            json1['imgNone'] = True
+            json1['tmdbImg'] = ""
     except:
         print('error tmdb for ' + url[1])
     if studio:
@@ -60,7 +60,7 @@ def fill_db(url, soup, image, studio, uri):
     global images_tmdb
     json1 = {}
     json1['_id'] = url
-    json1['update'] = datetime.today()
+    #json1['update'] = datetime.today()
     json1['uri'] = uri
     passare_oltre = False
     try:
@@ -81,6 +81,7 @@ def fill_db(url, soup, image, studio, uri):
                     passare_oltre = True
             except:
                 print('error tmdb for ' + url)
+        #print(json1)
         if not passare_oltre:
             if studio:
                 db.Studios.update_one({'_id': json1['_id']}, {'$set': json1}, True)
@@ -139,7 +140,7 @@ def mainSetNames():
         op_role.append({'$group': {'_id': '$'+field,
                                    'sum': {'$sum': 1},
                                    'pop': {'$avg': '$rating.num'}}})
-        op_role.append({'$match': {'$or': [{"sum": {'$gt': 4}}, {"pop": {'$gt': 50000}}]}})
+        op_role.append({'$match': {'$or': [{"sum": {'$gt': 4}}, {"pop": {'$gt': 100000}}]}})
         op_role.append({'$sort': {"sum": -1, 'pop': -1}})
         #if field in ['actors', 'crew.director']:
         #    op_role.append({'$match': {"sum": {'$lt': 10}}})
@@ -156,6 +157,7 @@ def mainSetNames():
                                 'foreignField': '_id',
                                 'as': 'info'}})
         op_role.append({'$match': {"info": {'$eq': []}}})
+        op_role.append({'$project': {'_id': 1}})
         json_operations[field.replace(".", "_")] = op_role
 
     for field in ['crew.director', 'actors']:
@@ -165,17 +167,17 @@ def mainSetNames():
                                    'sum': {'$sum': 1},
                                    'pop': {'$avg': '$rating.num'}}})
         op_role.append({'$match': {"pop": {'$gt': 0}}})
-        op_role.append({'$match': {'$or': [{"sum": {'$gt': 9}}, {"pop": {'$gt': 100000}}]}})
+        op_role.append({'$match': {'$or': [{"sum": {'$gt': 4}}, {"pop": {'$gt': 100000}}]}})
         op_role.append({'$sort': {"sum": -1, 'pop': -1}})
         op_role.append({'$lookup': {
                             'from': 'People',
                             'localField': '_id',
                             'foreignField': '_id',
                             'as': 'info'}})
-        #op_role.append({'$match': {"info.tmdbImg": {'$exists': False}}})
-        op_role.append({'$match': {"info.imgNone": {'$exists': False}}})
-        op_role.append({'$match': {"info.tmdb": {'$exists': False}}})
-
+        op_role.append({'$match': {"info.tmdbImg": {'$exists': False}}})
+        #op_role.append({'$match': {"info.imgNone": {'$exists': False}}})
+        #op_role.append({'$match': {"info.tmdb": {'$exists': False}}})
+        op_role.append({'$project': {'_id': 1}})
         json_operations[field.replace(".", "_")+'_img'] = op_role
 
 
@@ -217,12 +219,27 @@ def mainSetNamesExt():
     studioss = []
     json_operations = {}
     for year in ['', '_2015', '_2016', '_2017', '_2018', '_2019', '_2020', '_2021', '_2022', '_2023', '_2024']:
+    #for year in ['']:
         for field in field2 + ['studio']:
             for set in ['mostWatched', 'topRated']:
                 op_role = []
                 op_role.append({'$project': {'_id': '$stats' + year + '.' + set+field.replace(".", "_")+'._id'}})
                 op_role.append({'$unwind': '$_id'})
                 op_role.append({'$match': {'_id': {'$type': 16}}})
+                if field == 'studio':
+                    op_role.append({'$lookup': {
+                        'from': 'Studios',
+                        'localField': '_id',
+                        'foreignField': '_id',
+                        'as': 'info'}})
+                    op_role.append({'$match': {"info.name": {'$exists': False}}})
+                else:
+                    op_role.append({'$lookup': {
+                        'from': 'People',
+                        'localField': '_id',
+                        'foreignField': '_id',
+                        'as': 'info'}})
+                    op_role.append({'$match': {"info.tmdb": {'$exists': False}}})
                 json_operations[year+set+field.replace(".", "_")] = op_role
     ob3 = list(db.Users.aggregate([
         {'$facet': json_operations},
@@ -253,15 +270,12 @@ def mainSetNames2():
 
 
 def testNames():
-    obj = list(db.Users.aggregate([
-        {'$match': {'_id': 'ale_ich'}},
-        {'$project': {'_id': 1, 's': '$stats.topRatedcrew_director'}}
-    ]))
-    print(obj)
+    x = db.People.update_many({}, {'$unset': {'update': 1, 'imgNone': 1}})
+    x = db.Studios.update_many({}, {'$unset': {'update': 1, 'imgNone': 1}})
 
 
 if __name__ == '__main__':
-    #fillMongodb([71480], True)
+    #testNames()
+    #fillMongodb([74497], False)
     mainSetNamesExt()
     mainSetNames2()
-    #testNames()
