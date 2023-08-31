@@ -1,14 +1,9 @@
-from mongodb import db
-from config import *
 import aiohttp
 import asyncio
-import json
-import requests
 from bs4 import BeautifulSoup, SoupStrainer
 from mongodb import db
 from datetime import datetime, timedelta
 from config import *
-from threading import Thread
 import time
 
 global images_tmdb
@@ -140,7 +135,7 @@ def mainSetNames():
         op_role.append({'$group': {'_id': '$'+field,
                                    'sum': {'$sum': 1},
                                    'pop': {'$avg': '$rating.num'}}})
-        op_role.append({'$match': {'$or': [{"sum": {'$gt': 4}}, {"pop": {'$gt': 100000}}]}})
+        op_role.append({'$match': {'$or': [{"sum": {'$gt': 3}}, {"pop": {'$gt': 100000}}]}})
         op_role.append({'$sort': {"sum": -1, 'pop': -1}})
         #if field in ['actors', 'crew.director']:
         #    op_role.append({'$match': {"sum": {'$lt': 10}}})
@@ -157,6 +152,7 @@ def mainSetNames():
                                 'foreignField': '_id',
                                 'as': 'info'}})
         op_role.append({'$match': {"info": {'$eq': []}}})
+        #op_role.append({'$limit': 10000})
         op_role.append({'$project': {'_id': 1}})
         json_operations[field.replace(".", "_")] = op_role
 
@@ -201,16 +197,17 @@ def mainSetNames():
                     if z not in uris:
                         uris2.append(z['_id'])
 
+    print('da aggiungere con immagini ' + str(len(uris)))
+    print('da aggiungere no immagini ' + str(len(uris2)))
+    print('da aggiungere studios ' + str(len(uris3)))
+
     if len(uris) > 0:
-        print('da aggiungere con immagini ' + str(len(uris)))
         fillMongodb(uris, True)
 
     if len(uris2) > 0:
-        print('da aggiungere no immagini ' + str(len(uris2)))
         fillMongodb(uris2, False)
 
     if len(uris3) > 0:
-        print('da aggiungere studios ' + str(len(uris3)))
         fillMongodb(uris3, False, True)
 
 
@@ -275,7 +272,5 @@ def testNames():
 
 
 if __name__ == '__main__':
-    #testNames()
-    #fillMongodb([74497], False)
-    mainSetNamesExt()
+    #mainSetNamesExt()
     mainSetNames2()
