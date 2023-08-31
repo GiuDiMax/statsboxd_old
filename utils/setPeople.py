@@ -152,6 +152,7 @@ def mainSetNames():
                                 'foreignField': '_id',
                                 'as': 'info'}})
         op_role.append({'$match': {"info": {'$eq': []}}})
+        #op_role.append({'$limit': 10000})
         op_role.append({'$project': {'_id': 1}})
         json_operations[field.replace(".", "_")] = op_role
 
@@ -271,7 +272,5 @@ def testNames():
 
 
 if __name__ == '__main__':
-    #testNames()
-    #fillMongodb([74497], False)
-    mainSetNamesExt()
+    #mainSetNamesExt()
     mainSetNames2()
