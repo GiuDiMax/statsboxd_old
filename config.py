@@ -18,17 +18,21 @@ api_tmdb = '6fff7e293df6a808b97101a26c86a545'
 
 listsSelection = [
     ['dave/list/official-top-250-narrative-feature-films', 'Letterboxd Top 250', 1],
-    ['jake_ziegler/list/academy-award-winners-for-best-picture', 'Oscar Best Picture Winners', 2],
-    ['dave/list/imdb-top-250', 'IMDb Top 250', 3],
-    ['matthew/list/box-office-mojo-all-time-worldwide', 'Box Office Mojo All Time 100', 4],
-    ['bfi/list/sight-and-sounds-greatest-films-of-all-time', 'Sight & Sound Top 100', 5],
+    ['dave/list/imdb-top-250', 'IMDb Top 250', 2],
+    ['jake_ziegler/list/academy-award-winners-for-best-picture', 'Oscar Best Picture Winners', 3],
+    ['brsan/list/cannes-palme-dor-winners', 'Cannes’ Palme d’Or Winners', 4],
+    ['matthew/list/box-office-mojo-all-time-worldwide', 'Box Office Mojo All Time 100', 5],
     ['moseschan/list/afi-100-years-100-movies', 'AFI 100 Years 100 Movies', 6],
-    ['crew/list/edgar-wrights-1000-favorite-movies', 'Edgar Wright’s 1,000 Favorites', 7],
+    ['bfi/list/sight-and-sounds-greatest-films-of-all-time', 'Sight & Sound Greatest Films', 7],
     ['gubarenko/list/1001-movies-you-must-see-before-you-die-2021', '1,001 To See Before You Die', 8],
-    ['jack/list/official-top-250-documentary-films', 'Top 250 Documentaries', 9],
-    ['darrencb/list/letterboxds-top-250-horror-films', 'Top 250 Horror', 10],
-    ['jack/list/women-directors-the-official-top-100-narrative', 'Top 100 Women-Directed', 11],
-    ['lifeasfiction/list/letterboxd-100-animation', 'Top 100 Animation', 12]
+    ['crew/list/edgar-wrights-1000-favorite-movies', 'Edgar Wright’s 1,000 Favorites', 9],
+    ['dvideostor/list/roger-eberts-great-movies', 'Roger Ebert’s Great Movies', 10],
+    ['jack/list/women-directors-the-official-top-250-narrative', 'Top 250 Women-Directed', 11],
+    ['jack/list/black-directors-the-official-top-100-narrative', 'Top 100 Black-Directed', 12],
+    ['jack/list/official-top-250-films-with-the-most-fans', 'Top 250 Most Fans', 14],
+    ['jack/list/official-top-250-documentary-films', 'Top 250 Documentaries', 14],
+    ['lifeasfiction/list/letterboxd-100-animation', 'Top 100 Animation', 15],
+    ['darrencb/list/letterboxds-top-250-horror-films', 'Top 250 Horror', 16],
 ]
 
 crew_html = [
