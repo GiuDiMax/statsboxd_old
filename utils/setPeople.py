@@ -272,5 +272,5 @@ def testNames():
 
 
 if __name__ == '__main__':
-    #mainSetNamesExt()
+    mainSetNamesExt()
     mainSetNames2()
