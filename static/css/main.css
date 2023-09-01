@@ -833,8 +833,8 @@ span{
     display:flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap:0;
-    justify-content: space-between;
+    gap:2%;
+    justify-content: center;
 }
 
 .container_people{
