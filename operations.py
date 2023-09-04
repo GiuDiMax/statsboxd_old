@@ -265,7 +265,7 @@ def fillMongodbratings(urls):
 
 
 if __name__ == '__main__':
-    uris = ['mad-max']
+    uris = ['the-beheading-of-st-john-the-baptist']
     fillMongodb(uris)
     fillMongodbratings(uris)
     fillMongodbmembers(uris)
