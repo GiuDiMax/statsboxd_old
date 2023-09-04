@@ -209,6 +209,27 @@ def utility_processor4():
 
 
 @app.context_processor
+def utility_processor13():
+    def upperJoin(i, t):
+        try:
+            if t == 'genre':
+                string = gen_l[i]
+            elif t == 'country':
+                string = cou_l[i]
+            elif t == 'language':
+                string = lan_l[i]
+            else:
+                return ""
+            if len(string) < 4:
+                return string.replace('-', ' ').title().upper()
+            print(string)
+            return string.replace('-', ' ').title().replace('And', 'and').replace('Or', 'or')
+        except:
+            return i
+    return dict(upperJoin=upperJoin)
+
+
+@app.context_processor
 def utility_processor8():
     def firstUpperBis(string):
         if len(string) < 4:

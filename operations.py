@@ -181,14 +181,16 @@ def fill_db(url, soup):
         pass
 
     # RELATEDMOVIES
-    json1['related'] = []
     rels = soup.find_all('div', {"class": "linked-film-poster"})
+    if len(rels) > 0:
+        json1['related'] = []
     for rel in rels:
         json1['related'].append(int(rel['data-film-id']))
 
     #DATE
     json1['updateDate'] = datetime.today()
     json1['modifiedDate'] = datetime.strptime(json_lb['dateModified'], '%Y-%m-%d')
+    json1['updateRating'] = datetime.today()
 
 
     obj = db.Film.find_one({'uri': json1['uri']})
@@ -201,8 +203,13 @@ def fill_db(url, soup):
             if 'nanogenre' in obj['genres']:
                 json1['genres']['nanogenre'] = obj['genres']['nanogenre']
 
-        if 'statsLists' in obj:
-            json1['statsLists'] = obj['statsLists']
+        #if 'statsLists' in obj:
+        #    json1['statsLists'] = obj['statsLists']
+
+        for xx in ['statsLists', 'members', 'updateMembers']:
+            if 'statsLists' in obj:
+                json1[xx] = obj[xx]
+
 
     #if __name__ == '__main__':
     #    print(json1)
@@ -273,7 +280,7 @@ def fillMongodbratings(urls):
 
 
 if __name__ == '__main__':
-    uris = ['barbie']
+    uris = ['no-more-baths']
     fillMongodb(uris)
     fillMongodbratings(uris)
     fillMongodbmembers(uris)
