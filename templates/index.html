@@ -365,7 +365,7 @@
                 {% for i in range(num) %}
                     <div>
                         <a class="clickable label1" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}{{ type[1] }}/{{ user['stats'+year]['mostWatched'+type[0]][i]['_id'] }}">
-                            {{ firstUpper(user['stats'+year]['mostWatched'+type[0]][i]['_id']) }}
+                            {{ upperJoin(user['stats'+year]['mostWatched'+type[0]][i]['_id'], type[1]) }}
                         </a>
                         <div>
                             <div class="genresFilms" style="width: {{ user['stats'+year]['mostWatched'+type[0]][i]['sum']*100/user['stats'+year]['mostWatched'+type[0]][0]['sum'] }}%;"><span>{{ user['stats'+year]['mostWatched'+type[0]][i]['sum'] }} films</span></div>
