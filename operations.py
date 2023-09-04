@@ -7,6 +7,7 @@ from datetime import datetime
 #import requests
 #import lxml
 #from config import exclude_people
+from config import gen_l, lan_l, cou_l
 
 json0 = []
 
@@ -73,7 +74,8 @@ def fill_db(url, soup):
                 json1['genres']['mini-themes'].append(genre['href'].split("/")[3])
             '''
             if "/genre/" in str(genre['href']):
-                json1['genres']['main'].append(genre['href'].split("/")[3])
+                json1['genres']['main'].append(gen_l.index(genre['href'].split("/")[3]))
+                #json1['genres']['main'].append(genre['href'].split("/")[3])
     except:
         pass
 
@@ -96,6 +98,12 @@ def fill_db(url, soup):
             for code in details2:
                 if typex == 'studio':
                     code = int(code['href'].split("/contributor:", 1)[1].replace("/", ""))
+                elif typex == 'country':
+                    code = cou_l.index(code['href'].split("/")[-2])
+                elif typex == 'language':
+                    code = lan_l.index(code['href'].split("/")[-2])
+                elif typex == 'spoken_lang':
+                    code = lan_l.index(code['href'].split("/")[-2])
                 else:
                     code = code['href'].split("/")[-2]
                 try:
@@ -265,7 +273,8 @@ def fillMongodbratings(urls):
 
 
 if __name__ == '__main__':
-    uris = ['mad-max']
+    uris = ['barbie']
     fillMongodb(uris)
     fillMongodbratings(uris)
     fillMongodbmembers(uris)
+
