@@ -269,6 +269,6 @@ for field in field4:
             'localField': '_id',
             'foreignField': 'index',
             'as': 'info'}})
-        op_role.append({'$project': {'_id': {'$first': '$info._id'}, 'uri': '$_id', 'sum': 1}})
+        op_role.append({'$project': {'_id': {'$first': '$info._id'}, 'uri': {'$first': '$info.uri'}, 'sum': 1}})
     op_role.append({'$sort': {'_id': 1}})
     json_operations['total' + field.rsplit(".", 1)[0]] = op_role

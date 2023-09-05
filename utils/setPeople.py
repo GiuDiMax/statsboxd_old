@@ -54,7 +54,7 @@ def fill_db(url, soup, image, studio, uri):
     uri = str(uri).rsplit('/', 2)[1]
     global images_tmdb
     json1 = {}
-    json1['_id'] = url
+    json1['_id'] = int(url)
     #json1['update'] = datetime.today()
     json1['uri'] = uri
     passare_oltre = False
@@ -90,6 +90,7 @@ def fill_db(url, soup, image, studio, uri):
         print("Errore: " + str(url))
         #db.People.delete_one({'_id': url})
         pass
+    #print(json1)
 
 
 async def get(url, session, image, studio):
@@ -272,5 +273,6 @@ def testNames():
 
 
 if __name__ == '__main__':
-    mainSetNamesExt()
-    mainSetNames2()
+    fillMongodb([70857], False)
+    #mainSetNamesExt()
+    #mainSetNames2()

@@ -23,10 +23,10 @@ def setLinks():
 
 def fill_db4(url, resp):
     json1 = {}
-    json1['_id'] = url[1]
+    json1['_id'] = int(url[1])
     json1['name'] = url[2]
     json1['update'] = datetime.today()
-    json1['link'] = url[1]
+    #json1['link'] = url[1]
     try:
         try:
             json1['tmdbImg'] = str(resp).rsplit('"profile_path":"', 1)[1].rsplit('"', 1)[0]
@@ -143,6 +143,7 @@ def upPeople():
         {'$match': {'tmdbImg': {'$exists': True}}},
         {'$match': {'$or': [{'update': {'$lt': datex}}, {'update': {'$exists': False}}]}},
         {'$match': {'tmdb': {'$exists': True}}},
+        {'$sort': {'update': 1}},
         {'$project': {'_id': 1, 'tmdb': 1, 'name': 1}}
     ])
     lx = []
@@ -156,8 +157,9 @@ def upPeople():
 if __name__ == '__main__':
     #json1 = {'_id': 'kaan-guldur', 'update': datetime.today(), 'name': 'Kaan Guldur', 'tmdb': 1877487}
     #db.People.update_one({'_id': json1['_id']}, {'$set': json1}, True)
-    #db.People.update_many({}, {'$unset': {'link': 1}}, True)
+    db.People.update_many({}, {'$unset': {'link': 1}}, True)
+    db.People.delete_many({'_id': {'$type': 2}})
     #test()
     prePeople()
     upPeople()
-    mainSetNames()
+    #mainSetNames()
