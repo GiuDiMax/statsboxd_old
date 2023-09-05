@@ -230,6 +230,24 @@ def utility_processor13():
 
 
 @app.context_processor
+def utility_processor14():
+    def lowerJoin(i, t):
+        try:
+            if t == 'genre':
+                string = gen_l[i]
+            elif t == 'country':
+                string = cou_l[i]
+            elif t == 'language':
+                string = lan_l[i]
+            else:
+                return ""
+            return string
+        except:
+            return i
+    return dict(lowerJoin=lowerJoin)
+
+
+@app.context_processor
 def utility_processor8():
     def firstUpperBis(string):
         if len(string) < 4:
