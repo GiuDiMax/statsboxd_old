@@ -102,7 +102,7 @@ for field in field4:
         op_role.append({'$lookup': {
             'from': 'Countries',
             'localField': '_id',
-            'foreignField': 'uri',
+            'foreignField': 'index',
             'as': 'info'}})
         op_role.append({'$project': {'_id': {'$first': '$info._id'}, 'uri': '$_id', 'sum': 1}})
     op_role.append({'$sort': {'_id': 1}})
