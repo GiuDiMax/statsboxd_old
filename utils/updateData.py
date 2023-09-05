@@ -10,7 +10,7 @@ from cleanUsers import cleanUsers
 import random
 
 limitx = 100
-hx = 24 #ore
+hx = 12 #ore
 
 
 def refresh(i, nn):
