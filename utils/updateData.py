@@ -10,7 +10,7 @@ from cleanUsers import cleanUsers
 import random
 
 limitx = 100
-hx = 12 #ore
+hx = 240 #ore
 
 
 def refresh(i, nn):
@@ -113,9 +113,8 @@ def refreshata(i, k, nn):
 if __name__ == '__main__':
     x = db.Film.delete_many({'$and': [{'members': {'$lt': 500}}, {'updateDate': {'$lt': datetime.today() - timedelta(days=30)}}]})
     print("deleted: " + str(x.deleted_count))
-    nn = 999 #last x years
+    nn = 1 #last x years
     for k in range(0, 3):
-        print(k)
         for i in range(int(60000/limitx)+1):
             b = refreshata(i, k, nn)
             if b: break
@@ -123,8 +122,8 @@ if __name__ == '__main__':
     print("deleted: " + str(x.deleted_count))
     #all()
     #updateLists()
-    #mainSetNames2()
-    #mainSetNamesExt()
+    mainSetNames2()
+    mainSetNamesExt()
     #mainSetCollection2()
-    cleanUsers()
+    #cleanUsers()
     print("FINE")
