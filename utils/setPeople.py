@@ -14,7 +14,7 @@ def fill_db3(url, resp, image, studio):
     json1['_id'] = url[1]
     json1['name'] = url[2]
     json1['update'] = datetime.today()
-    json1['uri'] = url[3]
+    #json1['uri'] = url[3]
     json1['tmdb'] = url[0]
     try:
         try:
@@ -51,12 +51,12 @@ def fillMongodb3(urls, image, studio):
 
 
 def fill_db(url, soup, image, studio, uri):
-    uri = str(uri).rsplit('/', 2)[1]
+    #uri = str(uri).rsplit('/', 2)[1]
     global images_tmdb
     json1 = {}
-    json1['_id'] = int(url)
+    json1['_id'] = url #int(url)
     #json1['update'] = datetime.today()
-    json1['uri'] = uri
+    #json1['uri'] = uri
     passare_oltre = False
     try:
         name = (str(soup.find("h1", {"class": "title-1"})).split("</span>", 1)[1].split("</h1>", 1)[0]).strip()
@@ -66,7 +66,7 @@ def fill_db(url, soup, image, studio, uri):
                 tmdb = int(soup.find("div", {"class": "js-tmdb-person-bio"})['data-tmdb-id'])
                 json1['tmdb'] = tmdb
                 if image:
-                    images_tmdb.append([tmdb, url, name, uri])
+                    images_tmdb.append([tmdb, url, name]) #,uri
                     #req = "https://api.themoviedb.org/3/person/" + str(tmdb) + "?api_key=" + api_tmdb + "&language=en-US"
                     #x = requests.get(req)
                     #try:
@@ -94,7 +94,7 @@ def fill_db(url, soup, image, studio, uri):
 
 
 async def get(url, session, image, studio):
-    async with session.get(url='http://letterboxd.com/writer/contributor:' + str(url) + "/") as response:
+    async with session.get(url='http://letterboxd.com/writer/' + str(url) + "/") as response:
         resp = await response.read()
         soup = BeautifulSoup(resp, 'lxml', parse_only=SoupStrainer(['div']))
         fill_db(url, soup, image, studio, response.url)
@@ -136,7 +136,7 @@ def mainSetNames():
         op_role.append({'$group': {'_id': '$'+field,
                                    'sum': {'$sum': 1},
                                    'pop': {'$avg': '$rating.num'}}})
-        op_role.append({'$match': {'$or': [{"sum": {'$gt': 3}}, {"pop": {'$gt': 100000}}]}})
+        op_role.append({'$match': {'$or': [{"sum": {'$gt': 4}}, {"pop": {'$gt': 100000}}]}})
         op_role.append({'$sort': {"sum": -1, 'pop': -1}})
         #if field in ['actors', 'crew.director']:
         #    op_role.append({'$match': {"sum": {'$lt': 10}}})
@@ -164,7 +164,7 @@ def mainSetNames():
                                    'sum': {'$sum': 1},
                                    'pop': {'$avg': '$rating.num'}}})
         op_role.append({'$match': {"pop": {'$gt': 0}}})
-        op_role.append({'$match': {'$or': [{"sum": {'$gt': 4}}, {"pop": {'$gt': 100000}}]}})
+        op_role.append({'$match': {'$or': [{"sum": {'$gt': 9}}, {"pop": {'$gt': 100000}}]}})
         op_role.append({'$sort': {"sum": -1, 'pop': -1}})
         op_role.append({'$lookup': {
                             'from': 'People',
@@ -201,6 +201,7 @@ def mainSetNames():
     print('da aggiungere con immagini ' + str(len(uris)))
     print('da aggiungere no immagini ' + str(len(uris2)))
     print('da aggiungere studios ' + str(len(uris3)))
+    #print(uris3[:100])
 
     if len(uris) > 0:
         fillMongodb(uris, True)
@@ -273,6 +274,8 @@ def testNames():
 
 
 if __name__ == '__main__':
-    fillMongodb([70857], False)
+    #db.Studios.rename("Studios_old")
+    #fillMongodb(['stan-lee'], True)
     #mainSetNamesExt()
-    #mainSetNames2()
+    mainSetNames2()
+    #fillMongodb(['warner-bros-pictures-1', 'paramount-1'], False, True)

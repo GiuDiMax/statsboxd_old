@@ -36,10 +36,10 @@
         </div>
          {% if year == '' %}
           <h3 class="arrowcheck">
-              Database update in progres... PLEASE DON'T CLICK THE UPDATE BUTTON!
-               <!--To check the yearly stats, click on the arrow above right.<br/>
+              <!--Database update in progres... PLEASE DON'T CLICK THE UPDATE BUTTON!-->
+              To check the yearly stats, click on the arrow above right.<br/>
               This project has maintenance costs. Please consider <a target="_blank" href="//buymeacoffee.com/giudimax">supporting me</a>.<br/>
-              Backup domain: <a target="_blank" href="https://statsboxd.giudimax.top/{{ user._id }}">statsboxd.giudimax.top</a>-->
+              Backup domain: <a target="_blank" href="https://statsboxd.giudimax.top/{{ user._id }}">statsboxd.giudimax.top</a>
           </h3>
          {% endif %}
         <div class="mainSubtitle">
@@ -579,22 +579,20 @@
                     {% endif %}
                     {%for element in list%}
                         <div class="container_people">
-                            {% if 'name' in element %}
                                 <a href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">
-                            {% else %}
-                                <a href="{{ lbdurl }}/{{ role[0] }}/contributor:{{ element._id }}">
-                            {% endif %}
-                                <img class="holeperson lazy" src="{{ url_for('static', filename = 'images/'+role[0]+'.jpg') }}"
-                                    {% if 'img' in element and element.img != ''%}
-                                         data-src="//image.tmdb.org/t/p/w185/{{ element.img }}"
-                                    {% endif %}
-                                alt="{{ element._id }}"/>
-                            </a>
+                                    <img class="holeperson lazy" src="{{ url_for('static', filename = 'images/'+role[0]+'.jpg') }}"
+                                        {% if 'img' in element and element.img != ''%}
+                                             data-src="//image.tmdb.org/t/p/w185/{{ element.img }}"
+                                        {% endif %}
+                                         alt="{{ element._id }}"/>
+                                </a>
+                                <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">
                                 {% if 'name' in element %}
-                                    <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.name }}</a>
+                                    {{ element.name }}
                                 {% else %}
-                                    <a class="clickable" href="{{ lbdurl }}{{ role[0] }}/contributor:{{ element._id }}">ID: {{ element._id }}</a>
+                                    {{ firstUpperPeople(element._id) }}
                                 {% endif %}
+                                </a>
                             {% if type[2]=='w' %}
                                 <a class="sottotitolo" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}diary/for/{{ yearnum }}/{% endif %}with/{{ role[0] }}/{{ element._id }}">{{ element.sum }} films</a>
                             {% else %}
@@ -635,12 +633,11 @@
                     <span class="titlerole">{{ role[2] }}</span>
                     {%for element in user['stats'+year][type+role[0]][:20]%}
                         <div class="{{ type }}limit {% if loop.index > 5 %}hide{% endif %}">
-                                 {% if 'name' in element %}
-                                     <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}/with/{{ role[1] }}/{{ element._id }}">
+                            <a class="clickable" href="{{ lbdurl }}{{ user._id }}/films{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}/with/{{ role[1] }}/{{ element._id }}">
+                                {% if 'name' in element %}
                                     {{ element.name }}
                                 {% else %}
-                                     <a class="clickable" href="{{ lbdurl }}{{ role[1] }}/contributor:{{ element._id }}">
-                                     ID: {{ element._id }}
+                                     {{ firstUpperPeople(element._id) }}
                                 {% endif %}
                             </a>
                             <span class="sottotitolo">

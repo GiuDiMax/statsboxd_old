@@ -58,9 +58,9 @@ crew_html = [
     ['crew_hairstyling', 'hairstyling', 'Hairstyling'], ['studio', 'studio', 'Studios']
 ]
 
-exclude_people = [155375, 85155, 95749, 77577]
+exclude_people_old = [155375, 85155, 95749, 77577]
 
-exclude_people_old = ['mickie-mcgowan', 'stan-lee', 'jack-angel', 'sherry-lynn', 'fred-tatasciore', 'jim-cummings',
+exclude_people = ['mickie-mcgowan', 'stan-lee', 'jack-angel', 'sherry-lynn', 'fred-tatasciore', 'jim-cummings',
                       'frank-welker', 'laraine-newman', 'bob-bergen', 'jess-harnell', 'jan-rabson', 'bob-peterson',
                       'fred-tatasciore', 'dee-bradley-baker', 'grey-delisle', 'tara-strong', 'scott-menville',
                       'mona-marshall', 'danny-mann', 'bill-farmer', 'terri-douglas', 'david-cowgill', 'lori-alan',

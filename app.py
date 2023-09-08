@@ -10,6 +10,7 @@ from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 import os
 from utils.allowed import allowed, addAllowed
+import re
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
@@ -194,18 +195,32 @@ def utility_processor3():
             return 0
         else:
             return val / 2
-
     return dict(ifNull0_divide2=ifNull0_divide2)
 
 
 @app.context_processor
 def utility_processor4():
     def firstUpper(string):
-        if len(string) < 4:
-            return string.replace('-', ' ').title().upper()
-        return string.replace('-', ' ').title().replace('And', 'and').replace('Or', 'or')
-
+        try:
+            #print("AAA")
+            #print(string)
+            if len(string) < 4:
+                return string.replace('-', ' ').title().upper()
+            return string.replace('-', ' ').title().replace('And', 'and').replace('Or', 'or')
+        except:
+            return string
     return dict(firstUpper=firstUpper)
+
+
+@app.context_processor
+def utility_processor19():
+    def firstUpperPeople(string):
+        try:
+            string = re.sub(r'[0-9]', '', string)
+            return string.replace('-', ' ').title()
+        except:
+            return string
+    return dict(firstUpperPeople=firstUpperPeople)
 
 
 @app.context_processor
@@ -222,7 +237,7 @@ def utility_processor13():
                 return ""
             if len(string) < 4:
                 return string.replace('-', ' ').title().upper()
-            print(string)
+            #print(string)
             return string.replace('-', ' ').title().replace('And', 'and').replace('Or', 'or')
         except:
             return i

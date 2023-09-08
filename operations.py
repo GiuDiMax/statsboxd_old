@@ -89,15 +89,27 @@ def fill_db(url, soup):
             details2 = details_set[i].find_all('a')
             if typex == 'original language':
                 typex = 'language'
+            elif typex == 'original languages':
+                typex = 'language'
             elif typex == 'spoken languages':
                 typex = 'spoken_lang'
+            elif typex == 'spoken language':
+                typex = 'spoken_lang'
+            elif typex == 'language':
+                typex = 'language'
+            elif typex == 'languages':
+                typex = 'language'
+            elif typex == 'country':
+                typex = 'country'
             elif typex == 'countries':
                 typex = 'country'
+            elif typex == 'studio':
+                typex = 'studio'
             elif typex == 'studios':
                 typex = 'studio'
             for code in details2:
                 if typex == 'studio':
-                    code = int(code['href'].split("/contributor:", 1)[1].replace("/", ""))
+                    code = code['href'].split("/")[-2]
                 elif typex == 'country':
                     code = cou_l.index(code['href'].split("/")[-2])
                 elif typex == 'language':
@@ -119,7 +131,8 @@ def fill_db(url, soup):
         json1['actors'] = []
         for actor in actors:
             try:
-                code = int(actor['href'].split('/actor/contributor:')[-1][:-1])
+                #code = int(actor['href'].split('/actor/contributor:')[-1][:-1])
+                code = actor['href'].split("/")[-2]
                 try:
                     title = actor['title']
                 except:
@@ -140,7 +153,8 @@ def fill_db(url, soup):
         for crew in crews:
             crew = crew['href']
             role = crew.split("/")[-3]
-            code = int(crew.split("/")[-2].replace("contributor:", ""))
+            #code = int(crew.split("/")[-2].replace("contributor:", ""))
+            code = crew.split("/")[-2]
             try:
                 json1['crew'][role].append(code)
             except:
@@ -280,7 +294,7 @@ def fillMongodbratings(urls):
 
 
 if __name__ == '__main__':
-    uris = ['no-more-baths']
+    uris = ['girlfriend-in-a-coma']
     fillMongodb(uris)
     fillMongodbratings(uris)
     fillMongodbmembers(uris)
