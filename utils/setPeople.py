@@ -206,11 +206,11 @@ def mainSetNames():
     if len(uris) > 0:
         fillMongodb(uris, True)
 
-    if len(uris2) > 0:
-        fillMongodb(uris2, False)
-
     if len(uris3) > 0:
         fillMongodb(uris3, False, True)
+
+    if len(uris2) > 0:
+        fillMongodb(uris2, False)
 
 
 def mainSetNamesExt():

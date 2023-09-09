@@ -8,9 +8,10 @@ from setCollections import mainSetCollection2
 from setThemes import all
 from cleanUsers import cleanUsers
 import random
+from updateThemes import updateThemes
 
 limitx = 50
-hx = 5 #ore
+hx = 3 #ore
 
 
 def refresh(i, nn):
@@ -111,8 +112,11 @@ def refreshata(i, k, nn):
 
 
 if __name__ == '__main__':
-    x = db.Film.delete_many({'$and': [{'members': {'$lt': 500}}, {'updateDate': {'$lt': datetime.today() - timedelta(days=30)}}]})
-    print("deleted: " + str(x.deleted_count))
+    #x = db.Film.delete_many({'$and': [{'members': {'$lt': 100}}, {'updateDate': {'$lt': datetime.today() - timedelta(days=0)}}]})
+    #print("deleted: " + str(x.deleted_count))
+    #x = db.Film.delete_many({'year': {'$exists': False}})
+    #print("deleted: " + str(x.deleted_count))
+
     nn = 999 #last x years
     for k in range(0, 1):
         for i in range(int(60000/limitx)+1):
@@ -120,10 +124,9 @@ if __name__ == '__main__':
             if b: break
     x = db.Film.delete_many({'modifiedDate': {'$exists': False}})
     print("deleted: " + str(x.deleted_count))
-    #all()
-    #updateLists()
+    updateLists()
     mainSetNames2()
-    #mainSetNamesExt()
-    #mainSetCollection2()
+    mainSetCollection2()
+    updateThemes()
     cleanUsers()
     print("FINE")
