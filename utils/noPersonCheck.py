@@ -16,5 +16,5 @@ def npCheck(uris):
 
 
 if __name__ == '__main__':
-    npCheck([1116586, 2791228, ])
+    npCheck(['russell-barnett-1', 'james-pavlou'])
     #2791228

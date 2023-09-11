@@ -221,7 +221,7 @@ def fill_db(url, soup):
         #    json1['statsLists'] = obj['statsLists']
 
         for xx in ['statsLists', 'members', 'updateMembers']:
-            if 'statsLists' in obj:
+            if xx in obj:
                 json1[xx] = obj[xx]
 
 
@@ -294,7 +294,7 @@ def fillMongodbratings(urls):
 
 
 if __name__ == '__main__':
-    uris = ['girlfriend-in-a-coma']
+    uris = ['war-horse']
     fillMongodb(uris)
     fillMongodbratings(uris)
     fillMongodbmembers(uris)

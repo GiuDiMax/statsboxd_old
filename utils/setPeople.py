@@ -136,7 +136,7 @@ def mainSetNames():
         op_role.append({'$group': {'_id': '$'+field,
                                    'sum': {'$sum': 1},
                                    'pop': {'$avg': '$rating.num'}}})
-        op_role.append({'$match': {'$or': [{"sum": {'$gt': 4}}, {"pop": {'$gt': 100000}}]}})
+        op_role.append({'$match': {'$or': [{"sum": {'$gt': 3}}, {"pop": {'$gt': 80000}}]}})
         op_role.append({'$sort': {"sum": -1, 'pop': -1}})
         #if field in ['actors', 'crew.director']:
         #    op_role.append({'$match': {"sum": {'$lt': 10}}})
@@ -164,7 +164,7 @@ def mainSetNames():
                                    'sum': {'$sum': 1},
                                    'pop': {'$avg': '$rating.num'}}})
         op_role.append({'$match': {"pop": {'$gt': 0}}})
-        op_role.append({'$match': {'$or': [{"sum": {'$gt': 9}}, {"pop": {'$gt': 100000}}]}})
+        op_role.append({'$match': {'$or': [{"sum": {'$gt': 4}}, {"pop": {'$gt': 100000}}]}})
         op_role.append({'$sort': {"sum": -1, 'pop': -1}})
         op_role.append({'$lookup': {
                             'from': 'People',

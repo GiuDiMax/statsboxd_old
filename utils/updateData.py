@@ -11,7 +11,7 @@ import random
 from updateThemes import updateThemes
 
 limitx = 50
-hx = 3 #ore
+hx = 24 #ore
 
 
 def refresh(i, nn):
@@ -35,6 +35,7 @@ def refresh(i, nn):
     random.shuffle(uris)
     #print(len(uris))
     #exit()
+    #print(uris)
     if len(uris)<limitx:
         b = True
     print('analyizing data ' + str(len(uris) + i*limitx))
@@ -117,8 +118,8 @@ if __name__ == '__main__':
     #x = db.Film.delete_many({'year': {'$exists': False}})
     #print("deleted: " + str(x.deleted_count))
 
-    nn = 999 #last x years
-    for k in range(0, 1):
+    nn = 1 #last x years
+    for k in range(0, 3):
         for i in range(int(60000/limitx)+1):
             b = refreshata(i, k, nn)
             if b: break
