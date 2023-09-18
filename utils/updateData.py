@@ -11,7 +11,7 @@ import random
 from updateThemes import updateThemes
 
 limitx = 50
-hx = 24 #ore
+hx = 120 #ore
 
 
 def refresh(i, nn):
@@ -113,10 +113,10 @@ def refreshata(i, k, nn):
 
 
 if __name__ == '__main__':
-    #x = db.Film.delete_many({'$and': [{'members': {'$lt': 100}}, {'updateDate': {'$lt': datetime.today() - timedelta(days=0)}}]})
-    #print("deleted: " + str(x.deleted_count))
-    #x = db.Film.delete_many({'year': {'$exists': False}})
-    #print("deleted: " + str(x.deleted_count))
+    x = db.Film.delete_many({'$and': [{'members': {'$lt': 100}}, {'updateDate': {'$lt': datetime.today() - timedelta(days=90)}}]})
+    print("deleted: " + str(x.deleted_count))
+    x = db.Film.delete_many({'year': {'$exists': False}})
+    print("deleted: " + str(x.deleted_count))
 
     nn = 1 #last x years
     for k in range(0, 3):
