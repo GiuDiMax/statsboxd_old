@@ -125,7 +125,7 @@ if __name__ == '__main__':
             if b: break
     x = db.Film.delete_many({'modifiedDate': {'$exists': False}})
     print("deleted: " + str(x.deleted_count))
-    #updateLists()
+    updateLists()
     mainSetNames2()
     mainSetCollection2()
     updateThemes()

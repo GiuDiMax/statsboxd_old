@@ -1,5 +1,3 @@
-from mongodb import db
-from config import *
 import aiohttp
 import asyncio
 import json
@@ -8,6 +6,7 @@ from bs4 import BeautifulSoup, SoupStrainer
 from mongodb import db
 from datetime import datetime, timedelta
 from config import *
+import time
 
 
 def fill_db(url, soup):
@@ -90,8 +89,10 @@ def mainSetCollection2():
             mainSetCollection()
             break
         except:
+            time.sleep(5)
             pass
 
 
 if __name__ == '__main__':
+    #db.Collections.delete_many({})
     mainSetCollection2()
