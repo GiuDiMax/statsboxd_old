@@ -62,35 +62,47 @@ for field in field2 + field3:
         op_role.append({'$unwind': '$info'})
         op_role.append({'$project': {'_id': 1, 'sum': 1, 'name': '$info.name', 'uri': '$info.uri', 'type': '$info.type'}})
     json_operations['mostWatched' + field.replace('.', '_')] = op_role
-    if (field in field2) or (field == 'studio'):
-        op_role = []
-        op_role.append({'$match': {'diary.dRating': {'$gt': 0}}})
-        op_role.append({'$unwind': '$info.' + field})
-        op_role.append({'$group': {'_id': '$info.' + field,
-                                   'avg': {'$avg': '$diary.dRating'},
-                                   'sum': {'$sum': 1}}})
-        if field == 'actors':
-            op_role.append({'$match': {"sum": {'$gt': 1}}})
-            op_role.append({'$match': {"_id": {'$nin': exclude_people}}})
-        op_role.append({'$sort': {'avg': -1, 'sum': -1, 'info.rating.average': -1}})
-        op_role.append({'$limit': 20})
-        if field == 'studio':
-            op_role.append({'$lookup': {
-                'from': 'Studios',
-                'localField': '_id',
-                'foreignField': '_id',
-                'as': 'info'}})
-            op_role.append(
-                {'$project': {'_id': {'$ifNull': [{'$first': '$info.uri'}, '$_id']}, 'avg': {'$round': ['$avg', 2]}, 'name': {'$first': '$info.name'}}})
-        else:
-            op_role.append({'$lookup': {
-                'from': 'People',
-                'localField': '_id',
-                'foreignField': '_id',
-                'as': 'info'}})
-            op_role.append(
-                {'$project': {'_id': {'$ifNull': [{'$first': '$info.uri'}, '$_id']}, 'avg': {'$round': ['$avg', 2]}, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
-        json_operations['topRated' + field.replace('.', '_')] = op_role
+    #if (field in field2) or (field == 'studio'):
+    op_role = []
+    op_role.append({'$match': {'diary.dRating': {'$gt': 0}}})
+    op_role.append({'$unwind': '$info.' + field})
+    op_role.append({'$group': {'_id': '$info.' + field,
+                               'avg': {'$avg': '$diary.dRating'},
+                               'sum': {'$sum': 1}}})
+    if field == 'actors':
+        op_role.append({'$match': {"sum": {'$gt': 1}}})
+        op_role.append({'$match': {"_id": {'$nin': exclude_people}}})
+    elif field in ['genres.theme', 'genres.nanogenre']:
+        op_role.append({'$match': {"sum": {'$gt': 2}}})
+    elif field in field3:
+        op_role.append({'$match': {"sum": {'$gt': 3}}})
+    op_role.append({'$sort': {'avg': -1, 'sum': -1, 'info.rating.average': -1}})
+    op_role.append({'$limit': 20})
+    if field == 'studio':
+        op_role.append({'$lookup': {
+            'from': 'Studios',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'info'}})
+        op_role.append(
+            {'$project': {'_id': {'$ifNull': [{'$first': '$info.uri'}, '$_id']}, 'avg': {'$round': ['$avg', 2]}, 'name': {'$first': '$info.name'}}})
+    elif field in ['genres.theme', 'genres.nanogenre']:
+        op_role.append({'$lookup': {
+            'from': 'Themes',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'info'}})
+        op_role.append({'$unwind': '$info'})
+        op_role.append({'$project': {'_id': 1, 'avg': {'$round': ['$avg', 2]}, 'name': '$info.name', 'uri': '$info.uri', 'type': '$info.type'}})
+    else:
+        op_role.append({'$lookup': {
+            'from': 'People',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'info'}})
+        op_role.append(
+            {'$project': {'_id': {'$ifNull': [{'$first': '$info.uri'}, '$_id']}, 'avg': {'$round': ['$avg', 2]}, 'name': {'$first': '$info.name'}, 'img': {'$first': '$info.tmdbImg'}}})
+    json_operations['topRated' + field.replace('.', '_')] = op_role
 
 op_role = []
 op_role.append({'$group': {'_id': '$_id',

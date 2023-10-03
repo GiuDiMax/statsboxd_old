@@ -235,7 +235,9 @@ def utility_processor13():
                 string = lan_l[i]
             else:
                 return ""
-            if len(string) < 4:
+            if string == 'persianfarsi':
+                return 'Persian (Farsi)'
+            if (len(string) < 4 or string in ['ussr']) and string not in ['war']:
                 return string.replace('-', ' ').title().upper()
             #print(string)
             return string.replace('-', ' ').title().replace('And', 'and').replace('Or', 'or')

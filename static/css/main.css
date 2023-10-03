@@ -426,7 +426,7 @@ span{
 .threeColumns > div{
     flex-basis: 31%;
     height: 295px;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 .overlap1{
@@ -460,7 +460,7 @@ span{
 .attributes-chart .labels {
     display:flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: flex-start;
     margin: 0 !important;
 }
 
@@ -472,8 +472,8 @@ span{
 .labels2 > div{
     display:flex;
     flex-direction: row;
-    flex-basis: 100%;
     justify-content: space-between;
+    flex-basis: 10%;
 }
 
 .labels2 > div > div{

@@ -354,8 +354,12 @@
         <div class="sepline">
             <span>Genres, Countries & Languages</span>
             <div class="line"></div>
+            {% if user.ru %}
+            <span class="clickable active" data-show="MWGCL" data-hide="secGCL">Most Watched</span>
+            <span class="clickable" data-show="HRGCL" data-hide="secGCL">Highest Rated</span>
+            {% endif %}
         </div>
-        <div class="attributes-chart threeColumns">
+        <div id="MWGCL" class="attributes-chart threeColumns secGCL">
             {% for type in [['genres_main', 'genre', 'rgb(0, 224, 84)'], ['country','country', 'rgb(64, 188, 244)'], ['language','language', 'rgb(255, 128, 0)']] %}
             <div class="labels2">
                 {% set num = 10 %}
@@ -376,13 +380,40 @@
             </div>
             {%endfor%}
         </div>
+        {% if user.ru %}
+        <div id="HRGCL" class="attributes-chart threeColumns secGCL hide">
+            {% for type in [['genres_main', 'genre', 'rgb(0, 224, 84)'], ['country','country', 'rgb(64, 188, 244)'], ['language','language', 'rgb(255, 128, 0)']] %}
+            <div class="labels2">
+                {% set num = 10 %}
+                {% if  user['stats'+year]['topRated'+type[0]]|length < 10 %}
+                    {% set num =  user['stats'+year]['topRated'+type[0]]|length %}
+                {% endif %}
+                {% for i in range(num) %}
+                    <div>
+                        <a class="clickable label1" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}rated/.5-5/{{ type[1] }}/{{ lowerJoin(user['stats'+year]['topRated'+type[0]][i]['_id'], type[1]) }}">
+                            {{ upperJoin(user['stats'+year]['topRated'+type[0]][i]['_id'], type[1]) }}
+                        </a>
+                        <div>
+                            <div class="genresFilms" style="width: {{ user['stats'+year]['topRated'+type[0]][i]['avg']*100/user['stats'+year]['topRated'+type[0]][0]['avg'] }}%;"><span>Average {{ (user['stats'+year]['topRated'+type[0]][i]['avg']/2)|round(2) }}</span></div>
+                            <div class="progressBarWithVal" style="width:{{ user['stats'+year]['topRated'+type[0]][i]['avg']*100/user['stats'+year]['topRated'+type[0]][0]['avg'] }}%; background-color:{{ type[2] }};"></div>
+                        </div>
+                    </div>
+                {%endfor%}
+            </div>
+            {%endfor%}
+        </div>
+        {% endif %}
     </section>
     <section class="sectionStats">
         <div class="sepline">
             <span>Themes & Nanogenres®</span>
             <div class="line"></div>
+            {% if user.ru %}
+            <span class="clickable active" data-show="MWTN" data-hide="secTN">Most Watched</span>
+            <span class="clickable" data-show="HRTN" data-hide="secTN">Highest Rated</span>
+            {% endif %}
         </div>
-        <div class="attributes-chart twocolumn">
+        <div id="MWTN" class="attributes-chart twocolumn secTN">
             {% for type in ['theme', 'nanogenre'] %}
             <div class="labels">
                 {% set num = 10 %}
@@ -403,6 +434,29 @@
             </div>
              {%endfor%}
         </div>
+        {% if user.ru %}
+        <div id="HRTN" class="attributes-chart twocolumn secTN hide">
+            {% for type in ['theme', 'nanogenre'] %}
+            <div class="labels">
+                {% set num = 10 %}
+                {% if  user['stats'+year]['topRatedgenres_' + type]|length < 10 %}
+                    {% set num =  user['stats'+year]['topRatedgenres_' + type]|length %}
+                {% endif %}
+                {% for i in range(num) %}
+                        <a class="clickable label2" href="{{ lbdurl }}{{ user._id }}/films/{% if yearnum != 0 %}/diary/for/{{ yearnum }}/{% endif %}{{ user['stats'+year]['topRatedgenres_' + type][i]['type'] }}/{{ user['stats'+year]['topRatedgenres_' + type][i]['uri'] }}">
+                            <span class="leftText">
+                                {{ firstUpper(user['stats'+year]['topRatedgenres_' + type][i]['name']) }}
+                            </span>
+                            <span class="bold right">
+                                Average {{ (user['stats'+year]['topRatedgenres_' + type][i]['avg']/2)|round(2) }}
+                            </span>
+                            <div class="labcontainer" style="width:{{ user.stats['topRatedgenres_' + type][i]['avg'] * 100 /user.stats['topRatedgenres_' + type][0]['avg'] }}%;"></div>
+                        </a>
+                {%endfor%}
+            </div>
+             {%endfor%}
+        </div>
+        {% endif %}
     </section>
     {% if year == '' %}
     <section class="sectionStats">

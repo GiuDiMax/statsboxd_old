@@ -43,7 +43,7 @@ def obtain():
     a = db.Film.aggregate([
         {'$match': {"year": {'$gt': current_year - 2}}},
         {'$sort': {'rating.num': -1}},
-        {'$limit': 1000},
+        {'$limit': 2000},
         {'$project': {'uri': 1}}
     ])
 
@@ -53,13 +53,16 @@ def obtain():
     type = 'themes'
     list1 = []
     list2 = []
-    set(uris, type)
+    #set(uris, type)
     print(list1, list2)
+    print(len(list1))
+    print(len(list2))
     list1 = []
     list2 = []
     type = 'nanogenres'
     set(uris, type)
     print(list1)
+    print(len(list1))
 
 
 if __name__ == '__main__':

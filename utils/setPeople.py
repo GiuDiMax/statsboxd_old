@@ -5,6 +5,7 @@ from mongodb import db
 from datetime import datetime, timedelta
 from config import *
 import time
+from threading import Thread
 
 global images_tmdb
 
@@ -128,6 +129,18 @@ def fillMongodb(urls, image, studio=False):
         fillMongodb(urls[n:], image, studio)
 
 
+def updateOldImage():
+    urls = []
+    ob3 = db.People.aggregate([
+        {'$match':  {'update': {'$lt': datetime.now()-timedelta(days=30)}}},
+        {'$limit': 5000}
+    ])
+    for x in ob3:
+        urls.append([x['_id'], x['tmdb'], x['name']])
+    print("da aggiornare: " + str(len(urls)) + " immagini persone")
+    fillMongodb3(urls, True, False)
+
+
 def mainSetNames():
     json_operations = {}
     for field in field2 + ['studio']:
@@ -171,7 +184,8 @@ def mainSetNames():
                             'localField': '_id',
                             'foreignField': '_id',
                             'as': 'info'}})
-        op_role.append({'$match': {"info.tmdbImg": {'$exists': False}}})
+        #op_role.append({'$unwind': '$info'})
+        op_role.append({'$match': {'$or': [{"info.tmdbImg": {'$exists': False}}, {'info.update': {'$exists': False}}]}})
         #op_role.append({'$match': {"info.imgNone": {'$exists': False}}})
         #op_role.append({'$match': {"info.tmdb": {'$exists': False}}})
         op_role.append({'$project': {'_id': 1}})
@@ -268,6 +282,14 @@ def mainSetNames2():
         mainSetNames2()
 
 
+def updateOldImage2():
+    try:
+        updateOldImage()
+    except:
+        time.sleep(5)
+        updateOldImage2()
+
+
 def testNames():
     x = db.People.update_many({}, {'$unset': {'update': 1, 'imgNone': 1}})
     x = db.Studios.update_many({}, {'$unset': {'update': 1, 'imgNone': 1}})
@@ -277,5 +299,7 @@ if __name__ == '__main__':
     #db.Studios.rename("Studios_old")
     #fillMongodb(['stan-lee'], True)
     #mainSetNamesExt()
-    mainSetNames2()
+    #mainSetNames2()
+    updateOldImage()
+    #updateOldImage2()
     #fillMongodb(['warner-bros-pictures-1', 'paramount-1'], False, True)
