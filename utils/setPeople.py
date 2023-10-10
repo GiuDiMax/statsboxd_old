@@ -132,8 +132,9 @@ def fillMongodb(urls, image, studio=False):
 def updateOldImage():
     urls = []
     ob3 = db.People.aggregate([
-        {'$match':  {'update': {'$lt': datetime.now()-timedelta(days=30)}}},
-        {'$limit': 5000}
+        {'$match':  {'update': {'$lt': datetime.now()-timedelta(days=180)}}},
+        {'$sort': {'update': 1}},
+        {'$limit': 2000}
     ])
     for x in ob3:
         urls.append([x['_id'], x['tmdb'], x['name']])

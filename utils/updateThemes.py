@@ -117,7 +117,7 @@ def checkThemes():
         if x['size'] != x['size2']:
             nn.append(x)
     print("temi da aggiornare totalmente " + str(len(nn)))
-    #set3(nn)
+    set3(nn)
 
 
 def updateThemes():
