@@ -113,8 +113,8 @@ def refreshata(i, k, nn):
 
 
 if __name__ == '__main__':
-    x = db.Film.delete_many({'$and': [{'members': {'$lt': 100}}, {'updateDate': {'$lt': datetime.today() - timedelta(days=90)}}]})
-    print("deleted: " + str(x.deleted_count))
+    #x = db.Film.delete_many({'$and': [{'members': {'$lt': 100}}, {'updateDate': {'$lt': datetime.today() - timedelta(days=90)}}]})
+    #print("deleted: " + str(x.deleted_count))
     #x = db.Film.delete_many({'year': {'$exists': False}})
     #print("deleted: " + str(x.deleted_count))
 
@@ -126,7 +126,7 @@ if __name__ == '__main__':
             if b: break
     x = db.Film.delete_many({'modifiedDate': {'$exists': False}})
     print("deleted: " + str(x.deleted_count))
-    #updateLists()
+    updateLists()
     mainSetNames2()
     updateOldImage2()
     mainSetCollection2()
