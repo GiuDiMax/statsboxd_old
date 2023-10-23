@@ -121,6 +121,7 @@ def checkThemes():
 
 
 def updateThemes():
+    print("updatethemes")
     updateThemes2()
     checkThemes()
 

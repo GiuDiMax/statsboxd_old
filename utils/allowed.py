@@ -8,6 +8,13 @@ def allowed(username):
     return False
 
 
+def donator(username):
+    obj = list(db.Allowed.find({'_id': 1}))[0]['donator']
+    if username in obj:
+        return True
+    return False
+
+
 def getLista():
     obj = list(db.Allowed.find({'_id': 1}))[0]['allowed']
     obj.sort()

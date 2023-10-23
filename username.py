@@ -11,6 +11,7 @@ import time
 from year_stats import year_stats
 global watched_list, diary_list, rat_user
 from datetime import datetime
+from utils.allowed import donator
 
 
 def diary_function(sup):
@@ -132,7 +133,7 @@ def threadgeneral(username, fastUpdate=False):
         resp = requests.get('http://letterboxd.com/' + str(username))
         soup = BeautifulSoup(resp.text, 'lxml', parse_only=SoupStrainer('div', {'id': 'content'}))
         sup = soup.find('div', class_="profile-summary")
-        db.Users.update_one({'_id': username}, {'$set': {'name': sup.find('h1', {'class': 'title-1'}).text, 'image': sup.find('img')['src']}}, True)
+        db.Users.update_one({'_id': username}, {'$set': {'donator': donator(username.lower()), 'name': sup.find('h1', {'class': 'title-1'}).text, 'image': sup.find('img')['src']}}, True)
         print('general in: ' + str(time.time() - start3))
 
 
@@ -231,5 +232,5 @@ def checkUsername(username):
 
 
 if __name__ == '__main__':
-    fullUpdate('giudimax', False)
+    fullUpdate('ivopo', False)
     pass

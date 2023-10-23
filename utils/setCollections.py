@@ -10,30 +10,34 @@ import time
 
 
 def fill_db(url, soup):
+    #try:
+    json2 = {}
+    json2['_id'] = url
+    json2['name'] = soup.find('h1', {"class": "title-1"}).text
+    x = requests.get('https://letterboxd.com/films/ajax/in/' + url + "/")
+    soup = BeautifulSoup(x.content, 'lxml', parse_only=SoupStrainer(['div', 'section']))
     try:
-        json2 = {}
-        json2['_id'] = url
-        json2['name'] = soup.find('h1', {"class": "title-1"}).text
-        x = requests.get('https://letterboxd.com/films/ajax/in/' + url + "/")
-        soup = BeautifulSoup(x.content, 'lxml', parse_only=SoupStrainer(['div', 'section']))
         json2['num'] = int(soup.text.split("are ", 1)[1].split("\xa0", 1)[0])
-        json2['numRat'] = 0
-        json2['posters'] = []
-        ob3 = db.Film.aggregate([
-            {'$match': {'collection': url}},
-            {'$sort': {'year': 1}},
-            {'$limit': 3},
-            {'$project': {'_id': 1, 'poster': '$images.poster', 'numRat': '$rating.num'}}
-        ])
-        for x in ob3:
-            json2['posters'].append(x['poster'])
-            json2['numRat'] = json2['numRat'] + x['numRat']
-        try:
-            db.Collections.insert_one(json2)
-        except:
-            db.Collections.update_one({'_id': json2['_id']}, {'$set': json2})
     except:
-        pass
+        json2['num'] = 0
+    json2['numRat'] = 0
+    json2['posters'] = []
+    ob3 = db.Film.aggregate([
+        {'$match': {'collection': url}},
+        {'$sort': {'year': 1}},
+        {'$limit': 3},
+        {'$project': {'_id': 1, 'poster': {'$ifNull': ['$images.poster', '']}, 'numRat': {'$ifNull': ['$rating.num', 0]}}}
+    ])
+    for x in ob3:
+        json2['posters'].append(x['poster'])
+        json2['numRat'] = json2['numRat'] + x['numRat']
+    try:
+        db.Collections.insert_one(json2)
+    except:
+        db.Collections.update_one({'_id': json2['_id']}, {'$set': json2})
+    #except:
+    #    print("errore collezione")
+    #    pass
 
 
 async def get(url, session):
@@ -80,15 +84,20 @@ def mainSetCollection():
             for z in x[y]:
                 uris.append(z['_id'])
     print(len(uris))
+    #fillMongodb(uris)
     fillMongodb(uris)
 
 
 def mainSetCollection2():
+    print("mainsetcollection")
+    mainSetCollection()
+    return
     while True:
         try:
             mainSetCollection()
             break
         except:
+            print("errore riprovo")
             time.sleep(5)
             pass
 

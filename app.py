@@ -9,7 +9,7 @@ from threading import Thread
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 import os
-from utils.allowed import allowed, addAllowed
+from utils.allowed import allowed, addAllowed, donator
 import re
 
 app = Flask(__name__)
@@ -45,7 +45,11 @@ def main(username):
                     else:
                         return render_template('error.html')
                 if user['update'] <= datetime.today() - timedelta(days=30):
-                    return redirect('/' + username + '/update')
+                    #return redirect('/' + username + '/update')
+                    if fullUpdate(username.lower(), True):
+                        return redirect("/" + username)
+                    else:
+                        return render_template('error.html')
             if 'diary' and 'stats' in user:
                 try:
                     return render_template('index.html', user=user, lbdurl='https://letterboxd.com/', roles=crew_html,
@@ -118,7 +122,9 @@ def main_year(username, year):
 def main_update(username):
     # if beta_test and username.lower() not in beta_users:
     #    return render_template('username.html')
-    if not allowed(username.lower()):
+    #if not allowed(username.lower()):
+    #    return render_template('noallowed.html')
+    if not donator(username.lower()):
         return render_template('noallowed.html')
     if 'last' in request.args:
         last = datetime.strptime(request.args['last'], '%Y-%m-%d')

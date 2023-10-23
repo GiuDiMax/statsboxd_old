@@ -150,7 +150,7 @@ def mainSetNames():
         op_role.append({'$group': {'_id': '$'+field,
                                    'sum': {'$sum': 1},
                                    'pop': {'$avg': '$rating.num'}}})
-        op_role.append({'$match': {'$or': [{"sum": {'$gt': 3}}, {"pop": {'$gt': 80000}}]}})
+        op_role.append({'$match': {'$or': [{"sum": {'$gt': 4}}, {"pop": {'$gt': 100000}}]}})
         op_role.append({'$sort': {"sum": -1, 'pop': -1}})
         #if field in ['actors', 'crew.director']:
         #    op_role.append({'$match': {"sum": {'$lt': 10}}})
@@ -167,7 +167,7 @@ def mainSetNames():
                                 'foreignField': '_id',
                                 'as': 'info'}})
         op_role.append({'$match': {"info": {'$eq': []}}})
-        #op_role.append({'$limit': 10000})
+        #op_role.append({'$limit': 1000})
         op_role.append({'$project': {'_id': 1}})
         json_operations[field.replace(".", "_")] = op_role
 
@@ -189,6 +189,7 @@ def mainSetNames():
         op_role.append({'$match': {'$or': [{"info.tmdbImg": {'$exists': False}}, {'info.update': {'$exists': False}}]}})
         #op_role.append({'$match': {"info.imgNone": {'$exists': False}}})
         #op_role.append({'$match': {"info.tmdb": {'$exists': False}}})
+        #op_role.append({'$limit': 2500})
         op_role.append({'$project': {'_id': 1}})
         json_operations[field.replace(".", "_")+'_img'] = op_role
 
@@ -200,6 +201,7 @@ def mainSetNames():
     uris = []
     uris2 = []
     uris3 = []
+    print("conteggio foto")
     for x in ob3:
         for y in x:
             if (y == 'actors_img') or (y == 'crew_director_img'):
@@ -276,17 +278,21 @@ def mainSetNamesExt():
 
 
 def mainSetNames2():
+    print("setnames")
     try:
         mainSetNames()
     except:
+        print("errore riprovo")
         time.sleep(5)
         mainSetNames2()
 
 
 def updateOldImage2():
+    print("updateold")
     try:
         updateOldImage()
     except:
+        print("errore riprovo")
         time.sleep(5)
         updateOldImage2()
 
@@ -301,6 +307,5 @@ if __name__ == '__main__':
     #fillMongodb(['stan-lee'], True)
     #mainSetNamesExt()
     #mainSetNames2()
-    updateOldImage()
-    #updateOldImage2()
+    updateOldImage2()
     #fillMongodb(['warner-bros-pictures-1', 'paramount-1'], False, True)
