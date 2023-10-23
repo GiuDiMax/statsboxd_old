@@ -19,6 +19,7 @@ def cleanUsers():
     db.Users.delete_many({'name': {'$exists': False}})
     datex = datetime.today()
     datey = datex - timedelta(days=30)
+    #datey = datex - timedelta(days=0)
     x = db.Users.update_many({'$or': [{'update': {'$lt': datey}}, {'update': {'$exists': False}}]},
                                         {'$unset': {'diary': 1, 'stats': 1, 'stats_2023': 1,
                                          'stats_2022': 1, 'stats_2021': 1, 'stats_2020': 1,
