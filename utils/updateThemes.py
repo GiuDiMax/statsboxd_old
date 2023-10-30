@@ -25,11 +25,14 @@ def fill_db3(d, soup, pag):
         db.Themes.update_one({'_id': d['_id']}, {'$set': {'uri': d['uri'], 'num': num, 'name': name, 'type': d['type'], 'stat': d['stat']}, '$addToSet': {'list': {'$each': list}}}, True)
     else:
         db.Themes.update_one({'_id': d['_id']}, {'$addToSet': {'list': {'$each': list}}}, True)
-    print("aggiorno totalmente " + d['uri'])
+
     db.Film.update_many({"_id": {"$in": list}}, {'$addToSet': {'genres.' + d['type']: d['_id']}})
 
 
 async def get3(d, session):
+    db.Film.update_many({'genres.'+d['type']: d['_id']}, {'$pull': {'genres.'+d['type']: d['_id']}})
+    db.Themes.update_one({'_id': d['_id']}, {'$set': {'list': []}}, True)
+    print("pulito " + d['uri'])
     try:
         url2 = d['type'] + '/' + d['uri']
         if d['stat'] == 'N':
@@ -44,6 +47,7 @@ async def get3(d, session):
     except:
         time.sleep(1)
         await get3(d, session)
+    print("aggiorno totalmente " + d['uri'])
 
 
 async def main3(data):
@@ -127,5 +131,5 @@ def updateThemes():
 
 
 if __name__ == '__main__':
-    #updateThemes()
-    checkThemes()
+    updateThemes()
+    #checkThemes()
