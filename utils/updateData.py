@@ -119,7 +119,7 @@ if __name__ == '__main__':
     #print("deleted: " + str(x.deleted_count))
 
     if True:
-        nn = 10 #last x years
+        nn = 5 #last x years
         for k in range(0, 3):
             for i in range(int(500 / limitx) + 1):
             #for i in range(int(60000/limitx)+1):
