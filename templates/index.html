@@ -47,7 +47,7 @@
         <div class="mainSubtitle">
             <a href="{{ lbdurl }}/{{ user._id }}"><img class="avatar lazy" src="{{ url_for('static', filename='images/poster.jpg') }}" data-src="{{ user.image }}" alt="{{ user._id }}"/></a>
             <span><a href="{{ lbdurl }}/{{ user._id }}" class="clickable">
-                {% if name in user %}
+                {% if 'name' in user %}
                     {{ user.name }}
                 {% else %}
                     {{ user._id }}
