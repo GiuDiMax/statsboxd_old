@@ -262,7 +262,6 @@ op_role.append({'$sort': {'rispettoMedia': 1}})
 op_role.append({'$limit': 6})
 json_operations['flopToAverage'] = op_role
 
-
 op_role = []
 op_role.append({'$sort': {'diary.date': 1}})
 op_role.append({'$project': {'_id': '$info.uri', 'date': '$diary.date', 'poster': '$info.images.poster'}})
